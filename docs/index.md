@@ -1,10 +1,10 @@
 <div align="center">
-    <img alt="pwaga logo " src="./logo.png"><br/>
+    <img alt="shilong logo " src="./logo.png"><br/>
 </div>
 
 ## 🧬 Introduction
 
-`Pwaga` is a JavaScript library that allows you to build real-time web applications quickly, the server is built atop of [YoMo](https://github.com/yomorun/yomo), which provide secure, low-latency, and high-performance geo-distributed services.
+`Shilong` is a JavaScript library that allows you to build real-time web applications quickly, the server is built atop of [YoMo](https://github.com/yomorun/yomo), which provide secure, low-latency, and high-performance geo-distributed services.
 
 - **WebTransport** [Introduction: WebTransport is an API offering low-latency, bidirectional, client-server messaging.](https://web.dev/webtransport/)
   - Fallback to WebSocket if WebTransport connection cannot be established
@@ -17,7 +17,7 @@
 
 ...and a lot more.
 
-With `Pwaga`, components will get data flow in real time. Thus, the UI will be always **fast** and **reactive**.
+With `Shilong`, components will get data flow in real time. Thus, the UI will be always **fast** and **reactive**.
 
 ## 🌟 Showcase
 
@@ -33,37 +33,37 @@ With `Pwaga`, components will get data flow in real time. Thus, the UI will be a
 
 ## 🥷🏼 Quick Start
 
-### 1. Add `Pwaga` to your web app
+### 1. Add `Shilong` to your web app
 
 Using npm
 
 ```
-$ npm i --save @EchoHeim/Pwaga
+$ npm i --save @EchoHeim/shilong
 ```
 
 Using yarn
 
 ```
-$ yarn add @EchoHeim/Pwaga
+$ yarn add @EchoHeim/shilong
 ```
 
 Using pnpm
 
 ```
-$ pnpm i @EchoHeim/Pwaga
+$ pnpm i @EchoHeim/shilong
 ```
 
-For CDN, you can use [skypack](https://www.skypack.dev): [https://cdn.skypack.dev/@EchoHeim/Pwaga](https://cdn.skypack.dev/@yomo/Pwaga)
+For CDN, you can use [skypack](https://www.skypack.dev): [https://cdn.skypack.dev/@EchoHeim/shilong](https://cdn.skypack.dev/@yomo/shilong)
 
 ```html
 <script type="module">
-    import Presence from 'https://cdn.skypack.dev/@EchoHeim/Pwaga';
+    import Presence from 'https://cdn.skypack.dev/@EchoHeim/shilong';
 </script>
 ```
 
 ### 2. Connect to presence server
 
-The client need to authenticate with Pwaga to establish a realtime connection. The following code sample uses a demo EchoHeim's server(`https://prsc.EchoHeim.dev`) and `token` to authenticate and print the message `Connected to Pwaga!` when you’ve successfully connected.
+The client need to authenticate with Shilong to establish a realtime connection. The following code sample uses a demo EchoHeim's server(`https://prsc.EchoHeim.dev`) and `token` to authenticate and print the message `Connected to Shilong!` when you’ve successfully connected.
 
 #### How do I get a token?
 
@@ -74,7 +74,7 @@ For example, the following API route `pages/api/presence-auth.js` returns a json
 export default async function handler(req, res) {
     if (req.method === 'GET') {
         try {
-            const response = await fetch('https://prsc.pwaga.dev/api/v1/auth', {
+            const response = await fetch('https://prsc.Shilong.dev/api/v1/auth', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -116,10 +116,10 @@ Response data:
 #### Create a `Presence` instance
 
 ```js
-import Presence from '@EchoHeim/Pwaga';
+import Presence from '@EchoHeim/Shilong';
 
 // create an instance.
-const pwaga = new Presence('https://prsc.pwaga.dev', {
+const Shilong = new Presence('https://prsc.Shilong.dev', {
     auth: {
         // Certification Type
         type: 'token',
@@ -128,8 +128,8 @@ const pwaga = new Presence('https://prsc.pwaga.dev', {
     },
 });
 
-pwaga.on('connected', () => {
-    console.log('Connected to server: ', pwaga.host);
+Shilong.on('connected', () => {
+    console.log('Connected to server: ', Shilong.host);
 });
 ```
 
@@ -138,22 +138,22 @@ pwaga.on('connected', () => {
 Call the `toRoom('001')` function to enter room `001`, without it, you are in the default room.The client receives a message with the name `online` through the `on` callback function, and can also subscribe to a message with the name `mousemove` by returning an observable object through `on$`.
 
 ```js
-pwaga.on('connected', () => {
+Shilong.on('connected', () => {
     // Enter a room
-    pwaga.toRoom('001');
+    Shilong.toRoom('001');
 
     // Function to handle response for given event from server
-    pwaga.on('online', data => {
+    Shilong.on('online', data => {
         console.log('online:', data);
     });
 
     // Same as the `on` method, returns an observable response
-    pwaga.on$('mousemove').subscribe(data => {
+    Shilong.on$('mousemove').subscribe(data => {
         console.log('mousemove:', data);
     });
 
     // If you want to display the latency, you can get the value of the latency like this
-    pwaga.on('latency', data => {
+    Shilong.on('latency', data => {
         const { id, latency, meshId } = data;
         console.log('latency:', latency);
     });
@@ -171,9 +171,9 @@ import { map } from 'rxjs/operators';
 
 const ID = '34a1dbb5-c031-4680-926c-84a789d251e0';
 
-pwaga.on('connected', () => {
+Shilong.on('connected', () => {
     // Function for sending data to the server
-    pwaga.send('online', {
+    Shilong.send('online', {
         id: ID,
         x: 10,
         y: 10,
@@ -191,7 +191,7 @@ pwaga.on('connected', () => {
     );
 
     // Sending data streams to the server
-    mousemove$.subscribe(pwaga.ofRoom('001', 'mousemove'));
+    mousemove$.subscribe(Shilong.ofRoom('001', 'mousemove'));
 });
 ```
 
@@ -200,8 +200,8 @@ pwaga.on('connected', () => {
 A connection to EchoHeim can be closed once it is no longer needed.
 
 ```js
-pwaga.close();
-pwaga.on('closed', () => {
+Shilong.close();
+Shilong.on('closed', () => {
     console.log('Closed the connection');
 });
 ```
