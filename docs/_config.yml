@@ -1,5 +1,0 @@
-theme: jekyll-theme-cayman
-title: Shilong ⚡️ made realtime web applications edge-aware by EchoHeim, WebTransport based, provide fallback to WebSocket automatically.
-description: Shilong is a JavaScript library that allows you to build real-time web applications quickly, the server is built atop of Presencejs, which provide secure, low-latency, and high-performance geo-distributed services.
-# Google Analytics
-google_analytics: UA-47208480-12
