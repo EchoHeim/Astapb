@@ -1,19 +1,19 @@
 function h616_ui(){
-    top_border
+    border "top"
 
     echo -e "$V_line      ${green}~~~~~~~~~~~~~~ [ H616 Menu ] ~~~~~~~~~~~~~~${clear}       $V_line"
-    hr
+    border "div_line"
     echo -e "$V_line $yellow  1)$clear all build            $V_line $yellow  2)$clear update files          $V_line"
 
-    quit_back_footer
+    footer "quit_back"
 }
 
 function h616_menu(){
-    do_action "" "h616_ui"
+    do_action "h616_ui"
 
     while true; do
     
-        read -p "${cyan}Perform action: ${red} " action; echo
+        choose "action"
         case "$action" in
             1)
                 do_action "H616_build" "h616_ui";;
@@ -26,5 +26,4 @@ function h616_menu(){
         esac
         
     done
-    h616_menu
 }

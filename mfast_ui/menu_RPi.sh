@@ -1,13 +1,13 @@
 function rpi_ui(){
     ui_print_versions
-    top_border
+    border "top"
 
     echo -e "$V_line $yellow  3:$clear compile image     $V_line $yellow  4:$clear install image      $V_line"
         
     echo -e "|     ${green}~~~~~~~~~~~~~~ [ Update Menu ] ~~~~~~~~~~~~~~${clear}     | "
-    hr
+    border "div_line"
     echo -e "|  0) $BB4U_STATUS| "
-    hr
+    border "div_line"
     echo -e "|  a) [Update all]       |               |              | "
     echo -e "|                        |  Local Vers:  | Remote Vers: | "
     echo -e "|  Klipper/Klipper API:  |---------------|--------------| "
@@ -34,7 +34,7 @@ function rpi_ui(){
 function rpi_menu(){
     do_action "" "rpi_ui"
     while true; do
-        read -p "${cyan}Perform action:${red} " action; echo
+        choose "action"
         case "$action" in
 
         10)

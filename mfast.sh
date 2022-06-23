@@ -7,6 +7,40 @@ cd $(dirname "$(realpath "${BASH_SOURCE[0]}")")     # 取得当前执行的 shel
 for script in "./mfast_ui/"*.sh; do . $script; done
 for script in "./mfast_fun/"*.sh; do . $script; done
 
+# -------------------------------------------------------------------------- #
+function detect_pack() {
+    for pkg in "${dep_pkg[@]}"
+    do
+        if [[ ! $(dpkg-query -f'${Status}' --show $pkg 2>/dev/null) = *\ installed ]]; then
+            # echo "$pkg Uninstalled!"
+            inst_pkg+=($pkg)
+        fi
+    done
+}
+
+function WhetherInstall(){
+    if [ "${#inst_pkg[@]}" != "0" ]; then
+        echo -e "\nChecking for the following dependencies:\n"
+        for pkg in "${inst_pkg[@]}"
+        do
+            echo -e "${cyan}● $pkg ${clear}"
+        done
+        echo
+        choose "yn"
+        case "$yn" in
+            Y|y|Yes|yes|"")
+                echo
+                sudo apt-get update --allow-releaseinfo-change && sudo apt install ${inst_pkg[@]} -y
+                echo -e "\nDependencies installed!"
+                unset inst_pkg
+                ;;
+
+            N|n|No|no)
+                exit 0;;
+        esac
+    fi
+}
+
 #================================================================
 
 dep_pkg=(git tofrodos qrencode dialog)
@@ -14,31 +48,12 @@ detect_pack
 WhetherInstall
 
 ###########################
-function tab_format_title(){
-    f_name=$1
-    [ $# == 1 ] && echo "$(printf "%-$1s" "")"
-    [ $# == 2 ] && echo "$(printf "%-$2s" "$f_name")"
-    unset f_name
-}
-
-
-CycleSelect=1
 
 if [ $# == 0 ]; then
-    Type_Chose=0
-
-    tput reset      # clear screen;
-
-    while [ $CycleSelect == 1 ]
-    do
-
-       main_menu
-
-    done
+    main_menu
 else
-    echo -e "\n$blue/==================================================\\\\$clear"
-    echo -e "$V_line $red_flash    Invalid parameters,Please try again!    $clear $V_line"
-    echo -e "$blue\\==================================================/$clear"
+    Selection_invalid
+    exit 0
 fi
 
 #--------------------- Processing -------------------
@@ -115,3 +130,5 @@ elif [[ $Type_Chose -eq 101 || $Type_Chose -eq 102 ]]; then
         echo -e " $blue\\================================================/$clear"
     fi
 fi
+
+

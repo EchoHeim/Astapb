@@ -1,14 +1,13 @@
 function mp157_ui(){
-    ui_print_versions
-    top_border
+    border "top"
 
     echo -e "$V_line $yellow  1:$clear STlinux 5.4       $V_line $yellow  2:$clear STlinux 5.10       $V_line"
     echo -e "$V_line $yellow  9:$clear Restore Factory Image                       $V_line"
 
     echo -e "|     ${green}~~~~~~~~~~~~~~ [ Update Menu ] ~~~~~~~~~~~~~~${clear}     | "
-    hr
+    border "div_line"
     echo -e "|  0) $BB4U_STATUS| "
-    hr
+    border "div_line"
     echo -e "|  a) [Update all]       |               |              | "
     echo -e "|                        |  Local Vers:  | Remote Vers: | "
     echo -e "|  Klipper/Klipper API:  |---------------|--------------| "
@@ -36,7 +35,7 @@ function mp157_menu(){
 
     do_action "" "mp157_ui"
     while true; do
-        read -p "${cyan}Perform action:${red} " action; echo
+        choose "action"
         case "$action" in
 
         10)

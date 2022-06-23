@@ -1,17 +1,17 @@
 function rootfs_ui(){
-    top_border
+    border "top"
 
     echo -e "$V_line     ${green}~~~~~~~~~~~~~~ [ H616 Menu ] ~~~~~~~~~~~~~~${clear}        $V_line"
-    hr
+    border "div_line"
     echo -e "$V_line $yellow  1)$clear all build            $V_line $yellow  2)$clear update files          $V_line"
 
-    quit_back_footer
+    footer "quit_back"
 }
 
 function rootfs_menu(){
     do_action "" "rootfs_ui"
     while true; do
-        read -p "${cyan}Perform action:${red} " action; echo
+        choose "action"
         case "$action" in
 
         1)
