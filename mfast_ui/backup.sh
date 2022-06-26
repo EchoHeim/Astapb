@@ -1,3 +1,5 @@
+#!/bin/bash
+
 function backup_ui(){
     border "top"
     echo -e "|     ${cyan} "~~~~~~~~~~~~~~ [ Backup Menu ] ~~~~~~~~~~~~~~"     | "

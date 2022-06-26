@@ -17,8 +17,6 @@ WindowsIP=192.168.0.203
 ORANGEPI_PATH=/home/lodge/Allwinner/kernel4.9/orangepi-build
 
 
-SHELL_ROOT_PATH="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"      # 取得当前执行的 shell 文件所在的绝对路径;
-
 WINDOWS_SHARE_DIR=/run/user/1000/gvfs/smb-share:server=$WindowsIP,share=code         # windows 共享文件夹;
 WINDOWS_BACKUP_DIR=/run/user/1000/gvfs/smb-share:server=$WindowsIP,share=backup
 
@@ -35,7 +33,7 @@ PATH_ST_WORKSPACE=/home/lodge/STM32MP157
 PATH_UPDATE=$PATH_ST_WORKSPACE/flash_Image
 
 PATH_FACTORY_IMAGE=$PATH_ST_WORKSPACE/flash_Image/DefaultImage
-PATH_BUILD_SHELL=$SHELL_ROOT_PATH/stm32mp1
+PATH_BUILD_SHELL=$MFAST_ROOT_PATH/stm32mp1
 
 PATH_ST_SOURCE_5_4=$PATH_ST_WORKSPACE/openSTLinux-5.4
 PATH_ST_SOURCE_5_10=$PATH_ST_WORKSPACE/openSTLinux-5.10

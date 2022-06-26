@@ -5,7 +5,7 @@ CycleSelect=1
 
 #---------------------------------------------------------------
 
-function backups () {
+function backups(){
     
 if [ $# == 0 ]; then
 
@@ -80,7 +80,7 @@ if [[ $Type_Chose -eq 9 ]]; then            # This script;
     read B_or_R
     
     if [[ $B_or_R == "B" || $B_or_R == "b" ]]; then
-        cd $SHELL_ROOT_PATH
+        cd $MFAST_ROOT_PATH
         
         echo -e "\n Please input commit message:"
         echo -e "\n -> \c"
@@ -104,8 +104,8 @@ if [[ $Type_Chose -eq 9 ]]; then            # This script;
     fi
 
     if [[ $B_or_R == "R" || $B_or_R == "r" ]]; then
-        cd $SHELL_ROOT_PATH/..
-        rm $SHELL_ROOT_PATH -fr
+        cd $MFAST_ROOT_PATH/..
+        rm $MFAST_ROOT_PATH -fr
 
         git clone --depth 1 https://github.com/EchoHeim/Astapb.git
 

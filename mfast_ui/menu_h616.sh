@@ -1,9 +1,11 @@
+#!/bin/bash
+
 function h616_ui(){
     border "top"
 
-    echo -e "$V_line      ${green}~~~~~~~~~~~~~~ [ H616 Menu ] ~~~~~~~~~~~~~~${clear}       $V_line"
+    echo -e "$V_line    ${green}~~~~~~~~~~~~~~~~ [ H616 MENU ] ~~~~~~~~~~~~~~~~${clear}    $V_line"
     border "div_line"
-    echo -e "$V_line $yellow  1)$clear all build            $V_line $yellow  2)$clear update files          $V_line"
+    echo -e "$V_line $yellow  1)$clear all build            $V_line $yellow  2)$clear update files         $V_line"
 
     footer "quit_back"
 }

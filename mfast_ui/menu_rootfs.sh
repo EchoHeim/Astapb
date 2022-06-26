@@ -1,9 +1,11 @@
+#!/bin/bash
+
 function rootfs_ui(){
     border "top"
 
     echo -e "$V_line $yellow  101:$clear buster          $V_line $yellow  102:$clear bullseye         $V_line"
 
-    echo -e "|     ${green}~~~~~~~~~~~~~~ [ Update Menu ] ~~~~~~~~~~~~~~${clear}     | "
+    echo -e "|     ${green}~~~~~~~~~~~~~~ [ Armbian Menu ] ~~~~~~~~~~~~~~${clear}     | "
     border "div_line"
     echo -e "|  0) $BB4U_STATUS| "
     border "div_line"
@@ -14,7 +16,7 @@ function rootfs_ui(){
 
 function rootfs_menu(){
 
-    do_action "" "update_ui"
+    do_action "rootfs_ui"
     while true; do
         choose "action"
         case "$action" in

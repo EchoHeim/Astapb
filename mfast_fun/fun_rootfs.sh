@@ -1,3 +1,5 @@
+#!/bin/bash
+
 function rootfs_ui(){
     border "top"
 

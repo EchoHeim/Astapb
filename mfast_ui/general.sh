@@ -1,30 +1,5 @@
 #!/bin/bash
 
-# ======== color ========
-clear='\033[0m'
-
-black='\033[30m'
-gray=$(echo -en "\e[90m")
-red=$(echo -en "\e[91m")
-green=$(echo -en "\e[92m")
-yellow=$(echo -en "\e[93m")
-blue=$(echo -en "\e[94m")
-purple=$(echo -en "\e[95m")
-cyan=$(echo -en "\e[96m")
-white=$(echo -en "\e[97m")
-
-black_flash='\033[30;5m'
-gray_flash=$(echo -en "\e[90;5m")
-red_flash=$(echo -en "\e[91;5m")
-green_flash=$(echo -en "\e[92;5m")
-yellow_flash=$(echo -en "\e[93;5m")
-blue_flash=$(echo -en "\e[94;5m")
-purple_flash=$(echo -en "\e[95;5m")
-cyan_flash=$(echo -en "\e[96;5m")
-white_flash=$(echo -en "\e[97;5m")
-
-# ui total
-
 function tab_format_title(){
     f_name=$1
     [ $# == 1 ] && echo "$(printf "%-$1s" "")"
@@ -33,6 +8,8 @@ function tab_format_title(){
 }
 
 function border(){
+    color=${themes_color}
+
     if [[ "$ERROR_MSG" != "" ]]; then
         color=${red}
     fi
@@ -42,24 +19,18 @@ function border(){
     if [ "$OK_MSG" != "" ]; then
         color=${green}
     fi
-    if [[ "$ERROR_MSG" == "" && "$STATUS_MSG" == "" && "$OK_MSG" == "" ]]; then
-        color=${blue}
-        S_line="${color}/${clear}"       # /
-        V_line="${color}|${clear}"       # |
-        H_line="${color}-${clear}"       # -
-        BS_line="${color}\\\\${clear}"   # \
-    fi
+
     if [ "$1" == "top" ]; then
-        echo -e "${color}/========================================================\\\\${clear}"
+        echo -e "${color}/=======================================================\\\\${clear}"
     elif [ "$1" == "bottom" ]; then
-        echo -e "${color}\\========================================================/${clear}"
+        echo -e "${color}\\=======================================================/${clear}"
     elif [ "$1" == "div_line" ]; then
-        echo -e "${color}|--------------------------------------------------------|${clear}"
+        echo -e "${color}|-------------------------------------------------------|${clear}"
     elif [ "$1" == "blank_line" ]; then
-        echo -e "${color}|${clear}                                                        ${color}|${clear}"
+        echo -e "${color}|${clear}                                                       ${color}|${clear}"
     elif [ "$1" == "main_blank_line" ]; then
         title_name=""
-        title=$(tab_format_title $title_name 25)
+        title=$(tab_format_title $title_name 24)
         title_2=$(tab_format_title $title_name 22)
         echo -e "${color}|${clear} $yellow   $clear $title $clear$V_line $title_2 ${color}|${clear}"
         unset title title_name title_2
@@ -70,9 +41,9 @@ function border(){
 function footer(){
     border "div_line"
     if [ "$1" == "quit_back" ]; then
-        echo -e "$V_line                                   ${purple} Q/B: Quit or Back!${clear}  $V_line"
+        echo -e "$V_line                                  ${purple} Q/B: Quit or Back!${clear}  $V_line"
     elif [ "$1" == "quit_backup" ]; then
-        echo -e "$V_line                                 ${purple} Q/B: Quit or Backup!${clear}  $V_line"
+        echo -e "$V_line                                ${purple} Q/B: Quit or Backup!${clear}  $V_line"
     fi
     border "bottom"
 }
@@ -81,10 +52,10 @@ function print_header(){
     echo
     get_date
     border "top"
-    echo -e "$V_line    ${cyan} ~~~~~~~~~~~~~~~~~~~ ${yellow} MFAST ${cyan} ~~~~~~~~~~~~~~~~~~~    $V_line"
-    echo -e "$V_line    ${cyan}   Multi-Functional Automatic Scripting Tool        $V_line"
-    echo -e "$V_line    ${cyan} ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    $V_line"
-    echo -e "$V_line  ${gray}$current_date${clear}    ${yellow_flash}***** Please choose *****${clear}        ${gray}$current_time${clear}  $V_line"
+    echo -e "$V_line   ${cyan} ~~~~~~~~~~~~~~~~~~~ ${yellow} MFAST ${cyan} ~~~~~~~~~~~~~~~~~~~    $V_line"
+    echo -e "$V_line   ${cyan}    Multi-Functional Automatic Scripting Tool       $V_line"
+    echo -e "$V_line   ${cyan} ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    $V_line"
+    echo -e "$V_line  ${gray}$current_date${clear}   ${yellow_flash}***** Please choose *****${clear}        ${gray}$current_time${clear}  $V_line"
     unset current_date
     unset current_time
     border "bottom"
@@ -97,9 +68,9 @@ function get_date(){
 
 function choose(){
     if [ "$1" == "action" ]; then
-        read -p "${yellow} Please choose: ${red}" action; echo
+        read -p "${yellow} Please choose: ${red}" action; echo -e "${clear}"
     elif [ "$1" == "yn" ]; then
-        read -p "${cyan}###### Installing the above packages? (Y/n):${clear} " yn
+        read -p "${cyan}====> Installing the above packages? (Y/n):${red} " yn; echo -e "${clear}"
     fi
 }
 
@@ -117,9 +88,8 @@ function ok_msg(){
 }
 
 function quit_msg(){
-    border "top"
-    echo -e "$V_line ${green} ###### Good Job! ###### ${clear}                              $V_line"
-    border "bottom"
+    ok_msg "###### Good Job! ######"
+    print_msg
     exit 0
 }
 
@@ -154,7 +124,6 @@ function clear_msg(){
     unset STATUS_MSG
 }
 
-################################################################################
 ### TODO: rework other menus to make use of the following functions too and make them more readable
 
 function do_action(){

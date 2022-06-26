@@ -1,12 +1,14 @@
+#!/bin/bash
+
 function H616_build(){
-        cd $ORANGEPI_PATH
+    cd $ORANGEPI_PATH
 
     cp ./u-boot/v2021.07-sunxi/.config ./u-boot/v2021.07-sunxi/configs/orangepi_zero2_defconfig
 
     #=================================
 
     echo -e "\n ==== copy update script ====\n"
-    cp $SHELL_ROOT_PATH/H616/update_kernel.sh $ORANGEPI_PATH/nfs_folder/
+    cp $MFAST_ROOT_PATH/H616/update_kernel.sh $ORANGEPI_PATH/nfs_folder/
 
     echo -e "\n ==== copy wifi files ====\n"
 

@@ -42,8 +42,8 @@ if [[ $OS_Ver == buster ]]; then
     sudo echo "ttySTM0" >> $Work_Dir/etc/securetty          # 允许 root 用户登录 ttySTM0;
 fi
 
-sudo cp $SHELL_ROOT_PATH/ArmDebian/initOS.sh $Work_Dir/root
-sudo cp $SHELL_ROOT_PATH/stm32mp1/others/launch_M4.sh $Work_Dir/etc/         # MP157 M4核启动脚本;
+sudo cp $MFAST_ROOT_PATH/ArmDebian/initOS.sh $Work_Dir/root
+sudo cp $MFAST_ROOT_PATH/stm32mp1/others/launch_M4.sh $Work_Dir/etc/         # MP157 M4核启动脚本;
 
 cd $ARM_DEBIAN_ROOTFS_PATH/$Work_Dir
 

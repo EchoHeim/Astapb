@@ -1,3 +1,5 @@
+#!/bin/bash
+
 function build_rpi(){
    
 Pi_Ver=0
