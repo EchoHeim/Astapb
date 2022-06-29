@@ -11,7 +11,6 @@
 *.tar.gz   | tar 程序打包的档案，其中并且经过 gzip 的压缩
 
 # tar压缩
- 
 
 ## 1、压缩命令
 
@@ -26,7 +25,6 @@ tar -zxvf /home/***.tar.gz  |	以 gzip 解压
 tar -jxvf /home/***.tar.bz2 |	以 bzip2 解压
 tar -ztvf /tmp/***.tar.gz   |	查看 tar 内容
 
-
 命令示例 | 描述
 :---  | :---
 cpio -covB > [file \| device]	    | 备份
@@ -38,7 +36,6 @@ cpio -icduv < [file \| device]     |	还原
 恢复归档文件： tar xf           |	归档文件名.tar –C 指定目录
 恢复压缩归档文件： tar xzf      | 	归档文件名.tar.gz –C 指定目录
 解压 bz2 文件： tar jxf 文件名.bz2 -v   |	显示归档进度
-
 
 ## .tar
 
@@ -87,7 +84,6 @@ cpio -icduv < [file \| device]     |	还原
 解压 |	tar Zxvf FileName.tar.Z
 
 # 2、其他命令
-
 
 命令示例 | 描述
 :---  | :---

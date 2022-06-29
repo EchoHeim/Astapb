@@ -24,3 +24,9 @@ sudo udhcpc -i wlan0
 
 # 查看扫描网络信号强度
 # sudo wpa_cli scan_results
+
+
+
+systemctl restart NetworkManager
+
+

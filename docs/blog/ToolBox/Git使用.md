@@ -43,8 +43,8 @@ git config --global user.email "your_email@youremail.com"
 * 设置代理
 
 ``` bash
-git config --global http.proxy http://192.168.0.203:7890/
-git config --global https.proxy https://192.168.0.203:7890/
+git config --global http.proxy http://192.168.0.126:7890/
+git config --global https.proxy https://192.168.0.126:7890/
 ```
 > 后面是流量代理的 `IP` 和端口。
 

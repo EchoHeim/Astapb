@@ -28,9 +28,9 @@ sudo dhclient eth0
 ``` config
 auto eth0
 iface eth0 inet static
-address 192.168.1.90        # IP地址
-gateway 192.168.1 .1         # 网关
-netmask 255.255.255.0       # 子网掩码
+address 192.168.1.90            # IP地址
+gateway 192.168.1 .1            # 网关
+netmask 255.255.255.0           # 子网掩码
 #network 192.168.3.0
 #broadcast 192.168.3.255
 ```

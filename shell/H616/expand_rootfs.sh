@@ -147,8 +147,8 @@ if ls *.gcode > /dev/null 2>&1;then
 fi
 
 cd /udisk
-if [ -e "wpa_supplicant.conf" ];then
-    sudo cp ./wpa_supplicant.conf /etc/
+if [ -e "system.cfg" ];then
+    sudo cp ./system.cfg /etc/
 fi
 
 cd /

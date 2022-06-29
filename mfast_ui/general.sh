@@ -74,22 +74,28 @@ function choose(){
     fi
 }
 
+function confirm(){
+    read -p "${yellow} $1 ${red}" yn; echo -e "${clear}"
+}
+
 ### set some messages
 function error_msg(){
     ERROR_MSG=$1
+    print_msg
 }
 
 function status_msg(){
     STATUS_MSG=$1
+    print_msg
 }
 
 function ok_msg(){
     OK_MSG=$1
+    print_msg
 }
 
 function quit_msg(){
     ok_msg "###### Good Job! ######"
-    print_msg
     exit 0
 }
 

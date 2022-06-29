@@ -26,8 +26,12 @@ function mp157_menu(){
         choose "action"
         case "$action" in
 
-            1) do_action "update_system" "mp157_ui";;
-            2) do_action "update_all" "mp157_ui";;
+            1) do_action "mp157_cpmpile_TF-a" "mp157_ui";;
+            2) do_action "mp157_cpmpile_u-boot" "mp157_ui";;
+            3) do_action "mp157_cpmpile_kernel" "mp157_ui";;
+            4) do_action "mp157_clear_TF-a" "mp157_ui";;
+            5) do_action "mp157_clear_u-boot" "mp157_ui";;
+            6) do_action "mp157_clear_kernel" "mp157_ui";;
 
             B|b) clear; main_menu; break;;
             Q|q) quit_msg;;
