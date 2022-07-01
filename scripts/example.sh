@@ -9,7 +9,7 @@ cat >> init.sh << EOF
 
 cd /udisk/gcode
 if ls *.gcode > /dev/null 2>&1;then
-    sudo cp ./* /home/orangepi/gcode_files -fr
+
     sudo rm ./* -fr
 fi
 

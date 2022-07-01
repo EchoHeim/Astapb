@@ -29,4 +29,6 @@ sudo udhcpc -i wlan0
 
 systemctl restart NetworkManager
 
+sudo nmcli dev wifi connect biqu-m password biqu2020 ifname wlan0
+
 

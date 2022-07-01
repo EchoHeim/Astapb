@@ -218,6 +218,8 @@ sudo apt install mtd-utils
 
 # 4. 基于香橙派 kernel_5.13 修改记录
 
+0. update-motd.d 和 sys_cfg 文件夹，整个放在 /etc 目录下，终端登陆后的显示信息
+
 1. 修改主机名、用户名
    
     root用户登录，运行 `biqu_user.sh`
@@ -280,3 +282,14 @@ sudo apt install mtd-utils
     
     修改 orangepizero2 为新主机名 Hurakan
     
+9. klipper修改
+    
+    make menuconfig
+
+10. host_mcu
+    gpioinfo
+
+    make menuconfig
+    make flash
+
+

@@ -6,6 +6,9 @@ function h616_ui(){
     echo -e "$V_line    ${green}~~~~~~~~~~~~~~~~ [ H616 MENU ] ~~~~~~~~~~~~~~~~${clear}    $V_line"
     border "div_line"
     echo -e "$V_line $yellow  1)$clear all build            $V_line $yellow  2)$clear update files         $V_line"
+    border "div_line"
+    echo -e "$V_line $yellow  1)$clear user:${username_H616}            $V_line $yellow  2)$clear ip:${IP_H616}         $V_line"
+    echo -e "$V_line $yellow  1)$clear all build            $V_line $yellow  2)$clear update files         $V_line"
 
     footer "quit_back"
 }
