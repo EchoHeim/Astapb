@@ -41,9 +41,9 @@ function H616_build(){
 }
 
 function H616_updatefiles(){
-    # Pi_user=orangepi
-    Pi_user=biqu
-    Pi_IP=192.168.0.42
+
+    Pi_user=orangepi
+    Pi_IP=192.168.1.113
 
     ssh-keygen -R $Pi_IP
 
@@ -53,7 +53,7 @@ function H616_updatefiles(){
     
     #scp -r 5.13.0-sun50iw9 *.deb regulatory.* *.sh $Pi_user@$Pi_IP:/home/$Pi_user
     #scp -r 5.13.0-sun50iw9 *.ko *.deb regulatory.* *.sh $Pi_user@$Pi_IP:/home/$Pi_user
-    scp -r  *.deb *.sh $Pi_user@$Pi_IP:/home/$Pi_user
+    scp -r  5.16.17-sun50iw9 *.deb *.sh $Pi_user@$Pi_IP:/home/$Pi_user
 
     echo -e "\n **** copy complete! ****\n"
 }
