@@ -1,27 +1,8 @@
 #!/bin/bash
 
-function H616_build(){
-    
-    cd $PATH_H616_WORKSPACE
+function H616_build_uboot(){
 
     cp $PATH_H616_UBOOT/.config $PATH_H616_UBOOT/configs/orangepi_zero2_defconfig
-
-    #=================================
-
-    echo -e "\n ==== copy update script ====\n"
-    cp $MFAST_ROOT_PATH/shell/H616/update_kernel.sh $PATH_H616_NFS/
-
-    echo -e "\n ==== copy wifi files ====\n"
-
-    #cd $PATH_H616_NFS/29_WIFI
-    #cp regulatory.* $PATH_H616_NFS/
-    # scp regulatory.db regulatory.db.p7s $Pi_user@$Pi_IP:/home/$Pi_user
-
-    cd $PATH_H616_KERNEL/drivers/net/wireless/rtl8189fs
-    #cp 8189fs.ko $PATH_H616_NFS/
-
-    cd $PATH_H616_KERNEL/net/wireless/
-    #cp cfg80211.ko $PATH_H616_NFS/
 
     cd $PATH_H616_WORKSPACE
     sudo ./build.sh
@@ -29,6 +10,17 @@ function H616_build(){
     echo -e "\n ==== copy images ====\n"
 
     cp output/debs/u-boot/linux-*.deb $PATH_H616_NFS/
+
+    echo -e "\n **** build complete! ****\n"
+}
+
+function H616_build_kernel(){
+    
+    cd $PATH_H616_WORKSPACE
+    sudo ./build.sh
+
+    echo -e "\n ==== copy images ====\n"
+
     cp output/debs/linux-*.deb $PATH_H616_NFS/
 
     echo -e "\n ==== copy modules ====\n"
@@ -42,10 +34,13 @@ function H616_build(){
 
 function H616_updatefiles(){
 
-    Pi_user=orangepi
-    Pi_IP=192.168.1.113
+    Pi_user=${username_H616}
+    Pi_IP=${IP_H616}
 
     ssh-keygen -R $Pi_IP
+
+    echo -e "\n ==== copy update script ====\n"
+    cp $MFAST_ROOT_PATH/shell/H616/update_kernel.sh $PATH_H616_NFS/
 
     echo -e "\n ==== copy images ====\n"
 
@@ -56,4 +51,25 @@ function H616_updatefiles(){
     scp -r  5.16.17-sun50iw9 *.deb *.sh $Pi_user@$Pi_IP:/home/$Pi_user
 
     echo -e "\n **** copy complete! ****\n"
+}
+
+function H616_change_boardinfo(){
+
+    read -p "${yellow} Which information to modify? (${green}U${yellow}ser/${green}I${yellow}p) ${red}" choose_info; echo -e "${clear}"
+
+    case "$choose_info" in
+        U|u) read -p "${yellow} Please enter a new user name: ${red}" board_user; echo -e "${clear}"
+            sed -i "s/^username_H616=.*$/username_H616=${board_user}/" ${MFAST_ROOT_PATH}/mfast.cfg
+            ;;
+
+        I|i) read -p "${yellow} Please enter the new board ip: ${red}" board_ip; echo -e "${clear}"
+            sed -i "s/^IP_H616=.*$/IP_H616=${board_ip}/" ${MFAST_ROOT_PATH}/mfast.cfg
+            ;;
+
+        *)  error_msg "Input error!" ;;
+    esac
+
+    source ${MFAST_ROOT_PATH}/mfast.cfg
+
+    unset choose_info board_user board_ip
 }

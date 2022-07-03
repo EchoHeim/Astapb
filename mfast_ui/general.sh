@@ -79,19 +79,23 @@ function confirm(){
 }
 
 ### set some messages
-function error_msg(){
-    ERROR_MSG=$1
-    print_msg
+function select_msg() {
+    echo -e "${white}   [➔] ${1}"
 }
-
-function status_msg(){
-    STATUS_MSG=$1
-    print_msg
+function status_msg() {
+    echo -e "\n${magenta}###### ${1}${white}\n"
 }
-
-function ok_msg(){
-    OK_MSG=$1
-    print_msg
+function ok_msg() {
+    echo -e "\n${green}[✓ OK] ${1}${white}\n"
+}
+function warn_msg() {
+    echo -e "\n${yellow}[! WARN] ${1}${white}\n"
+}
+function error_msg() {
+    echo -e "\n${red}[x ERROR] ${1}${white}\n"
+}
+function abort_msg() {
+    echo -e "\n${red}<<<<<< ${1}${white}\n"
 }
 
 function quit_msg(){

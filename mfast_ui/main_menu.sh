@@ -13,7 +13,7 @@ function main_ui(){
     echo -e "$V_line $yellow 3)$clear [MP157]                  $V_line                        $V_line "
     border "main_blank_line"
     echo -e "$V_line $yellow 4)$clear [RaspBerryPi]            $V_line                        $V_line "
-    echo -e "$V_line                              $V_line            Ver: 1.0.3  $V_line "
+    echo -e "$V_line                              $V_line            Ver: 1.0.4  $V_line "
     footer "quit_backup"
 }
 
