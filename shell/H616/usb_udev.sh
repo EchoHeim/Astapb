@@ -1,8 +1,8 @@
 #!/bin/bash
 
 MNT_PATH=/home/biqu/gcode_files/         # mount menu
-DEV_PRE=$1              
-DEV_NAME=$2       
+DEV_PRE=$1
+DEV_NAME=$2
 
 if [ $ACTION == "add" ]; then
     sudo mkdir -p $MNT_PATH$DEV_PRE-$DEV_NAME

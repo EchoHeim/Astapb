@@ -143,6 +143,7 @@ fi
 cd /udisk/gcode
 if ls *.gcode > /dev/null 2>&1;then
     sudo cp ./*.gcode /home/$username/gcode_files -fr
+    sync
     sudo rm ./*.gcode -fr
 fi
 
@@ -154,6 +155,7 @@ fi
 cd /
 sudo umount /udisk
 sudo rm /udisk -fr
+sync
 
 sudo ethtool -s eth0 autoneg on speed 100 duplex full      # 限制以太网使用百兆带宽
 

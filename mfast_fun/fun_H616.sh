@@ -5,7 +5,7 @@ function H616_build_uboot(){
     cp $PATH_H616_UBOOT/.config $PATH_H616_UBOOT/configs/orangepi_zero2_defconfig
 
     cd $PATH_H616_WORKSPACE
-    sudo ./build.sh
+    sudo ./build.sh BOARD=orangepizero2 BRANCH=current BUILD_OPT=u-boot
 
     echo -e "\n ==== copy images ====\n"
 
@@ -17,7 +17,7 @@ function H616_build_uboot(){
 function H616_build_kernel(){
     
     cd $PATH_H616_WORKSPACE
-    sudo ./build.sh
+    sudo ./build.sh BOARD=orangepizero2 BRANCH=current BUILD_OPT=kernel KERNEL_CONFIGURE=yes
 
     echo -e "\n ==== copy images ====\n"
 

@@ -3,11 +3,12 @@
 
 > 个人学习的知识点记录
 
+* [linux文件共享](./blog/Linux/Linux小技巧/Linux文件共享.md)
+
 ## RaspBerryPi
 
 * [树莓派40pin引脚测试](./blog/Linux/raspberryPi/树莓派40pin引脚测试.md)
 * [树莓派调试记录](./blog/Linux/raspberryPi/树莓派调试记录.md)
-
 
 ## STM32MP157
 

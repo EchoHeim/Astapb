@@ -220,6 +220,8 @@ sudo apt install mtd-utils
 
 0. update-motd.d 和 sys_cfg 文件夹，整个放在 /etc 目录下，终端登陆后的显示信息
 
+    /ete/issue 和 /ete/issue.net 文件
+
 1. 修改主机名、用户名
    
     root用户登录，运行 `biqu_user.sh`
@@ -292,4 +294,7 @@ sudo apt install mtd-utils
     make menuconfig
     make flash
 
+11. fluidd 界面
+    打印机名称修改
 
+12. 开机自启动 can 
