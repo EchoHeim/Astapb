@@ -298,3 +298,13 @@ sudo apt install mtd-utils
     打印机名称修改
 
 12. 开机自启动 can 
+
+13. 取消 git 代理
+
+14. klipper log删除
+
+15. SSH 取消超时断开连接
+
+    <https://blog.csdn.net/weixin_39534395/article/details/119229057>
+
+    <https://blog.csdn.net/bandaoyu/article/details/116999236>

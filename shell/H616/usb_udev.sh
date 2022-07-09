@@ -10,16 +10,10 @@ if [ $ACTION == "add" ]; then
     if [[ $? -ne 0 ]]; then
         sudo rmdir $MNT_PATH$DEV_PRE-$DEV_NAME
     fi
-    if [[ $DEV_NAME == "video0" ]]; then
-        source /home/biqu/scripts/web_camera.sh
-    fi
 elif [ $ACTION == "remove" ]; then
     if [[ -e  $MNT_PATH$DEV_PRE-$DEV_NAME ]] ; then
         sudo umount $MNT_PATH$DEV_PRE-$DEV_NAME
         /usr/bin/rmdir  $MNT_PATH$DEV_PRE-$DEV_NAME
-    fi
-    if [[ $DEV_NAME == "video0" ]]; then
-        sudo kill -9 $(pidof mjpg_streamer)
     fi
 fi
 

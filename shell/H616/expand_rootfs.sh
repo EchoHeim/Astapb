@@ -180,6 +180,6 @@ history -w
 cd /home/$username/
 sudo rm ./.bash_history -fr
 
-sudo sed -i 's/expand_rootfs.sh/init.sh/' /etc/rc.local
+sudo sed -i 's/expand_rootfs.sh/init.sh \&/' /etc/rc.local
 
 sudo reboot

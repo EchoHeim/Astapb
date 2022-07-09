@@ -12,11 +12,18 @@ wifi_status="$red ERROR! $clear"
 phy_status="$red ERROR! $clear"
 usb_device_mount=0
 
-tab_format(){
+function tab_format(){
     f_name=$1
     [ $# == 1 ] && echo "$(printf "%-$1s" "")"
     [ $# == 2 ] && echo "$(printf "%-$2s" "$f_name")"
     unset f_name
+}
+
+function IP_GATEWAY(){
+    local_ip=`ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:"`
+
+    IP_ADDR="${local_ip%.*}.1"
+    echo $IP_ADDR
 }
 
 function check_hdmi() {
@@ -70,9 +77,7 @@ function check_wifi() {
     sudo udhcpc -i wlan0
     sleep 6
 
-    ping -c 1 www.baidu.com -I wlan0 & wait $!
-    echo ""
-
+    ping -c 1 $(IP_GATEWAY) -I wlan0 & wait $!
     if [ $? == 0 ]; then
         wifi_status="$green OK! $clear"
     fi
@@ -85,9 +90,7 @@ function check_phy() {
     echo -e " $yellow ==== Checking phy... ==== $clear"
     echo ""
 
-    ping -c 1 www.baidu.com -I eth0 & wait $!
-    echo ""
-
+    ping -c 1 $(IP_GATEWAY) -I eth0 & wait $!
     if [ $? == 0 ]; then
         phy_status="$green OK! $clear"
     fi
@@ -96,8 +99,8 @@ function check_phy() {
 
 check_hdmi
 check_usb
-check_phy
 check_wifi
+check_phy
 
 free -h --si
 
