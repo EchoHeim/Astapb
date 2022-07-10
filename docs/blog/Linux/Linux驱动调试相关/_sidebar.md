@@ -1,12 +1,6 @@
 <!-- _sidebar.md -->
 
-# &emsp; [Android 学习笔记](./blog/Android/README.md)   <!-- {docsify-ignore} -->
+- [<font color="Darkorange">🛸 返回 </font>](blog/Catalog/Linux笔记.md)
 
-* [随笔001-提示信息(Tosat&Log)](./blog/Android/随笔001-提示信息.md)
-* [随笔002-使用Menu](./blog/Android/随笔002-使用Menu.md)
-* [随笔003-使用Intent连接多个活动](./blog/Android/随笔003-使用Intent连接多个活动.md)
-* [随笔004-UI设计常用控件](./blog/Android/随笔004-UI设计常用控件.md)
-* [随笔005-APP界面语言跟随系统](./blog/Android/随笔005-APP界面语言跟随系统.md)
-* [随笔006-多个Activity共享全局变量](./blog/Android/随笔006-多个Activity共享全局变量.md)
-
-* [返回](../) 
+* [<font color="darkviolet">📍 Linux访问PHY芯片寄存器 </font>](blog/Linux/Linux驱动调试相关/Linux访问PHY芯片寄存器.md)
+* [<font color="darkviolet">📍 Linux使用adb抓取Android日志 </font>](blog/Linux/Linux驱动调试相关/Linux使用adb抓取Android日志.md)

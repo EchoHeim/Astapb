@@ -18,7 +18,7 @@
      * @param type
      * @param animation
      */
-    function do_animation($obj, type, animation) {
+    function do_animation ($obj, type, animation) {
         if (type === 'show') {
             switch (animation) {
                 case 'fade':
@@ -54,12 +54,12 @@
      * @param $obj
      * @param speed
      */
-    function click_event($obj, speed) {
+    function click_event ($obj, speed) {
         var not_clicked = true;
         $obj.on('click', function () {
             if (not_clicked === true) {
                 not_clicked = false;
-                $('html, body').animate({scrollTop: 0}, speed, function () {
+                $('html, body').animate({ scrollTop: 0 }, speed, function () {
                     not_clicked = true;
                 });
             }
@@ -208,7 +208,7 @@
             if ($window.outerWidth() <= params.hideUnderWidth) {
                 isHidden = true;
                 do_animation($container, 'hide', params.entryAnimation);
-                if (typeof($textContainer) !== 'undefined') {
+                if (typeof ($textContainer) !== 'undefined') {
                     do_animation($textContainer, 'hide', params.entryAnimation);
                 }
             } else {
@@ -220,7 +220,7 @@
         if ($window.outerWidth() <= params.hideUnderWidth) {
             isHidden = true;
             $container.hide();
-            if (typeof($textContainer) !== 'undefined')
+            if (typeof ($textContainer) !== 'undefined')
                 $textContainer.hide();
         }
 
@@ -230,32 +230,32 @@
             $window.scroll(function () {
                 if ($window.scrollTop() >= params.trigger && !isHidden) {
                     do_animation($container, 'show', params.entryAnimation);
-                    if (typeof($textContainer) !== 'undefined') {
+                    if (typeof ($textContainer) !== 'undefined') {
                         do_animation($textContainer, 'show', params.entryAnimation);
                     }
                 } else {
                     do_animation($container, 'hide', params.entryAnimation);
-                    if (typeof($textContainer) !== 'undefined') {
+                    if (typeof ($textContainer) !== 'undefined') {
                         do_animation($textContainer, 'hide', params.entryAnimation);
                     }
                 }
             });
         } else {
             do_animation($container, 'show', params.entryAnimation);
-            if (typeof($textContainer) !== 'undefined') {
+            if (typeof ($textContainer) !== 'undefined') {
                 do_animation($textContainer, 'show', params.entryAnimation);
             }
         }
         /* If i load the page and the scroll is over the trigger, i don't have immediately the event 'scroll' */
         if ($window.scrollTop() >= params.trigger && !isHidden) {
             do_animation($container, 'show', params.entryAnimation);
-            if (typeof($textContainer) !== 'undefined') {
+            if (typeof ($textContainer) !== 'undefined') {
                 do_animation($textContainer, 'show', params.entryAnimation);
             }
         }
 
         click_event($container, params.goupSpeed);
-        if (typeof($textContainer) !== 'undefined') {
+        if (typeof ($textContainer) !== 'undefined') {
             click_event($textContainer, params.goupSpeed);
         }
     };

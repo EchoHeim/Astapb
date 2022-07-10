@@ -8,7 +8,7 @@ var pointerY = 0;
 var tap = ('ontouchstart' in window || navigator.msMaxTouchPoints) ? 'touchstart' : 'contextmenu';
 var colors = ['#FF1461', '#18FF92', '#5A87FF', '#FBF38C'];
 
-function setCanvasSize() {
+function setCanvasSize () {
     canvasEl.width = window.innerWidth * 2;
     canvasEl.height = window.innerHeight * 2;
     canvasEl.style.width = window.innerWidth + 'px';
@@ -16,12 +16,12 @@ function setCanvasSize() {
     canvasEl.getContext('2d').scale(2, 2);
 }
 
-function updateCoords(e) {
+function updateCoords (e) {
     pointerX = e.clientX || e.touches[0].clientX;
     pointerY = e.clientY || e.touches[0].clientY;
 }
 
-function setParticuleDirection(p) {
+function setParticuleDirection (p) {
     var angle = anime.random(0, 360) * Math.PI / 180;
     var value = anime.random(50, 180);
     var radius = [-1, 1][anime.random(0, 1)] * value;
@@ -31,14 +31,14 @@ function setParticuleDirection(p) {
     }
 }
 
-function createParticule(x, y) {
+function createParticule (x, y) {
     var p = {};
     p.x = x;
     p.y = y;
     p.color = colors[anime.random(0, colors.length - 1)];
     p.radius = anime.random(16, 32);
     p.endPos = setParticuleDirection(p);
-    p.draw = function() {
+    p.draw = function () {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, 2 * Math.PI, true);
         ctx.fillStyle = p.color;
@@ -47,7 +47,7 @@ function createParticule(x, y) {
     return p;
 }
 
-function createCircle(x, y) {
+function createCircle (x, y) {
     var p = {};
     p.x = x;
     p.y = y;
@@ -55,7 +55,7 @@ function createCircle(x, y) {
     p.radius = 0.1;
     p.alpha = .5;
     p.lineWidth = 6;
-    p.draw = function() {
+    p.draw = function () {
         ctx.globalAlpha = p.alpha;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, 2 * Math.PI, true);
@@ -67,13 +67,13 @@ function createCircle(x, y) {
     return p;
 }
 
-function renderParticule(anim) {
+function renderParticule (anim) {
     for (var i = 0; i < anim.animatables.length; i++) {
         anim.animatables[i].target.draw();
     }
 }
 
-function animateParticules(x, y) {
+function animateParticules (x, y) {
     var circle = createCircle(x, y);
     var particules = [];
     for (var i = 0; i < numberOfParticules; i++) {
@@ -81,10 +81,10 @@ function animateParticules(x, y) {
     }
     anime.timeline().add({
         targets: particules,
-        x: function(p) {
+        x: function (p) {
             return p.endPos.x;
         },
-        y: function(p) {
+        y: function (p) {
             return p.endPos.y;
         },
         radius: 0.1,
@@ -110,12 +110,12 @@ function animateParticules(x, y) {
 
 var render = anime({
     duration: Infinity,
-    update: function() {
+    update: function () {
         ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
     }
 });
 
-document.addEventListener(tap, function(e) {
+document.addEventListener(tap, function (e) {
     window.human = true;
     render.play();
     updateCoords(e);
@@ -125,7 +125,7 @@ document.addEventListener(tap, function(e) {
 var centerX = window.innerWidth / 2;
 var centerY = window.innerHeight / 2;
 
-function autoClick() {
+function autoClick () {
     if (window.human) return;
     animateParticules(
         anime.random(centerX - 50, centerX + 50),

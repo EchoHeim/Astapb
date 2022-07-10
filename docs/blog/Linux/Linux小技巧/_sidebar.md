@@ -1,12 +1,15 @@
 <!-- _sidebar.md -->
 
-# &emsp; [Android 学习笔记](./blog/Android/README.md)   <!-- {docsify-ignore} -->
+- [<font color="Darkorange">🛸 返回 </font>](blog/Catalog/Linux笔记.md)
 
-* [随笔001-提示信息(Tosat&Log)](./blog/Android/随笔001-提示信息.md)
-* [随笔002-使用Menu](./blog/Android/随笔002-使用Menu.md)
-* [随笔003-使用Intent连接多个活动](./blog/Android/随笔003-使用Intent连接多个活动.md)
-* [随笔004-UI设计常用控件](./blog/Android/随笔004-UI设计常用控件.md)
-* [随笔005-APP界面语言跟随系统](./blog/Android/随笔005-APP界面语言跟随系统.md)
-* [随笔006-多个Activity共享全局变量](./blog/Android/随笔006-多个Activity共享全局变量.md)
-
-* [返回](../) 
+* [<font color="darkviolet">🌿 Linux定时任务 </font>](blog/Linux/Linux小技巧/Linux定时任务.md)
+* [<font color="darkviolet">🌿 Linux扩展根分区 </font>](blog/Linux/Linux小技巧/Linux扩展根分区.md)
+* [<font color="darkviolet">🌿 linux设置静态IP </font>](blog/Linux/Linux小技巧/linux设置静态IP.md)
+* [<font color="darkviolet">🌿 linux网速测试 </font>](blog/Linux/Linux小技巧/linux网速测试.md)
+* [<font color="darkviolet">🌿 Linux文件共享 </font>](blog/Linux/Linux小技巧/Linux文件共享.md)
+* [<font color="darkviolet">🌿 linux性能测试 </font>](blog/Linux/Linux小技巧/linux性能测试.md)
+* [<font color="darkviolet">🌿 Linux修改用户名 </font>](blog/Linux/Linux小技巧/Linux修改用户名.md)
+* [<font color="darkviolet">🌿 Linux压缩软件的使用 </font>](blog/Linux/Linux小技巧/Linux压缩软件的使用.md)
+* [<font color="darkviolet">🌿 Linux自动挂载U盘 </font>](blog/Linux/Linux小技巧/Linux自动挂载U盘.md)
+* [<font color="darkviolet">🌿 MJPG-streamer的安装 </font>](blog/Linux/Linux小技巧/MJPG-streamer的安装.md)
+* [<font color="darkviolet">🌿 SSH与动态MOTD </font>](blog/Linux/Linux小技巧/SSH与动态MOTD.md)

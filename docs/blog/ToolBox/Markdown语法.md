@@ -576,9 +576,9 @@ $$
 
 
 
-## 11 使用 LaTeX 写矩阵
+# 11 使用 LaTeX 写矩阵
 
-### 11.1 简单的 Matrix
+## 11.1 简单的 Matrix
 
 使用 `\begin{matrix}…\end{matrix}` 来生成矩阵，其中`...` 表示的是 *LaTeX*  的矩阵命令，矩阵命令中每一行以 `\\` 结束，矩阵的元素之间用`&`来分隔开。
 
@@ -592,7 +592,7 @@ $$
   \end{matrix} \tag{1}
 ```
 
-### 11.2 带括号的 Matrix
+## 11.2 带括号的 Matrix
 
 感觉 11.1 中的矩阵不是很美观，可以给矩阵加上括号，加括号的方式有很多，大致可分为两种：使用 `\left ... \right`  或者把公式命令中的 `matrix`  改成  `pmatrix`、`bmatrix`、`Bmatrix`、`vmatrix`、`Vmatrix `等。
 
@@ -652,7 +652,7 @@ $$
           \end{Bmatrix} \tag{5}
       ```
 
-### 11.3 带省略号的Matrix
+## 11.3 带省略号的Matrix
 
 如果矩阵元素太多，可以使用 `\cdots` ⋯⋯ `\ddots` ⋱⋱ `\vdots` ⋮⋮  等省略符号来定义矩阵。
 
@@ -670,7 +670,7 @@ $$
   ```
 
 
-### 11.4 带参数的 Matrix
+## 11.4 带参数的 Matrix
 
 比如写增广矩阵，可能需要最右边一列单独考虑。可以用`array`命令来处理：
 
@@ -688,7 +688,7 @@ $$
 
 其中`\begin{array}{cc|c}`中的 c 表示居中对齐元素,`|` 用来作为分割列的符号。
 
-### 11.5 行间矩阵
+## 11.5 行间矩阵
 
 可以使用`\bigl(\begin{smallmatrix} ... \end{smallmatrix}\bigr)`，
 

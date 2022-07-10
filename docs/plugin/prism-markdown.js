@@ -14,7 +14,7 @@
      * @param {boolean} starAlternative Whether to also add an alternative where all `_`s are replaced with `*`s.
      * @returns {RegExp}
      */
-    function createInline(pattern, starAlternative) {
+    function createInline (pattern, starAlternative) {
         pattern = pattern.replace(/<inner>/g, inner);
         if (starAlternative) {
             pattern = pattern + '|' + pattern.replace(/_/g, '\\*');
@@ -245,7 +245,7 @@
             return;
         }
 
-        function walkTokens(tokens) {
+        function walkTokens (tokens) {
             if (!tokens || typeof tokens === 'string') {
                 return;
             }

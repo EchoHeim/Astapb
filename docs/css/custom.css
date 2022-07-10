@@ -1,9 +1,10 @@
 section.cover .cover-main {
     z-index: 100;
 }
+
 section.cover.has-mask .mask {
     background-color: rgb(255, 255, 255);
-    opacity: .1!important;
+    opacity: .1 !important;
     position: absolute;
     top: 0;
     height: 100%;
@@ -24,64 +25,67 @@ section.cover h5 .anchor span {
 }
 
 section.cover h4 .anchor span {
-    font-family: STKaiti,'Lobster', cursive;
+    font-family: STKaiti, 'Lobster', cursive;
     font-size: 18px;
     color: var(--theme-color);
-    color:rgb(123, 109, 131);
+    color: rgb(123, 109, 131);
 }
 
-section.cover .cover-main > p:last-child a .iconfont {
+section.cover .cover-main>p:last-child a .iconfont {
     font-size: 1em;
 }
 
-.sidebar > h1 a {
+.sidebar>h1 a {
     font-family: 'Lobster', cursive;
 }
 
 /*滚动条样式*/
 /* 滚动条宽度 */
-::-webkit-scrollbar{width:8px;}
+::-webkit-scrollbar {
+    width: 8px;
+}
+
 /* 滚动条颜色 */
-::-webkit-scrollbar-thumb{
+::-webkit-scrollbar-thumb {
     background: #33a9dc;
     background-image: linear-gradient(#6ecd56, #33a9dc, #cb6196, #c16290);
     border-radius: 2em;
 }
 
 /* 一级标题添加背景 */
-h1 span{
-    display:inline-block;
-    font-family:STKaiti,"Microsoft YaHei",LiSu,STLiti;
+h1 span {
+    display: inline-block;
+    font-family: STKaiti, "Microsoft YaHei", LiSu, STLiti;
     background: rgba(1, 225, 255, 0.384);
-    color:#ffffff;
-    padding:  5px  15px;
-    border-radius:5px;
+    color: #ffffff;
+    padding: 5px 15px;
+    border-radius: 5px;
     box-shadow: 1px 1px 3px rgba(240, 61, 247, 0.637);
 }
 
-h2 span{
-    display:inline-block;
-    font-family:STKaiti,"Microsoft YaHei",LiSu,STLiti;
+h2 span {
+    display: inline-block;
+    font-family: STKaiti, "Microsoft YaHei", LiSu, STLiti;
     font-size: 22px;
-    padding:  5px  10px;
-    border-radius:5px;
+    padding: 5px 10px;
+    border-radius: 5px;
     box-shadow: 1px 1px 4px rgb(1, 225, 255);
 }
 
 p {
-	/* color: rgb(73, 73, 73); */
-	font-family:STKaiti,"Microsoft YaHei",LiSu,STLiti;
-	font-size: 17px;
+    /* color: rgb(73, 73, 73); */
+    font-family: STKaiti, "Microsoft YaHei", LiSu, STLiti;
+    font-size: 17px;
 }
 
 li {
-	/* color: rgb(73, 73, 73); */
-	font-family:STKaiti,"Microsoft YaHei",LiSu,STLiti;
-	font-size: 18px;
+    /* color: rgb(73, 73, 73); */
+    font-family: STKaiti, "Microsoft YaHei", LiSu, STLiti;
+    font-size: 18px;
 }
 
 /* 侧边栏调节 */
-.sidebar { 
+.sidebar {
     padding-top: 6px;
 }
 
@@ -107,11 +111,11 @@ aside.sidebar ul li a {
     color: rgb(37, 150, 179);
 }
 
-aside.sidebar ul li.active > a {
+aside.sidebar ul li.active>a {
     font-size: 16px !important;
 }
 
-aside.sidebar ul li.active > a:before {
+aside.sidebar ul li.active>a:before {
     content: '' !important;
     position: absolute !important;
     margin: 0 !important;
@@ -123,6 +127,7 @@ aside.sidebar ul li.active > a:before {
     background-color: #4ae3fe !important;
     box-shadow: 0 0 0 3px rgba(16, 177, 218, 0.4) !important;
 }
+
 /*调节侧边栏结束*/
 
 
@@ -131,7 +136,7 @@ aside.sidebar ul li.active > a:before {
     /* 代码块头部图片 */
     content: '';
     display: block;
-    background: url(../images/icon.svg);
+    background: url(https://cdn.jsdelivr.net/gh/EchoHeim/Astapb/docs/images/icon.svg);
     height: 30px;
     background-size: 26px;
     background-repeat: no-repeat;
@@ -140,8 +145,8 @@ aside.sidebar ul li.active > a:before {
 }
 
 .markdown-section pre>code {
-    color: #399959 !important;
-    font-family: STKaiti,'Inconsolata', consolas,"PingFang SC", "Microsoft YaHei", monospace !important;
+    color: #24a0f3 !important;
+    font-family: STKaiti, 'Inconsolata', consolas, "PingFang SC", "Microsoft YaHei", monospace !important;
     /* background-color: #eff3f0bb !important;    //#accfff  #282c34 */
     font-size: 16px !important;
     white-space: pre !important;
@@ -152,13 +157,15 @@ aside.sidebar ul li.active > a:before {
     border-radius: .3em;
 }
 
-.markdown-section > div > img, .markdown-section pre {
-    box-shadow: 2px 2px 20px 6px rgba(9, 32, 240, 0.219) !important;
+.markdown-section>div>img,
+.markdown-section pre {
+    box-shadow: 2px 2px 20px 6px rgba(2, 247, 255, 0.699) !important;
 }
 
 .markdown-section a:not(:hover) {
     text-decoration: none;
 }
+
 /*代码块设置 end*/
 
 /*添加代码块复制按钮样式*/
@@ -167,52 +174,54 @@ aside.sidebar ul li.active > a:before {
     color: #FFFFFF !important;
     font-size: 12px !important;
 }
-::after{
+
+::after {
     color: #9da2fd !important;
     font-size: 13px !important;
 }
 
 
 /* 修改代码块代码颜色显示 */
-.token.directive.keyword{
+.token.directive.keyword {
     color: #4faee2 !important;
 }
 
-.token.keyword{
+.token.keyword {
     color: #c678dd !important;
 }
 
-.token.comment{
+.token.comment {
     color: #737c8b !important;
 }
 
-.token.tag{
+.token.tag {
     color: #a589ad !important;
 }
 
-.token.attr-name{
+.token.attr-name {
     color: #de916c !important;
 }
 
-.token.attr-value{
+.token.attr-value {
     color: #4faee2 !important;
 }
 
-.token.macro.property{
+.token.macro.property {
     color: #4faee2 !important;
 }
 
-.token.function{
+.token.function {
     color: #e6b456 !important;
 }
-.token.string{
+
+.token.string {
     color: #98b755 !important;
 }
-.token.punctuation{
+
+.token.punctuation {
     color: #c0c3c1 !important;
 }
 
-.token.number{
-    color:#c0c3c1  !important;
+.token.number {
+    color: #c0c3c1 !important;
 }
-

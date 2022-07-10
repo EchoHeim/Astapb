@@ -6,4 +6,4 @@
 * [<font color="darkviolet">🐋 Klipper 安装 </font>](blog/ToolBox/Klipper安装.md)
 * [<font color="darkviolet">🦓 MarkDown 语法 </font>](blog/ToolBox/Markdown语法.md)
 * [<font color="darkviolet">🐔 js.org二级域名 </font>](blog/ToolBox/js.org二级域名.md)
-
+* [<font color="darkviolet">🐅 ubuntu操作记录 </font>](blog/ToolBox/ubuntu操作记录.md)
