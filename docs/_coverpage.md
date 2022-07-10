@@ -20,7 +20,7 @@
 <br>
 
 [GitHub <i class="iconfont icon-github"></i>](https://github.com/EchoHeim/Astapb/tree/master/docs)
-[开始冲浪 <i class="iconfont icon-jiantouxia"></i>](blog_start.md)
+[开始冲浪 <i class="iconfont icon-jiantouxia"></i>](blog/blog_start.md)
 
 <!-- background image -->
 ![back](https://cdn.jsdelivr.net/gh/EchoHeim/Astapb/docs/images/coverpage.png)
