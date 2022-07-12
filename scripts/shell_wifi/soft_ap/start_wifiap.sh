@@ -31,3 +31,5 @@ function startWifi_sta() {
     sudo nmcli dev wifi connect $WIFI_SSID password $WIFI_PASSWD ifname $wlan
     sudo udhcpc -i $wlan
 }
+
+

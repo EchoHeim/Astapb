@@ -40,11 +40,11 @@ function startWifi_ap() {
     if [[ $IS_AP_MODE == "no" && $sta_mount -gt 1 ]]; then
         echo $(date)" ---- change to ap mode..." >> /home/biqu/scripts/wifi.log
         IS_AP_MODE="yes"
+        nmcli device disconnect $wlan
         sudo kill -9 $(pidof hostapd)
         sudo kill -9 $(pidof udhcpd)
         sudo kill -9 $(pidof udhcpc)
-        nmcli device disconnect $wlan
-
+        
         # hostapd启动中常用到的参数说明
             # -h   显示帮助信息
             # -d   显示更多的debug信息 (-dd 获取更多)
@@ -117,6 +117,7 @@ while [ 1 ]; do
     elif [[ $WIFI_AP == "true" ]]; then
         if [[ $(is_network $eth) == yes ]]; then
             sta_mount=6
+            [[ $(is_network $wlan) == yes ]] && IS_AP_MODE="no"
             echo -e $(date)" ==== $eth network connection..." >> /home/biqu/scripts/wifi.log
             startWifi
         elif [[ $(is_network $wlan) == no ]]; then

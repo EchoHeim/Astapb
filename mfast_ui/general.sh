@@ -67,35 +67,31 @@ function get_date(){
 }
 
 function choose(){
-    if [ "$1" == "action" ]; then
-        read -p "${yellow} Please choose: ${red}" action; echo -e "${clear}"
-    elif [ "$1" == "yn" ]; then
-        read -p "${cyan}====> Installing the above packages? (Y/n):${red} " yn; echo -e "${clear}"
+    if [ $# == 1 ]; then
+        [[ "$1" == "action" ]] && read -p "${yellow} Please choose: ${red}" action; echo -e "${clear}"
+    elif [ $# == 2 ]; then
+        [[ "$1" == "yn" ]] && read -p "${yellow} $2 ${red}" yn; echo -e "${clear}"
     fi
-}
-
-function confirm(){
-    read -p "${yellow} $1 ${red}" yn; echo -e "${clear}"
 }
 
 ### set some messages
 function select_msg() {
-    echo -e "${white}   [➔] ${1}"
+    echo -e "${white}   [➔] ${1}${clear}"
 }
 function status_msg() {
-    echo -e "\n${magenta}###### ${1}${white}\n"
+    echo -e "\n${magenta}###### ${1} ######${clear}\n"
 }
 function ok_msg() {
-    echo -e "\n${green}[✓ OK] ${1}${white}\n"
+    echo -e "\n${green}[✓ OK] ${1}${clear}\n"
 }
 function warn_msg() {
-    echo -e "\n${yellow}[! WARN] ${1}${white}\n"
+    echo -e "\n${yellow}[! WARN] ${1}${clear}\n"
 }
 function error_msg() {
-    echo -e "\n${red}[x ERROR] ${1}${white}\n"
+    echo -e "\n${red}[x ERROR] ${1}${clear}\n"
 }
 function abort_msg() {
-    echo -e "\n${red}<<<<<< ${1}${white}\n"
+    echo -e "\n${red}<<<<<< ${1}${clear}\n"
 }
 
 function quit_msg(){

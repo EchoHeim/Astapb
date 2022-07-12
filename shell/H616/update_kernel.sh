@@ -2,8 +2,6 @@
 
 cd ~
 
-sudo sed -i "s/verbosity=1/verbosity=7/" /boot/orangepiEnv.txt
-
 if [ -e "./linux-u-boot-current-orangepizero2_3.0.4_arm64.deb" ];then
     echo -e "\n **** remove uboot ****\n"
     sudo apt purge -y linux-u-boot-orangepizero2-current
@@ -12,8 +10,6 @@ if [ -e "./linux-u-boot-current-orangepizero2_3.0.4_arm64.deb" ];then
 
     sudo nand-sata-install
 fi
-
-# sudo apt install udhcpc -y
 
 # sudo mv regulatory.db* /lib/firmware/
 

@@ -28,7 +28,7 @@ function WhetherInstall(){
             echo -e "${cyan}● $pkg ${clear}"
         done
         echo
-        choose "yn"
+        choose "yn" "====> Installing the above packages? (Y/n):"
         case "$yn" in
             Y|y|Yes|yes|"")
                 echo
