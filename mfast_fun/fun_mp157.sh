@@ -19,10 +19,8 @@ function mp157_cpmpile_TF-a(){
         make -f ../Makefile.sdk all
 
         status_msg "Copy file..."
-
         cp ../build/trusted/tf-a-stm32mp157d-${mp157_board}-trusted.stm32 $PATH_UPDATE/tf-a/
         sync
-
         ok_msg "Build TF-A complete!"
         ;;
 
@@ -45,12 +43,9 @@ function mp157_cpmpile_u-boot(){
         #make DEVICE_TREE=stm32mp157d-${CompanyLogo} UBOOT_CONFIGS=stm32mp15_${CompanyLogo}_trusted_defconfig,trusted,u-boot.stm32 all
 
         status_msg "Copy file..."
-
         cp ./u-boot.stm32 $PATH_UPDATE/u-boot/u-boot-stm32mp157d-${CompanyLogo}.stm32
         cp ./u-boot.stm32 $PATH_UPDATE/u-boot/u-boot-stm32mp157d-${CompanyLogo}-sr.stm32
-
         sync
-        
         ok_msg "Build u-boot complete!"
         ;;
 
@@ -66,14 +61,14 @@ function mp157_cpmpile_kernel(){
         choose "yn" "Install kernel driver modules? (y/N) "
         case "$yn" in
             Y|y)
-            if [ -d "/media/$USER/$MOUNT_DIR" ];then                            # 判断文件夹是否存在;
+            if [ -d "/media/$USER/$MOUNT_DIR" ];then    # 判断文件夹是否存在;
                 status_msg "Compile module files..."
-                make dtbs          # 重新编译设备树;
-                make modules -j12  # 编译驱动模块;
+                make dtbs               # 重新编译设备树;
+                make modules -j12       # 编译驱动模块;
 
                 status_msg "Modules install..."
                 sudo make modules_install INSTALL_MOD_PATH=/media/$USER/$MOUNT_DIR   # 安装模块;
-            else    # 文件夹不存在;
+            else            # 文件夹不存在;
                 warn_msg "No sd card inserted!"
                 warn_msg "Continue compiling the kernel..."
                 sleep 3
@@ -89,16 +84,15 @@ function mp157_cpmpile_kernel(){
         make DEVICE_TREE=stm32mp157d-${CompanyLogo} uImage dtbs LOADADDR=0XC2000040 -j16
 
         status_msg "Copy file..."
-
         cp arch/arm/boot/uImage $PATH_UPDATE/tftpboot/
         cp arch/arm/boot/dts/stm32mp157d-${CompanyLogo}.dtb $PATH_UPDATE/tftpboot/
 
-        cp arch/arm/boot/uImage $PATH_UPDATE/bootfs/
-        cp arch/arm/boot/dts/stm32mp157d-${CompanyLogo}.dtb $PATH_UPDATE/bootfs/
-
+        cp arch/arm/boot/uImage $PATH_UPDATE/kernel/
+        cp arch/arm/boot/dts/stm32mp157d-${CompanyLogo}.dtb $PATH_UPDATE/kernel/
+        sync
         status_msg "Packing bootfs..."
 
-        cd $PATH_UPDATE/bootfs/
+        cd $PATH_UPDATE/kernel/
         dd if=/dev/zero of=bootfs.ext4 bs=1M count=20
         mkfs.ext4 -L bootfs bootfs.ext4
 
@@ -110,7 +104,6 @@ function mp157_cpmpile_kernel(){
         mv bootfs.ext4 $PATH_UPDATE/${CompanyLogo}-image-bootfs.ext4
         
         sync
-
         ok_msg "Build kernel complete!"
         ;;
 
@@ -151,33 +144,45 @@ function mp157_clear(){
     esac
 }
 
-
-function mp157_flash_factory() {
+function mp157_flash(){
     STM32_Programmer_CLI -l usb
-
-    cd $PATH_FACTORY_IMAGE
-    echo -e "\n$purple Restore factory image via usb1? $red_flash(y/N)$clear \c"
-    read update_YN
-
-    if [[ $update_YN == "y" || $update_YN == "Y" ]]; then
-        SD_or_eMMC=0
-        echo -e "\n$purple Revert to SD card or eMMC? (Please Choose)"
-        echo -e " $red_flash( 1:SD card / 2:eMMC )$clear \c"
-        read SD_or_eMMC
+    choose "yn" "Restore image via usb1? (y/N) "
+    select_msg $yn
+    if [[ "$yn" =~ "Y"|"y" ]]; then
+        choose "SD_or_eMMC"
         if [[ $SD_or_eMMC == 2 ]]; then
-            echo -e "\n$green Restore factory image to eMMC...$clear\n"
-            STM32_Programmer_CLI -c port=usb1 -w atk_emmc-stm32mp157d-atk-qt.tsv -tm 20000
+            SD_or_eMMC="eMMC"
         elif [[ $SD_or_eMMC == 1 ]]; then
-            echo -e "\n$green Restore factory image to SD card...$clear\n"
-            STM32_Programmer_CLI -c port=usb1 -w atk_sdcard-stm32mp157d-atk-qt.tsv -tm 20000
+            SD_or_eMMC="SD_card"
         else
-            echo -e "\n$blue/==================================================\\\\$clear"
-            echo -e "$V_line $yellow                  [ Warning ]                   $clear $V_line"
-            echo -e "$V_line $yellow              **** No Choose! ****              $clear $V_line"
-            echo -e "$blue\\==================================================/$clear"
+            warn_msg "Wrong choice!"
         fi
+
+        case "$1" in
+            "factory")
+            cd $PATH_FACTORY_IMAGE
+            [[ $SD_or_eMMC == "eMMC" ]] && prg_file="atk_emmc-stm32mp157d-atk-qt"
+            [[ $SD_or_eMMC == "SD_card" ]] && prg_file="atk_sd_card-stm32mp157d-atk-qt"
+            ;;
+
+            "bootfs")
+            cd $PATH_UPDATE
+            [[ $SD_or_eMMC == "eMMC" ]] && prg_file="atk_emmc-stm32mp157d-atk-qt"
+            [[ $SD_or_eMMC == "SD_card" ]] && prg_file="atk_sd_card-stm32mp157d-atk-qt"
+            ;;
+
+            "rootfs")
+            cd $PATH_UPDATE
+            [[ $SD_or_eMMC == "eMMC" ]] && prg_file="atk_emmc-stm32mp157d-atk-qt"
+            [[ $SD_or_eMMC == "SD_card" ]] && prg_file="atk_sd_card-stm32mp157d-atk-qt"
+            ;;
+        esac
+
+        [[ $SD_or_eMMC =~ "eMMC"|"SD_card" ]] && status_msg "Restore $1 image to $SD_or_eMMC..." && STM32_Programmer_CLI -c port=usb1 -w $prg_file.tsv -tm 20000
     fi
-    exit 0
+
+    unset SD_or_eMMC
+    unset prg_file
 }
 
 function mp157_cpmpile_rootfs(){
@@ -194,96 +199,9 @@ function mp157_cpmpile_rootfs(){
         cp $PWD/arch/arm/boot/uImage $PATH_UPDATE/tftpboot/
         cp $PWD/arch/arm/boot/dts/stm32mp157d-${CompanyLogo}.dtb $PATH_UPDATE/tftpboot/
 
-        cp $PWD/arch/arm/boot/uImage $PATH_UPDATE/bootfs/
-        cp $PWD/arch/arm/boot/dts/stm32mp157d-${CompanyLogo}.dtb $PATH_UPDATE/bootfs/
+        cp $PWD/arch/arm/boot/uImage $PATH_UPDATE/kernel/
+        cp $PWD/arch/arm/boot/dts/stm32mp157d-${CompanyLogo}.dtb $PATH_UPDATE/kernel/
 
         echo -e "\n$green **** Build busybox complete! ****$clear\n"
     fi
 }
-
-function mp157_flash_bootfs() {
-    STM32_Programmer_CLI -l usb
-    echo -e "\n$purple Update the bootfs via usb1? $red_flash(y/N)$clear \c"
-    read update_YN
-
-    if [[ $update_YN == "y" || $update_YN == "Y" ]]; then
-        SD_or_eMMC=0
-        echo -e "\n$purple Revert to SD card or eMMC? (Please Choose)"
-        echo -e " $red_flash( 1:SD card / 2:eMMC )$clear \c"
-        read SD_or_eMMC
-
-        if [[ $SD_or_eMMC == 2 ]]; then
-            echo -e "\n$green Update rootfs image to eMMC...$clear\n"
-
-            if [ $CoreBoardModel == "Atk" ]; then
-                STM32_Programmer_CLI -c port=usb1 -w ${CompanyLogo}_emmc_bootfs-stm32mp157d.tsv -tm 20000
-          
-            elif [ $CoreBoardModel == "${CompanyLogo}" ]; then
-                
-                STM32_Programmer_CLI -c port=usb1 -w ${CompanyLogo}_emmc_bootfs-stm32mp157d-sr.tsv -tm 20000
-               
-            fi
-            
-        elif [[ $SD_or_eMMC == 1 ]]; then
-            echo -e "\n$green Update rootfs image to SD card...$clear\n"
-
-            if [ $CoreBoardModel == "Atk" ]; then
-                    STM32_Programmer_CLI -c port=usb1 -w ${CompanyLogo}_sdcard_bootfs-stm32mp157d.tsv -tm 20000
-             
-            elif [ $CoreBoardModel == "${CompanyLogo}" ]; then
-                    STM32_Programmer_CLI -c port=usb1 -w ${CompanyLogo}_sdcard_bootfs-stm32mp157d-sr.tsv -tm 20000
-             
-            fi
-            
-        else
-            echo -e "\n$blue/==================================================\\\\$clear"
-            echo -e "$V_line $yellow                  [ Warning ]                   $clear $V_line"
-            echo -e "$V_line $yellow              **** No Choose! ****              $clear $V_line"
-            echo -e "$blue\\==================================================/$clear"
-        fi
-    fi
-
-}
-
-function mp157_flash_rootfs() {
-    STM32_Programmer_CLI -l usb
-    echo -e "\n$purple Update the rootfs via usb1? $red_flash(y/N)$clear \c"
-    read update_YN
-
-    if [[ $update_YN == "y" || $update_YN == "Y" ]]; then
-        SD_or_eMMC=0
-        echo -e "\n$purple Revert to SD card or eMMC? (Please Choose)"
-        echo -e " $red_flash( 1:SD card / 2:eMMC )$clear \c"
-        read SD_or_eMMC
-
-        if [[ $SD_or_eMMC == 2 ]]; then
-            echo -e "\n$green Update rootfs image to eMMC...$clear\n"
-
-            if [ $CoreBoardModel == "Atk" ]; then
-                    STM32_Programmer_CLI -c port=usb1 -w ${CompanyLogo}_emmc_rootfs-stm32mp157d.tsv -tm 20000
-          
-            elif [ $CoreBoardModel == "${CompanyLogo}" ]; then
-                    STM32_Programmer_CLI -c port=usb1 -w ${CompanyLogo}_emmc_rootfs-stm32mp157d-sr.tsv -tm 20000
-         
-            fi
-            
-        elif [[ $SD_or_eMMC == 1 ]]; then
-            echo -e "\n$green Update rootfs image to SD card...$clear\n"
-
-            if [ $CoreBoardModel == "Atk" ]; then
-                    STM32_Programmer_CLI -c port=usb1 -w ${CompanyLogo}_sdcard_rootfs-stm32mp157d.tsv -tm 20000
-  
-            elif [ $CoreBoardModel == "${CompanyLogo}" ]; then
-                    STM32_Programmer_CLI -c port=usb1 -w ${CompanyLogo}_sdcard_rootfs-stm32mp157d-sr.tsv -tm 20000
-            
-            fi
-            
-        else
-            echo -e "\n$blue/==================================================\\\\$clear"
-            echo -e "$V_line $yellow                  [ Warning ]                   $clear $V_line"
-            echo -e "$V_line $yellow              **** No Choose! ****              $clear $V_line"
-            echo -e "$blue\\==================================================/$clear"
-        fi
-    fi
-}
-

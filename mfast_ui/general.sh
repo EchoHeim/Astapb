@@ -68,30 +68,31 @@ function get_date(){
 
 function choose(){
     if [ $# == 1 ]; then
-        [[ "$1" == "action" ]] && read -p "${yellow} Please choose: ${red}" action; echo -e "${clear}"
+        [[ "$1" == "action" ]] && read -p "${yellow} Please choose: ${red}" action && echo -e "${clear}"
+        [[ "$1" == "SD_or_eMMC" ]] && echo "${yellow} Revert to SD card or eMMC? (Please Choose)" && read -p " 1:SD card / 2:eMMC ${red}" SD_or_eMMC && echo -e "${clear}"
     elif [ $# == 2 ]; then
-        [[ "$1" == "yn" ]] && read -p "${yellow} $2 ${red}" yn; echo -e "${clear}"
+        [[ "$1" == "yn" ]] && read -p "${yellow} $2 ${red}" yn && echo -e "${clear}"
     fi
 }
 
 ### set some messages
 function select_msg() {
-    echo -e "${white}   [➔] ${1}${clear}"
+    echo -e "${green}🔹🔹🔹 ${1}${clear}\n"
 }
 function status_msg() {
-    echo -e "\n${magenta}###### ${1} ######${clear}\n"
+    echo -e "\n${magenta}🔸🔸🔸 ${1} 🔸🔸🔸${clear}\n"
 }
 function ok_msg() {
-    echo -e "\n${green}[✓ OK] ${1}${clear}\n"
+    echo -e "\n${green}[✅ O.K.] ${1}${clear}\n"
 }
 function warn_msg() {
-    echo -e "\n${yellow}[! WARN] ${1}${clear}\n"
+    echo -e "\n${yellow}[🟡 WARN] ${1}${clear}\n"
 }
 function error_msg() {
-    echo -e "\n${red}[x ERROR] ${1}${clear}\n"
+    echo -e "\n${red}[❌ ERROR] ${1}${clear}\n"
 }
 function abort_msg() {
-    echo -e "\n${red}<<<<<< ${1}${clear}\n"
+    echo -e "\n${cyan}<<<<<< ${1}${clear}\n"
 }
 
 function quit_msg(){

@@ -16,7 +16,7 @@ function mp157_ui(){
     border "div_line"
     echo -e "$V_line $yellow  9:$clear Restore Factory Image                            $V_line"
     border "div_line"
-    echo -e "$V_line $yellow  b:$clear flash-bootfs         $V_line $yellow  r:$clear flash-rootfs         $V_line"
+    echo -e "$V_line $yellow  fb:$clear flash-bootfs        $V_line $yellow  fr:$clear flash-rootfs        $V_line"
     footer "quit_back"
 }
 
@@ -33,6 +33,10 @@ function mp157_menu(){
             5) do_action "mp157_clear u-boot" "mp157_ui";;
             6) do_action "mp157_clear kernel" "mp157_ui";;
 
+            9) do_action "mp157_flash factory" "mp157_ui";;
+            FB|fB|Fb|fb) do_action "mp157_flash bootfs" "mp157_ui";;
+            FR|fR|Fr|fr) do_action "mp157_flash rootfs" "mp157_ui";;
+            
             B|b) clear; main_menu; break;;
             Q|q) quit_msg;;
             *)  Selection_invalid "mp157_ui";;

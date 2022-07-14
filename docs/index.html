@@ -183,11 +183,13 @@
     <script src="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.js"></script>
     <script>
         document.body.oncopy = function () {
-            swal("复制成功 🎉",
-                "若要转载或引用请务必保留原文链接,并申明来源!",
-                "如果你觉得本仓库不错,那就来GitHub给个Star吧~ 😊",
-                "https://github.com/EchoHeim/Astapb",
-                "success");
+            swal({
+                title: '复制成功 🎉',
+                text: '若要转载或引用请务必保留原文链接,并申明来源!\n如果觉得内容不错,那就来 GitHub 给个💠Star💠吧~\n\nhttps://github.com/EchoHeim/Astapb',
+                timer: 5000,
+                showConfirmButton: true,
+                imageUrl: 'https://cdn.jsdelivr.net/gh/EchoHeim/Astapb/docs/images/cute_01.gif'
+            });
         };
     </script>
 

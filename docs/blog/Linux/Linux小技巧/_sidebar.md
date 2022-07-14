@@ -12,4 +12,5 @@
 * [<font color="darkviolet">🌿 Linux压缩软件的使用 </font>](blog/Linux/Linux小技巧/Linux压缩软件的使用.md)
 * [<font color="darkviolet">🌿 Linux自动挂载U盘 </font>](blog/Linux/Linux小技巧/Linux自动挂载U盘.md)
 * [<font color="darkviolet">🌿 MJPG-streamer的安装 </font>](blog/Linux/Linux小技巧/MJPG-streamer的安装.md)
+* [<font color="darkviolet">🌿 Nginx搭建静态网站服务器 </font>](blog/Linux/Linux小技巧/Nginx搭建静态网站服务器.md)
 * [<font color="darkviolet">🌿 SSH与动态MOTD </font>](blog/Linux/Linux小技巧/SSH与动态MOTD.md)

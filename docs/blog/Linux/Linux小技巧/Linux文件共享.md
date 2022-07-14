@@ -203,3 +203,7 @@ sudo /etc/init.d/vsftpd restart
 然后连接就行，这时右侧就显示 `Ubuntu` 系统上的文件，如果有乱码，就断开连接，在站点设置的字符集选项中设置 强制 `UTF-8`。
 
 如果需要复制文件，直接左右窗口拖动即可。
+
+# 4. ubuntu访问windows共享文件夹
+
+参考：[https://www.cnblogs.com/smartjourneys/articles/7992298.html](https://www.cnblogs.com/smartjourneys/articles/7992298.html)

@@ -14,15 +14,15 @@ cd /
 
 ROOT_DEV=/dev/${filelist[0]}
 
-ROOT_NUM=1
-UDISK_TEMP=2
-UDISK_NUM=3
+ROOT_NUM=4
+UDISK_TEMP=5
+UDISK_NUM=6
 
 PART_SIZE=`cat /sys/block/${filelist[0]}/size`
 
 UDISK_START=`expr $PART_SIZE - 614400`
 
-ROOTFS_START=8192
+ROOTFS_START=303104
 ROOTFS_END=`expr $UDISK_START - 1`
 
 # 使用 fdisk 工具进行磁盘分区;
@@ -52,16 +52,16 @@ do
     ((c++))
 done
 
-if [[ ${filelist[3]} == mmcblk1p3 ]]; then
-    sudo mkfs.vfat /dev/mmcblk1p3            # 格式化分区为 FAT 格式;
-    sudo mount /dev/mmcblk1p3 /udisk/
-    sudo mount /dev/mmcblk1p2 /udisk_temp/
+if [[ ${filelist[6]} == mmcblk1p6 ]]; then
+    sudo mkfs.vfat /dev/mmcblk1p6            # 格式化分区为 FAT 格式;
+    sudo mount /dev/mmcblk1p6 /udisk/
+    sudo mount /dev/mmcblk1p5 /udisk_temp/
 fi
 
-if [[ ${filelist[3]} == mmcblk0p3 ]]; then
-    sudo mkfs.vfat /dev/mmcblk0p3            # 格式化分区为 FAT 格式;
-    sudo mount /dev/mmcblk0p3 /udisk/
-    sudo mount /dev/mmcblk0p2 /udisk_temp/
+if [[ ${filelist[6]} == mmcblk0p6 ]]; then
+    sudo mkfs.vfat /dev/mmcblk0p6            # 格式化分区为 FAT 格式;
+    sudo mount /dev/mmcblk0p6 /udisk/
+    sudo mount /dev/mmcblk0p5 /udisk_temp/
 fi
 
 #------------------------
@@ -97,7 +97,7 @@ y
 w
 EOF
 
-sudo resize2fs /dev/${filelist[1]}           # 扩展分区;
+sudo resize2fs /dev/${filelist[5]}           # 扩展分区;
 
 cd /home/$username/scripts
 
@@ -117,8 +117,8 @@ do
 done
 
 cd /home/$username/scripts
-if [ -e "expand_rootfs.sh" ];then
-    sudo rm ./expand_rootfs.sh -fr
+if [ -e "expand_rootfs_4_9.sh" ];then
+    sudo rm ./expand_rootfs_4_9.sh -fr
 fi
 
 sudo chown $username:$username /home/$username/ -R
@@ -126,20 +126,20 @@ sudo chown $username:$username /home/$username/ -R
 sudo ntpdate stdtime.gov.hk
 
 sudo mkdir /udisk
-if [[ \${filelist[2]} == mmcblk0p2 ]]; then
-    sudo mount /dev/mmcblk0p2 /udisk/
+if [[ \${filelist[5]} == mmcblk0p5 ]]; then
+    sudo mount /dev/mmcblk0p5 /udisk/
 fi
 
-if [[ \${filelist[2]} == mmcblk1p2 ]]; then
-    sudo mount /dev/mmcblk1p2 /udisk/
+if [[ \${filelist[5]} == mmcblk1p5 ]]; then
+    sudo mount /dev/mmcblk1p5 /udisk/
 fi
 
-if [[ \${filelist[2]} == mmcblk0p3 ]]; then
-    sudo mount /dev/mmcblk0p3 /udisk/
+if [[ \${filelist[5]} == mmcblk0p6 ]]; then
+    sudo mount /dev/mmcblk0p6 /udisk/
 fi
 
-if [[ \${filelist[2]} == mmcblk1p3 ]]; then
-    sudo mount /dev/mmcblk1p3 /udisk/
+if [[ \${filelist[5]} == mmcblk1p6 ]]; then
+    sudo mount /dev/mmcblk1p6 /udisk/
 fi
 
 cd /udisk/gcode
@@ -150,8 +150,8 @@ if ls *.gcode > /dev/null 2>&1;then
 fi
 
 cd /udisk
-if [ -e "system.cfg" ];then
-    sudo cp ./system.cfg /etc/
+if [ -e "system_config.txt" ];then
+    sudo cp ./system_config.txt /etc/
 fi
 
 cd /
@@ -162,12 +162,12 @@ sync
 sudo ethtool -s eth0 autoneg on speed 100 duplex full      # 限制以太网使用百兆带宽
 
 cd /home/$username/scripts
-./reconnect_wifi.sh
+
+sudo mount -t vfat /dev/mmcblk0p6 /mnt/tfcard
+
+/etc/wifi_config.sh &
 
 EOF
-
-# trap "sudo rm ~/expand_rootfs.sh -f" EXIT		#脚本退出执行trap后面双引号中的命令
-# sudo sed -i 's/\/home\/$username\/expand_rootfs.sh/sudo rm \/home\/$username\/expand_rootfs.sh/' /etc/rc.local
 
 cd /home/$username/klipper_logs
 rm ./* -fr
@@ -182,6 +182,6 @@ history -w
 cd /home/$username/
 sudo rm ./.bash_history -fr
 
-sudo sed -i 's/expand_rootfs.sh/init.sh \&/' /etc/rc.local
+sudo sed -i 's/expand_rootfs_4_9.sh/init.sh \&/' /etc/rc.local
 
 sudo reboot

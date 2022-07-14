@@ -35,5 +35,22 @@ sudo killall wpa_supplicant
 sudo wpa_supplicant -Dnl80211 -c /etc/wpa_supplicant.conf -i wlan0 &
 
 ## 2.7 nmcli工具
-systemctl restart NetworkManager
+sudo systemctl restart NetworkManager
+sudo nmcli dev wifi connect biqu-m password biqu2020 ifname wlan0
+
+
+sudo create_ap --fix-unmanaged
+
+# 开启 wifi 热点
+sudo systemctl start create_ap
+# 关闭 wifi 热点
+sudo systemctl stop create_ap
+
+
+sudo systemctl stop create_ap
+skeep 2
+sudo create_ap --fix-unmanaged
+skeep 4
+sudo systemctl restart NetworkManager
+skeep 2
 sudo nmcli dev wifi connect biqu-m password biqu2020 ifname wlan0

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 new_username=biqu
-old_username=orangepi
+old_username=kandy
 
 hostname=Hurakan
 
