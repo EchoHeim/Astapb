@@ -154,6 +154,20 @@ scp -r local_dir username@servername:remote_dir
 
 https://github.com/zq1997/deepin-wine/issues/170
 
+https://github.com/zq1997/deepin-wine/issues/278
+
+https://www.daimajiaoliu.com/daima/7120ca2b18e5803
+
+https://www.freesion.com/article/6055985563/
+
+rm -rf ~/.wine          
+export WINEARCH=win32
+
+https://blog.csdn.net/weixin_39970668/article/details/111520985
+
+https://askubuntu.com/questions/822733/installing-ie8-in-wine-error-rename-sha1sum-mismatch-winetest-cat
+
+
 ## 1.4 Vim 配置
 
 修改文件

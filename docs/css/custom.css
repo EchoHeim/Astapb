@@ -145,7 +145,7 @@ aside.sidebar ul li.active>a:before {
 }
 
 .markdown-section pre>code {
-    color: #24a0f3 !important;
+    color: #8711f5 !important;
     font-family: STKaiti, 'Inconsolata', consolas, "PingFang SC", "Microsoft YaHei", monospace !important;
     /* background-color: #eff3f0bb !important;    //#accfff  #282c34 */
     font-size: 16px !important;
@@ -159,7 +159,7 @@ aside.sidebar ul li.active>a:before {
 
 .markdown-section>div>img,
 .markdown-section pre {
-    box-shadow: 2px 2px 20px 6px rgba(2, 247, 255, 0.699) !important;
+    box-shadow: 2px 2px 20px 6px rgba(18, 238, 220, 0.705) !important;
 }
 
 .markdown-section a:not(:hover) {

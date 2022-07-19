@@ -35,7 +35,7 @@ $UDISK_START
 
 t
 $UDISK_NUM
-b
+11
 w
 EOF
 
@@ -97,7 +97,7 @@ y
 w
 EOF
 
-sudo resize2fs /dev/${filelist[5]}           # 扩展分区;
+sudo resize2fs /dev/${filelist[4]}           # 扩展分区;
 
 cd /home/$username/scripts
 
@@ -120,6 +120,12 @@ cd /home/$username/scripts
 if [ -e "expand_rootfs_4_9.sh" ];then
     sudo rm ./expand_rootfs_4_9.sh -fr
 fi
+
+/etc/NetManager.sh &
+
+sudo ifconfig can0 down
+sleep 5
+sudo ifconfig can0 up
 
 sudo chown $username:$username /home/$username/ -R
 
@@ -150,8 +156,8 @@ if ls *.gcode > /dev/null 2>&1;then
 fi
 
 cd /udisk
-if [ -e "system_config.txt" ];then
-    sudo cp ./system_config.txt /etc/
+if [ -e "system.cfg" ];then
+    sudo cp ./system.cfg /etc/
 fi
 
 cd /
@@ -159,11 +165,9 @@ sudo umount /udisk
 sudo rm /udisk -fr
 sync
 
-sudo ethtool -s eth0 autoneg on speed 100 duplex full      # 限制以太网使用百兆带宽
-
 cd /home/$username/scripts
 
-sudo mount -t vfat /dev/mmcblk0p6 /mnt/tfcard
+# sudo mount -t vfat /dev/mmcblk0p6 /mnt/tfcard
 
 /etc/wifi_config.sh &
 
@@ -183,5 +187,7 @@ cd /home/$username/
 sudo rm ./.bash_history -fr
 
 sudo sed -i 's/expand_rootfs_4_9.sh/init.sh \&/' /etc/rc.local
+
+sync
 
 sudo reboot
