@@ -168,6 +168,11 @@ https://blog.csdn.net/weixin_39970668/article/details/111520985
 https://askubuntu.com/questions/822733/installing-ie8-in-wine-error-rename-sha1sum-mismatch-winetest-cat
 
 
+https://blog.csdn.net/hongxiao2016/article/details/115156831
+
+链接: https://pan.baidu.com/s/1JR9bdBsXminHTCuPmCMDuw?pwd=54v1 提取码: 54v1 复制这段内容后打开百度网盘手机App，操作更方便哦 
+--来自百度网盘超级会员v5的分享
+
 ## 1.4 Vim 配置
 
 修改文件

@@ -7,6 +7,8 @@ IS_AP_MODE="no"
 sta_mount=0
 
 function Env_init() {
+    source $SYS_CFG         # 加载配置文件
+
     exec 1> /dev/null
     # without check_interval set, we risk a 0 sleep = busy loop
     if [ ! "$check_interval" ]; then
@@ -15,10 +17,8 @@ function Env_init() {
     fi
 
     sudo kill -9 `pidof wpa_supplicant`
-    sleep 2
+    sleep 6
     sudo systemctl restart NetworkManager
-
-    source $SYS_CFG         # 加载配置文件
 }
 
 function is_network() {
@@ -37,18 +37,19 @@ function Create_AP_ON() {
     if [[ $IS_AP_MODE == "no" && $sta_mount -gt 1 ]]; then
         nmcli device disconnect $wlan
         sudo systemctl start create_ap
-        sleep 5
+        sleep 2
+        IS_AP_MODE="yes"
 
         echo $(date)" xxxx $wlan Change to ap mode..." >> /home/biqu/scripts/wifi.log
-        while inotifywait $WIFI_CFG --timefmt '%d/%m/%y %H:%M' --format "%T %f" -e MODIFY
-        do
+        if inotifywait $WIFI_CFG --timefmt '%d/%m/%y %H:%M' --format "%T %f" -e MODIFY
+        then
             echo -e $(date)" ==== $wlan modify cfg..." >> /home/biqu/scripts/wifi.log
-            sleep 2
+            IS_AP_MODE="no"
             source $WIFI_CFG
             sudo sed -i "s/^WIFI_SSID=.*$/WIFI_SSID=$WIFI_SSID/" $SYS_CFG
             sudo sed -i "s/^WIFI_PASSWD=.*$/WIFI_PASSWD=$WIFI_PASSWD/" $SYS_CFG
             [[ $(is_network $eth) == no ]] && Create_AP_OFF
-        done
+        fi
     fi
 }
 
@@ -57,39 +58,39 @@ function Create_AP_OFF() {
     sudo create_ap --fix-unmanaged
     sudo systemctl restart NetworkManager
 
-    [[ !(ifconfig | grep $wlan) ]] && sudo ifconfig $wlan up     # 确保wlan连接启动了
+    [[ $(ifconfig | grep $wlan) == "" ]] && sudo ifconfig $wlan up  # 确保wlan连接启动了
 
     if [[ $(is_network $wlan) == no ]]; then
-        [[ $sta_mount -eq 6 ]] && sta_mount=0
         source $SYS_CFG
         echo -e $(date)" ==== $wlan prepare connection... -WIFI_SSID:$WIFI_SSID -WIFI_PASSWD:$WIFI_PASSWD" >> /home/biqu/scripts/wifi.log
         sudo nmcli dev wifi connect $WIFI_SSID password $WIFI_PASSWD ifname $wlan
         sleep 5
     fi
+    sta_mount=0
+    IS_AP_MODE="no"
+
+    [[ $(is_network $wlan) == no ]] || echo -e $(date)" ==== $wlan network connection..." >> /home/biqu/scripts/wifi.log
 }
 
 function startWifi_sta() {
     source $SYS_CFG
     sta_mount=`expr $sta_mount + 1`
     echo $(date)" .... sta connecting...$sta_mount..." >> /home/biqu/scripts/wifi.log
-
-    sudo nmcli dev wifi connect $WIFI_SSID password $WIFI_PASSWD ifname $wlan
-    # sudo nmcli dev wifi connect $WIFI_SSID password $WIFI_PASSWD wep-key-type key ifname $wlan
     
-    [[ $(is_network $wlan) == yes ]] && sta_mount=0
-    [[ $(is_network $wlan) == yes ]] && IS_AP_MODE="no"
+    Create_AP_OFF
+
+    # sudo nmcli dev wifi connect $WIFI_SSID password $WIFI_PASSWD wep-key-type key ifname $wlan
 }
 
 function startWifi() {
-    [[ !(ifconfig | grep $wlan) ]] && sudo ifconfig $wlan up     # 确保wlan连接启动了
+    [[ $(ifconfig | grep $wlan) == "" ]] && sudo ifconfig $wlan up  # 确保wlan连接启动了
 
-    if [[ $sta_mount -le 1 ]]; then
+    if [[ $sta_mount -le 2 ]]; then
         nmcli device connect $wlan      # 连接wifi
         echo $(date)" .... $wlan connecting..." >> /home/biqu/scripts/wifi.log
-        # [[ $(is_network $wlan) == yes ]] && sudo udhcpc -i $wlan
         sleep 2
         [[ $(is_network $wlan) == no ]] && startWifi_sta
-        [[ $(is_network $wlan) == yes ]] && sta_mount=0 && IS_AP_MODE="no"
+        [[ $(is_network $wlan) == yes ]] && sta_mount=0 && echo $(date)" [O.K.] $wlan connected!" >> /home/biqu/scripts/wifi.log
     else
         echo $(date)" xxxx $wlan connection failure... IS_AP_MODE=$IS_AP_MODE ..." >> /home/biqu/scripts/wifi.log
         Create_AP_ON
@@ -108,10 +109,7 @@ while [ 1 ]; do
             startWifi
             sleep 6    # 更改间隔时间，因为有些服务启动较慢，试验后，改的间隔长一点有用
         else
-            if [[ $(is_network $eth) == yes ]]; then    # 以太网连接
-                nmcli device disconnect $wlan
-                echo "==== Ethernet Connected, wlan disconnect! ====" >> /home/biqu/scripts/wifi.log
-            fi
+            [[ $(is_network $eth) == yes ]] && nmcli device disconnect $wlan && echo "==== Ethernet Connected, wlan disconnect! ====" >> /home/biqu/scripts/wifi.log
         fi
     elif [[ $WIFI_AP == "true" ]]; then
         if [[ $(is_network $eth) == yes ]]; then
@@ -123,10 +121,6 @@ while [ 1 ]; do
             [[ $sta_mount -eq 6 ]] && sta_mount=0
             echo -e $(date)" ==== No $wlan network connection..." >> /home/biqu/scripts/wifi.log
             startWifi
-        elif [[ $(is_network $wlan) == yes ]]; then
-            echo -e $(date)" ==== $wlan network connection..." >> /home/biqu/scripts/wifi.log
-            # sudo udhcpc -i $wlan
-            IS_AP_MODE="no"
         fi
     fi
     sync
