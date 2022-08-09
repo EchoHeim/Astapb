@@ -1,8 +1,8 @@
 #!/bin/bash
 
-function H616_build_uboot(){
-
-    cp $PATH_H616_UBOOT/.config $PATH_H616_UBOOT/configs/orangepi_zero2_defconfig
+function H616_build_uboot()
+{
+    cp $PATH_H616_UBOOT/.config $PATH_H616_UBOOT/configs/h616_defconfig
 
     cd $PATH_H616_WORKSPACE
     sudo ./build.sh BOARD=orangepizero2 BRANCH=current BUILD_OPT=u-boot
@@ -14,8 +14,8 @@ function H616_build_uboot(){
     echo -e "\n **** build complete! ****\n"
 }
 
-function H616_build_kernel(){
-    
+function H616_build_kernel()
+{
     cd $PATH_H616_WORKSPACE
     sudo ./build.sh BOARD=orangepizero2 BRANCH=current BUILD_OPT=kernel KERNEL_CONFIGURE=yes
 
@@ -32,8 +32,8 @@ function H616_build_kernel(){
     echo -e "\n **** build complete! ****\n"
 }
 
-function H616_updatefiles(){
-
+function H616_updatefiles()
+{
     Pi_user=${username_H616}
     Pi_IP=${IP_H616}
 
@@ -53,8 +53,8 @@ function H616_updatefiles(){
     echo -e "\n **** copy complete! ****\n"
 }
 
-function H616_change_boardinfo(){
-
+function H616_change_boardinfo()
+{
     read -p "${yellow} Which information to modify? (${green}U${yellow}ser/${green}I${yellow}p) ${red}" choose_info; echo -e "${clear}"
 
     case "$choose_info" in

@@ -83,7 +83,7 @@ function status_msg() {
     echo -e "\n${magenta}🔸🔸🔸 ${1} 🔸🔸🔸${clear}\n"
 }
 function ok_msg() {
-    echo -e "\n${green}[✅ O.K.] ${1}${clear}\n"
+    echo -e "\n${green}[🔥 O.K.] ${1}${clear}\n"
 }
 function warn_msg() {
     echo -e "\n${yellow}[🟡 WARN] ${1}${clear}\n"

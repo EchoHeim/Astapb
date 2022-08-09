@@ -299,6 +299,8 @@ sudo apt install mtd-utils
 
 12. 开机自启动 can 
 
+    <https://www.klipper3d.org/CANBUS.html?h=can#host-hardware>
+
 13. 取消 git 代理
 
 14. klipper log删除
@@ -308,3 +310,25 @@ sudo apt install mtd-utils
     <https://blog.csdn.net/weixin_39534395/article/details/119229057>
 
     <https://blog.csdn.net/bandaoyu/article/details/116999236>
+
+
+# 5.其他功能测试
+
+## 红外接收
+
+安装红外测试软件
+sudo apt-get install -y ir-keytable
+
+查看红外ir设备
+ir-keytable
+
+查看红外接收键值
+ir-keytable -t
+
+## 3.5mm 音频输出
+
+查看声卡
+aplay -l
+
+播放音乐
+aplay -D hw:2,0 /usr/share/sounds/alsa/audio.wav

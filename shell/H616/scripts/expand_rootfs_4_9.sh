@@ -2,6 +2,8 @@
 
 username=biqu
 
+sudo chown $username:$username /home/$username/ -R
+
 c=0
 cd /dev
 for file in `ls mmcblk*`
@@ -22,7 +24,8 @@ PART_SIZE=`cat /sys/block/${filelist[0]}/size`
 
 UDISK_START=`expr $PART_SIZE - 614400`
 
-ROOTFS_START=303104
+ROOTFS_START=270336
+
 ROOTFS_END=`expr $UDISK_START - 1`
 
 # 使用 fdisk 工具进行磁盘分区;
