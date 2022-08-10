@@ -1,19 +1,26 @@
 #!/bin/bash
 
 function rpi_ui(){
-    ui_print_versions
     border "top"
-
-    echo -e "$V_line $yellow  3:$clear compile image     $V_line $yellow  4:$clear install image      $V_line"
-        
-    echo -e "|     ${green}~~~~~~~~~~~~~~ [ Update Menu ] ~~~~~~~~~~~~~~${clear}     | "
+    echo -e "$V_line      ${green}~~~~~~~~~~~~~ [ RaspBerryPi ] ~~~~~~~~~~~~~${clear}      $V_line"
     border "div_line"
-
-    echo -e "|  8) [PrettyGCode]      |  $LOCAL_PGC_COMMIT | $REMOTE_PGC_COMMIT | "
-    echo -e "|  9) [Telegram Bot]     |  $LOCAL_MOONRAKER_TELEGRAM_BOT_COMMIT | $REMOTE_MOONRAKER_TELEGRAM_BOT_COMMIT | "
-    echo -e "|                        |------------------------------| "
-    echo -e "|  10) [System]          |  $DISPLAY_SYS_UPDATE   | "
-    back_footer
+    echo -e "$V_line ${cyan} [ WorkPath ]                                ${magenta}C${yellow}hange   $V_line"
+    border "blank_line"
+    PI_PATH=$(tab_format_title $PATH_PI_WORKSPACE 49)
+    echo -e "$V_line ${green}  ${PI_PATH}   $V_line"
+    border "div_line"
+    echo -e "$V_line ${cyan} [ Compile ] ${clear}                                         $V_line"
+    border "div_line"
+    echo -e "$V_line        🐬        $V_line $yellow       PI3      $V_line $yellow       PI4       $V_line"
+    border "div_line"
+    echo -e "$V_line $yellow     32 bit$clear      $V_line $magenta      < 1 >     $V_line $magenta      < 2 >      $V_line"
+    border "div_line"
+    echo -e "$V_line $yellow     64 bit$clear      $V_line $magenta      < 3 >     $V_line $magenta      < 4 >      $V_line"
+    border "div_line"
+    echo -e "$V_line ${cyan} [ Update ] ${clear}                                          $V_line"
+    border "div_line"
+    echo -e "$V_line $yellow  ${magenta}U${clear}pdate kernel driver files!                         $V_line"
+    footer "quit"
 }
 
 function rpi_menu(){
@@ -22,14 +29,22 @@ function rpi_menu(){
         choose "action"
         case "$action" in
 
-        10)
-            do_action "update_system" "rpi_ui";;
-        a)
-            do_action "update_all" "rpi_ui";;
-        B|b)
-            clear; main_menu; break;;
+        C|c)
+            read -p "${yellow} Please input the pi-kernel path: ${red}" pi_work_path
+            change_path ${pi_work_path}
+            unset pi_work_path
+            break;;
+
+        Q|q) quit_msg;;
         *)  Selection_invalid "rpi_ui";;
+
         esac
     done
     rpi_menu
+}
+
+function change_path(){
+    sed -i "s/^PI_KERNEL_Folder=.*$/PI_KERNEL_Folder=$1/" ${MFAST_ROOT_PATH}/mfast_fun/path.sh
+    source ${MFAST_ROOT_PATH}/mfast_fun/path.sh
+    do_action
 }
