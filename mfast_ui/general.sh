@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function tab_format_title(){
+function tab_format(){
     f_name=$1
     [ $# == 1 ] && echo "$(printf "%-$1s" "")"
     [ $# == 2 ] && echo "$(printf "%-$2s" "$f_name")"
@@ -30,8 +30,8 @@ function border(){
         echo -e "${color}|${clear}                                                       ${color}|${clear}"
     elif [ "$1" == "main_blank_line" ]; then
         title_name=""
-        title=$(tab_format_title $title_name 24)
-        title_2=$(tab_format_title $title_name 22)
+        title=$(tab_format $title_name 24)
+        title_2=$(tab_format $title_name 22)
         echo -e "${color}|${clear} $yellow   $clear $title $clear$V_line $title_2 ${color}|${clear}"
         unset title title_name title_2
     fi
@@ -91,7 +91,7 @@ function warn_msg() {
     echo -e "\n${yellow}[🟡 WARN] ${1}${clear}\n"
 }
 function error_msg() {
-    echo -e "\n${red}[❌ ERROR] ${1}${clear}\n"
+    echo -e "\n${red}[🔥 ERROR] ${1}${clear}\n"
 }
 function abort_msg() {
     echo -e "\n${cyan}<<<<<< ${1}${clear}\n"

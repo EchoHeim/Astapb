@@ -9,9 +9,9 @@ function h616_ui(){
     border "div_line"
     echo -e "$V_line ${yellow}  u)${clear} update files                                     $V_line"
     border "div_line"
-    echo -e "$V_line                           $V_line  user:${yellow} $(tab_format_title ${username_H616} 16) ${clear}  $V_line"
+    echo -e "$V_line                           $V_line  user:${yellow} $(tab_format ${username_H616} 16) ${clear}  $V_line"
     echo -e "$V_line ${cyan}  Target_Board >> ${yellow}e${cyan}dit >> $V_line                           $V_line"
-    echo -e "$V_line                           $V_line    ip:${yellow} $(tab_format_title ${IP_H616} 16) ${clear}  $V_line"
+    echo -e "$V_line                           $V_line    ip:${yellow} $(tab_format ${IP_H616} 16) ${clear}  $V_line"
 
     footer "quit_back"
 }
