@@ -44,6 +44,8 @@ function footer(){
         echo -e "$V_line                                  ${purple} Q/B: Quit or Back!${clear}  $V_line"
     elif [ "$1" == "quit_backup" ]; then
         echo -e "$V_line                                ${purple} Q/B: Quit or Backup!${clear}  $V_line"
+    elif [ "$1" == "quit" ]; then
+        echo -e "$V_line                                ${purple}           Q: Quit!  ${clear}  $V_line"
     fi
     border "bottom"
 }
