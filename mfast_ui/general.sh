@@ -80,7 +80,7 @@ function select_msg() {
     echo -e "${green}🔹🔹🔹 ${1}${clear}\n"
 }
 function status_msg() {
-    echo -e "\n${magenta}🔸🔸🔸 ${1} 🔸🔸🔸${clear}\n"
+    echo -e "\n${magenta}🔸🔸🔸 ${1}🔸🔸🔸${clear}\n"
 }
 function ok_msg() {
     echo -e "\n${green}[🔥 O.K.] ${1}${clear}\n"
@@ -150,10 +150,10 @@ function Selection_invalid(){
     if [ $# -eq 1 ]; then
         error_msg "Invalid input, Please reselect!"
     elif [ $# -eq 0 ]; then
-        status_msg "No parameters needed, Please retype!"
+        status_msg "Parameter error, Please retype!"
     fi
     print_msg
-    $1
+    [ $# -eq 1 ] && $1
 }
 
 function armbian_status() {

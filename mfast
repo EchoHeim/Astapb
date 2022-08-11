@@ -53,6 +53,15 @@ WhetherInstall
 
 if [ $# == 0 ]; then
     main_menu
+elif [ $# == 1 ]; then
+    if [ $1 == "rpi" ]; then
+        rpi_menu
+    elif [ $1 == "-h" ]; then
+        echo "Installing packages..."
+    else
+        Selection_invalid
+        exit 0
+    fi
 else
     Selection_invalid
     exit 0
