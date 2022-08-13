@@ -2,11 +2,15 @@
 
 cd ~
 
-if [ -e "./linux-u-boot-current-orangepizero2_3.0.4_arm64.deb" ];then
+uboot_img="linux-u-boot-current-orangepizero2_2.0.1_arm64.deb"
+dtb_img="linux-dtb-current-sun50iw9_2.0.1_arm64.deb"
+kernel_img="linux-image-current-sun50iw9_2.0.1_arm64.deb"
+
+if [ -e $uboot_img ];then
     echo -e "\n **** remove uboot ****\n"
     sudo apt purge -y linux-u-boot-orangepizero2-current
     echo -e "\n **** install uboot ****\n"
-    sudo dpkg -i linux-u-boot-current-orangepizero2_3.0.4_arm64.deb
+    sudo dpkg -i $uboot_img
 
     sudo nand-sata-install
 fi
@@ -16,18 +20,18 @@ fi
 # sudo rm /lib/modules/5.16.17-sun50iw9 -fr
 # sudo mv ./5.16.17-sun50iw9 /lib/modules/ -f
 
-if [ -e "./linux-dtb-current-sun50iw9_3.0.4_arm64.deb" ];then
+if [ -e $dtb_img ];then
     echo -e "\n **** remove dtb ****\n"
     sudo apt purge -y linux-dtb-current-sun50iw9
     echo -e "\n **** install dtb ****\n"
-    sudo dpkg -i linux-dtb-current-sun50iw9_3.0.4_arm64.deb
+    sudo dpkg -i $dtb_img
 fi
 
-if [ -e "./linux-image-current-sun50iw9_3.0.4_arm64.deb" ];then
+if [ -e $kernel_img ];then
     echo -e "\n **** remove kernel ****\n"
     sudo apt purge -y linux-image-current-sun50iw9
     echo -e "\n **** install kernel ****\n"
-    sudo dpkg -i linux-image-current-sun50iw9_3.0.4_arm64.deb
+    sudo dpkg -i $kernel_img
 fi
 
 sudo rm ./linux-*.deb ./5.16.17-sun50iw9 -fr

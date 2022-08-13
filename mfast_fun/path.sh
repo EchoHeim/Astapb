@@ -11,15 +11,16 @@ WindowsIP=192.168.0.203
 
 # ======================== PATH ======================== #
 
+WINDOWS_SHARE_DIR=/run/user/1000/gvfs/smb-share:server=$WindowsIP,share=code         # windows 共享文件夹;
+WINDOWS_BACKUP_DIR=/run/user/1000/gvfs/smb-share:server=$WindowsIP,share=backup
+
+
 # ======== H616
 PATH_H616_WORKSPACE=$HOME/Allwinner-H616
 
 PATH_H616_NFS=$PATH_H616_WORKSPACE/nfs_folder
-PATH_H616_UBOOT=$PATH_H616_WORKSPACE/u-boot/v2021.10-sunxi
-PATH_H616_KERNEL=$PATH_H616_WORKSPACE/kernel/orange-pi-5.16-sunxi64
-
-WINDOWS_SHARE_DIR=/run/user/1000/gvfs/smb-share:server=$WindowsIP,share=code         # windows 共享文件夹;
-WINDOWS_BACKUP_DIR=/run/user/1000/gvfs/smb-share:server=$WindowsIP,share=backup
+PATH_H616_UBOOT=$PATH_H616_WORKSPACE/u-boot
+PATH_H616_KERNEL=$PATH_H616_WORKSPACE/kernel
 
 # ======== Armbian
 ARM_DEBIAN_ROOTFS_PATH=$HOME/ArmDebian

@@ -79,12 +79,11 @@ function build_pi4_64bit()
 function install_modules()
 {
     [ -d "/media/$USERNAME/rootfs" ] || return 0
-    
-    if [ -d "/media/$USERNAME/rootfs" ];then            # 判断文件夹是否存在;
-        echo -e "$green\n**** modules install... ****\n$clear"
-        sudo env PATH=$PATH make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- INSTALL_MOD_PATH=/media/$USERNAME/$MOUNT_DIR modules_install
 
-        echo -e "$green\n**** kernel backup... ****\n$clear"
+    if [ -d "/media/$USERNAME/rootfs" ];then            # 判断文件夹是否存在;
+        status_msg "modules install..."
+        sudo env PATH=$PATH make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- INSTALL_MOD_PATH=/media/$USERNAME/$MOUNT_DIR modules_install
+        status_msg "kernel backup..."
         sudo cp /media/$USERNAME/boot/$KERNEL.img /media/$USERNAME/boot/$KERNEL-backup.img
 
         echo -e "$green\n**** copy Kernel.img... ****\n$clear"
