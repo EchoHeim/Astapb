@@ -2,7 +2,7 @@
 
 # 0. 引言
 
-在软件开发过程中，编程人员经常需要写文档，如开发文档、接口 `API` 文档、软件使用手册等，也会编写 `Blog` 记录开发过程，技术感悟（比如我的博客：[MacLodge's Blog](https://pwaga.js.org/) ）。
+在软件开发过程中，编程人员经常需要写文档，如开发文档、接口 `API` 文档、软件使用手册等，也会编写 `Blog` 记录开发过程，技术感悟（比如我的博客：[MacLodge's Blog](https://shilong.js.org) ）。
 
 对于这些文档，一般情况下编写人员有以下几种需求：编写简单、对外发布、格式友好、形式专业。
 
@@ -27,7 +27,7 @@
 
 [官方入门文档](https://docsify.js.org/#/zh-cn/)
 
-> 此 [网站源码](https://github.com/EchoHeim/Astapb/tree/master/docs) 全部开源。&emsp; 附上 [效果预览](https://echoheim.github.io/Astapb/)
+> 此 [网站源码](https://github.com/EchoHeim/Astapb/tree/master/docs) 全部开源。&emsp; 附上 [效果预览](https://shilong.js.org/)
 
 ## 1.1 Docsify 特性
 

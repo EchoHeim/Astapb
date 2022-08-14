@@ -9,3 +9,4 @@
 * [<font color="darkviolet">🦓 shell脚本语法 </font>](blog/ToolBox/shell脚本语法.md)
 * [<font color="darkviolet">🐅 ubuntu操作记录 </font>](blog/ToolBox/ubuntu操作记录.md)
 * [<font color="darkviolet">🐔 js.org二级域名 </font>](blog/ToolBox/js.org二级域名.md)
+* [<font color="darkviolet">🐵 eu.org二级域名 </font>](blog/ToolBox/eu.org二级域名.md)

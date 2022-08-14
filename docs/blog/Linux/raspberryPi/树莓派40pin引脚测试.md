@@ -1,5 +1,11 @@
 ### <center> <font size=34 face="STKaiti"> 树莓派 40pin 引脚测试 </font>    <!-- {docsify-ignore} -->
 
+> 参考
+
+[Linux下用文件IO的方式操作GPIO](https://blog.csdn.net/lu_embedded/article/details/53061901)
+
+[确定正确的gpiochip](https://github.com/Klipper3d/klipper/blob/master/docs/RPi_microcontroller.md#optional-identify-the-correct-gpiochip)
+
 shell 直接操作 IO 应该是最方便的一种方式了。
 
 硬件连接

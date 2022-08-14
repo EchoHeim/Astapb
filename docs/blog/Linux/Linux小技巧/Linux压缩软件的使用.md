@@ -92,8 +92,12 @@ gzip filename	| 压缩 加[-d]解压
 bzip2 -z filename |	压缩 加[-d]解压
 bzcat filename.bz2 |	查看压缩文件内容
 
+# 3. 分卷压缩
+
+<https://www.cnblogs.com/zhuhuibiao/p/15763441.html>
 
 # 三、rar压缩
+
  ## 1、rar安装与卸载
 
 > 一般来说，默认Linux是不能解压rar文件的，需要安装rar解压工具。

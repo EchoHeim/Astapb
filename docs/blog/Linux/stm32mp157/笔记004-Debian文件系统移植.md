@@ -352,3 +352,9 @@ deb-src https://mirrors.ustc.edu.cn/debian/ bullseye-backports main contrib non-
 deb https://mirrors.ustc.edu.cn/debian-security/ bullseye-security main contrib non-free
 deb-src https://mirrors.ustc.edu.cn/debian-security/ bullseye-security main contrib non-free
 ```
+
+# 5. 参考
+
+<https://www.cirmall.com/bbs/thread-168333-1-1.html>
+
+<https://blog.csdn.net/sinat_37141443/article/details/80882219>

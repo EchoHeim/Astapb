@@ -294,6 +294,8 @@ sudo apt install mtd-utils
     make menuconfig
     make flash
 
+    <https://github.com/Klipper3d/klipper/blob/master/docs/RPi_microcontroller.md>
+
 11. fluidd 界面
     打印机名称修改
 
