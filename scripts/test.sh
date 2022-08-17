@@ -20,6 +20,9 @@ function foo()
     echo $1
 }
 
-result=$(foo 33)
 
-echo result is ${result}
+while true
+do
+    sleep 0.5
+    echo "0 > value"
+done
