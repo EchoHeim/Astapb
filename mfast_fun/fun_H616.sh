@@ -5,7 +5,7 @@ function H616_build_uboot()
     cp $PATH_H616_UBOOT/.config $PATH_H616_UBOOT/configs/h616_defconfig
 
     cd $PATH_H616_WORKSPACE
-    sudo ./build.sh BOARD=orangepizero2 BRANCH=current BUILD_OPT=u-boot
+    sudo ./build.sh BUILD_OPT=u-boot
 
     echo -e "\n ==== copy images ====\n"
 
@@ -17,7 +17,7 @@ function H616_build_uboot()
 function H616_build_kernel()
 {
     cd $PATH_H616_WORKSPACE
-    sudo ./build.sh BOARD=orangepizero2 BRANCH=current BUILD_OPT=kernel KERNEL_CONFIGURE=yes
+    sudo ./build.sh BUILD_OPT=kernel KERNEL_CONFIGURE=yes
 
     echo -e "\n ==== copy images ====\n"
 
@@ -38,9 +38,6 @@ function H616_updatefiles()
     Pi_IP=${IP_H616}
 
     ssh-keygen -R $Pi_IP
-
-    echo -e "\n ==== copy update script ====\n"
-    cp $MFAST_ROOT_PATH/shell/H616/update_kernel.sh $PATH_H616_NFS/
 
     echo -e "\n ==== copy images ====\n"
 
@@ -73,3 +70,17 @@ function H616_change_boardinfo()
 
     unset choose_info board_user board_ip
 }
+
+function H616_sync_version_value()
+{
+    #从config.js读取appid
+    FIND_FILE="../config.js"  
+    str=$(sed -n '/appid/p' $FIND_FILE)
+    echo $str  #此时得到的是一整行
+    
+    appid=$( sed -n '/appid/p' $FIND_FILE | sed 's/.*"\(.*\)".*/\1/g')
+    # 第一句的结果输出到第二句
+    # .*"\(.*\)".* 正则匹配双引号中的值， 要加上前后两个(), \1表示第一个()中匹配的值
+    echo  $appid
+}
+

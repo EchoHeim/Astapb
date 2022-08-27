@@ -334,3 +334,14 @@ aplay -l
 
 播放音乐
 aplay -D hw:2,0 /usr/share/sounds/alsa/audio.wav
+
+# 6.附加
+
+## 6.1 打印日志级别修改
+
+``` bash
+echo 7 4 1 7 > /proc/sys/kernel/printk
+```
+
+
+

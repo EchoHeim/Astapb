@@ -48,9 +48,11 @@ sudo systemctl stop create_ap
 
 
 sudo systemctl stop create_ap
-skeep 2
+sleep 2
 sudo create_ap --fix-unmanaged
-skeep 4
+sleep 4
 sudo systemctl restart NetworkManager
-skeep 2
+sleep 2
 sudo nmcli dev wifi connect biqu-m password biqu2020 ifname wlan0
+
+sudo nmcli dev wifi connect CB1\ Tester password 12345678 ifname wlan0
