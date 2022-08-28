@@ -34,6 +34,8 @@ function H616_build_kernel()
 
 function H616_updatefiles()
 {
+    H616_sync_version_value
+    
     Pi_user=${username_H616}
     Pi_IP=${IP_H616}
 
@@ -73,14 +75,14 @@ function H616_change_boardinfo()
 
 function H616_sync_version_value()
 {
-    #从config.js读取appid
-    FIND_FILE="../config.js"  
-    str=$(sed -n '/appid/p' $FIND_FILE)
-    echo $str  #此时得到的是一整行
+    src_FILE="$PATH_H616_WORKSPACE/scripts/main.sh"
+    update_FILE="$PATH_H616_WORKSPACE/nfs_folder/update_kernel.sh"
+
+    # str=$(sed -n '/REVISION=/p' $src_FILE)      # 此时得到的是一整行
     
-    appid=$( sed -n '/appid/p' $FIND_FILE | sed 's/.*"\(.*\)".*/\1/g')
-    # 第一句的结果输出到第二句
     # .*"\(.*\)".* 正则匹配双引号中的值， 要加上前后两个(), \1表示第一个()中匹配的值
-    echo  $appid
+    REVISION=$( sed -n '/REVISION=/p' $src_FILE | sed 's/.*"\(.*\)".*/\1/g')
+
+    sed -i "s/^version=.*$/version="${REVISION}"/" $update_FILE
 }
 
