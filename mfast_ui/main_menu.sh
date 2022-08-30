@@ -5,15 +5,15 @@ function main_ui(){
     echo -e "$V_line   ${green} ~~~~~~~~~~~~~~~~ [ MAIN MENU ] ~~~~~~~~~~~~~~~~    $V_line"
     border "div_line"
     echo -e "$V_line $green Basic $clear                      $V_line $green Extensions $clear           $V_line "
-    border "main_blank_line"
+    border "space_blank_line" 28 22
     echo -e "$V_line $yellow 1)$clear [Armbian]                $V_line $yellow S)$clear [Settings]         $V_line "
-    border "main_blank_line"
+    border "space_blank_line" 28 22
     echo -e "$V_line $yellow 2)$clear [H616]                   $V_line $yellow I)$clear [Info]             $V_line "
-    border "main_blank_line"
+    border "space_blank_line" 28 22
     echo -e "$V_line $yellow 3)$clear [MP157]                  $V_line                        $V_line "
-    border "main_blank_line"
+    border "space_blank_line" 28 22
     echo -e "$V_line $yellow 4)$clear [RaspBerryPi]            $V_line                        $V_line "
-    echo -e "$V_line                              $V_line            Ver: 1.0.4  $V_line "
+    echo -e "$V_line                              $V_line           Ver: $(tab_format ${MFAST_VER} 6)  $V_line "
     footer "quit_backup"
 }
 
@@ -25,7 +25,7 @@ function main_menu(){
         case "$action" in
             
             1) clear && rootfs_menu && break;;
-            2) clear && h616_menu && break;;
+            2) clear && H616_sync_version_value && h616_menu && break;;
             3) clear && mp157_menu && break;;
             4) clear && rpi_menu && break;;
 

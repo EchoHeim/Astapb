@@ -10,16 +10,6 @@ function tab_format(){
 function border(){
     color=${themes_color}
 
-    if [[ "$ERROR_MSG" != "" ]]; then
-        color=${red}
-    fi
-    if [[ "$STATUS_MSG" != "" ]]; then
-        color=${yellow}
-    fi
-    if [ "$OK_MSG" != "" ]; then
-        color=${green}
-    fi
-
     if [ "$1" == "top" ]; then
         echo -e "${color}/=======================================================\\\\${clear}"
     elif [ "$1" == "bottom" ]; then
@@ -27,12 +17,12 @@ function border(){
     elif [ "$1" == "div_line" ]; then
         echo -e "${color}|-------------------------------------------------------|${clear}"
     elif [ "$1" == "blank_line" ]; then
-        echo -e "${color}|${clear}                                                       ${color}|${clear}"
-    elif [ "$1" == "main_blank_line" ]; then
+        echo -e "${V_line}                                                       ${V_line}"
+    elif [ "$1" == "space_blank_line" ]; then
         title_name=""
-        title=$(tab_format $title_name 24)
-        title_2=$(tab_format $title_name 22)
-        echo -e "${color}|${clear} $yellow   $clear $title $clear$V_line $title_2 ${color}|${clear}"
+        title=$(tab_format $title_name $2)
+        title_2=$(tab_format $title_name $3)
+        echo -e "${V_line} ${title} ${V_line} ${title_2} ${V_line}"
         unset title title_name title_2
     fi
     unset color
