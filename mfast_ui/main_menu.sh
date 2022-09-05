@@ -37,6 +37,5 @@ function main_menu(){
             *)  Selection_invalid "main_ui";;
 
         esac
-
     done
 }

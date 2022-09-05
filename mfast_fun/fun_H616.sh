@@ -79,6 +79,8 @@ function H616_sync_version_value()
     REVISION=$( sed -n '/REVISION=/p' $src_FILE | sed 's/.*"\(.*\)".*/\1/g')
 
     sed -i "s/^version=.*$/version="${REVISION}"/" $update_FILE
+
+    H616_add_cfg
 }
 
 function H616_compile_manual_cfg()
@@ -90,4 +92,9 @@ function H616_compile_manual_cfg()
         sed -i "s/^manual_cfg_kernel=.*$/manual_cfg_kernel="YES"/" ${MFAST_ROOT_PATH}/mfast.cfg
     fi
     source ${MFAST_ROOT_PATH}/mfast.cfg
+}
+
+function H616_add_cfg()
+{
+    cp ~/Astapb/shell/H616/scripts/* ~/Allwinner-H616/userpatches/scripts -fr
 }

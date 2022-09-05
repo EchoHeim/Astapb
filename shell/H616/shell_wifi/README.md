@@ -56,3 +56,6 @@ sleep 2
 sudo nmcli dev wifi connect biqu-m password biqu2020 ifname wlan0
 
 sudo nmcli dev wifi connect CB1\ Tester password 12345678 ifname wlan0
+
+sudo nmcli dev wifi connect BIQU password BiQu_HW@8888 ifname wlan0
+

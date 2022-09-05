@@ -343,5 +343,9 @@ aplay -D hw:2,0 /usr/share/sounds/alsa/audio.wav
 echo 7 4 1 7 > /proc/sys/kernel/printk
 ```
 
+## 6.2 apt源
+
+deb https://mirrors.tuna.tsinghua.edu.cn/debian bullseye main
+deb http://deb.debian.org/debian bullseye main contrib
 
 
