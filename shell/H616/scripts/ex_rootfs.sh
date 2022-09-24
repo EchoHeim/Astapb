@@ -39,7 +39,7 @@ unset filelist
 
 #-----------------
 sudo usermod -a -G root $username
-sudo chmod 777 /var/run/wpa_supplicant/wlan0
+# sudo chmod 777 /var/run/wpa_supplicant/wlan0
 
 
 cd $shell_path
@@ -57,7 +57,7 @@ if [ -e "ex_rootfs.sh" ];then
 fi
 
 sudo chown $username:$username /home/$username/ -R
-sudo ntpdate stdtime.gov.hk
+# sudo ntpdate stdtime.gov.hk
 
 cd /boot/gcode
 if ls *.gcode > /dev/null 2>&1;then

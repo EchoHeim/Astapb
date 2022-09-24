@@ -5,6 +5,26 @@ CycleSelect=1
 
 #---------------------------------------------------------------
 
+function mfast_backup(){
+
+    cd $MFAST_ROOT_PATH
+
+    echo -e "\n Please input commit message:"
+    echo -e "\n -> \c"
+    read git_MSG
+
+    git add .
+    git commit -m "$git_MSG"
+    git push origin master
+
+    if [ $? == 0 ]; then        # 判断上一条命令是否成功执行;
+        ok_msg "Backup Successful!"
+    else
+        warn_msg "Backup failed!"
+    fi
+}
+
+
 function backups(){
     
 if [ $# == 0 ]; then
@@ -74,27 +94,7 @@ if [[ $Type_Chose -eq 9 ]]; then            # This script;
     read B_or_R
     
     if [[ $B_or_R == "B" || $B_or_R == "b" ]]; then
-        cd $MFAST_ROOT_PATH
         
-        echo -e "\n Please input commit message:"
-        echo -e "\n -> \c"
-        read git_MSG
-
-        git add .
-        git commit -m "$git_MSG"
-        git push -u origin master
-
-        if [ $? == 0 ]; then        # 判断上一条命令是否成功执行;
-            echo -e "\n$blue/==================================================\\\\$clear"
-            echo -e "$V_line $green                  [  Notice  ]                  $clear $V_line"
-            echo -e "$V_line $green          **** Backup Successful! ****          $clear $V_line"
-            echo -e "$blue\\==================================================/$clear"
-        else
-            echo -e "\n$blue/==================================================\\\\$clear"
-            echo -e "$V_line $red                  [  Warning  ]                 $clear $V_line"
-            echo -e "$V_line $red            **** Backup failed! ****            $clear $V_line"
-            echo -e "$blue\\==================================================/$clear"
-        fi
     fi
 
     if [[ $B_or_R == "R" || $B_or_R == "r" ]]; then

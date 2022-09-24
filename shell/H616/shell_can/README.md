@@ -18,6 +18,9 @@ dmesg | grep -i '\(can\|spi\)'
 sudo ip -details link show can0
 ```
 
+![image](https://user-images.githubusercontent.com/26021085/177245475-4bbc506d-6064-404d-a469-8d415cbec2f6.png)
+
+
 ## 1.3 klipper操作
 
 连接can设备

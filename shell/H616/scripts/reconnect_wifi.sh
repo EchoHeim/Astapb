@@ -82,7 +82,7 @@ function Create_AP_OFF() {
 
     if [[ $(is_network $wlan) == no ]]; then
         source $cfg_file
-        echo -e $(date)" ==== $wlan prepare connection... -WIFI_SSID:$WIFI_SSID -WIFI_PASSWD:$WIFI_PASSWD" >> $log_file
+        echo -e $(date)" ==== $wlan prepare connection... -WIFI_SSID:$WIFI_SSID " >> $log_file
         sudo nmcli dev wifi connect $WIFI_SSID password $WIFI_PASSWD ifname $wlan
         sleep 5
     fi
