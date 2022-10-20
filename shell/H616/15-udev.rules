@@ -1,0 +1,10 @@
+ACTION=="add", KERNEL=="sd[a-z][0-9]", RUN+="/bin/mkdir -p /home/biqu/gcode_files/%k"
+ACTION=="add", KERNEL=="sd[a-z][0-9]", RUN+="/usr/bin/systemd-mount --no-block --automount=yes --collect /dev/%k /home/biqu/gcode_files/%k -o rw,noauto,sync,dirsync,noexec,nodev,noatime"
+ACTION=="remove", KERNEL=="sd[a-z][0-9]", RUN+="/usr/bin/systemd-umount /home/biqu/gcode_files/%k"
+ACTION=="remove", KERNEL=="sd[a-z][0-9]", RUN+="/bin/rmdir /home/biqu/gcode_files/%k"
+ACTION=="remove", KERNEL=="sd[a-z][0-9]", RUN+="/etc/check_udisk.sh %k"
+
+ACTION=="add", KERNEL=="hd[a-z][0-9]", RUN+="/bin/mkdir -p /home/biqu/gcode_files/%k"
+ACTION=="add", KERNEL=="hd[a-z][0-9]", RUN+="/usr/bin/systemd-mount --no-block --automount=yes --collect /dev/%k /home/biqu/gcode_files/%k -o rw,noauto,sync,dirsync,noexec,nodev,noatime"
+ACTION=="remove", KERNEL=="hd[a-z][0-9]", RUN+="/usr/bin/systemd-umount /home/biqu/gcode_files/%k"
+ACTION=="remove", KERNEL=="hd[a-z][0-9]", RUN+="/bin/rmdir /home/biqu/gcode_files/%k"

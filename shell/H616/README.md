@@ -258,9 +258,9 @@ sudo apt install mtd-utils
 
 5. u盘自动挂载，支持热插拔
    
-    把规则文件 10-usb.rules 放入 /etc/udev/rules.d/ 目录下;
+    把规则文件 12-usb.rules 放入 /etc/udev/rules.d/ 目录下;
 
-    把脚本文件 usb_udev.sh 放在 /home/biqu/scripts/ 目录下;
+    把脚本文件 usb_udev.sh 放在 /etc/scripts/ 目录下;
 
 6. usb摄像头实现即插即用
     
@@ -313,6 +313,11 @@ sudo apt install mtd-utils
 
     <https://blog.csdn.net/bandaoyu/article/details/116999236>
 
+16. MDNS
+
+Many people prefer to access their machines using the name.local addressing scheme available via mDNS (zeroconf, bonjour) instead of an IP address. This is simple to enable on the hurakan but requires the installation of the following packages which should be installed from the factory:
+
+sudo apt install avahi-daemon bind9-host geoip-database libavahi-common-data libavahi-common3 libavahi-core7 libdaemon0 libgeoip1 libnss-mdns libnss-mymachines
 
 # 5.其他功能测试
 

@@ -7,7 +7,7 @@ function backup_ui(){
 
     echo -e "$V_line $yellow 1)$clear Backup this script!                               $V_line "
 
-    footer "quit_backup"
+    footer "quit_back"
 }
 
 

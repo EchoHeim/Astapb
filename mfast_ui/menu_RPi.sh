@@ -19,7 +19,7 @@ function rpi_ui(){
     echo -e "$V_line ${cyan} [ Update ]                                           $V_line"
     border "div_line"
     echo -e "$V_line $yellow  ${magenta}U${clear}pdate kernel driver files!                         $V_line"
-    footer "quit"
+    footer "quit_back"
     unset PI_PATH
 }
 
@@ -41,6 +41,7 @@ function rpi_menu(){
                 unset pi_work_path
                 break;;
 
+            B|b) clear; main_menu; break;;
             Q|q) quit_msg;;
             *)  Selection_invalid "rpi_ui";;
         esac

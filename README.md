@@ -1,4 +1,4 @@
-# 1. MFAST 简介
+## 1. MFAST 简介
 
 - 脚本作用
 
@@ -19,12 +19,12 @@
 
     > 脚本运行 `不具有`通用性
 
-# 2. 功能包含
+## 2. 功能包含
 
-> * 自动备份 (`部分指定文件`)
+> * 自动备份本工具
 > * 构建debian文件系统
 > * 编译树莓派内核源码
 > * 编译和烧录stm32mp157源码
-> * 编译香橙派 (`H616`)
+> * 编译H616源码 (`基于OrangePi`)
 
-![image](https://user-images.githubusercontent.com/26021085/178963535-74e31739-b9e1-4594-b4ef-ff043e3a6834.png)
+![image](https://user-images.githubusercontent.com/26021085/192084452-73850abe-87c9-4388-85dd-5eb2a55a445f.png)

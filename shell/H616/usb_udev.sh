@@ -6,7 +6,7 @@ DEV_NAME=$2
 
 if [ $ACTION == "add" ]; then
     sudo mkdir -p $MNT_PATH$DEV_PRE-$DEV_NAME
-    sudo mount -t vfat /dev/$DEV_NAME $MNT_PATH$DEV_PRE-$DEV_NAME
+    sudo mount /dev/$DEV_NAME $MNT_PATH$DEV_PRE-$DEV_NAME
     if [[ $? -ne 0 ]]; then
         sudo rmdir $MNT_PATH$DEV_PRE-$DEV_NAME
     fi
