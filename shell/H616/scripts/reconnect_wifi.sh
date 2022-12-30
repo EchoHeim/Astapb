@@ -26,9 +26,25 @@ function Env_init() {
     sleep 4
     [[ $(ifconfig | grep $wlan) == "" ]] && nmcli radio wifi on
 
-    sudo nmcli dev wifi connect $WIFI_SSID password $WIFI_PASSWD ifname $wlan
+    if [[ `nmcli device wifi list` =~ $WIFI_SSID ]]
+    then
+        if [[ ! `sudo nmcli dev wifi connect $WIFI_SSID password $WIFI_PASSWD ifname $wlan` =~ "successfully" ]]
+        then
+            echo " ===> Specify the WPA encryption method: $WIFI_SSID " >> $log_file
+            sudo nmcli c modify $WIFI_SSID wifi-sec.key-mgmt wpa-psk
+            sudo nmcli dev wifi connect $WIFI_SSID password $WIFI_PASSWD ifname $wlan
+        fi
+    else
+        echo " ===> Hide wifi_ssid: $WIFI_SSID " >> $log_file
+        sudo nmcli c add type wifi con-name $WIFI_SSID ifname wlan0 ssid $WIFI_SSID
+        sudo nmcli c modify $WIFI_SSID wifi-sec.key-mgmt wpa-psk wifi-sec.psk $WIFI_PASSWD
+        sudo nmcli c up $WIFI_SSID
+    fi
+
     sleep 6
 }
+
+
 
 function is_network() {
     local Result=no
@@ -83,7 +99,20 @@ function Create_AP_OFF() {
     if [[ $(is_network $wlan) == no ]]; then
         source $cfg_file
         echo -e $(date)" ==== $wlan prepare connection... -WIFI_SSID:$WIFI_SSID " >> $log_file
-        sudo nmcli dev wifi connect $WIFI_SSID password $WIFI_PASSWD ifname $wlan
+        if [[ `nmcli device wifi list` =~ $WIFI_SSID ]]
+        then
+            if [[ ! `sudo nmcli dev wifi connect $WIFI_SSID password $WIFI_PASSWD ifname $wlan` =~ "successfully" ]]
+            then
+                echo " ===> Specify the WPA encryption method: $WIFI_SSID " >> $log_file
+                sudo nmcli c modify $WIFI_SSID wifi-sec.key-mgmt wpa-psk
+                sudo nmcli dev wifi connect $WIFI_SSID password $WIFI_PASSWD ifname $wlan
+            fi
+        else
+            echo " ===> Hide wifi_ssid: $WIFI_SSID " >> $log_file
+            sudo nmcli c add type wifi con-name $WIFI_SSID ifname wlan0 ssid $WIFI_SSID
+            sudo nmcli c modify $WIFI_SSID wifi-sec.key-mgmt wpa-psk wifi-sec.psk $WIFI_PASSWD
+            sudo nmcli c up $WIFI_SSID
+        fi
         sleep 5
     fi
     sta_mount=0
@@ -140,6 +169,32 @@ while [ 1 ]; do
             [[ $sta_mount -eq 6 ]] && sta_mount=0
             echo -e $(date)" ==== No $wlan network connection..." >> $log_file
             startWifi
+        fi
+    fi
+
+    if [[ ${IP_MODE} == "auto" ]]; then
+        if [[ ${IP_STATIC_DEVICE} == "eth" ]]; then
+            if [[ -e "/etc/NetworkManager/system-connections/Wired connection 1.nmconnection" ]]; then
+                sudo rm /etc/NetworkManager/system-connections/Wired\ connection\ 1.nmconnection -fr
+                sudo nmcli con up "Wired connection 1"
+            fi
+        elif [[ ${IP_STATIC_DEVICE} == "wifi" ]]; then
+            if [ `sudo grep -c "manual" /etc/NetworkManager/system-connections/${WIFI_SSID}.nmconnection` -eq '1' ]; then
+                sudo nmcli con mod ${WIFI_SSID} ipv4.addresses "" ipv4.gateway "" ipv4.dns "" ipv4.method "auto"
+                sudo nmcli con up ${WIFI_SSID}
+            fi
+        fi
+    elif [[ ${IP_MODE} == "static" ]]; then
+        if [[ ${IP_STATIC_DEVICE} == "eth" ]]; then
+            if [[ ! -e "/etc/NetworkManager/system-connections/Wired connection 1.nmconnection" ]]; then
+                sudo nmcli con mod "Wired connection 1" ipv4.addresses ${IP_ADDR} ipv4.gateway ${IP_GATEWAY} ipv4.dns ${IP_DNS} ipv4.method "manual"
+                sudo nmcli con up "Wired connection 1"
+            fi
+        elif [[ ${IP_STATIC_DEVICE} == "wifi" ]]; then
+            if [ `sudo grep -c "manual" /etc/NetworkManager/system-connections/${WIFI_SSID}.nmconnection` -eq '0' ]; then
+                sudo nmcli con mod ${WIFI_SSID} ipv4.addresses ${IP_ADDR} ipv4.gateway ${IP_GATEWAY} ipv4.dns ${IP_DNS} ipv4.method "manual"
+                sudo nmcli con up ${WIFI_SSID}
+            fi
         fi
     fi
 

@@ -353,4 +353,104 @@ echo 7 4 1 7 > /proc/sys/kernel/printk
 deb https://mirrors.tuna.tsinghua.edu.cn/debian bullseye main
 deb http://deb.debian.org/debian bullseye main contrib
 
+## 6.3 禁用无关服务
+
+``` bash
+sudo systemctl disable bluetooth.service
+sudo systemctl disable hostapd.service
+sudo systemctl disable armbian-firstrun-config.service
+sudo systemctl disable e2scrub_all.timer
+sudo systemctl disable e2scrub_reap.service
+```
+
+# 7. HDMI 显示
+
+## 7.1 显示旋转
+
+DISPLAY=:0 xrandr --output HDMI-1 --rotate normal
+DISPLAY=:0 xrandr --output HDMI-1 --rotate left
+DISPLAY=:0 xrandr --output HDMI-1 --rotate right
+DISPLAY=:0 xrandr --output HDMI-1 --rotate inverted
+
+## 7.2 触摸旋转
+
+> 列出所有输入设备
+
+DISPLAY=:0 xinput --list
+
+> 旋转
+
+DISPLAY=:0 xinput --set-prop 'WaveShare WS170120' 'Coordinate Transformation Matrix' 1 0 0 0 1 0 0 0 1
+DISPLAY=:0 xinput --set-prop 'WaveShare WS170120' 'Coordinate Transformation Matrix' 0 -1 1 1 0 0 0 0 1
+DISPLAY=:0 xinput --set-prop 'WaveShare WS170120' 'Coordinate Transformation Matrix' 0 1 0 -1 0 1 0 0 1
+DISPLAY=:0 xinput --set-prop ${input_id} 'Coordinate Transformation Matrix' -1 0 1 0 -1 1 0 0 1
+
+HDMI_Vendor="WaveShare"
+string=`DISPLAY=:0 xinput --list | grep ${HDMI_Vendor}`
+string=${string#*id=}
+input_id=${string%[*}
+echo ${input_id}
+
+
+## 7.3 设置分辨率
+
+extraargs=video=HDMI-A-1:1024x600-24@60
+
+
+## 8 设置静态IP
+
+sudo nmcli con mod "Wired connection 1" ipv4.addresses "192.168.0.110" ipv4.gateway "192.168.0.1" ipv4.dns "8.8.8.8" ipv4.method "manual"
+
+sudo nmcli con mod "biqu-m" ipv4.addresses "192.168.1.110" ipv4.gateway "192.168.1.1" ipv4.dns "8.8.8.8" ipv4.method "manual"
+
+sudo nmcli con mod "biqu-m" ipv4.addresses "" ipv4.gateway "" ipv4.dns "" ipv4.method "auto"
+
+sudo nmcli con up biqu-m
+
+sudo systemctl restart NetworkManager
+
+
+## 9 sox音频播放
+
+安装
+sudo apt-get install sox libsox-fmt-all
+
+指定音频驱动
+export AUDIODRIVER=alsa
+
+播放
+play *.mp3
+
+======================================================
+_IP=$(hostname -I) || true
+if [ "$(hostname -I)" ]; then
+    printf "My IP: %s\n" "$(hostname -I)"
+fi
+
+
+======================================================
+命令行播放视频（需要安装mplayer播放器）
+mplayer -vo fbdev2 /home/biqu/video.mp4 -vf scale=1024:600
+
+
+echo 0 > /sys/class/graphics/fbcon/cursor_blink #光标不闪烁
+
+======================================================
+1.先将系统烧到sd卡上
+2.插入sd卡，启动香蕉派
+3.检查容量并dd进镜像：
+sudo fdisk -l
+sudo dd if=/dev/mmcblk1 of=/dev/mmcblk2 bs=512 count=5038080
+
+#count的计算方法：sudo fdisk -l /dev/mmcblk0 查看最后一个sector值，转换单位（512byte->1M Byte）
+
+(15409151+1)*512/1024/1024=15409152/2048=7524
+
+(/dev/mmcblk0 729088 15409151 14680064 7G 83 Linux)
+
+=======================================================
+
+查看 chipid
+
+cat /sys/class/sunxi_info/sys_info | grep "chipid"
 
