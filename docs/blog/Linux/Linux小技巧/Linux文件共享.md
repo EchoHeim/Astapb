@@ -107,20 +107,20 @@ writable = yes
 
 * 其他参数描述如下
 
-参数    | 描述
-:---    | :---
-comment | 备注描述
-path    |  共享文件夹的路径
-valid users | 可访问的用户，多个用户用,隔开（使用上面步骤创建的 Samba用户名）
-public  | 访问是否不需要密码
-read only   | 是否只读
-create mask | 文件权限设置
-directory mask  | 文件权限设置
-available   | 是否有效
-browseable  | 是否可浏览，no表示隐藏，需要通过 IP+共享名称 进行访问
-display charset、unix charset、dos charset  | 防止出现中文目录乱码的情况
+| 参数                                       | 描述                                                            |
+| :----------------------------------------- | :-------------------------------------------------------------- |
+| comment                                    | 备注描述                                                        |
+| path                                       | 共享文件夹的路径                                                |
+| valid users                                | 可访问的用户，多个用户用,隔开（使用上面步骤创建的 Samba用户名） |
+| public                                     | 访问是否不需要密码                                              |
+| read only                                  | 是否只读                                                        |
+| create mask                                | 文件权限设置                                                    |
+| directory mask                             | 文件权限设置                                                    |
+| available                                  | 是否有效                                                        |
+| browseable                                 | 是否可浏览，no表示隐藏，需要通过 IP+共享名称 进行访问           |
+| display charset、unix charset、dos charset | 防止出现中文目录乱码的情况                                      |
 
-4. 启动 Samba 服务
+1. 启动 Samba 服务
 
 ``` bash
 sudo service smbd restart       # 重启服务
@@ -151,6 +151,14 @@ ps -aux | grep smbd                     # 查看 samba 是否正在运行
 然后在弹出的对话框输入 `Samba` 配置的用户和密码，如果用户名和登录 `Linux` 的用户名一样，则需要输入登录 `Linux` 设备的密码，验证正确后即可看到共享的文件夹，然后就可以进行文件传输读写操作。
 
 ![image](https://user-images.githubusercontent.com/26021085/167988624-13c03576-5717-461a-a9ae-870af69171fa.png)
+
+- 注意
+
+    在`ubuntu`下创建`samba`后发现不能写，用下面方法即可解决
+
+    进入共享目录，执行命令
+    
+    `chmod -R go+w share/`
 
 # 3. FTP服务
 
