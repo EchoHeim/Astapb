@@ -3,6 +3,7 @@
 function H616_build_uboot()
 {
     cp $PATH_H616_UBOOT/.config $PATH_H616_UBOOT/configs/h616_defconfig
+    sync
 
     cd $PATH_H616_WORKSPACE
     sudo ./build.sh BUILD_OPT=u-boot

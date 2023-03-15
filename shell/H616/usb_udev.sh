@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MNT_PATH=/home/biqu/gcode_files/         # mount menu
+MNT_PATH=/home/biqu/printer_data/gcodes/         # mount menu
 DEV_PRE=$1
 DEV_NAME=$2
 
