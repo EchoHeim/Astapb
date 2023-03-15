@@ -3,6 +3,14 @@
 
 > 个人学习的知识点记录
 
+## 🌾 Linux应用编程
+
+* [Linux系统简介](blog/Linux/Linux应用编程/Linux系统简介.md)
+* [Linux基本工具](blog/Linux/Linux应用编程/Linux基本工具.md)
+* [Linux系统管理](blog/Linux/Linux应用编程/Linux系统管理.md)
+* [Linux进程与线程](blog/Linux/Linux应用编程/Linux进程与线程.md)
+* [Linux网络编程](blog/Linux/Linux应用编程/Linux网络编程.md)
+
 ## 📍 Linux驱动调试相关
 
 * [Linux访问PHY芯片寄存器](blog/Linux/Linux驱动调试相关/Linux访问PHY芯片寄存器.md)
