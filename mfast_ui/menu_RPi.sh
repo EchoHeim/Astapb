@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function rpi_ui(){
+function rpi_ui() {
     border "top"
     echo -e "$V_line      ${green}~~~~~~~~~~~~~ [ RaspBerryPi ] ~~~~~~~~~~~~~${clear}      $V_line"
     border "div_line"
@@ -23,33 +23,39 @@ function rpi_ui(){
     unset PI_PATH
 }
 
-function rpi_menu(){
+function rpi_menu() {
     do_action "" "rpi_ui"
     while true; do
         choose "action"
         case "$action" in
-            1) do_action "install_modules" "rpi_ui";;
-            2) do_action "H616_build_kernel" "rpi_ui";;
-            3) do_action "H616_build_uboot" "rpi_ui";;
-            4) do_action "H616_build_kernel" "rpi_ui";;
-            5) do_action "install_modules" ""
+        1) do_action "install_modules" "rpi_ui" ;;
+        2) do_action "H616_build_kernel" "rpi_ui" ;;
+        3) do_action "H616_build_uboot" "rpi_ui" ;;
+        4) do_action "H616_build_kernel" "rpi_ui" ;;
+        5)
+            do_action "install_modules" ""
             ;;
-            
-            C|c)
-                read -p "${yellow} Please input the pi-kernel path: ${red}" pi_work_path
-                change_path ${pi_work_path}
-                unset pi_work_path
-                break;;
 
-            B|b) clear; main_menu; break;;
-            Q|q) quit_msg;;
-            *)  Selection_invalid "rpi_ui";;
+        C | c)
+            read -p "${yellow} Please input the pi-kernel path: ${red}" pi_work_path
+            change_path ${pi_work_path}
+            unset pi_work_path
+            break
+            ;;
+
+        B | b)
+            clear
+            main_menu
+            break
+            ;;
+        Q | q) quit_msg ;;
+        *) Selection_invalid "rpi_ui" ;;
         esac
     done
     rpi_menu
 }
 
-function change_path(){
+function change_path() {
     sed -i "s/^PI_KERNEL_Folder=.*$/PI_KERNEL_Folder=$1/" ${MFAST_ROOT_PATH}/mfast_fun/path.sh
     source ${MFAST_ROOT_PATH}/mfast_fun/path.sh
     do_action

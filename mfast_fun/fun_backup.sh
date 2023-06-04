@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function mfast_backup(){
+function mfast_backup() {
 
     cd $MFAST_ROOT_PATH
 
@@ -12,7 +12,7 @@ function mfast_backup(){
     git commit -m "$git_MSG"
     git push origin master
 
-    if [ $? == 0 ]; then        # 判断上一条命令是否成功执行;
+    if [ $? == 0 ]; then # 判断上一条命令是否成功执行;
         ok_msg "Backup Successful!"
     else
         warn_msg "Backup failed!"

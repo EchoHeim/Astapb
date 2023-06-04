@@ -1,13 +1,13 @@
 #!/bin/bash
 
-function tab_format(){
+function tab_format() {
     f_name=$1
     [ $# == 1 ] && echo "$(printf "%-$1s" "")"
     [ $# == 2 ] && echo "$(printf "%-$2s" "$f_name")"
     unset f_name
 }
 
-function border(){
+function border() {
     color=${themes_color}
 
     if [ "$1" == "top" ]; then
@@ -28,7 +28,7 @@ function border(){
     unset color
 }
 
-function footer(){
+function footer() {
     border "div_line"
     if [ "$1" == "quit_back" ]; then
         echo -e "$V_line                                  ${purple} Q/B: Quit or Back!${clear}  $V_line"
@@ -40,7 +40,7 @@ function footer(){
     border "bottom"
 }
 
-function print_header(){
+function print_header() {
     echo
     get_date
     border "top"
@@ -53,12 +53,12 @@ function print_header(){
     border "bottom"
 }
 
-function get_date(){
+function get_date() {
     current_date=$(date +"20%y-%m-%d")
     current_time=$(date +"%H:%M")
 }
 
-function choose(){
+function choose() {
     if [ $# == 1 ]; then
         [[ "$1" == "action" ]] && read -p "${yellow} Please choose: ${red}" action && echo -e "${clear}"
         [[ "$1" == "SD_or_eMMC" ]] && echo "${yellow} Revert to SD card or eMMC? (Please Choose)" && read -p " 1:SD card / 2:eMMC ${red}" SD_or_eMMC && echo -e "${clear}"
@@ -87,12 +87,12 @@ function abort_msg() {
     echo -e "\n${cyan}<<<<<< ${1}${clear}\n"
 }
 
-function quit_msg(){
+function quit_msg() {
     ok_msg "###### Good Job! ######"
     exit 0
 }
 
-function print_msg(){
+function print_msg() {
     if [[ "$ERROR_MSG" != "" ]]; then
         border "top"
         echo -e "${red}"
@@ -117,7 +117,7 @@ function print_msg(){
     clear_msg
 }
 
-function clear_msg(){
+function clear_msg() {
     unset OK_MSG
     unset ERROR_MSG
     unset STATUS_MSG
@@ -125,7 +125,7 @@ function clear_msg(){
 
 ### TODO: rework other menus to make use of the following functions too and make them more readable
 
-function do_action(){
+function do_action() {
     clear && print_header
     if [ $# -eq 2 ]; then
         $1
@@ -137,7 +137,7 @@ function do_action(){
     fi
 }
 
-function Selection_invalid(){
+function Selection_invalid() {
     clear && print_header
     if [ $# -eq 1 ]; then
         error_msg "Invalid input, Please reselect!"
@@ -163,4 +163,3 @@ function raspberrypi_status() {
 function orangepi_status() {
     echo "================================"
 }
-

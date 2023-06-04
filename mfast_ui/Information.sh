@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function about_ui(){
+function about_ui() {
     border "top"
     echo -e "$V_line   ${cyan} ~~~~~~~~~~~~~~~ [ Information ] ~~~~~~~~~~~~~~~    $V_line"
     border "div_line"
@@ -26,7 +26,7 @@ function about_ui(){
     echo
 }
 
-function about_menu(){
+function about_menu() {
     clear_msg
     print_header
     do_action "about_ui"
@@ -34,9 +34,13 @@ function about_menu(){
         choose "action"
         case "$action" in
 
-            B|b) clear; main_menu; break;;
-            Q|q) quit_msg;;
-            *)  Selection_invalid "about_ui";;
+        B | b)
+            clear
+            main_menu
+            break
+            ;;
+        Q | q) quit_msg ;;
+        *) Selection_invalid "about_ui" ;;
 
         esac
     done

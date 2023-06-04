@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MNT_PATH=/home/biqu/printer_data/gcodes/         # mount menu
+MNT_PATH=/home/biqu/printer_data/gcodes/ # mount menu
 DEV_PRE=$1
 DEV_NAME=$2
 
@@ -11,9 +11,9 @@ if [ $ACTION == "add" ]; then
         sudo rmdir $MNT_PATH$DEV_PRE-$DEV_NAME
     fi
 elif [ $ACTION == "remove" ]; then
-    if [[ -e  $MNT_PATH$DEV_PRE-$DEV_NAME ]] ; then
+    if [[ -e $MNT_PATH$DEV_PRE-$DEV_NAME ]]; then
         sudo umount $MNT_PATH$DEV_PRE-$DEV_NAME
-        /usr/bin/rmdir  $MNT_PATH$DEV_PRE-$DEV_NAME
+        /usr/bin/rmdir $MNT_PATH$DEV_PRE-$DEV_NAME
     fi
 fi
 

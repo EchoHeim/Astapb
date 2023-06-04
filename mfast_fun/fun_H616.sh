@@ -1,7 +1,6 @@
 #!/bin/bash
 
-function H616_build_uboot()
-{
+function H616_build_uboot() {
     cp $PATH_H616_UBOOT/.config $PATH_H616_UBOOT/configs/h616_defconfig
     sync
 
@@ -14,13 +13,12 @@ function H616_build_uboot()
     echo -e "\n **** build complete! ****\n"
 }
 
-function H616_build_kernel()
-{
+function H616_build_kernel() {
     cd $PATH_H616_WORKSPACE
 
-    if [[ $manual_cfg_kernel == "YES" ]];then
+    if [[ $manual_cfg_kernel == "YES" ]]; then
         sudo ./build.sh BUILD_OPT=kernel MANUAL_KERNEL_CONFIGURE=yes
-    elif [[ $manual_cfg_kernel == "NO" ]];then
+    elif [[ $manual_cfg_kernel == "NO" ]]; then
         sudo ./build.sh BUILD_OPT=kernel MANUAL_KERNEL_CONFIGURE=no
     fi
 
@@ -36,8 +34,7 @@ function H616_build_kernel()
     echo -e "\n **** build complete! ****\n"
 }
 
-function H616_File_Transfer()
-{
+function H616_File_Transfer() {
     Pi_user=${username_H616}
     Pi_IP=${IP_H616}
 
@@ -45,57 +42,57 @@ function H616_File_Transfer()
 
     echo -e "\n ==== copy images ====\n"
     cd $PATH_H616_NFS
-    
+
     #scp -r 5.13.0-sun50iw9 *.deb regulatory.* *.sh $Pi_user@$Pi_IP:/home/$Pi_user
     #scp -r 5.13.0-sun50iw9 *.ko *.deb regulatory.* *.sh $Pi_user@$Pi_IP:/home/$Pi_user
-    scp -r  5.16.17-sun50iw9 *.deb *.sh $Pi_user@$Pi_IP:/home/$Pi_user
+    scp -r 5.16.17-sun50iw9 *.deb *.sh $Pi_user@$Pi_IP:/home/$Pi_user
 
     echo -e "\n **** copy complete! ****\n"
 }
 
-function H616_change_boardinfo()
-{
+function H616_change_boardinfo() {
     case $1 in
-        user) read -p "${yellow} Please enter a new user name: ${red}" board_user; echo -e "${clear}"
-            sed -i "s/^username_H616=.*$/username_H616=${board_user}/" ${MFAST_ROOT_PATH}/mfast.cfg
-            ;;
+    user)
+        read -p "${yellow} Please enter a new user name: ${red}" board_user
+        echo -e "${clear}"
+        sed -i "s/^username_H616=.*$/username_H616=${board_user}/" ${MFAST_ROOT_PATH}/mfast.cfg
+        ;;
 
-        ip) read -p "${yellow} Please enter the new board ip: ${red}" board_ip; echo -e "${clear}"
-            sed -i "s/^IP_H616=.*$/IP_H616=${board_ip}/" ${MFAST_ROOT_PATH}/mfast.cfg
-            ;;
+    ip)
+        read -p "${yellow} Please enter the new board ip: ${red}" board_ip
+        echo -e "${clear}"
+        sed -i "s/^IP_H616=.*$/IP_H616=${board_ip}/" ${MFAST_ROOT_PATH}/mfast.cfg
+        ;;
     esac
 
     source ${MFAST_ROOT_PATH}/mfast.cfg
     unset board_user board_ip
 }
 
-function H616_sync_version_value()
-{
+function H616_sync_version_value() {
     src_FILE="$PATH_H616_WORKSPACE/scripts/main.sh"
     update_FILE="$PATH_H616_WORKSPACE/nfs_folder/update_kernel.sh"
 
     # str=$(sed -n '/REVISION=/p' $src_FILE)      # 此时得到的是一整行
-    
+
     # .*"\(.*\)".* 正则匹配双引号中的值， 要加上前后两个(), \1表示第一个()中匹配的值
-    REVISION=$( sed -n '/REVISION=/p' $src_FILE | sed 's/.*"\(.*\)".*/\1/g')
+    REVISION=$(sed -n '/REVISION=/p' $src_FILE | sed 's/.*"\(.*\)".*/\1/g')
 
     sed -i "s/^version=.*$/version="${REVISION}"/" $update_FILE
 
     H616_add_cfg
 }
 
-function H616_compile_manual_cfg()
-{
+function H616_compile_manual_cfg() {
     source ${MFAST_ROOT_PATH}/mfast.cfg
-    if [[ $manual_cfg_kernel == "YES" ]];then
+    if [[ $manual_cfg_kernel == "YES" ]]; then
         sed -i "s/^manual_cfg_kernel=.*$/manual_cfg_kernel="NO"/" ${MFAST_ROOT_PATH}/mfast.cfg
-    elif [[ $manual_cfg_kernel == "NO" ]];then
+    elif [[ $manual_cfg_kernel == "NO" ]]; then
         sed -i "s/^manual_cfg_kernel=.*$/manual_cfg_kernel="YES"/" ${MFAST_ROOT_PATH}/mfast.cfg
     fi
     source ${MFAST_ROOT_PATH}/mfast.cfg
 }
 
-function H616_add_cfg()
-{
+function H616_add_cfg() {
     cp ~/Astapb/shell/H616/scripts/* ~/Allwinner-H616/userpatches/scripts -fr
 }

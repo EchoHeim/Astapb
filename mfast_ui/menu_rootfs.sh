@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function rootfs_ui(){
+function rootfs_ui() {
     border "top"
 
     echo -e "$V_line $yellow  101:$clear buster          $V_line $yellow  102:$clear bullseye         $V_line"
@@ -14,17 +14,21 @@ function rootfs_ui(){
     back_footer
 }
 
-function rootfs_menu(){
+function rootfs_menu() {
 
     do_action "rootfs_ui"
     while true; do
         choose "action"
         case "$action" in
 
-        B|b)
-            clear; main_menu; break;;
+        B | b)
+            clear
+            main_menu
+            break
+            ;;
         *)
-            Selection_invalid "rootfs_ui";;
+            Selection_invalid "rootfs_ui"
+            ;;
         esac
     done
     rootfs_menu

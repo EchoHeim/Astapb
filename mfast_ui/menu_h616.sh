@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function h616_ui(){
+function h616_ui() {
     border "top"
 
     echo -e "$V_line    ${green}~~~~~~~~~~~~~~~~ [ H616 MENU ] ~~~~~~~~~~~~~~~~${clear}    $V_line"
@@ -19,26 +19,30 @@ function h616_ui(){
     footer "quit_back"
 }
 
-function h616_menu(){
+function h616_menu() {
     do_action "h616_ui"
 
     while true; do
-    
+
         choose "action"
         case "$action" in
-            1) do_action "H616_build_uboot" "h616_ui";;
-            2) do_action "H616_build_kernel" "h616_ui";;
+        1) do_action "H616_build_uboot" "h616_ui" ;;
+        2) do_action "H616_build_kernel" "h616_ui" ;;
 
-            T|t) do_action "H616_File_Transfer" "h616_ui";;
-            W|w) do_action "H616_compile_manual_cfg" "h616_ui";;
+        T | t) do_action "H616_File_Transfer" "h616_ui" ;;
+        W | w) do_action "H616_compile_manual_cfg" "h616_ui" ;;
 
-            U|u) do_action "H616_change_boardinfo user" "h616_ui";;
-            I|i) do_action "H616_change_boardinfo ip" "h616_ui";;
+        U | u) do_action "H616_change_boardinfo user" "h616_ui" ;;
+        I | i) do_action "H616_change_boardinfo ip" "h616_ui" ;;
 
-            B|b) clear; main_menu; break;;
-            Q|q) quit_msg;;
-            *)  Selection_invalid "h616_ui";;
+        B | b)
+            clear
+            main_menu
+            break
+            ;;
+        Q | q) quit_msg ;;
+        *) Selection_invalid "h616_ui" ;;
         esac
-        
+
     done
 }

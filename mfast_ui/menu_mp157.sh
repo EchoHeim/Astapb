@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function mp157_ui(){
+function mp157_ui() {
     border "top"
     echo -e "$V_line    ${green}~~~~~~~~~~~~~ [ STM32MP157 MENU ] ~~~~~~~~~~~~~${clear}    $V_line"
     border "div_line"
@@ -20,26 +20,30 @@ function mp157_ui(){
     footer "quit_back"
 }
 
-function mp157_menu(){
+function mp157_menu() {
     do_action "mp157_ui"
     while true; do
         choose "action"
         case "$action" in
 
-            1) do_action "mp157_cpmpile_TF-a" "mp157_ui";;
-            2) do_action "mp157_cpmpile_u-boot" "mp157_ui";;
-            3) do_action "mp157_cpmpile_kernel" "mp157_ui";;
-            4) do_action "mp157_clear TF-a" "mp157_ui";;
-            5) do_action "mp157_clear u-boot" "mp157_ui";;
-            6) do_action "mp157_clear kernel" "mp157_ui";;
+        1) do_action "mp157_cpmpile_TF-a" "mp157_ui" ;;
+        2) do_action "mp157_cpmpile_u-boot" "mp157_ui" ;;
+        3) do_action "mp157_cpmpile_kernel" "mp157_ui" ;;
+        4) do_action "mp157_clear TF-a" "mp157_ui" ;;
+        5) do_action "mp157_clear u-boot" "mp157_ui" ;;
+        6) do_action "mp157_clear kernel" "mp157_ui" ;;
 
-            9) do_action "mp157_flash factory" "mp157_ui";;
-            FB|fB|Fb|fb) do_action "mp157_flash bootfs" "mp157_ui";;
-            FR|fR|Fr|fr) do_action "mp157_flash rootfs" "mp157_ui";;
-            
-            B|b) clear; main_menu; break;;
-            Q|q) quit_msg;;
-            *)  Selection_invalid "mp157_ui";;
+        9) do_action "mp157_flash factory" "mp157_ui" ;;
+        FB | fB | Fb | fb) do_action "mp157_flash bootfs" "mp157_ui" ;;
+        FR | fR | Fr | fr) do_action "mp157_flash rootfs" "mp157_ui" ;;
+
+        B | b)
+            clear
+            main_menu
+            break
+            ;;
+        Q | q) quit_msg ;;
+        *) Selection_invalid "mp157_ui" ;;
 
         esac
     done

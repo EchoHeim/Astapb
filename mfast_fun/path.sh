@@ -11,9 +11,8 @@ WindowsIP=192.168.0.203
 
 # ======================== PATH ======================== #
 
-WINDOWS_SHARE_DIR=/run/user/1000/gvfs/smb-share:server=$WindowsIP,share=code         # windows 共享文件夹;
+WINDOWS_SHARE_DIR=/run/user/1000/gvfs/smb-share:server=$WindowsIP,share=code # windows 共享文件夹;
 WINDOWS_BACKUP_DIR=/run/user/1000/gvfs/smb-share:server=$WindowsIP,share=backup
-
 
 # ======== H616
 PATH_H616_WORKSPACE=$HOME/Allwinner-H616
@@ -46,12 +45,9 @@ PATH_ST_BUILDROOT=$PATH_ST_WORKSPACE/buildroot
 PI_KERNEL_Folder=linux
 PATH_PI_WORKSPACE=$HOME/RaspBerryPi/$PI_KERNEL_Folder
 
-
-
 # ======== backup
 
 INI_FILE=${HOME}/.kiauh.ini
 BACKUP_DIR=${HOME}/kiauh-backups
 
 ### set github repos
-

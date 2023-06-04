@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function main_ui(){
+function main_ui() {
     border "top"
     echo -e "$V_line   ${green} ~~~~~~~~~~~~~~~~ [ MAIN MENU ] ~~~~~~~~~~~~~~~~    $V_line"
     border "div_line"
@@ -17,24 +17,24 @@ function main_ui(){
     footer "quit_backup"
 }
 
-function main_menu(){
+function main_menu() {
     do_action "main_ui"
     while true; do
-    
+
         choose "action"
         case "$action" in
-            
-            1) clear && rootfs_menu && break;;
-            2) clear && H616_sync_version_value && h616_menu && break;;
-            3) clear && mp157_menu && break;;
-            4) clear && rpi_menu && break;;
 
-            S|s) clear && settings_menu && break;;
-            I|i) clear && about_menu && break;;
+        1) clear && rootfs_menu && break ;;
+        2) clear && H616_sync_version_value && h616_menu && break ;;
+        3) clear && mp157_menu && break ;;
+        4) clear && rpi_menu && break ;;
 
-            B|b) clear && backup_menu && break;;
-            Q|q) quit_msg;;
-            *)  Selection_invalid "main_ui";;
+        S | s) clear && settings_menu && break ;;
+        I | i) clear && about_menu && break ;;
+
+        B | b) clear && backup_menu && break ;;
+        Q | q) quit_msg ;;
+        *) Selection_invalid "main_ui" ;;
 
         esac
     done
