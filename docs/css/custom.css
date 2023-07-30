@@ -1,9 +1,14 @@
+/* 封面样式 */
 section.cover .cover-main {
   z-index: 100;
 }
 
+section.cover .cover-main > p:last-child a .iconfont {
+  font-size: 1em;
+}
+
 section.cover.has-mask .mask {
-  background-color: rgb(255, 255, 255);
+  background-color: rgba(255, 255, 255, 0.8);
   opacity: 0.1 !important;
   position: absolute;
   top: 0;
@@ -11,17 +16,10 @@ section.cover.has-mask .mask {
   width: 100%;
 }
 
-section.cover h3 .anchor span {
+section.cover h6 .anchor span {
   font-family: "Lobster", cursive;
   font-size: 54px;
-  color: var(--theme-color);
-  /* color:rgb(255, 255, 255); */
-}
-
-section.cover h5 .anchor span {
-  font-family: "Lobster", cursive;
-  font-size: 24px;
-  color: var(--theme-color);
+  color: rgba(39, 214, 245, 0.795);
 }
 
 section.cover h4 .anchor span {
@@ -31,25 +29,10 @@ section.cover h4 .anchor span {
   color: rgb(123, 109, 131);
 }
 
-section.cover .cover-main > p:last-child a .iconfont {
-  font-size: 1em;
-}
-
-.sidebar > h1 a {
+section.cover h5 .anchor span {
   font-family: "Lobster", cursive;
-}
-
-/*滚动条样式*/
-/* 滚动条宽度 */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-/* 滚动条颜色 */
-::-webkit-scrollbar-thumb {
-  background: #33a9dc;
-  background-image: linear-gradient(#6ecd56, #33a9dc, #cb6196, #c16290);
-  border-radius: 2em;
+  font-size: 24px;
+  color: var(--theme-color);
 }
 
 /* 一级标题添加背景 */
@@ -60,7 +43,7 @@ h1 span {
   color: #ffffff;
   padding: 5px 15px;
   border-radius: 5px;
-  box-shadow: 1px 1px 3px rgba(240, 61, 247, 0.637);
+  box-shadow: 1px 1px 3px rgba(19, 130, 233, 0.664);
 }
 
 h2 span {
@@ -72,10 +55,22 @@ h2 span {
   box-shadow: 1px 1px 4px rgb(1, 225, 255);
 }
 
+/*滚动条样式*/
+::-webkit-scrollbar {
+  width: 6px; /* 滚动条宽度 */
+}
+
+/* 滚动条颜色 */
+::-webkit-scrollbar-thumb {
+  background: #33a9dc;
+  background-image: linear-gradient(#6ecd56, #33a9dc, #cb6196, #c16290);
+  border-radius: 2em;
+}
+
 p {
   /* color: rgb(73, 73, 73); */
   font-family: STKaiti, "Microsoft YaHei", LiSu, STLiti;
-  font-size: 17px;
+  font-size: 18px;
 }
 
 li {
@@ -86,7 +81,11 @@ li {
 
 /* 侧边栏调节 */
 .sidebar {
-  padding-top: 6px;
+  padding-top: 1px;
+}
+
+.sidebar > h1 a {
+  font-family: "Lobster", cursive;
 }
 
 aside.sidebar ul li {
@@ -132,13 +131,31 @@ aside.sidebar ul li.active > a:before {
 
 /* ---------------------------- 代码块设置 start ------------------------------*/
 
+/*代码块背景*/
+/* p code {
+  background-color: rgb(255, 255, 255) !important;
+} */
+
+.markdown-section p.tip,
+.markdown-section tr:nth-child(1n) {
+  font-size: 16px !important;
+}
+
+.markdown-section h1 {
+  margin: 3rem 0 2rem 0;
+}
+
+.markdown-section h2 {
+  margin: 2rem 0 1rem;
+}
+
 /* 代码块头部图标 start */
 .markdown-section pre:before {
   content: "";
   display: block;
   background: url(https://cdn.jsdelivr.net/gh/EchoHeim/Astapb/docs/images/code_pin.png);
   height: 30px;
-  background-size: 40px;
+  background-size: 50px;
   background-repeat: no-repeat;
   background-color: #1c1c1c;
   background-position: 10px 10px;
@@ -157,13 +174,24 @@ aside.sidebar ul li.active > a:before {
   -moz-tab-size: 4 !important;
   -o-tab-size: 4 !important;
   tab-size: 4 !important;
-  border-radius: 0.3em;
+  border-radius: 5px !important;
+  padding-left: 20px !important;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  letter-spacing: 1px !important;
 }
 
-/* .markdown-section > div > img,
 .markdown-section pre {
-  box-shadow: 2px 2px 20px 6px rgba(0, 217, 255, 0.308) !important; 
-} */
+  box-shadow: 2px 2px 20px 6px rgba(0, 217, 255, 0.308) !important; /* 边框颜色 */
+  padding-left: 0 !important;
+  padding-right: 0px !important;
+  background-color: #1d1d1d !important;
+}
+
+img,
+pre {
+  border-radius: 5px;
+}
 
 ol,
 ul,
@@ -171,36 +199,9 @@ li {
   line-height: 27px !important;
   font-size: 16px !important;
 }
-@media (min-width: 600px) {
-  .markdown-section pre > code {
-    font-size: 15px !important;
-    letter-spacing: 1.1px !important;
-  }
-}
-@media (max-width: 600px) {
-  .markdown-section pre > code {
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 16px !important;
-  }
-  pre:after {
-    content: "" !important;
-  }
-}
-section.cover h1 {
-  margin: 0;
-}
 
-pre {
-  background-color: #212121 !important;
-}
-
-@media (min-width: 600px) {
-  pre code {
-    /*box-shadow: 2px 1px 20px 2px #aaa;*/
-    /*border-radius: 10px !important;*/
-    padding-left: 20px !important;
-  }
+.markdown-section {
+  margin: 5 1% !important;
 }
 
 .markdown-section a:not(:hover) {
@@ -217,7 +218,7 @@ pre {
 }
 
 ::after {
-  color: #5d06ff83 !important;
+  color: #06eeffee !important;
   font-size: 14px !important;
 }
 
