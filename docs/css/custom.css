@@ -132,35 +132,75 @@ aside.sidebar ul li.active > a:before {
 
 /* ---------------------------- 代码块设置 start ------------------------------*/
 
-/* 代码块头部图片 */
-/* .markdown-section pre:before {
+/* 代码块头部图标 start */
+.markdown-section pre:before {
   content: "";
   display: block;
-  background: url(https://cdn.jsdelivr.net/gh/EchoHeim/Astapb/docs/images/icon.svg);
+  background: url(https://cdn.jsdelivr.net/gh/EchoHeim/Astapb/docs/images/code_pin.png);
   height: 30px;
-  background-size: 26px;
+  background-size: 40px;
   background-repeat: no-repeat;
-  background-color: #c0c3c1;
-  background-position: 0px 10px;
-} */
+  background-color: #1c1c1c;
+  background-position: 10px 10px;
+}
+/*代码块头部图标 end*/
 
 .markdown-section pre > code {
-  /* color: #8711f5 !important; */
-  font-family: STKaiti, "Inconsolata", consolas, "PingFang SC",
-    "Microsoft YaHei", monospace !important;
-  /* background-color: #eff3f0bb !important;    //#accfff  #282c34 */
-  font-size: 18px !important;
+  color: #c0c3c1 !important;
+  font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", STKaiti,
+    "Inconsolata", consolas, "PingFang SC", "Microsoft YaHei", Arial, sans-serif,
+    monospace !important;
+  background-color: #282c34 !important;
+  font-size: 15px !important;
   white-space: pre !important;
-  line-height: 1.4 !important;
+  line-height: 1.5 !important;
   -moz-tab-size: 4 !important;
   -o-tab-size: 4 !important;
   tab-size: 4 !important;
   border-radius: 0.3em;
 }
 
-.markdown-section > div > img,
+/* .markdown-section > div > img,
 .markdown-section pre {
-  box-shadow: 2px 2px 20px 6px rgba(0, 247, 255, 0.308) !important;
+  box-shadow: 2px 2px 20px 6px rgba(0, 217, 255, 0.308) !important; 
+} */
+
+ol,
+ul,
+li {
+  line-height: 27px !important;
+  font-size: 16px !important;
+}
+@media (min-width: 600px) {
+  .markdown-section pre > code {
+    font-size: 15px !important;
+    letter-spacing: 1.1px !important;
+  }
+}
+@media (max-width: 600px) {
+  .markdown-section pre > code {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 16px !important;
+  }
+  pre:after {
+    content: "" !important;
+  }
+}
+section.cover h1 {
+  margin: 0;
+}
+
+pre {
+  background-color: #212121 !important;
+}
+
+@media (min-width: 600px) {
+  pre code {
+    /*box-shadow: 2px 1px 20px 2px #aaa;*/
+    /*border-radius: 10px !important;*/
+    padding-left: 20px !important;
+  }
 }
 
 .markdown-section a:not(:hover) {
@@ -171,17 +211,17 @@ aside.sidebar ul li.active > a:before {
 
 /*添加代码块复制按钮样式*/
 .docsify-copy-code-button {
-  background: #7600d6 !important;
+  background: #00d684 !important;
   color: #ffffff !important;
   font-size: 12px !important;
 }
 
 ::after {
-  color: #9da2fd !important;
-  font-size: 13px !important;
+  color: #5d06ff83 !important;
+  font-size: 14px !important;
 }
 
-/* 修改代码块代码颜色显示 */
+/*修改代码块代码颜色显示*/
 .token.directive.keyword {
   color: #4faee2 !important;
 }
@@ -213,15 +253,17 @@ aside.sidebar ul li.active > a:before {
 .token.function {
   color: #e6b456 !important;
 }
-
 .token.string {
   color: #98b755 !important;
 }
-
 .token.punctuation {
   color: #c0c3c1 !important;
 }
 
 .token.number {
   color: #c0c3c1 !important;
+}
+
+a.section-link {
+  font-size: 0.9rem !important;
 }
