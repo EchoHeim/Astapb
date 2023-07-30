@@ -130,17 +130,18 @@ aside.sidebar ul li.active > a:before {
 
 /*调节侧边栏结束*/
 
-/*代码块设置 start*/
+/* ---------------------------- 代码块设置 start ------------------------------*/
+
 /* 代码块头部图片 */
 /* .markdown-section pre:before {
-    content: '';
-    display: block;
-    background: url(https://cdn.jsdelivr.net/gh/EchoHeim/Astapb/docs/images/icon.svg);
-    height: 30px;
-    background-size: 26px;
-    background-repeat: no-repeat;
-    background-color: #c0c3c1;
-    background-position: 0px 10px;
+  content: "";
+  display: block;
+  background: url(https://cdn.jsdelivr.net/gh/EchoHeim/Astapb/docs/images/icon.svg);
+  height: 30px;
+  background-size: 26px;
+  background-repeat: no-repeat;
+  background-color: #c0c3c1;
+  background-position: 0px 10px;
 } */
 
 .markdown-section pre > code {
@@ -148,7 +149,7 @@ aside.sidebar ul li.active > a:before {
   font-family: STKaiti, "Inconsolata", consolas, "PingFang SC",
     "Microsoft YaHei", monospace !important;
   /* background-color: #eff3f0bb !important;    //#accfff  #282c34 */
-  font-size: 24px !important;
+  font-size: 18px !important;
   white-space: pre !important;
   line-height: 1.4 !important;
   -moz-tab-size: 4 !important;
@@ -159,18 +160,18 @@ aside.sidebar ul li.active > a:before {
 
 .markdown-section > div > img,
 .markdown-section pre {
-  box-shadow: 2px 2px 20px 6px rgba(18, 238, 220, 0.705) !important;
+  box-shadow: 2px 2px 20px 6px rgba(0, 247, 255, 0.308) !important;
 }
 
 .markdown-section a:not(:hover) {
   text-decoration: none;
 }
 
-/*代码块设置 end*/
+/*------------------------------- 代码块设置 end -----------------------------*/
 
 /*添加代码块复制按钮样式*/
 .docsify-copy-code-button {
-  background: #d600b9 !important;
+  background: #7600d6 !important;
   color: #ffffff !important;
   font-size: 12px !important;
 }
