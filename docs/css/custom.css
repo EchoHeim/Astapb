@@ -17,20 +17,20 @@ section.cover.has-mask .mask {
 }
 
 section.cover h6 .anchor span {
-  font-family: "Lobster", cursive;
+  font-family: 'Lobster', cursive;
   font-size: 54px;
   color: rgba(39, 214, 245, 0.795);
 }
 
 section.cover h4 .anchor span {
-  font-family: STKaiti, "Lobster", cursive;
+  font-family: STKaiti, 'Lobster', cursive;
   font-size: 18px;
   color: var(--theme-color);
   color: rgb(123, 109, 131);
 }
 
 section.cover h5 .anchor span {
-  font-family: "Lobster", cursive;
+  font-family: 'Lobster', cursive;
   font-size: 24px;
   color: var(--theme-color);
 }
@@ -38,7 +38,7 @@ section.cover h5 .anchor span {
 /* 一级标题添加背景 */
 h1 span {
   display: inline-block;
-  font-family: STKaiti, "Microsoft YaHei", LiSu, STLiti;
+  font-family: STKaiti, 'Microsoft YaHei', LiSu, STLiti;
   background: rgba(1, 225, 255, 0.384);
   color: #ffffff;
   padding: 5px 15px;
@@ -48,7 +48,7 @@ h1 span {
 
 h2 span {
   display: inline-block;
-  font-family: STKaiti, "Microsoft YaHei", LiSu, STLiti;
+  font-family: STKaiti, 'Microsoft YaHei', LiSu, STLiti;
   font-size: 22px;
   padding: 5px 10px;
   border-radius: 5px;
@@ -58,6 +58,7 @@ h2 span {
 /*滚动条样式*/
 ::-webkit-scrollbar {
   width: 6px; /* 滚动条宽度 */
+  height: 6px; /* 滚动条高度 */
 }
 
 /* 滚动条颜色 */
@@ -69,13 +70,13 @@ h2 span {
 
 p {
   /* color: rgb(73, 73, 73); */
-  font-family: STKaiti, "Microsoft YaHei", LiSu, STLiti;
+  font-family: STKaiti, 'Microsoft YaHei', LiSu, STLiti;
   font-size: 18px;
 }
 
 li {
   /* color: rgb(73, 73, 73); */
-  font-family: STKaiti, "Microsoft YaHei", LiSu, STLiti;
+  font-family: STKaiti, 'Microsoft YaHei', LiSu, STLiti;
   font-size: 18px;
 }
 
@@ -85,7 +86,11 @@ li {
 }
 
 .sidebar > h1 a {
-  font-family: "Lobster", cursive;
+  font-family: 'Lobster', cursive;
+}
+
+a.section-link {
+  font-size: 0.9rem !important;
 }
 
 aside.sidebar ul li {
@@ -115,7 +120,7 @@ aside.sidebar ul li.active > a {
 }
 
 aside.sidebar ul li.active > a:before {
-  content: "" !important;
+  content: '' !important;
   position: absolute !important;
   margin: 0 !important;
   width: 10px !important;
@@ -136,77 +141,86 @@ aside.sidebar ul li.active > a:before {
   background-color: rgb(255, 255, 255) !important;
 } */
 
-.markdown-section p.tip,
-.markdown-section tr:nth-child(1n) {
+/* .markdown-section p.tip, */
+/* .markdown-section tr:nth-child(1n) {
   font-size: 16px !important;
-}
+} */
 
-.markdown-section h1 {
+/* .markdown-section h1 {
   margin: 3rem 0 2rem 0;
 }
 
 .markdown-section h2 {
   margin: 2rem 0 1rem;
+} */
+
+/* .markdown-section > div > img, */
+/* .markdown-section pre {
+  box-shadow: 2px 2px 20px 6px rgb(255, 255, 255) !important;
+} */
+
+.markdown-section pre {
+  /* box-shadow: 2px 2px 20px 6px rgba(0, 217, 255, 0.308) !important; 边框颜色 */
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  background-color: #1d1d1d !important;
 }
 
 /* 代码块头部图标 start */
 .markdown-section pre:before {
-  content: "";
+  content: '';
   display: block;
   background: url(https://cdn.jsdelivr.net/gh/EchoHeim/Astapb/docs/images/code_pin.png);
   height: 30px;
   background-size: 50px;
   background-repeat: no-repeat;
-  background-color: #1c1c1c;
+  background-color: #7c2b2b;
   background-position: 10px 10px;
 }
 /*代码块头部图标 end*/
 
 .markdown-section pre > code {
   color: #c0c3c1 !important;
-  font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", STKaiti,
-    "Inconsolata", consolas, "PingFang SC", "Microsoft YaHei", Arial, sans-serif,
+  font-family: 'Helvetica Neue', Helvetica, 'Hiragino Sans GB', STKaiti,
+    'Inconsolata', consolas, 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif,
     monospace !important;
-  background-color: #282c34 !important;
+  background-color: #282b31 !important;
   font-size: 15px !important;
   white-space: pre !important;
   line-height: 1.5 !important;
   -moz-tab-size: 4 !important;
   -o-tab-size: 4 !important;
   tab-size: 4 !important;
-  border-radius: 5px !important;
+  border-radius: 25px !important;
   padding-left: 20px !important;
+  padding-right: 20px !important;
   padding-top: 10px !important;
   padding-bottom: 10px !important;
   letter-spacing: 1px !important;
+  /* min-width: 500px;
+  max-width: 500px; */
+  width: 100%;
 }
 
-.markdown-section pre {
-  box-shadow: 2px 2px 20px 6px rgba(0, 217, 255, 0.308) !important; /* 边框颜色 */
-  padding-left: 0 !important;
-  padding-right: 0px !important;
-  background-color: #1d1d1d !important;
-}
-
-img,
+/* img,
 pre {
   border-radius: 5px;
-}
+} */
 
-ol,
+/* ol,
 ul,
 li {
   line-height: 27px !important;
   font-size: 16px !important;
-}
+} */
 
-.markdown-section {
+/* .markdown-section {
   margin: 5 1% !important;
-}
+} */
 
-.markdown-section a:not(:hover) {
+/* .markdown-section a:not(:hover) {
   text-decoration: none;
-}
+} */
 
 /*------------------------------- 代码块设置 end -----------------------------*/
 
@@ -263,8 +277,4 @@ li {
 
 .token.number {
   color: #c0c3c1 !important;
-}
-
-a.section-link {
-  font-size: 0.9rem !important;
 }
