@@ -4,8 +4,6 @@ date: 2022-06-23
 tags: [Linux, Linux 小技巧]
 summary: MBR（Master Boot Record、主引导记录）和 GPT（GUID Partition Table、GUID意为全局唯一标识符）是在磁盘上存储分区信息的两种不同方式；
 ---
-### <center> <font size=34 face="STKaiti"> Linux 扩展根分区 </font>    <!-- {docsify-ignore} -->
-
 # 1. 概述
 
 ## 1.1 MBR & GTP

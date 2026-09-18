@@ -3,8 +3,6 @@ title: Linux 系统启动
 date: 2022-06-23
 tags: [Linux, STM32MP157]
 ---
-### <center> <font size=34 face="STKaiti"> Linux 系统启动 </font>    <!-- {docsify-ignore} -->
-
 # 1. 软件架构
 
 ![image](https://user-images.githubusercontent.com/26021085/168005777-3330ee84-a605-445b-b889-6630ca81bb3d.png)

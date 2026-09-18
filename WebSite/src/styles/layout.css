@@ -1,0 +1,49 @@
+/* 页面骨架。三栏结构、20% 固定左栏、18vh/20vh 的顶距都与旧 style.css 一致。 */
+
+#main {
+  display: flex;
+  align-items: flex-start;
+  min-height: 100%;
+}
+
+/* 左栏占 20% 流式宽度，内部再固定定位，滚动时搜索框不跟着跑 */
+#search {
+  flex: 0 0 20%;
+  align-self: stretch;
+}
+
+#search > div {
+  position: fixed;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: stretch;
+  padding: 20% 1rem 0 1rem;
+  width: 20%;
+  height: 100%;
+}
+
+/* 提示文案钉在左栏底部（旧版靠 space-between 实现，这里改用 auto 外边距，
+   这样中间多插一个分类锚点也不会把它顶走） */
+#searchHint {
+  margin-top: auto;
+}
+
+/* 搜索引擎那一列 */
+#searchItem {
+  margin-top: 20vh;
+  margin-right: 2rem;
+}
+
+#content {
+  margin-top: 18vh;
+}
+
+#content > div {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+/* 锚点跳转时给卡片留一点上边距，别贴着视口顶 */
+.item[id^='cat-'] {
+  scroll-margin-top: 2rem;
+}

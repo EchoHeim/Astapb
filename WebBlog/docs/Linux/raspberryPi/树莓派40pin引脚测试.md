@@ -4,8 +4,6 @@ date: 2022-06-23
 tags: [Linux, 树莓派]
 summary: 参考
 ---
-### <center> <font size=34 face="STKaiti"> 树莓派 40pin 引脚测试 </font>    <!-- {docsify-ignore} -->
-
 > 参考
 
 [Linux下用文件IO的方式操作GPIO](https://blog.csdn.net/lu_embedded/article/details/53061901)

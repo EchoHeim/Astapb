@@ -1,0 +1,92 @@
+---
+import { withBase } from '../utils/url';
+import { AUTHOR } from '../consts';
+import type { CatNode, TagInfo } from '../utils/tags';
+
+interface Props {
+  /** 一级分类 → 细分标签的两层树 */
+  tree: CatNode[];
+  /** 全部标签（按文章数倒序），侧栏只展示前若干个 */
+  tags: TagInfo[];
+  /** 标签云最多显示几个 */
+  tagLimit?: number;
+}
+
+const { tree, tags, tagLimit = 12 } = Astro.props;
+const topTags = tags.slice(0, tagLimit);
+---
+
+<aside class="side" aria-label="站点信息">
+  {
+    tree.length > 0 && (
+      <section>
+        <div class="side__h">分类</div>
+        <ul class="tree">
+          {tree.map((cat) => (
+            <li>
+              <a href={withBase(`tags/${cat.slug}/`)}>
+                {cat.name}
+                <span class="n">{cat.count}</span>
+              </a>
+              {cat.children.length > 0 && (
+                <ul>
+                  {cat.children.map((sub) => (
+                    <li>
+                      <a href={withBase(`tags/${sub.slug}/`)}>
+                        {sub.name}
+                        <span class="n">{sub.count}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    topTags.length > 0 && (
+      <section>
+        <div class="side__h">标签</div>
+        <div class="cloud">
+          {topTags.map((t) => (
+            <a href={withBase(`tags/${t.slug}/`)}>
+              {t.name}
+              <span class="count">{t.count}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <section>
+    <div class="side__h">订阅</div>
+    <div class="subscribe">
+      <a href={withBase('rss.xml')}>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 11a9 9 0 019 9M4 4a16 16 0 0116 16" />
+          <circle cx="5" cy="19" r="1.5"></circle>
+        </svg>
+        RSS 订阅
+      </a>
+      <a href={AUTHOR.github} target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9.5 18.5L4 12l5.5-6.5" />
+          <path d="M14.5 5.5L20 12l-5.5 6.5" />
+        </svg>
+        GitHub
+      </a>
+      <a href={`mailto:${AUTHOR.email}`}>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect height="14" rx="2" width="18" x="3" y="5"></rect>
+          <path d="M3.6 7.2L12 13l8.4-5.8"></path>
+        </svg>
+        {AUTHOR.email}
+      </a>
+    </div>
+  </section>
+</aside>

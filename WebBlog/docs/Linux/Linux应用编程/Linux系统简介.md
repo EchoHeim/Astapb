@@ -4,8 +4,6 @@ date: 2023-03-15
 tags: [Linux, Linux 应用编程]
 summary: 操作系统：统一管理软硬件资源，给应用层提供提供统一的接口。
 ---
-### <center> <font size=34 face="STKaiti"> Linux系统简介 </font>    <!-- {docsify-ignore} -->
-
 # 1. 操作系统历史
 
 > 操作系统：统一管理软硬件资源，给应用层提供提供统一的接口。

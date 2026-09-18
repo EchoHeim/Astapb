@@ -11,9 +11,7 @@ export async function getStaticPaths() {
   const index = buildTagIndex(all);
 
   return index.map((tag) => {
-    const posts = sortPosts(
-      all.filter((p) => p.data.tags.includes(tag.name))
-    );
+    const posts = sortPosts(all.filter((p) => p.data.tags.includes(tag.name)));
     return { params: { tag: tag.slug }, props: { tag, posts } };
   });
 }
@@ -26,14 +24,19 @@ const { tag, posts } = Astro.props;
   description={`标签「${tag.name}」下的 ${posts.length} 篇文章`}
   active="标签"
 >
-  <section class="hero">
-    <h1>{tag.name}</h1>
-    <p>{posts.length} 篇文章</p>
-  </section>
+  <div class="wrap">
+    <div class="page-head">
+      <div class="page-head__kicker">Tag · 标签</div>
+      <h1>{tag.name}</h1>
+      <p>共 {posts.length} 篇，按时间倒序排列。</p>
+    </div>
 
-  <PostList posts={posts} />
+    <div class="page-body">
+      <PostList posts={posts} />
+    </div>
 
-  <p style="margin-top:30px">
-    <a href={withBase('tags/')}>← 返回全部标签</a>
-  </p>
+    <p class="back-link">
+      <a href={withBase('tags/')}>← 返回全部标签</a>
+    </p>
+  </div>
 </BaseLayout>

@@ -4,8 +4,6 @@ date: 2022-06-23
 tags: [ToolBox]
 summary: 或
 ---
-### <center> <font size=14 face="STKaiti"> Github快速访问 </font>    <!-- {docsify-ignore} -->
-
 # 1. 登录 DNS 解析网站
 
 <http://tool.chinaz.com/dns>

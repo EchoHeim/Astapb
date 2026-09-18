@@ -44,7 +44,9 @@ jobs:
         with:
           node-version: "22"
           cache: npm
-          cache-dependency-path: WebBlog/package-lock.json
+          cache-dependency-path: |
+            WebBlog/package-lock.json
+            WebSite/package-lock.json
 
       - name: Build new blog (Astro)
         working-directory: WebBlog
@@ -57,6 +59,19 @@ jobs:
           done
           echo "文章页数：$(find dist -name index.html | wc -l)"
 
+      - name: Build nav site (Vite)
+        working-directory: WebSite
+        # 注意：prebuild 会先跑 scripts/verify-icons.mjs，图标键与磁盘对不上就直接失败。
+        # 该脚本依赖 Node 22.18+ 的内置 TS 类型擦除来直接 import 数据模块。
+        run: |
+          npm ci
+          npm run build
+          test -f dist/index.html || { echo "导航站缺少 dist/index.html"; exit 1; }
+          # 图标必须真的被构建收录，数量塌了说明 glob 没匹配到资源目录
+          icons=$(find dist -name '*.png' | wc -l)
+          echo "导航站图标文件数：$icons"
+          test "$icons" -ge 70 || { echo "导航站图标数量异常：$icons"; exit 1; }
+
       - name: Assemble site
         run: |
           set -euo pipefail
@@ -66,16 +81,17 @@ jobs:
           # 博客：Astro 产物直接放到站点根目录
           cp -r WebBlog/dist/. _site/
 
-          # 导航站：WebSite/ 的内容放到子路径 aa/
+          # 导航站：WebSite 的 Vite 产物放到子路径 aa/
+          # （vite.config.ts 里 base='/aa/'，产物内引用已自带该前缀）
           mkdir -p _site/aa
-          cp -r WebSite/. _site/aa/
-          rm -rf _site/aa/.workbuddy
-          rm -f _site/aa/README.md
+          cp -r WebSite/dist/. _site/aa/
 
           # 自定义域名必须位于产物根目录，否则每次部署都会被重置
           echo "shilong.js.org" > _site/CNAME
           # 关闭 Jekyll（本产物已是纯静态，不需要它再做一次处理）
           touch _site/.nojekyll
+
+          test -f _site/aa/index.html || { echo "导航站没被组装进 _site/aa/"; exit 1; }
 
           echo "---- artifact preview ----"
           ls -la _site

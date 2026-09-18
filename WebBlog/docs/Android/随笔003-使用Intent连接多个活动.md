@@ -4,8 +4,6 @@ date: 2022-06-23
 tags: [Android]
 summary: Intent 是 Android 各组件之间进行交互的一种重要方式，一般被用于启动活动、启动服务以及发送广播等场景。
 ---
-### <center> <font size=34 face="STKaiti"> 使用Intent连接多个活动 </font>    <!-- {docsify-ignore} -->
-
 `Intent` 是 `Android` 各组件之间进行交互的一种重要方式，一般被用于启动活动、启动服务以及发送广播等场景。
 
 # 1. 显式 Intent

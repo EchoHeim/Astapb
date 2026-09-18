@@ -4,8 +4,6 @@ date: 2022-06-23
 tags: [ToolBox]
 summary: 如何免费申请js.org二级域名？
 ---
-### <center> <font size=28 face="STKaiti"> 申请js.org二级域名 </font>    <!-- {docsify-ignore} -->
-
 # 1. js.org 简介
 
 如何免费申请js.org二级域名？

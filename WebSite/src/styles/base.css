@@ -1,0 +1,80 @@
+/*
+ * 基础重置。
+ *
+ * 与旧版相比有意放宽了两处：
+ *   - 不再 `outline: 0` 一把抹掉焦点框，改用 :focus-visible 只对键盘用户显示；
+ *   - 不再全局 `background: none` / `border: 0`，避免误伤 mark、色块等元素。
+ */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  /* 全站尺寸都以 rem 计，这个 14px 是旧版的基准，改动会让所有间距走形 */
+  font-size: 14px;
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: Arial, 'Microsoft YaHei', sans-serif;
+  font-size: 14px;
+  -webkit-text-size-adjust: 100%;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+input {
+  font: inherit;
+  color: inherit;
+  border: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+mark {
+  background: var(--mark-bg);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 0.1em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

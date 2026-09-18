@@ -4,8 +4,6 @@ date: 2022-06-23
 tags: [ToolBox]
 summary: Git 是一个开源的分布式版本控制系统，可以有效、高速地处理从很小到非常大的项目版本管理。也是 Linus Torvalds 为了帮助管理 Linux 内核开发而开发的一个开放源码的版本控制软件。
 ---
-### <center> <font size=34 face="STKaiti"> Git使用 </font>    <!-- {docsify-ignore} -->
-
 # 1. 简介
 
 `Git` 是一个开源的分布式版本控制系统，可以有效、高速地处理从很小到非常大的项目版本管理。也是 `Linus Torvalds` 为了帮助管理 `Linux` 内核开发而开发的一个开放源码的版本控制软件。
@@ -315,7 +313,7 @@ git branch --set-upstream <branch-name> <origin/branch-name>
 git submodule add <url> <path>
 ```
 
-> 例如我在[LVGL仓库](https://github.com/EchoHeim/LVGL)中移植 `lvgl8.2` 时，在 `git` 主目录下输入以下命令，添加 `lvgl`、`lv_drivers` 作为子模块
+> 例如在项目里移植 `lvgl8.2` 时，在 `git` 主目录下输入以下命令，添加 `lvgl`、`lv_drivers` 作为子模块
 
 ``` bash
 git submodule add -b release/v8.2 https://github.com/lvgl/lvgl.git lvgl

@@ -1,33 +1,64 @@
 ---
-import { withBase, formatDate } from '../utils/url';
+import { withBase } from '../utils/url';
 import { tagSlug } from '../utils/tags';
+import { readingMinutes } from '../utils/posts';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   post: CollectionEntry<'posts'>;
-  /** 是否显示摘要（归档、搜索等密集列表可关掉） */
+  /** 是否显示摘要（密集列表可关掉） */
   showSummary?: boolean;
 }
 
 const { post, showSummary = true } = Astro.props;
 const href = withBase(`${post.id}/`);
+
+const d = post.data.date;
+const day = String(d.getDate()).padStart(2, '0');
+const ym = `${d.getFullYear()} / ${String(d.getMonth() + 1).padStart(2, '0')}`;
+
+// 约定：tags 第一项是栏目，其余是话题（见 sync-content.mjs 的 TAG_RULES）
+const category = post.data.tags[0];
+const subTags = post.data.tags.slice(1);
+const minutes = readingMinutes(post.body || '');
 ---
 
-<li class="post-item">
-  <div class="post-meta">
-    <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+<article class="item">
+  <div class="item__date">
+    <span class="item__day">{day}</span>
+    <time class="item__ym" datetime={d.toISOString()}>{ym}</time>
+  </div>
+
+  <div class="item__main">
     {
-      post.data.tags.length > 0 && (
-        <span class="tags">
-          {post.data.tags.map((t) => (
-            <a class="tag" href={withBase(`tags/${tagSlug(t)}/`)}>
-              {t}
-            </a>
-          ))}
-        </span>
+      category && (
+        <div class="item__kicker">
+          {category}
+          {subTags.length > 0 && <span> / {subTags.join(' / ')}</span>}
+        </div>
       )
     }
+
+    <h3 class="item__title"><a href={href}>{post.data.title}</a></h3>
+
+    {showSummary && post.data.summary && <p class="item__excerpt">{post.data.summary}</p>}
+
+    <div class="item__meta">
+      <span>{minutes} 分钟读完</span>
+      {
+        post.data.tags.length > 0 && (
+          <>
+            <span class="dot" aria-hidden="true" />
+            <span class="tags">
+              {post.data.tags.map((t) => (
+                <a class="tag" href={withBase(`tags/${tagSlug(t)}/`)}>
+                  {t}
+                </a>
+              ))}
+            </span>
+          </>
+        )
+      }
+    </div>
   </div>
-  <h2><a href={href}>{post.data.title}</a></h2>
-  {showSummary && post.data.summary && <p class="post-summary">{post.data.summary}</p>}
-</li>
+</article>

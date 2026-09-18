@@ -19,3 +19,19 @@ export function formatDate(d) {
   const day = String(dt.getDate()).padStart(2, '0');
   return `${dt.getFullYear()}-${m}-${day}`;
 }
+
+/** 中文日期：2023 年 7 月 14 日（文章页页眉用，比数字串更像刊物） */
+export function formatDateZh(d) {
+  const dt = d instanceof Date ? d : new Date(d);
+  if (Number.isNaN(dt.getTime())) return '';
+  return `${dt.getFullYear()} 年 ${dt.getMonth() + 1} 月 ${dt.getDate()} 日`;
+}
+
+/** 归档列表用的短日期：MM / DD */
+export function formatMonthDay(d) {
+  const dt = d instanceof Date ? d : new Date(d);
+  if (Number.isNaN(dt.getTime())) return '';
+  return `${String(dt.getMonth() + 1).padStart(2, '0')} / ${String(
+    dt.getDate()
+  ).padStart(2, '0')}`;
+}

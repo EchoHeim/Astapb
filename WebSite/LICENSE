@@ -22,7 +22,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
 
 ## 二、第三方图标与品牌标识 —— 归各自权利人所有
 
-适用目录：`icon/`、`header/`、`search/`、`img/`
+适用目录：`icon/`、`header/`、`search/`、`img/`、`public/`
 
 其中出现的 GitHub、Steam、淘宝、YouTube、Facebook、Pinterest 等
 **图标、Logo、商标、品牌名称，版权与商标权均归各自权利人所有**。
@@ -40,7 +40,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
 
 ## 三、站内数据
 
-`main.js` 中的网站地址与分类清单为本人整理，适用 **MIT**（同第一部分）。
+`src/data/categories.ts` 与 `src/data/engines.ts` 中的网站地址与分类清单为本人整理，
+适用 **MIT**（同第一部分）。
 
 ---
 

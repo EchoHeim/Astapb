@@ -4,8 +4,6 @@ date: 2022-06-23
 tags: [Linux, Linux 小技巧]
 summary: 编译配置文件
 ---
-### <center> <font size=34 face="STKaiti"> 设置静态IP </font>    <!-- {docsify-ignore} -->
-
 编译配置文件
 ``` bash
 sudo vim /etc/network/interfaces

@@ -4,8 +4,6 @@ date: 2022-07-14
 tags: [Linux, Linux 小技巧]
 summary: "Nginx (\"engine x\") 是一个高性能的 HTTP 和 反向代理服务器，这里介绍如何在Debian系统安装nginx并搭建一个最简单的静态网站服务器。"
 ---
-### <center> <font size=34 face="STKaiti"> Nginx搭建静态网站服务器 </font>    <!-- {docsify-ignore} -->
-
 # 1. 简介
 
 Nginx `("engine x")` 是一个高性能的 HTTP 和 反向代理服务器，这里介绍如何在Debian系统安装nginx并搭建一个最简单的静态网站服务器。

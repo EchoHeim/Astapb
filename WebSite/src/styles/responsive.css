@@ -1,0 +1,63 @@
+/*
+ * 移动端断点，沿用旧 mobile.css 的 650px。
+ *
+ * 一处有意改动：旧版在移动端让左栏继续保持 position:fixed，再用
+ * `#searchItem { margin: 21rem auto 0 auto }` 把引擎图标列顶到它下面 ——
+ * 21rem 是照着当时面板高度手算的，面板里加一行内容就会错位。
+ * 这里改成静态流式排布，高度由内容决定，不再有魔法数字。
+ */
+
+@media only screen and (max-width: 650px) {
+  #main {
+    flex-flow: column;
+  }
+
+  #search {
+    flex-basis: 100%;
+  }
+
+  #search > div {
+    position: static;
+    width: 100%;
+    height: auto;
+    padding: 3.5rem 1rem 0 1rem;
+  }
+
+  .search-box input {
+    height: 3.2rem;
+    line-height: 3.2rem;
+    font-size: 1rem;
+  }
+
+  .anchors {
+    margin-top: 1.25rem;
+    overflow-y: visible;
+  }
+
+  #searchHint {
+    margin-top: 1.5rem;
+    padding: 0 0 1rem 0;
+    text-align: center;
+  }
+
+  #searchItem {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    margin: 1.5rem auto 0 auto;
+  }
+
+  #content {
+    margin-top: 2rem;
+  }
+
+  .theme-toggle {
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+
+  /* 窄屏下每屏只放一个分类，避免卡片被挤到只剩半列 */
+  #grid {
+    justify-content: center;
+  }
+}

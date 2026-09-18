@@ -54,6 +54,9 @@ const canonical = absoluteUrl(Astro.url.pathname.replace(withBase(''), ''));
     />
     <link rel="sitemap" type="application/xml" href={withBase('sitemap-index.xml')} />
 
+    <meta name="theme-color" content="#fbfaf6" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)" />
+
     <meta property="og:type" content={title ? 'article' : 'website'} />
     <meta property="og:site_name" content={SITE_TITLE} />
     <meta property="og:title" content={pageTitle} />
@@ -134,7 +137,7 @@ const canonical = absoluteUrl(Astro.url.pathname.replace(withBase(''), ''));
 
     <Header active={active} />
 
-    <main id="main" class="container">
+    <main id="main">
       <slot />
     </main>
 
@@ -142,8 +145,7 @@ const canonical = absoluteUrl(Astro.url.pathname.replace(withBase(''), ''));
     {!hideSearch && <SearchDialog />}
 
     <button class="to-top" id="to-top" type="button" aria-label="回到顶部" data-show="false">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M12 19V5M5 12l7-7 7 7" />
       </svg>
     </button>
@@ -220,8 +222,15 @@ const canonical = absoluteUrl(Astro.url.pathname.replace(withBase(''), ''));
 
       /* -------- 滚动相关：进度条 + 回到顶部显隐 + 目录高亮 -------- */
       const progress = document.getElementById('progress');
+      // 桌面用右侧目录轨，窄屏用顶部折叠目录，两者可能同时存在于 DOM 中，
+      // 但任一时刻只有一个是可见的 —— 只高亮当前可见的那一份。
+      const railVisible =
+        window.matchMedia('(min-width: 1081px)').matches &&
+        !!document.querySelector('.rail');
       const tocLinks = Array.from(
-        document.querySelectorAll<HTMLAnchorElement>('.toc-rail a[href^="#"]')
+        document.querySelectorAll<HTMLAnchorElement>(
+          (railVisible ? '.rail' : '.toc-inline') + ' a[href^="#"]'
+        )
       );
       const headings = tocLinks
         .map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))))
@@ -235,13 +244,13 @@ const canonical = absoluteUrl(Astro.url.pathname.replace(withBase(''), ''));
           progress.style.width =
             max > 0 ? `${Math.min(100, (y / max) * 100)}%` : '0%';
         }
-        if (toTop) toTop.dataset.show = String(y > 600);
+        if (toTop) toTop.dataset.show = String(y > 700);
 
         if (headings.length) {
           // 取最后一个已经滚过顶部安全线的标题作为当前章节
           let idx = -1;
           for (let i = 0; i < headings.length; i++) {
-            if (headings[i].getBoundingClientRect().top <= 88) idx = i;
+            if (headings[i].getBoundingClientRect().top <= 96) idx = i;
             else break;
           }
           tocLinks.forEach((a, i) =>

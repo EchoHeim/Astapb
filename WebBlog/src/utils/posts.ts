@@ -25,3 +25,23 @@ export function sortPosts<T extends Pick<CollectionEntry<'posts'>, 'id' | 'data'
     return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
   });
 }
+
+/**
+ * 估算阅读时长（分钟）。
+ *
+ * 中文按字数、英文按词数折半计入（一个英文词的信息量大致相当于
+ * 1.5 个汉字），再按每分钟 400 字折算。只用于列表和文章页展示，
+ * 不需要精确 —— 但必须**在列表和详情页用同一套算法**，
+ * 否则同一篇文章在两个页面上会显示不同的时长。
+ */
+export function readingMinutes(body = ''): number {
+  const text = body
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/\s+/g, ' ');
+  const cjk = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
+  const words = (
+    text.replace(/[\u4e00-\u9fa5]/g, ' ').match(/[A-Za-z0-9]+/g) || []
+  ).length;
+  return Math.max(1, Math.round((cjk + words * 1.5) / 400));
+}

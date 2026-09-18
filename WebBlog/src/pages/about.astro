@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { ASSETS_BASE, AUTHOR, SITE_URL } from '../consts';
+import { ASSETS_BASE, AUTHOR, SITE_URL, SITE_TITLE } from '../consts';
 
 const QR = {
   wechat: `${ASSETS_BASE}/images/Qart_CodeMonkey.gif`,
@@ -14,77 +14,109 @@ const QR = {
   description="关于本站与作者"
   active="关于"
 >
-  <section class="hero">
-    <h1>关于</h1>
-    <p>嵌入式工程师 ｜ 新技术追随者 ｜ 互联网是有记忆的，我想留下一些成长的脚印。</p>
+  <div class="wrap">
+    <div class="page-head">
+      <div class="page-head__kicker">About · 关于</div>
+      <h1>关于</h1>
+      <p>嵌入式工程师 ｜ 新技术追随者 ｜ 互联网是有记忆的，我想留下一些成长的脚印。</p>
+    </div>
+  </div>
+
+  <section class="about-strip">
+    <div class="wrap about-strip__in">
+      <div class="about-strip__txt">
+        <div class="about-strip__kicker">这个博客</div>
+        <h2>白天和寄存器打交道，<br />晚上和文字打交道。</h2>
+        <p>
+          做嵌入式这几年，很多东西是在反复踩坑之后才真正明白的。写下来有两个原因：
+          一是给自己留个可检索的索引，二是希望下一个遇到同样问题的人少走两小时弯路。
+        </p>
+        <p>
+          文章偏笔记体，重命令和可复现的步骤，不追求体系完整。有写错的地方，欢迎邮件指出。
+        </p>
+      </div>
+
+      <dl class="facts">
+        <div><dt>站点</dt><dd>{SITE_TITLE}</dd></div>
+        <div><dt>方向</dt><dd>Linux / C/C++ / Python / FPGA / ToolBox</dd></div>
+        <div><dt>起于</dt><dd>2022 年 6 月 23 日</dd></div>
+        <div><dt>构建</dt><dd>Astro · 纯静态</dd></div>
+        <div><dt>许可</dt><dd>CC BY-NC-SA 4.0</dd></div>
+        <div>
+          <dt>联系</dt>
+          <dd><a href={`mailto:${AUTHOR.email}`}>{AUTHOR.email}</a></dd>
+        </div>
+      </dl>
+    </div>
   </section>
 
-  <div class="about-grid">
-    <div class="about-card">
-      <h2>本站</h2>
-      <p>
-        这里存放我的学习笔记与技术随笔，主要围绕嵌入式与上位机开发：
-        Linux 应用与驱动、C/C++、Python、FPGA、以及一些折腾过的工具。
-      </p>
-      <p>
-        站点由 <a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a>
-        构建为纯静态页面，没有后端也没有数据库；文章源是仓库里的 Markdown，
-        提交后由 GitHub Actions 自动构建发布。
-      </p>
-      <p>
-        内容默认采用
-        <a
-          href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"
-          target="_blank"
-          rel="noopener noreferrer">CC BY-NC-SA 4.0</a
-        >
-        许可 —— 欢迎转载，请保留原文链接并注明出处。
-      </p>
-    </div>
-
-    <div class="about-card">
-      <h2>联系</h2>
-      <p>邮箱：<a href={`mailto:${AUTHOR.email}`}>{AUTHOR.email}</a></p>
-      <p>
-        GitHub：
-        <a href={AUTHOR.github} target="_blank" rel="noopener noreferrer">EchoHeim</a>
-      </p>
-      <p>
-        本站：<a href={SITE_URL}>{SITE_URL.replace('https://', '')}</a>
-      </p>
-      <p>
-        <a href="/aa/" target="_blank" rel="noopener noreferrer"
-          >网站导航 AnywhereAnything →</a
-        >
-      </p>
-    </div>
-
-    <div class="about-card">
-      <h2>订阅与支持</h2>
-      <p>
-        <a href="../rss.xml">RSS 订阅</a> —— 用任意阅读器订阅更新，不必反复回访。
-      </p>
-      <p>不定期分享编码技术、学习经验与生活感悟，欢迎关注公众号「程序小猴」。</p>
-      <div class="qr-row" style="margin-top:16px">
-        <figure>
-          <img src={QR.wechat} alt="微信公众号二维码：程序小猴" loading="lazy" />
-          <figcaption>微信公众号</figcaption>
-        </figure>
+  <div class="wrap">
+    <div class="about-cards">
+      <div class="about-card">
+        <h2>本站</h2>
+        <p>
+          这里存放我的学习笔记与技术随笔，主要围绕嵌入式与上位机开发：
+          Linux 应用与驱动、C/C++、Python、FPGA、以及一些折腾过的工具。
+        </p>
+        <p>
+          站点由 <a href="https://astro.build" target="_blank" rel="noopener noreferrer"
+            >Astro</a
+          > 构建为纯静态页面，没有后端也没有数据库；文章源是仓库里的 Markdown，
+          提交后由 GitHub Actions 自动构建发布。
+        </p>
+        <p>
+          内容默认采用
+          <a
+            href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"
+            target="_blank"
+            rel="noopener noreferrer">CC BY-NC-SA 4.0</a
+          >
+          许可 —— 欢迎转载，请保留原文链接并注明出处。
+        </p>
       </div>
-    </div>
 
-    <div class="about-card">
-      <h2>赞赏</h2>
-      <p>觉得内容还不错的话，请作者喝一杯咖啡吧。</p>
-      <div class="qr-row" style="margin-top:16px">
-        <figure>
-          <img src={QR.alipay} alt="支付宝收款码" loading="lazy" />
-          <figcaption>支付宝</figcaption>
-        </figure>
-        <figure>
-          <img src={QR.wechatPay} alt="微信收款码" loading="lazy" />
-          <figcaption>微信支付</figcaption>
-        </figure>
+      <div class="about-card">
+        <h2>联系</h2>
+        <p>邮箱：<a href={`mailto:${AUTHOR.email}`}>{AUTHOR.email}</a></p>
+        <p>
+          GitHub：
+          <a href={AUTHOR.github} target="_blank" rel="noopener noreferrer">EchoHeim</a>
+        </p>
+        <p>本站：<a href={SITE_URL}>{SITE_URL.replace('https://', '')}</a></p>
+        <p>
+          <a href="/aa/" target="_blank" rel="noopener noreferrer"
+            >网站导航 AnywhereAnything →</a
+          >
+        </p>
+      </div>
+
+      <div class="about-card">
+        <h2>订阅与关注</h2>
+        <p>
+          <a href="../rss.xml">RSS 订阅</a> —— 用任意阅读器订阅更新，不必反复回访。
+        </p>
+        <p>不定期分享编码技术、学习经验与生活感悟，欢迎关注公众号「程序小猴」。</p>
+        <div class="qr-row">
+          <figure>
+            <img src={QR.wechat} alt="微信公众号二维码：程序小猴" loading="lazy" />
+            <figcaption>微信公众号</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <div class="about-card">
+        <h2>赞赏</h2>
+        <p>觉得内容还不错的话，请作者喝一杯咖啡吧。</p>
+        <div class="qr-row">
+          <figure>
+            <img src={QR.alipay} alt="支付宝收款码" loading="lazy" />
+            <figcaption>支付宝</figcaption>
+          </figure>
+          <figure>
+            <img src={QR.wechatPay} alt="微信收款码" loading="lazy" />
+            <figcaption>微信支付</figcaption>
+          </figure>
+        </div>
       </div>
     </div>
   </div>

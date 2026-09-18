@@ -3,9 +3,10 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostList from '../components/PostList.astro';
 import Pager from '../components/Pager.astro';
-import { PAGE_SIZE, SITE_TITLE, SITE_DESCRIPTION } from '../consts';
-import { buildTagIndex } from '../utils/tags';
-import { formatDate, withBase } from '../utils/url';
+import Sidebar from '../components/Sidebar.astro';
+import { PAGE_SIZE, SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
+import { buildTagIndex, buildCategoryTree } from '../utils/tags';
+import { withBase } from '../utils/url';
 import { sortPosts } from '../utils/posts';
 
 const all = await getCollection('posts', ({ data }) => !data.draft);
@@ -13,25 +14,81 @@ const sorted = sortPosts(all);
 
 const posts = sorted.slice(0, PAGE_SIZE);
 const lastPage = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
-const tagCount = buildTagIndex(all).length;
-const span = `${formatDate(sorted[sorted.length - 1].data.date)} 起`;
+
+const tags = buildTagIndex(all);
+const tree = buildCategoryTree(all);
+
+const oldest = sorted[sorted.length - 1];
+const startLabel = oldest
+  ? `${oldest.data.date.getFullYear()} 年 ${oldest.data.date.getMonth() + 1} 月`
+  : '';
+const years = new Set(sorted.map((p) => p.data.date.getFullYear())).size;
 ---
 
 <BaseLayout description={SITE_DESCRIPTION}>
   <section class="hero">
-    <h1>{SITE_TITLE}</h1>
-    <p>{SITE_DESCRIPTION}</p>
-    <div class="hero__stats">
-      <span><b>{sorted.length}</b> 篇文章</span>
-      <span><b>{tagCount}</b> 个标签</span>
-      <span>{span}</span>
-      <span><a href={withBase('rss.xml')}>RSS 订阅</a></span>
+    <div class="wrap">
+      <div class="hero__kicker">嵌入式工程师的学习笔记 · 自 {startLabel}</div>
+      <h1 class="hero__title">
+        互联网是有记忆的，<br />我想留下<em>一些成长的脚印</em>。
+      </h1>
+      <p class="hero__lede">
+        Linux、C/C++、Python、FPGA、ToolBox —— 把踩过的坑和想明白的事写在这里，
+        也写给下一个遇到同样问题的人。
+      </p>
+      <div class="hero__stats">
+        <div><b>{sorted.length}</b><span>篇文章</span></div>
+        <div><b>{tags.length}</b><span>个标签</span></div>
+        <div><b>{tree.length}</b><span>个分类</span></div>
+        <div><b>{years}</b><span>年跨度</span></div>
+      </div>
     </div>
   </section>
 
-  <h2 class="section-title">
-    最新文章<span class="count">（共 {sorted.length} 篇）</span>
-  </h2>
-  <PostList posts={posts} />
-  <Pager currentPage={1} lastPage={lastPage} prefix="" urlPattern="page/[page]/" />
+  <div class="wrap">
+    <div class="layout">
+      <div class="main-col">
+        <div class="sec-head">
+          <h2>最新文章</h2>
+          <span class="sec-head__note">
+            共 {sorted.length} 篇 · 第 1 / {lastPage} 页
+          </span>
+        </div>
+        <PostList posts={posts} />
+        <Pager currentPage={1} lastPage={lastPage} prefix="" urlPattern="page/[page]/" />
+      </div>
+
+      <Sidebar tree={tree} tags={tags} />
+    </div>
+  </div>
+
+  <section class="about-strip">
+    <div class="wrap about-strip__in">
+      <div class="about-strip__txt">
+        <div class="about-strip__kicker">关于这个博客</div>
+        <h2>白天和寄存器打交道，<br />晚上和文字打交道。</h2>
+        <p>
+          做嵌入式这几年，很多东西是在反复踩坑之后才真正明白的。写下来有两个原因：
+          一是给自己留个可检索的索引，二是希望下一个遇到同样问题的人少走两小时弯路。
+        </p>
+        <p>
+          文章偏笔记体，重命令和可复现的步骤，不追求体系完整。有写错的地方，欢迎邮件指出。
+        </p>
+        <p>
+          <a href={withBase('about/')}>更多关于本站 →</a>
+        </p>
+      </div>
+
+      <dl class="facts">
+        <div><dt>站点</dt><dd>{SITE_TITLE}</dd></div>
+        <div><dt>方向</dt><dd>Linux / C/C++ / Python / FPGA / ToolBox</dd></div>
+        <div><dt>起于</dt><dd>2022 年 6 月 23 日</dd></div>
+        <div><dt>许可</dt><dd>CC BY-NC-SA 4.0</dd></div>
+        <div>
+          <dt>联系</dt>
+          <dd><a href={`mailto:${AUTHOR.email}`}>{AUTHOR.email}</a></dd>
+        </div>
+      </dl>
+    </div>
+  </section>
 </BaseLayout>

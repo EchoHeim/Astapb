@@ -4,8 +4,6 @@ date: 2022-06-23
 tags: [Linux, Linux 小技巧]
 summary: "- 无需安装工具即可查看："
 ---
-### <center> <font size=34 face="STKaiti"> Linux性能测试 </font>    <!-- {docsify-ignore} -->
-
 # 1. linux查看CPU温度
 
 - 无需安装工具即可查看：

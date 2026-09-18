@@ -4,8 +4,6 @@ date: 2022-06-23
 tags: [建站]
 summary: Gitter 的功能特色
 ---
-# 添加 Gitter 在线交流
-
 ## Gitter 的介绍
 
 Gitter 的功能特色

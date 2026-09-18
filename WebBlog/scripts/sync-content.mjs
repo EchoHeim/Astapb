@@ -8,10 +8,15 @@
  *   Astro 的内容集合会直接校验失败、整个站点构建不出来。
  *
  * 所以这里在构建前把缺的补齐，让「往内容目录丢一个 .md 就自动上线」
- * 这件事真正成立。脚本只补不删，可以反复运行。
+ * 这件事真正成立。脚本只补不删（唯一的例外见下），可以反复运行。
+ *
+ * 它同时做一件清理：**去掉正文首行与文章标题重复的 H1**。
+ * 这批笔记是「首行写 # 标题」的写法，而这里又用同一行抽成了 frontmatter.title，
+ * 于是文章页会同时出现页面大标题和正文里的 H1 —— 同一页两个 H1，
+ * 视觉上也重复一遍。写入时删掉它，保持一页一个 H1。删的是重复行，不是内容。
  *
  * 用法：
- *   node scripts/sync-content.mjs           # 补全 + 体检
+ *   node scripts/sync-content.mjs           # 补全 + 清理 + 体检
  *   node scripts/sync-content.mjs --check   # 只体检，不写文件
  */
 import fs from 'node:fs';
@@ -37,7 +42,13 @@ const EXCLUDE_DIRS = new Set([
 ]);
 const EXCLUDE_FILES = new Set(['_sidebar.md', 'README.md', 'blog_start.md']);
 
-/** 与 src/content.config.ts 的 TAG_RULES 保持一致 */
+/**
+ * 按目录前缀推断标签：命中规则即返回 [一级分类] 或 [一级分类, 细分标签]。
+ *
+ * 数组顺序即优先级 —— 必须从具体到笼统（`NoteBook/Python/Anaconda/`
+ * 要排在 `NoteBook/Python/` 和 `NoteBook/` 之前），否则细分标签永远匹配不到。
+ * 新增分类目录时同步加一条，并确认 `src/content.config.ts` 的排除规则不会挡掉它。
+ */
 const TAG_RULES = [
   ['C_C++/C++学习笔记/', 'C/C++', 'C++ 学习笔记'],
   ['C_C++/C语言实用技巧/', 'C/C++', 'C 语言技巧'],
@@ -58,7 +69,6 @@ const TAG_RULES = [
   ['Python/', 'Python', null],
   ['Android/', 'Android', null],
   ['FPGA/', 'FPGA', null],
-  ['LVGL/', 'LVGL', null],
   ['ToolBox/', 'ToolBox', null],
   ['project/', '建站', null],
 ];
@@ -252,11 +262,73 @@ function stripCode(md) {
     .replace(/^(?: {4}|\t)[^\n]*$/gm, '');
 }
 
+/** 正文在原文里的起始下标；没有 frontmatter 时为 0 */
+function bodyStartOf(text) {
+  if (!text.startsWith('---')) return 0;
+  const end = text.indexOf('\n---', 3);
+  if (end < 0) return 0;
+  const after = end + 4;
+  return text[after] === '\n' ? after + 1 : after;
+}
+
+/**
+ * 去掉正文开头「重复文章标题」的那一行。
+ *
+ * 语料里有两种历史写法，都是把页面标题又在正文里写一遍：
+ *
+ *   1) 直接写 H1：            `# Linux系统简介`
+ *   2) docsify 时期的居中大标题：
+ *      `### <center> <font size=34 face="STKaiti"> Linux系统简介 </font> <!-- {docsify-ignore} -->`
+ *
+ * 第 2 种在旧站点里负责把标题渲染得又大又居中（docsify-ignore 是叫它别进侧栏）。
+ * 新站点已有 post__title，这行不但重复，`<font size=34>` 这种废弃标签还会
+ * 让标题比正文字号大出好几级。所以两种一并删掉。
+ *
+ * 判定条件很保守：必须是**正文第一个内容行**、必须**是标题行**、
+ * 且去掉标记与内联标签后的纯文本**与 frontmatter 的 title 完全相同**。
+ * 只要文章自己写的标题和 title 不一样，就原样保留。
+ *
+ * 返回 null 表示无需改动。
+ */
+function dropDuplicateTitle(raw, bodyStart, title) {
+  if (!title) return null;
+
+  const head = raw.slice(0, bodyStart);
+  const lines = raw.slice(bodyStart).split('\n');
+
+  // 跳过前导空行与 HTML 注释，定位第一个内容行
+  let i = 0;
+  for (; i < lines.length; i++) {
+    const s = lines[i].trim();
+    if (!s || s.startsWith('<!--')) continue;
+    break;
+  }
+
+  const m = (lines[i] ?? '').trim().match(/^#{1,6}\s+(.+?)\s*$/);
+  if (!m) return null;
+  if (stripMd(m[1]) !== String(title).trim()) return null;
+
+  // 连同紧随其后的一个空行一起删掉，避免留下多余间隔
+  const drop = [i];
+  if (lines[i + 1] !== undefined && lines[i + 1].trim() === '') drop.push(i + 1);
+  drop.sort((a, b) => b - a).forEach((k) => lines.splice(k, 1));
+
+  return head + lines.join('\n');
+}
+
 // ---------------------------------------------------------------- 主流程
 
 const dateMap = buildDateMap();
 const files = walk(BLOG);
-const stats = { total: files.length, added: 0, patched: 0, ok: 0, noTag: [], badImg: [] };
+const stats = {
+  total: files.length,
+  added: 0,
+  patched: 0,
+  ok: 0,
+  deduped: 0,
+  noTag: [],
+  badImg: [],
+};
 
 for (const file of files) {
   const rel = path.relative(BLOG, file).split(path.sep).join('/');
@@ -270,8 +342,19 @@ for (const file of files) {
   if (!data.date) missing.push('date');
   if (!data.tags || !data.tags.length) missing.push('tags');
 
+  // 标题：frontmatter 优先，缺失时从正文首个标题行推
+  const title = data.title || extractTitle(body, stem);
+
+  /* 两步都只改内存里的 text，最后统一比较、统一写一次 ——
+     否则两个步骤各写一次文件，中间态很容易互相踩到。 */
+
+  // 1) 去掉与标题重复的首行标题（H1 或 docsify 时期的居中大标题）
+  const deduped = dropDuplicateTitle(raw, fm ? bodyStartOf(raw) : 0, title);
+  let text = deduped ?? raw;
+
+  // 2) 补齐缺失的 frontmatter
   if (missing.length) {
-    const title = data.title || extractTitle(body, stem);
+    const { body: curBody } = splitFrontmatter(text);
     let date = data.date;
     if (!date) {
       // git 历史优先；取不到（浅克隆 / 新文件）就用文件时间，对新增文章恰好正确
@@ -287,7 +370,7 @@ for (const file of files) {
         stats.noTag.push(rel);
       }
     }
-    const summary = data.summary || extractSummary(body);
+    const summary = data.summary || extractSummary(curBody);
 
     const lines = [
       '---',
@@ -298,16 +381,24 @@ for (const file of files) {
     if (summary) lines.push(`summary: ${yamlStr(summary)}`);
     lines.push('---', '');
 
-    if (!CHECK_ONLY) {
-      fs.writeFileSync(file, lines.join('\n') + body.replace(/^\n+/, ''), 'utf8');
-    }
+    text = lines.join('\n') + curBody.replace(/^\n+/, '');
+  }
+
+  if (text !== raw && !CHECK_ONLY) fs.writeFileSync(file, text, 'utf8');
+
+  if (missing.length) {
     if (fm) stats.patched++;
     else stats.added++;
     console.log(
       `${c.yellow(fm ? '补全' : '新增')} ${c.cyan(rel)}  ${c.dim('缺 ' + missing.join('/'))}`
     );
+    if (deduped !== null) stats.deduped++;
   } else {
     stats.ok++;
+    if (deduped !== null) {
+      stats.deduped++;
+      console.log(`${c.cyan('去重标题')} ${rel}`);
+    }
   }
 
   // 体检：正文里相对路径的图片若不存在，Astro 构建会直接失败。
@@ -337,7 +428,7 @@ for (const file of files) {
 console.log('');
 console.log(c.dim('─'.repeat(56)));
 console.log(
-  `内容同步：共 ${stats.total} 篇 ｜ 新增 frontmatter ${stats.added} ｜ 补全 ${stats.patched} ｜ 已完整 ${stats.ok}`
+  `内容同步：共 ${stats.total} 篇 ｜ 新增 frontmatter ${stats.added} ｜ 补全 ${stats.patched} ｜ 去重标题 ${stats.deduped} ｜ 已完整 ${stats.ok}`
 );
 
 if (stats.noTag.length) {

@@ -1,0 +1,48 @@
+/*
+ * 设计变量。
+ *
+ * dark 一栏是**原 style.css 的数值逐条搬过来的**（#2b2b2b 底、#2fb388 强调色、
+ * #3f3f3f 输入框…），换主题不会动到深色下的观感。
+ * light 一栏是新增的，底色跟着博客的 #fbfaf6 走，强调色压深一档以保证对比度。
+ */
+
+:root {
+  /* 折叠卡片的行高：图标 2rem + 上下 padding 各 .3rem，
+     与旧 create.js 里 `height = 12 + 2.6 * n rem` 的 2.6 是同一个数 */
+  --row-h: 2.6rem;
+}
+
+[data-theme='dark'] {
+  --bg: #2b2b2b;
+  --fg: #efefef;
+  --accent: #2fb388;
+  --accent-strong: #2ba07b;
+  --surface: #3f3f3f;
+  --surface-hover: #444444;
+  --muted: #666666;
+  --list-fg: #c0c0c0;
+  --shadow-1: #111111;
+  --shadow-2: #222222;
+  --fade-from: rgba(43, 43, 43, 0.5);
+  --fade-to: rgba(43, 43, 43, 1);
+  --mark-bg: rgba(47, 179, 136, 0.3);
+  --ring: #2fb388;
+}
+
+[data-theme='light'] {
+  --bg: #fbfaf6;
+  --fg: #2c2c2a;
+  --accent: #1f8f6a;
+  --accent-strong: #2ba07b;
+  --surface: #ffffff;
+  --surface-hover: #f4f2ec;
+  --muted: #8a8880;
+  --list-fg: #4a4843;
+  --shadow-1: rgba(0, 0, 0, 0.1);
+  --shadow-2: rgba(0, 0, 0, 0.14);
+  --fade-from: rgba(251, 250, 246, 0.5);
+  --fade-to: rgba(251, 250, 246, 1);
+  --mark-bg: rgba(47, 179, 136, 0.3);
+  --ring: #1f8f6a;
+  --border: rgba(0, 0, 0, 0.12);
+}

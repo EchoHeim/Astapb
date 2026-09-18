@@ -3,26 +3,31 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="搜索" description="搜索全部文章" hideSearch>
-  <section class="hero">
-    <h1>搜索</h1>
-    <p>输入关键词，匹配标题、标签与正文。</p>
-  </section>
+  <div class="narrow">
+    <div class="page-head">
+      <div class="page-head__kicker">Search · 搜索</div>
+      <h1>搜索</h1>
+      <p>输入关键词，匹配文章标题、标签与正文。</p>
+    </div>
 
-  <div style="margin-top:24px">
-    <input
-      class="search-page-input"
-      id="page-search-input"
-      type="search"
-      placeholder="例如：树莓派 / pandas / 中断"
-      autocomplete="off"
-      spellcheck="false"
-      aria-label="搜索关键词"
-      aria-controls="page-search-results"
-    />
+    <div class="page-body">
+      <input
+        class="search-page-input"
+        id="page-search-input"
+        type="search"
+        placeholder="例如：树莓派 / pandas / 中断"
+        autocomplete="off"
+        spellcheck="false"
+        aria-label="搜索关键词"
+        aria-controls="page-search-results"
+      />
+    </div>
+
+    <div class="sec-head sec-head--tight">
+      <h2 id="page-search-title">全部文章</h2>
+    </div>
+    <ul class="search-results" id="page-search-results" role="listbox"></ul>
   </div>
-
-  <h2 class="section-title" id="page-search-title">全部文章</h2>
-  <ul class="search-results" id="page-search-results" role="listbox"></ul>
 </BaseLayout>
 
 <script>

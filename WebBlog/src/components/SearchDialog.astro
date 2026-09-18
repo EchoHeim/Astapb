@@ -5,28 +5,32 @@ import {
   renderHits,
   scoreDocs,
 } from '../scripts/search';
+
+// 结构对齐参考版式：铺满视口的 .dialog 只负责定位与遮罩，
+// 内容装在 .dialog__box 里；结果列表的 class 由 scripts/search.ts 生成。
 ---
 
-<dialog class="search-dialog" id="search-dialog" aria-label="搜索文章">
-  <div class="search-dialog__head">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-      stroke-linecap="round" aria-hidden="true">
-      <circle cx="11" cy="11" r="7" />
-      <path d="M20 20l-4.3-4.3" />
-    </svg>
-    <input
-      class="search-input"
-      id="search-input"
-      type="search"
-      placeholder="搜索标题、标签或正文…"
-      autocomplete="off"
-      spellcheck="false"
-      aria-label="搜索关键词"
-      aria-controls="search-results"
-    />
-    <span class="search-dialog__hint">Esc</span>
+<dialog class="dialog" id="search-dialog" aria-label="搜索文章">
+  <div class="dialog__box">
+    <div class="dialog__head">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"></circle>
+        <path d="M20.5 20.5L16.7 16.7"></path>
+      </svg>
+      <input
+        class="search-input"
+        id="search-input"
+        type="search"
+        placeholder="搜索标题、标签或正文…"
+        autocomplete="off"
+        spellcheck="false"
+        aria-label="搜索关键词"
+        aria-controls="search-results"
+      />
+      <kbd>Esc</kbd>
+    </div>
+    <ul class="dialog__list" id="search-results" role="listbox"></ul>
   </div>
-  <ul class="search-results" id="search-results" role="listbox"></ul>
 </dialog>
 
 <script>

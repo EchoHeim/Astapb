@@ -4,8 +4,6 @@ date: 2022-06-23
 tags: [Linux, Linux 小技巧]
 summary: MJPG-streamer 是一个优秀的开源project，它可以通过HTTP的方式访问linux上面的兼容摄像头，本地获取摄像头的数据，再通过http通讯发出来，最终通过浏览器来访问IP地址对应的端…
 ---
-### <center> <font size=34 face="STKaiti"> MJPG-streamer的安装 </font>    <!-- {docsify-ignore} -->
-
 # 1. 简介
 
 MJPG-streamer 是一个优秀的开源project，它可以通过HTTP的方式访问linux上面的兼容摄像头，本地获取摄像头的数据，再通过http通讯发出来，最终通过浏览器来访问IP地址对应的端口号就能够看到视频。

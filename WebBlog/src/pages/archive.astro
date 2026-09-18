@@ -1,8 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { withBase, formatDate } from '../utils/url';
-import { tagSlug } from '../utils/tags';
+import { withBase, formatMonthDay } from '../utils/url';
+import { buildTagIndex, buildCategoryTree } from '../utils/tags';
 import { sortPosts } from '../utils/posts';
 
 const all = await getCollection('posts', ({ data }) => !data.draft);
@@ -16,40 +16,111 @@ for (const post of sorted) {
   byYear.get(y)!.push(post);
 }
 const years = [...byYear.keys()].sort((a, b) => Number(b) - Number(a));
+
+const tree = buildCategoryTree(all);
+const tags = buildTagIndex(all);
+
+/**
+ * 行尾的归属：三层标签（栏目 / 子类 / 细目）全写会太长，
+ * 折成「栏目 / 细目」，两层的原样保留。
+ */
+function trail(t: string[]): string {
+  if (t.length === 0) return '';
+  if (t.length <= 2) return t.join(' / ');
+  return `${t[0]} / ${t[t.length - 1]}`;
+}
 ---
 
-<BaseLayout title="归档" description="按时间浏览全部文章" active="归档">
-  <section class="hero">
-    <h1>归档</h1>
-    <p>
-      {sorted.length} 篇文章 · 跨 {years.length} 年
-    </p>
-  </section>
+<BaseLayout
+  title="归档"
+  description={`按时间浏览全部 ${sorted.length} 篇文章`}
+  active="归档"
+>
+  <div class="wrap">
+    <div class="page-head">
+      <div class="page-head__kicker">Archive · 归档</div>
+      <h1>全部文章</h1>
+      <p>
+        共 {sorted.length} 篇，跨 {years.length} 年，按时间倒序排列。
+        也可以直接<a href="#cats">按分类树</a>或<a href="#tags">按标签</a>浏览。
+      </p>
+    </div>
 
-  {
-    years.map((y) => (
-      <section class="archive-year">
-        <h2>
-          {y} 年<span class="count">（{byYear.get(y)!.length} 篇）</span>
-        </h2>
-        <ul class="archive-list">
+    {
+      years.map((y) => (
+        <section class="year">
+          <div class="year__h">
+            <b>{y}</b>
+            <span>{byYear.get(y)!.length} 篇</span>
+            <span class="rule" aria-hidden="true" />
+          </div>
+
           {byYear.get(y)!.map((post) => (
-            <li>
-              <time datetime={post.data.date.toISOString()}>
-                {formatDate(post.data.date).slice(5)}
-              </time>
-              <a href={withBase(`${post.id}/`)}>{post.data.title}</a>
-              <span class="tags">
-                {post.data.tags.slice(0, 1).map((t) => (
-                  <a class="tag" href={withBase(`tags/${tagSlug(t)}/`)}>
-                    {t}
-                  </a>
-                ))}
+            <div class="row">
+              <span class="row__d">
+                <time datetime={post.data.date.toISOString()}>
+                  {formatMonthDay(post.data.date)}
+                </time>
               </span>
-            </li>
+              <h3 class="row__t">
+                <a href={withBase(`${post.id}/`)}>{post.data.title}</a>
+              </h3>
+              <span class="row__c">{trail(post.data.tags)}</span>
+            </div>
           ))}
-        </ul>
-      </section>
-    ))
-  }
+        </section>
+      ))
+    }
+
+    <section class="year" id="cats">
+      <div class="sec-head">
+        <h2>按分类浏览</h2>
+        <span class="sec-head__note">{tree.length} 个分类</span>
+      </div>
+
+      <div class="cats">
+        {
+          tree.map((cat) => (
+            <ul class="tree">
+              <li>
+                <a href={withBase(`tags/${cat.slug}/`)}>
+                  {cat.name}
+                  <span class="n">{cat.count}</span>
+                </a>
+                {cat.children.length > 0 && (
+                  <ul>
+                    {cat.children.map((sub) => (
+                      <li>
+                        <a href={withBase(`tags/${sub.slug}/`)}>
+                          {sub.name}
+                          <span class="n">{sub.count}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            </ul>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="year" id="tags">
+      <div class="sec-head">
+        <h2>按标签浏览</h2>
+        <span class="sec-head__note">{tags.length} 个标签</span>
+      </div>
+      <div class="cloud tag-cloud-lg">
+        {
+          tags.map((t) => (
+            <a href={withBase(`tags/${t.slug}/`)}>
+              {t.name}
+              <span class="count">{t.count}</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
 </BaseLayout>

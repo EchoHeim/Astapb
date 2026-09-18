@@ -4,19 +4,21 @@ import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   posts: CollectionEntry<'posts'>[];
+  /** 是否显示摘要 */
+  showSummary?: boolean;
 }
 
-const { posts } = Astro.props;
+const { posts, showSummary = true } = Astro.props;
 ---
 
 {
   posts.length === 0 ? (
     <p class="empty">这里还没有文章。</p>
   ) : (
-    <ul class="post-list">
+    <div class="list">
       {posts.map((post) => (
-        <PostCard post={post} />
+        <PostCard post={post} showSummary={showSummary} />
       ))}
-    </ul>
+    </div>
   )
 }

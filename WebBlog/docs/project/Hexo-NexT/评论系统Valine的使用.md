@@ -4,8 +4,6 @@ date: 2022-06-23
 tags: [建站]
 summary: 注明：以下方案是在 Valine 1.4.9 版本下完成，对于其他版本应该会根据实际情况修改参数，使用 F12 查看参数修改即可使用！（说明于 2020 - 04 - 25）
 ---
-# 评论系统 Valine 的使用
-
 注明：以下方案是在 Valine 1.4.9 版本下完成，对于其他版本应该会根据实际情况修改参数，使用 F12 查看参数修改即可使用！（说明于 2020 - 04 - 25）
 
 强烈推荐大佬们直接去看 [cungudafa](https://blog.csdn.net/cungudafa/article/details/105548858) 对于 Valine 评论系统的优化，实在是棒，本人博客：[EnjoyToShare](https://wugenqiang.github.io/) 的评论系统也是根据这位大佬的文章阐述修改而来，在此对她表示感谢！

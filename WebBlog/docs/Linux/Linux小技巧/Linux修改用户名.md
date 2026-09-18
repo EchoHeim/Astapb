@@ -4,8 +4,6 @@ date: 2022-06-23
 tags: [Linux, Linux 小技巧]
 summary: Linux将用户名修改后，还需要修改 组名+家目录+UID
 ---
-### <center> <font size=34 face="STKaiti"> Linux修改用户名 </font>    <!-- {docsify-ignore} -->
-
 Linux将用户名修改后，还需要修改 组名+家目录+UID
 
 这只会更改用户名，而其他的东西，比如用户组，家目录，UID 等都保持不变。

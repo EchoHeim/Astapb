@@ -1,0 +1,282 @@
+/* 组件样式。数值来源标注了对应的旧 style.css 规则。 */
+
+/* ---------------- 主题切换按钮（新增） ---------------- */
+
+.theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0.5px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  opacity: 0.85;
+  transition: opacity 0.15s ease;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  opacity: 1;
+}
+
+.theme-toggle svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.icon-sun,
+.icon-moon {
+  display: none;
+}
+
+/* 深色下显示太阳（点它去浅色），浅色下显示月亮 */
+[data-theme='dark'] .icon-sun {
+  display: block;
+}
+
+[data-theme='light'] .icon-moon {
+  display: block;
+}
+
+/* ---------------- 搜索框（旧 #searchBox） ---------------- */
+
+.search-box input {
+  width: 100%;
+  height: 4rem;
+  line-height: 4rem;
+  padding: 0 2em;
+  font-size: 1.2rem;
+  border-radius: 30px;
+  background: url('../../img/search.png') no-repeat right center var(--surface);
+}
+
+.search-box input::placeholder {
+  color: var(--muted);
+}
+
+/*
+ * 旧规则写的是 `background: #444` 简写，会把背景图一起重置掉，
+ * 于是聚焦瞬间右侧那个小图标会消失。这里改成只改背景色，图标留着。
+ */
+.search-box input:focus {
+  background-color: var(--surface-hover);
+}
+
+/* 搜索框下方那个装饰 Logo（旧 HTML 里就是紧跟 input 的一个 img） */
+.search-logo {
+  width: 1.5rem;
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
+}
+
+/* ---------------- 分类锚点（新增） ---------------- */
+
+.anchors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 2rem;
+  overflow-y: auto;
+}
+
+.anchors a {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.85rem;
+  color: var(--list-fg);
+  border-radius: 0.6rem;
+}
+
+.anchors a:hover {
+  background: var(--accent-strong);
+  color: #ffffff;
+}
+
+.anchors a[aria-current='true'],
+.anchors a.is-current {
+  color: var(--accent);
+}
+
+/* ---------------- 提示文案（旧 #search p） ---------------- */
+
+#searchHint {
+  padding: 2rem 0;
+  font-size: 0.6rem;
+  line-height: 1.9;
+  color: var(--muted);
+}
+
+#searchHint span {
+  display: block;
+}
+
+#searchHint a {
+  color: var(--accent);
+}
+
+.hint-count {
+  transition: color 0.15s ease;
+}
+
+.hint-count.is-active {
+  color: var(--accent);
+}
+
+/* ---------------- 搜索引擎图标列（旧 #searchItem） ---------------- */
+
+#searchItem li {
+  width: 3rem;
+  height: 3rem;
+  margin: 0.3rem;
+  border-radius: 2rem;
+  overflow: hidden;
+  box-shadow: 0 2px 2px 2px var(--shadow-1);
+}
+
+.engine {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.engine img {
+  width: 100%;
+}
+
+/* ---------------- 分类卡片（旧 .item / .wrap） ---------------- */
+
+.item {
+  margin: 0 1rem;
+  overflow: hidden;
+  /* 旧版由 JS 内联算 height，这里交给 CSS 变量，分类各自的可见条数可配 */
+  height: calc(12rem + var(--row-h) * var(--visible, 6));
+}
+
+.wrap {
+  padding: 1rem 0;
+  text-align: center;
+}
+
+.wrap h2 {
+  font-weight: normal;
+  font-size: 1.3rem;
+  line-height: 2rem;
+  color: var(--accent);
+}
+
+/* 推荐位在左栏居中：旧版靠 .wrap 的 text-align 居中，这里 img 是 display:block，
+   所以改用 margin auto 达到同样的居中效果。 */
+.recommend {
+  display: block;
+}
+
+.recommend img {
+  width: 5rem;
+  height: 5rem;
+  margin: 0.5rem auto;
+  border-radius: 3rem;
+  box-shadow: 0 4px 4px 4px var(--shadow-2);
+}
+
+.recommend p {
+  line-height: 2rem;
+}
+
+.wrap ul {
+  margin: 1rem 0;
+  text-align: left;
+  color: var(--list-fg);
+}
+
+.site {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 1rem;
+}
+
+.site:hover,
+.site:focus-visible {
+  background: var(--accent-strong);
+  color: #ffffff;
+}
+
+.site:hover mark,
+.site:focus-visible mark {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.site img,
+.icon-fallback {
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 2rem;
+  box-shadow: 0 2px 2px 2px var(--shadow-1);
+}
+
+/* 没有图标时的首字母色块，背景色由 JS 按站点名推导后内联写入 */
+.icon-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  color: #ffffff;
+}
+
+/* ---------------- 折叠与展开（旧 .test / .item.change） ---------------- */
+
+.clamp-end {
+  position: relative;
+}
+
+.clamp-end::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, var(--fade-from), var(--fade-to));
+  /* 旧版遮罩挂在 li 本身、点击仍然生效；现在 li 里套了 <a>，
+     不放开事件的话最后一条可见项就点不动了 */
+  pointer-events: none;
+}
+
+.item.change {
+  overflow: visible;
+}
+
+.item.change .wrap {
+  position: relative;
+  z-index: 1;
+  background: var(--bg);
+  box-shadow: 0 2px 5px 2px var(--shadow-1);
+}
+
+.item.change .clamp-end::after {
+  background: none;
+}
+
+/* 过滤态：全部命中项直接铺开，不做折叠 */
+#grid.is-filtering .item {
+  height: auto;
+  overflow: visible;
+}
+
+#grid.is-filtering .clamp-end::after {
+  background: none;
+}
+
+/* ---------------- 空状态 ---------------- */
+
+.empty {
+  margin: 2rem 1rem;
+  font-size: 0.95rem;
+  color: var(--muted);
+}

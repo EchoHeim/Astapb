@@ -4,8 +4,6 @@ date: 2022-06-23
 tags: [Python, Anaconda]
 summary: 最近在使用Jupyter notebook的时候感觉到，没有个目录真心难受，当想查找需要的函数的时候，不能很快速的找到，这个时候，要是有个目录就好很多了，很不幸的是，默认Jupyter noteboo…
 ---
-# Jupyter添加目录toc
-
 最近在使用Jupyter notebook的时候感觉到，没有个目录真心难受，当想查找需要的函数的时候，不能很快速的找到，这个时候，要是有个目录就好很多了，很不幸的是，默认Jupyter notebook事没有生成目录这个功能的，但很巧的是，有人已经开发了Jupyter插件，里面包含toc目录功能，开森 🦞
 
 效果图如下：

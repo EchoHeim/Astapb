@@ -1,10 +1,10 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { withBase, formatDate, absoluteUrl } from '../utils/url';
+import { withBase, formatDateZh, absoluteUrl } from '../utils/url';
 import { tagSlug } from '../utils/tags';
 import { AUTHOR } from '../consts';
-import { sortPosts } from '../utils/posts';
+import { sortPosts, readingMinutes } from '../utils/posts';
 
 export async function getStaticPaths() {
   const all = await getCollection('posts', ({ data }) => !data.draft);
@@ -38,16 +38,7 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 const category = post.data.tags[0];
 const subTags = post.data.tags.slice(1);
 
-/** 阅读时长：中文按字计、英文按词计，每分钟 400 字 */
-function readingMinutes(body = '') {
-  const text = body.replace(/```[\s\S]*?```/g, ' ').replace(/\s+/g, ' ');
-  const cjk = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
-  const words = (text.replace(/[\u4e00-\u9fa5]/g, ' ').match(/[A-Za-z0-9]+/g) || [])
-    .length;
-  return Math.max(1, Math.round((cjk + words * 1.5) / 400));
-}
-
-const minutes = readingMinutes(post.body);
+const minutes = readingMinutes(post.body || '');
 const canonical = absoluteUrl(`${post.id}/`);
 
 const jsonLd = {
@@ -61,6 +52,9 @@ const jsonLd = {
   author: { '@type': 'Person', name: AUTHOR.name, url: AUTHOR.github },
   keywords: post.data.tags.join(', '),
 };
+
+/** 目录默认从 3 节起才值得展示 */
+const showToc = toc.length >= 3;
 ---
 
 <BaseLayout title={post.data.title} description={post.data.summary} trackProgress>
@@ -70,112 +64,147 @@ const jsonLd = {
     is:inline
   />
 
-  <article>
-    <header class="post-header">
-      <div class="post-meta">
+  <article class="post">
+    <div class="wrap">
+      {
+        category && (
+          <div class="post__kicker">
+            {category}
+            {subTags.map((t) => (
+              <>
+                <span> / </span>
+                {t}
+              </>
+            ))}
+          </div>
+        )
+      }
+
+      <h1 class="post__title">{post.data.title}</h1>
+
+      <div class="post__meta">
         <time datetime={post.data.date.toISOString()}>
-          {formatDate(post.data.date)}
+          {formatDateZh(post.data.date)}
         </time>
-        <span>约 {minutes} 分钟</span>
+        <span class="dot" aria-hidden="true" />
+        <span>{AUTHOR.name}</span>
+        <span class="dot" aria-hidden="true" />
+        <span>约 {minutes} 分钟读完</span>
         {
-          category && (
-            <span class="tags">
-              <a class="tag" href={withBase(`tags/${tagSlug(category)}/`)}>
-                {category}
-              </a>
-              {subTags.map((t) => (
+          post.data.tags.length > 0 && (
+            <div class="tags">
+              {post.data.tags.map((t) => (
                 <a class="tag" href={withBase(`tags/${tagSlug(t)}/`)}>
                   {t}
                 </a>
               ))}
-            </span>
+            </div>
           )
         }
       </div>
-      <h1>{post.data.title}</h1>
-    </header>
 
-    {
-      toc.length >= 3 && (
-        <details class="toc-inline">
-          <summary>本文目录（{toc.length} 节）</summary>
-          <ol>
-            {toc.map((h) => (
-              <li class={h.depth === 3 ? 'lvl3' : ''}>
-                <a href={`#${h.slug}`}>{h.text}</a>
-              </li>
-            ))}
-          </ol>
-        </details>
-      )
-    }
+      {post.data.summary && <p class="post__lede">{post.data.summary}</p>}
 
-    <div class="post-layout">
-      <div class="prose">
-        <Content />
+      <div class="post__body">
+        <div class="prose">
+          {
+            showToc && (
+              <details class="toc-inline">
+                <summary>本文目录（{toc.length} 节）</summary>
+                <ol>
+                  {toc.map((h) => (
+                    <li class={h.depth === 3 ? 'lvl3' : ''}>
+                      <a href={`#${h.slug}`}>{h.text}</a>
+                    </li>
+                  ))}
+                </ol>
+              </details>
+            )
+          }
+
+          <Content />
+
+          <div class="post__foot">
+            <div class="license">
+              <svg aria-hidden="true" viewBox="0 0 34 24">
+                <circle cx="9" cy="12" fill="none" r="6.6" stroke="currentColor"
+                  stroke-width="1.5" />
+                <text fill="currentColor" font-family="Georgia,serif" font-size="8.5"
+                  text-anchor="middle" x="9" y="15.4">C</text>
+                <circle cx="25" cy="12" fill="none" r="6.6" stroke="currentColor"
+                  stroke-width="1.5" />
+                <text fill="currentColor" font-family="Georgia,serif" font-size="8.5"
+                  text-anchor="middle" x="25" y="15.4">C</text>
+              </svg>
+              <div>
+                <b>署名-非商业性使用-相同方式共享 4.0 国际（CC BY-NC-SA 4.0）</b><br />
+                本文可自由转载与修改，但需保留作者署名与出处链接，不得用于商业用途，且衍生作品需以相同方式共享。
+                转载请注明：
+                <a href={canonical}>MacLodge&#39;s Blog · {post.data.title}</a>
+              </div>
+            </div>
+
+            <nav class="postnav" aria-label="上一篇 / 下一篇">
+              {
+                older ? (
+                  <a href={withBase(`${older.id}/`)} rel="prev">
+                    <div class="postnav__lab">← 上一篇</div>
+                    <div class="postnav__t">{older.data.title}</div>
+                  </a>
+                ) : (
+                  <span class="postnav__empty">已经是最早一篇</span>
+                )
+              }
+              {
+                newer ? (
+                  <a class="next" href={withBase(`${newer.id}/`)} rel="next">
+                    <div class="postnav__lab">下一篇 →</div>
+                    <div class="postnav__t">{newer.data.title}</div>
+                  </a>
+                ) : (
+                  <span class="postnav__empty">已经是最新一篇</span>
+                )
+              }
+            </nav>
+
+            {
+              related.length > 0 && (
+                <section class="related">
+                  <div class="related__h">「{category}」下的其他文章</div>
+                  <ul>
+                    {related.map((p) => (
+                      <li>
+                        <a href={withBase(`${p.id}/`)}>
+                          <span class="t">{p.data.title}</span>
+                          <span class="d">
+                            {p.data.date.getFullYear()} /{' '}
+                            {String(p.data.date.getMonth() + 1).padStart(2, '0')}
+                          </span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )
+            }
+          </div>
+        </div>
+
+        {
+          showToc && (
+            <aside class="rail" aria-label="文章目录">
+              <div class="rail__h">目录</div>
+              <ol>
+                {toc.map((h) => (
+                  <li class={h.depth === 3 ? 'lvl3' : ''}>
+                    <a href={`#${h.slug}`}>{h.text}</a>
+                  </li>
+                ))}
+              </ol>
+            </aside>
+          )
+        }
       </div>
-
-      {
-        toc.length >= 3 && (
-          <aside class="toc-rail" aria-label="文章目录">
-            <p class="toc-rail__title">目录</p>
-            <ol>
-              {toc.map((h) => (
-                <li class={h.depth === 3 ? 'lvl3' : ''}>
-                  <a href={`#${h.slug}`}>{h.text}</a>
-                </li>
-              ))}
-            </ol>
-          </aside>
-        )
-      }
     </div>
-
-    <footer class="post-footer">
-      <nav class="post-nav" aria-label="上下篇">
-        {
-          older ? (
-            <a class="post-nav__item" href={withBase(`${older.id}/`)} rel="prev">
-              <span class="post-nav__label">← 上一篇</span>
-              <span class="post-nav__title">{older.data.title}</span>
-            </a>
-          ) : (
-            <span class="post-nav__item post-nav__item--empty">已经是最早一篇</span>
-          )
-        }
-        {
-          newer ? (
-            <a
-              class="post-nav__item post-nav__item--next"
-              href={withBase(`${newer.id}/`)}
-              rel="next"
-            >
-              <span class="post-nav__label">下一篇 →</span>
-              <span class="post-nav__title">{newer.data.title}</span>
-            </a>
-          ) : (
-            <span class="post-nav__item post-nav__item--empty">已经是最新一篇</span>
-          )
-        }
-      </nav>
-
-      {
-        related.length > 0 && (
-          <section class="related">
-            <h2>「{category}」下的其他文章</h2>
-            <ul>
-              {related.map((p) => (
-                <li>
-                  <time datetime={p.data.date.toISOString()}>
-                    {formatDate(p.data.date)}
-                  </time>
-                  <a href={withBase(`${p.id}/`)}>{p.data.title}</a>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )
-      }
-    </footer>
   </article>
 </BaseLayout>

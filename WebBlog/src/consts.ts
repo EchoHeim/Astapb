@@ -22,6 +22,9 @@ export const SITE_TITLE = "MacLodge's Blog";
 export const SITE_DESCRIPTION =
   '嵌入式工程师的学习笔记 —— Linux、C/C++、Python、FPGA、ToolBox。互联网是有记忆的，我想留下一些成长的脚印。';
 
+/** 报头右侧的小字，标注站点起始年份 */
+export const SITE_SINCE = 'since 2022';
+
 /** 作者信息 */
 export const AUTHOR = {
   name: 'MacLodge',

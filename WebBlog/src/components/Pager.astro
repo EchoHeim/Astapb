@@ -15,34 +15,64 @@ const { currentPage, lastPage, prefix = '', urlPattern = 'page/[page]/' } =
 
 const hrefFor = (p: number) =>
   p === 1 ? withBase(prefix) : withBase(urlPattern.replace('[page]', String(p)));
+
+/**
+ * 页码窗口：首末页与当前页 ±1 始终显示，中间用省略号收拢。
+ * 页数少时直接全部列出，避免出现「1 … 5」这种多余的省略号。
+ */
+function pageItems(current: number, last: number): (number | 'gap')[] {
+  if (last <= 7) return Array.from({ length: last }, (_, i) => i + 1);
+
+  const keep = new Set([1, last, current, current - 1, current + 1]);
+  const nums = [...keep].filter((n) => n >= 1 && n <= last).sort((a, b) => a - b);
+
+  const out: (number | 'gap')[] = [];
+  let prev = 0;
+  for (const n of nums) {
+    if (prev && n - prev > 1) out.push('gap');
+    out.push(n);
+    prev = n;
+  }
+  return out;
+}
+
+const items = pageItems(currentPage, lastPage);
 ---
 
 {
   lastPage > 1 && (
     <nav class="pager" aria-label="分页导航">
-      <span class="pager__side">
-        {currentPage > 1 ? (
-          <a href={hrefFor(currentPage - 1)} rel="prev">
-            ← 上一页
-          </a>
-        ) : (
-          <span class="pager__disabled">← 上一页</span>
-        )}
-      </span>
+      {currentPage > 1 ? (
+        <a class="pager__arrow" href={hrefFor(currentPage - 1)} rel="prev">
+          ← 上一页
+        </a>
+      ) : (
+        <span class="pager__disabled">← 上一页</span>
+      )}
 
-      <span class="pager__status">
-        第 {currentPage} / {lastPage} 页
-      </span>
-
-      <span class="pager__side">
-        {currentPage < lastPage ? (
-          <a href={hrefFor(currentPage + 1)} rel="next">
-            下一页 →
-          </a>
+      {items.map((it) =>
+        it === 'gap' ? (
+          <span class="gap" aria-hidden="true">
+            …
+          </span>
         ) : (
-          <span class="pager__disabled">下一页 →</span>
-        )}
-      </span>
+          <a
+            href={hrefFor(it)}
+            aria-current={it === currentPage ? 'page' : undefined}
+            aria-label={`第 ${it} 页`}
+          >
+            {it}
+          </a>
+        )
+      )}
+
+      {currentPage < lastPage ? (
+        <a class="pager__arrow" href={hrefFor(currentPage + 1)} rel="next">
+          下一页 →
+        </a>
+      ) : (
+        <span class="pager__disabled">下一页 →</span>
+      )}
     </nav>
   )
 }

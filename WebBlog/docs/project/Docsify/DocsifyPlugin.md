@@ -4,8 +4,6 @@ date: 2022-06-23
 tags: [建站]
 summary: 效果预览
 ---
-### <center> <font size=34 face="STKaiti"> Docsify 插件 </font>    <!-- {docsify-ignore} -->
-
 # 1. 实用功能
 
 ## 1.1 [分页导航插件](https://github.com/imyelo/docsify-pagination#readme)

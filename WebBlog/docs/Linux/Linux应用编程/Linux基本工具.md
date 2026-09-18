@@ -4,8 +4,6 @@ date: 2023-03-15
 tags: [Linux, Linux 应用编程]
 summary: 有信息表示成功
 ---
-### <center> <font size=34 face="STKaiti"> Linux 使用 adb 抓取 Android 日志 </font>    <!-- {docsify-ignore} -->
-
 # 1. adb 安装
 
 ``` bash

@@ -4,8 +4,6 @@ date: 2022-06-23
 tags: [ToolBox]
 summary: 记录 Ubuntu 系统从安装到配置开发环境的一些列操作，以及做一些自定义风格的修改。这里也附带一下我在CSDN博客上的相关操作记录。
 ---
-### <center> <font size=34 face="STKaiti"> ubuntu 操作记录  </font>    <!-- {docsify-ignore} -->
-
 # 0. 文档说明
 
 记录 `Ubuntu` 系统从安装到配置开发环境的一些列操作，以及做一些自定义风格的修改。这里也[附带一下我在CSDN博客上的相关操作记录](https://blog.csdn.net/hsl416604093/article/details/80203638)。

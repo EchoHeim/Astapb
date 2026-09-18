@@ -4,8 +4,6 @@ date: 2022-06-23
 tags: [Python]
 summary: 在我们的日常学习中，能够编写和运行 Python 文件的程序很多，比如 Python 安装自带的 IDE、程序员喜爱的Pycharm、数据科学全家桶 Anaconda，还有 Spyder、Thonny…
 ---
-# Jupyter notebook 使用指南
-
 ## 前言
 
 在我们的日常学习中，能够编写和运行 Python 文件的程序很多，比如 Python 安装自带的 IDE、程序员喜爱的Pycharm、数据科学全家桶 Anaconda，还有 Spyder、Thonny 等。就我个人使用而言，如果进行大型项目推荐使用 Pycharm，如果进行数据处理和分析，最好选用 Jupyter notebook。可以说，**Jupyter notebook 是用Python 进行数据科学、机器学习的必备工具。**

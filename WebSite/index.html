@@ -1,35 +1,104 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="zh-CN" data-theme="dark" data-theme-key="nav-theme">
   <head>
-    <title>AnywhereAnything</title>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AnywhereAnything · 网站导航</title>
     <meta
-      name="viewport"
-      content="width=device-width, user-scalable=no, initial-scale=1.0"
+      name="description"
+      content="一个纯静态的网站导航页：聚合搜索框 + 17 个分类共 97 个常用站点，支持站内筛选、分类锚点与深浅色主题。"
     />
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    <link rel="stylesheet" type="text/css" href="mobile.css" />
+    <meta name="theme-color" content="#2b2b2b" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#fbfaf6" media="(prefers-color-scheme: light)" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="AnywhereAnything · 网站导航" />
+    <meta property="og:description" content="聚合搜索框 + 17 个分类共 97 个常用站点。" />
+    <link rel="icon" href="/favicon.png" />
+
+    <script>
+      // 主题必须在首屏绘制前定下来，否则会先闪一下默认色。
+      // 内联同步脚本，外链模块脚本来不及在首次绘制前执行。
+      (function () {
+        var root = document.documentElement;
+        try {
+          var saved = localStorage.getItem(root.dataset.themeKey || 'nav-theme');
+          var theme =
+            saved === 'light' || saved === 'dark'
+              ? saved
+              : window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light';
+          root.setAttribute('data-theme', theme);
+        } catch (e) {
+          /* 隐私模式下 localStorage 会抛异常，忽略即可 */
+        }
+      })();
+    </script>
   </head>
+
   <body>
+    <button
+      id="themeToggle"
+      class="theme-toggle"
+      type="button"
+      aria-label="切换深浅色主题"
+      title="切换深浅色主题"
+    >
+      <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="5" />
+        <line x1="12" y1="1" x2="12" y2="3" />
+        <line x1="12" y1="21" x2="12" y2="23" />
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+        <line x1="1" y1="12" x2="3" y2="12" />
+        <line x1="21" y1="12" x2="23" y2="12" />
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+      </svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" />
+      </svg>
+    </button>
+
     <div id="main">
       <div id="search">
         <div>
-          <div>
-            <input type="text" name="" id="searchBox" />
-            <img src="img/logo.png" />
+          <div class="search-box">
+            <input
+              id="searchBox"
+              type="text"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              placeholder="搜索站点，或输入关键词"
+              aria-label="搜索关键词"
+            />
+            <img class="search-logo" alt="" />
           </div>
-          <p>
-            输入关键词，然后点网站，即在那个网站里搜索。按回车搜索 Google <br />
-            by <a href="https://github.com/EchoHeim">MacLodge</a>
+
+          <nav id="anchors" class="anchors" aria-label="分类导航"></nav>
+
+          <p id="searchHint">
+            <span>输入关键词，然后点网站，即在那个网站里搜索。</span>
+            <span id="hintDefault"></span>
+            <span id="hintCount" class="hint-count"></span>
+            <span class="hint-by">
+              by
+              <a href="https://github.com/EchoHeim" target="_blank" rel="noopener noreferrer">
+                MacLodge
+              </a>
+            </span>
           </p>
         </div>
       </div>
-      <ul id="searchItem"></ul>
+
+      <ul id="searchItem" aria-label="外部搜索引擎"></ul>
+
       <div id="content">
-        <div></div>
+        <div id="grid"></div>
       </div>
     </div>
-    <script type="text/javascript" src="create.js"></script>
-    <script type="text/javascript" src="main.js"></script>
+
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

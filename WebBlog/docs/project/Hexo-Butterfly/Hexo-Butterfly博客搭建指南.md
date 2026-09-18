@@ -4,8 +4,6 @@ date: 2022-06-23
 tags: [建站]
 summary: Hexo 是一个基于 Node.js 快速、简洁且高效的博客框架，可以将 Markdown 文件快速的生成静态网页，托管在 GitHub Pages 上。
 ---
-# Hexo - Butterfly 博客搭建指南
-
 ## 1 Hexo 框架搭建
 
 ### 1.1 Hexo 环境部署

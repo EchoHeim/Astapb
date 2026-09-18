@@ -1,26 +1,42 @@
 ---
-import { SITE_TITLE, AUTHOR } from '../consts';
+import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
 import { withBase } from '../utils/url';
 
-const year = new Date().getFullYear();
+const START_YEAR = 2022;
+const year = Math.max(START_YEAR, new Date().getFullYear());
 ---
 
-<footer class="site-footer">
-  <div class="site-footer__inner">
-    <p>
-      &copy; {year} {SITE_TITLE} · 原创内容采用
+<footer class="site-foot">
+  <div class="site-foot__inner">
+    <div>
+      <div class="site-foot__brand">
+        <span class="brand__mark" aria-hidden="true">M</span>
+        {SITE_TITLE}
+      </div>
+      <p>{SITE_DESCRIPTION}</p>
+    </div>
+
+    <nav class="site-foot__links" aria-label="页脚导航">
+      <a href={withBase('')}>首页</a>
+      <a href={withBase('archive/')}>归档</a>
+      <a href={withBase('tags/')}>标签</a>
+      <a href={withBase('about/')}>关于</a>
+      <a href={withBase('rss.xml')}>RSS</a>
+      <a href={AUTHOR.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href={`mailto:${AUTHOR.email}`}>邮箱</a>
+      <a href="/aa/" target="_blank" rel="noopener noreferrer">导航站</a>
+    </nav>
+  </div>
+
+  <div class="site-foot__legal">
+    <span>
+      &copy; {START_YEAR}–{year} {AUTHOR.name} · 原创内容采用
       <a
         href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"
         target="_blank"
         rel="noopener noreferrer">CC BY-NC-SA 4.0</a
-      > 许可协议，转载请注明出处。
-    </p>
-    <p>
-      <a href={`mailto:${AUTHOR.email}`}>{AUTHOR.email}</a>
-      · <a href={AUTHOR.github} target="_blank" rel="noopener noreferrer">GitHub</a>
-      · <a href={withBase('rss.xml')}>RSS 订阅</a>
-      · <a href={withBase('search/')}>搜索</a>
-      · <a href="/aa/" target="_blank" rel="noopener noreferrer">导航站</a>
-    </p>
+      > 许可，转载请注明出处
+    </span>
+    <span>Editorial 版式 · 由 Astro 静态生成</span>
   </div>
 </footer>
