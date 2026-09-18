@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * 把 docs/ 里被文章引用的图片与附件，按原目录结构镜像到独立资源仓库目录，
+ * 把被文章引用的图片与附件，按原目录结构镜像到独立资源仓库目录，
  * 供推送后由 jsDelivr 提供加速分发。
  *
  * 用法：
@@ -9,10 +9,10 @@
  *   node scripts/migrate-assets.mjs --yes --target=../Astapb-assets
  *
  * 设计取舍：
- *   - 只搬「被文章引用到的」资源，不整目录搬 —— docs/ 里 219 MB 的
+ *   - 只搬「被文章引用到的」资源，不整目录搬 —— 内容目录里 219 MB 的
  *     第三方 PDF 不属于本站原创内容，不该出现在资源仓库里。
- *   - 不修改任何 Markdown 源文件。路径改写发生在渲染期（见
- *     src/plugins/rehype-assets.mjs），这样旧 docsify 站点仍然能正常显示图片。
+ *   - 不修改任何 Markdown 源文件；图片地址由 src/consts.ts 的
+ *     ASSETS_BASE 在运行期拼接。
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -21,8 +21,11 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT = path.resolve(HERE, '..');
 const REPO = path.resolve(PROJECT, '..');
-const DOCS = path.join(REPO, 'docs');
-const BLOG = path.join(DOCS, 'blog');
+// 内容与图片资源现在都在项目根（WebBlog/）下，资源仓库镜像的也是这一层结构，
+// 所以迁移后 ASSETS_BASE 要指向 .../Astapb@master/WebBlog
+const ASSET_ROOT = PROJECT;
+// 内容目录；改目录名时这里和 content.config.ts / sync-content.mjs 必须同步
+const BLOG = path.join(ASSET_ROOT, 'docs');
 
 const args = process.argv.slice(2);
 const APPLY = args.includes('--yes');
@@ -69,7 +72,7 @@ for (const md of walk(BLOG)) {
         /* 保持原样 */
       }
       const abs = path.resolve(path.dirname(md), p);
-      if (!abs.startsWith(DOCS)) continue;
+      if (!abs.startsWith(ASSET_ROOT)) continue;
       if (!fs.existsSync(abs)) continue;
       if (!referenced.has(abs)) referenced.set(abs, md);
     }
@@ -82,7 +85,7 @@ const STATIC = [
   'sponsor/images',
 ];
 for (const rel of STATIC) {
-  const dir = path.join(DOCS, rel);
+  const dir = path.join(ASSET_ROOT, rel);
   if (!fs.existsSync(dir)) continue;
   for (const name of fs.readdirSync(dir)) {
     const abs = path.join(dir, name);
@@ -95,7 +98,7 @@ for (const rel of STATIC) {
 let bytes = 0;
 const plan = [];
 for (const [abs, md] of referenced) {
-  const rel = path.relative(DOCS, abs).split(path.sep).join('/');
+  const rel = path.relative(ASSET_ROOT, abs).split(path.sep).join('/');
   const size = fs.statSync(abs).size;
   bytes += size;
   plan.push({ rel, size, md: path.relative(REPO, md) });
@@ -116,7 +119,7 @@ if (!APPLY) {
 
 let copied = 0;
 for (const p of plan) {
-  const src = path.join(DOCS, p.rel.split('/').join(path.sep));
+  const src = path.join(ASSET_ROOT, p.rel.split('/').join(path.sep));
   const dst = path.join(TARGET, p.rel.split('/').join(path.sep));
   fs.mkdirSync(path.dirname(dst), { recursive: true });
   fs.copyFileSync(src, dst);
@@ -131,7 +134,7 @@ fs.writeFileSync(
     '本仓库是 [Astapb](https://github.com/EchoHeim/Astapb) 博客的**资源仓库**，',
     '由 `WebBlog/scripts/migrate-assets.mjs` 生成，请勿手工编辑。',
     '',
-    '目录结构与主仓库 `docs/` 保持一致，经 jsDelivr 提供加速：',
+    '目录结构与主仓库 `WebBlog/` 保持一致，经 jsDelivr 提供加速：',
     '',
     '```',
     'https://cdn.jsdelivr.net/gh/EchoHeim/Astapb-assets@main/<相对 docs 的路径>',

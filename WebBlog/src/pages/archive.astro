@@ -3,9 +3,10 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { withBase, formatDate } from '../utils/url';
 import { tagSlug } from '../utils/tags';
+import { sortPosts } from '../utils/posts';
 
 const all = await getCollection('posts', ({ data }) => !data.draft);
-const sorted = all.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const sorted = sortPosts(all);
 
 /** 按年份分组，年份内按时间倒序 */
 const byYear = new Map<string, typeof sorted>();

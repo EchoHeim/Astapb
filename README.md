@@ -19,9 +19,13 @@
 两个站点由**同一个 GitHub Pages 产物**提供 —— 因为一个仓库只能发布一个 Pages 站点，
 所以这里用 Actions 把两部分拼进同一产物，靠子路径区分。
 
-博客的文章源是 `docs/blog/` 下的 Markdown。**`docs/` 目录仍然保留在仓库里，
-但不再对外发布** —— 它同时充当文章内容源与旧 docsify 站点的历史存档。
-详见 [WebBlog/README](WebBlog/README.md)。
+> **正式部署目标只有 GitHub Pages。**
+> 账号 `echoheim-projects` 下另有一个同名 Vercel 项目连着本仓库，
+> 但它因项目设置里的 Node 版本过期而持续构建失败，**不是有效的部署目标**。
+> 详见 [WebBlog/README](WebBlog/README.md) 的「部署到 GitHub Pages」一节。
+
+博客的文章、图片与站点代码**全部在 `WebBlog/` 目录内**（2026-09-18 由仓库根的
+`docs/` 整体迁入），不再跨目录引用。详见 [WebBlog/README](WebBlog/README.md)。
 
 ---
 
@@ -29,8 +33,7 @@
 
 | 目录 | 内容 | 许可证 | 详细说明 |
 | --- | --- | --- | --- |
-| `WebBlog/` | 博客站（Astro，构建式）→ `/` | 代码 MIT<br>文章 CC BY-NC-SA 4.0 | [README](WebBlog/README.md) |
-| `docs/` | 博客的**文章内容源**（`blog/**/*.md`）与站点图片资源；docsify 机制已于 2026-09-18 删除 | 文章 CC BY-NC-SA 4.0<br>站点代码 MIT | [ABOUT](docs/ABOUT.md) |
+| `WebBlog/` | 博客站（Astro）→ `/`：文章源 `docs/`、图片 `images/` `sponsor/`、站点代码 `src/` | 代码 MIT<br>文章 CC BY-NC-SA 4.0 | [README](WebBlog/README.md) |
 | `WebSite/` | 网站导航站（纯静态）→ `/aa/` | 代码 MIT<br>图标归原权利人 | [README](WebSite/README.md) |
 | `CodeKey/` | 公众号「程序小猴」素材库 | **保留所有权利** | [README](CodeKey/README.md) |
 | `scripts/` | 实用小工具（Python / Shell） | MIT | [README](scripts/README.md) |
@@ -44,11 +47,11 @@
 推送到 `master` 后由 [`.github/workflows/publish.yml`](.github/workflows/publish.yml) 自动构建并发布：
 
 ```
-docs/blog/  ──►  (内容源，不直接发布)
-                    │
-WebBlog/    ──►  astro build  ──►  WebBlog/dist/  ──┐
-                                                     ├──►  _site/  ──►  GitHub Pages
-WebSite/   ──────────────────────────────────────────┘
+WebBlog/docs/  ──┐
+                 ├──►  astro build  ──►  WebBlog/dist/  ──┐
+WebBlog/src/   ──┘                                        │
+                                                          ├──►  _site/  ──►  GitHub Pages
+WebSite/  ────────────────────────────────────────────────┘
 
 _site/      = 博客  →  https://shilong.js.org/
 _site/aa/   = 导航  →  https://shilong.js.org/aa/
@@ -58,7 +61,7 @@ _site/aa/   = 导航  →  https://shilong.js.org/aa/
 第三方考研资料与前端源码都不再进入发布产物。
 
 **前置条件**：仓库 `Settings → Pages → Build and deployment → Source` 必须选择
-**GitHub Actions**，否则 `deploy-pages` 会报 `Get Pages site failed`。
+**GitHub Actions**（已于 2026-09-18 生效），否则 `deploy-pages` 会报 `Get Pages site failed`。
 
 ---
 

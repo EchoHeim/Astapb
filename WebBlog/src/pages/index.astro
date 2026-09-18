@@ -6,9 +6,10 @@ import Pager from '../components/Pager.astro';
 import { PAGE_SIZE, SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import { buildTagIndex } from '../utils/tags';
 import { formatDate, withBase } from '../utils/url';
+import { sortPosts } from '../utils/posts';
 
 const all = await getCollection('posts', ({ data }) => !data.draft);
-const sorted = all.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const sorted = sortPosts(all);
 
 const posts = sorted.slice(0, PAGE_SIZE);
 const lastPage = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));

@@ -1084,7 +1084,7 @@ plugins: [
 
 效果
 
-<left> ![](https://cdn.jsdelivr.net/gh/EchoHeim/Astapb@master/docs/images/logo.png 'logo')
+<left> ![](https://cdn.jsdelivr.net/gh/EchoHeim/Astapb@master/WebBlog/images/logo.png 'logo')
 
 
 

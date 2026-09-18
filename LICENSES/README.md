@@ -9,8 +9,8 @@
 
 | 文件 | 许可证 | 适用范围 |
 | --- | --- | --- |
-| [`MIT.txt`](MIT.txt) | MIT | 代码：`scripts/`、`.github/`、`docs/` 站点代码、`WebSite/` 代码 |
-| [`CC-BY-NC-SA-4.0.md`](CC-BY-NC-SA-4.0.md) | CC BY-NC-SA 4.0 | 原创图文：`docs/**/*.md`、`docs/images/`、`docs/sponsor/` |
+| [`MIT.txt`](MIT.txt) | MIT | 代码：`scripts/`、`.github/`、`WebBlog/` 站点代码、`WebSite/` 代码 |
+| [`CC-BY-NC-SA-4.0.md`](CC-BY-NC-SA-4.0.md) | CC BY-NC-SA 4.0 | 原创图文：`WebBlog/docs/**/*.md`、`WebBlog/images/`、`WebBlog/sponsor/images/` |
 
 ## 不在本目录的许可
 
@@ -19,8 +19,8 @@
 | 区域 | 声明位置 |
 | --- | --- |
 | `CodeKey/` —— 保留所有权利 | [`../CodeKey/LICENSE`](../CodeKey/LICENSE) |
-| `docs/blog/尚德机构-考研/` —— 第三方资料，未授权 | 该目录下的 `LICENSE` |
-| `docs/blog/港股打新/` —— 第三方资料，未授权 | 该目录下的 `LICENSE` |
+| `WebBlog/docs/尚德机构-考研/`、`尚德机构-考研-知识库/` —— 第三方资料，未授权 | 该目录下的 `LICENSE` |
+| `WebBlog/docs/港股打新/` —— 第三方资料，未授权 | 该目录下的 `LICENSE` |
 | `WebSite/` —— 代码 MIT + 第三方图标声明 | [`../WebSite/LICENSE`](../WebSite/LICENSE) |
 
 ---

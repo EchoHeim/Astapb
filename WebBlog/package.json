@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "MacLodge's Blog —— Astro 构建的静态博客，内容源指向 ../docs/blog",
+  "description": "MacLodge's Blog —— Astro 构建的静态博客；文章源为同目录下的 docs/",
   "scripts": {
     "sync": "node scripts/sync-content.mjs",
     "check": "node scripts/sync-content.mjs --check",

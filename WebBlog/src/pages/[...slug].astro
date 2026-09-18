@@ -4,12 +4,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { withBase, formatDate, absoluteUrl } from '../utils/url';
 import { tagSlug } from '../utils/tags';
 import { AUTHOR } from '../consts';
+import { sortPosts } from '../utils/posts';
 
 export async function getStaticPaths() {
   const all = await getCollection('posts', ({ data }) => !data.draft);
-  const sorted = all.sort(
-    (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-  );
+  const sorted = sortPosts(all);
 
   return sorted.map((post, i) => {
     // 相关阅读：同属一级标签、按时间取最近的几篇

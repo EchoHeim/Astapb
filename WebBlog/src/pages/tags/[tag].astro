@@ -4,15 +4,16 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostList from '../../components/PostList.astro';
 import { buildTagIndex } from '../../utils/tags';
 import { withBase } from '../../utils/url';
+import { sortPosts } from '../../utils/posts';
 
 export async function getStaticPaths() {
   const all = await getCollection('posts', ({ data }) => !data.draft);
   const index = buildTagIndex(all);
 
   return index.map((tag) => {
-    const posts = all
-      .filter((p) => p.data.tags.includes(tag.name))
-      .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+    const posts = sortPosts(
+      all.filter((p) => p.data.tags.includes(tag.name))
+    );
     return { params: { tag: tag.slug }, props: { tag, posts } };
   });
 }

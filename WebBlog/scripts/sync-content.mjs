@@ -3,11 +3,11 @@
  * 内容同步与体检 —— 在每次构建前自动运行（npm run build 会先触发 prebuild）。
  *
  * 它解决的是一个很实际的问题：
- *   docs/blog 下的 Markdown 是**手工维护**的，而新博客的文章列表、标签页、
- *   RSS 全部依赖 frontmatter。如果新加一篇没有 frontmatter 的文章，
+ *   `docs/`（Astro 工程内的内容目录）下的 Markdown 是**手工维护**的，而博客的
+ *   文章列表、标签页、RSS 全部依赖 frontmatter。如果新加一篇没有 frontmatter 的文章，
  *   Astro 的内容集合会直接校验失败、整个站点构建不出来。
  *
- * 所以这里在构建前把缺的补齐，让「往 docs/blog 丢一个 .md 就自动上线」
+ * 所以这里在构建前把缺的补齐，让「往内容目录丢一个 .md 就自动上线」
  * 这件事真正成立。脚本只补不删，可以反复运行。
  *
  * 用法：
@@ -22,8 +22,9 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT = path.resolve(HERE, '..');
 const REPO = path.resolve(PROJECT, '..');
-const DOCS = path.join(REPO, 'docs');
-const BLOG = path.join(DOCS, 'blog');
+// 内容与站点代码同在 WebBlog/ 下，不再跨目录引用
+// 注意目录名叫 docs —— 是 Astro 工程内部的 docs/，与仓库根曾有的同名目录无关
+const BLOG = path.join(PROJECT, 'docs');
 
 const CHECK_ONLY = process.argv.includes('--check');
 
@@ -85,7 +86,20 @@ function walk(dir, out = []) {
   return out;
 }
 
-/** 把仓库相对路径（git 输出，如 docs/blog/a.md）映射成 blog 相对路径 */
+/**
+ * 把仓库相对路径映射成「内容根之下的相对路径」。
+ *
+ * git 给的是**仓库相对**路径，而这个内容目录在 2026-09-18 一天内被挪过两次，
+ * 所以 git 历史里同时存在三种前缀：
+ *   最初    docs/blog/xxx.md
+ *   第一次   WebBlog/blog/xxx.md
+ *   第二次   WebBlog/docs/xxx.md
+ *
+ * 三种都必须剥掉，统一成 `Linux/xxx.md` 这样的键。
+ * 只处理其中一两种的话，另一部分文章会因为前缀对不上而取不到首次提交日期，
+ * **静默退化成文件 mtime**（不报错，只是日期全错）。
+ * 这也是为什么这里用一条枚举所有已知前缀的正则，而不是简单地 startsWith。
+ */
 function buildDateMap() {
   const map = new Map();
   try {
@@ -110,7 +124,10 @@ function buildDateMap() {
       }
       const p = line.trim();
       if (!p || !cur) continue;
-      const rel = p.startsWith('docs/') ? p.slice(5) : p;
+      const rel = p.replace(
+        /^(?:WebBlog\/blog|WebBlog\/docs|docs\/blog|blog|docs)\//,
+        ''
+      );
       if (!map.has(rel)) map.set(rel, cur.slice(0, 10));
     }
   } catch {
@@ -259,7 +276,7 @@ for (const file of files) {
     if (!date) {
       // git 历史优先；取不到（浅克隆 / 新文件）就用文件时间，对新增文章恰好正确
       date =
-        dateMap.get('blog/' + rel) ||
+        dateMap.get(rel) ||
         new Date(fs.statSync(file).mtime).toISOString().slice(0, 10);
     }
     let tags = data.tags;

@@ -5,10 +5,8 @@
 #   导航  WebSite/                    -> https://shilong.js.org/aa/
 #
 # 2026-09-18：博客已由 docsify 切换为 Astro，并接管根路径。
-#   `docs/` 目录仍然保留在仓库里 —— 它现在是博客的**内容源**
-#   （WebBlog/src/content.config.ts 指向 ../docs/blog），但不再参与发布。
-#   好处是产物从约 247 MB 降到约 2 MB，部署时间大幅缩短，
-#   同时原始 Markdown 与第三方资料不再被公开托管。
+#   博客的内容源（Markdown）与图片资源现在都在 WebBlog/ 目录内，
+#   与站点代码同处一个工程，不再跨目录引用。构建只需要 WebBlog/ 这一个目录。
 #
 # 使用前必须在仓库 Settings -> Pages -> Build and deployment -> Source
 # 选择 "GitHub Actions"，否则 deploy-pages 会报 Get Pages site failed。

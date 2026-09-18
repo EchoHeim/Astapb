@@ -1,12 +1,11 @@
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
 import { SITE_TITLE, SITE_DESCRIPTION, BASE_PATH } from '../consts';
+import { sortPosts } from '../utils/posts';
 
 export async function GET(context) {
   const all = await getCollection('posts', ({ data }) => !data.draft);
-  const sorted = all.sort(
-    (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-  );
+  const sorted = sortPosts(all);
 
   const base = (BASE_PATH || '').replace(/\/+$/, '');
 

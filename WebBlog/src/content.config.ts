@@ -2,10 +2,20 @@ import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 /**
- * 文章内容源指向 ../docs/blog —— 与现有 docsify 站点**共用同一份 Markdown**，
- * 不复制、不搬家，避免两处内容漂移。
+ * 文章内容源就是本项目的 `docs/` 目录。
  *
- * 因此这里必须显式排除三类东西：
+ * 注意这里的 `docs/` 是 **Astro 工程内部**的目录，与仓库根曾经存在的同名目录
+ * 没有任何关系（那个已随 docsify 一起删除）。
+ *
+ * 2026-09-18 这一天它被连续挪过两次：仓库根 `docs/blog/` → `WebBlog/blog/`
+ * → `WebBlog/docs/`。现在文章与站点代码同处一个工程，不再跨目录引用。
+ *
+ * 改目录名时**必须同步这几处**，漏一处就会出问题：
+ *   - 本文件的 `base`
+ *   - scripts/sync-content.mjs 的 BLOG 与其 git 前缀剥离规则
+ *   - scripts/migrate-assets.mjs 的 BLOG
+ *
+ * 这里必须显式排除三类东西：
  *   1. 站点维护文件   _sidebar.md / blog_start.md / 各级 README.md
  *   2. 索引页         Catalog/**（是导航页，不是文章）
  *   3. 第三方资料      尚德机构-考研 / 尚德机构-考研-知识库 / 港股打新
@@ -26,7 +36,7 @@ function slugSegment(s: string): string {
 
 const posts = defineCollection({
   loader: glob({
-    base: '../docs/blog',
+    base: './docs',
     pattern: [
       '**/*.md',
       '!**/_sidebar.md',

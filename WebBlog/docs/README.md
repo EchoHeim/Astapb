@@ -24,7 +24,7 @@
 
 - 微信公众号： 程序小猴 (欢迎扫码关注哦 🥤)
 
-![logo](https://cdn.jsdelivr.net/gh/EchoHeim/Astapb/docs/images/Qart_CodeMonkey.gif ':size=350x350')
+![logo](https://cdn.jsdelivr.net/gh/EchoHeim/Astapb@master/WebBlog/images/Qart_CodeMonkey.gif ':size=350x350')
 
 # 🍧 赞赏作者
 

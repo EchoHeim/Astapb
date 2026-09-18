@@ -12,11 +12,11 @@
 | --- | --- | --- | --- |
 | `scripts/` | 代码（Python / Shell 小工具） | **MIT** | `LICENSES/MIT.txt` |
 | `.github/` | CI 配置 | **MIT** | `LICENSES/MIT.txt` |
-| `docs/**/*.md` | 原创博客文章 | **CC BY-NC-SA 4.0** | `LICENSES/CC-BY-NC-SA-4.0.md` |
-| `docs/images/`、`docs/sponsor/` | 原创图片 | **CC BY-NC-SA 4.0** | 同上 |
-| `docs/` 站点代码（`index.html`、`pwa.js`、`css/`、`js/`、`plugin/`） | 代码 | **MIT** | `LICENSES/MIT.txt` |
-| `docs/blog/尚德机构-考研/` | **第三方付费课程资料** | **未授权，不适用任何开放许可** | 见该目录 `LICENSE` |
-| `docs/blog/港股打新/` | **第三方资料** | **未授权，不适用任何开放许可** | 见该目录 `LICENSE` |
+| `WebBlog/docs/**/*.md` | 原创博客文章 | **CC BY-NC-SA 4.0** | `LICENSES/CC-BY-NC-SA-4.0.md` |
+| `WebBlog/images/`、`WebBlog/sponsor/images/` | 原创图片 | **CC BY-NC-SA 4.0** | 同上 |
+| `WebBlog/src/`、`scripts/`、`astro.config.mjs`、`public/` | 站点代码 | **MIT** | `LICENSES/MIT.txt` |
+| `WebBlog/docs/尚德机构-考研/`、`尚德机构-考研-知识库/` | **第三方付费课程资料** | **未授权，不适用任何开放许可** | 见该目录 `LICENSE` |
+| `WebBlog/docs/港股打新/` | **第三方资料** | **未授权，不适用任何开放许可** | 见该目录 `LICENSE` |
 | `WebSite/` 代码（`*.html` `*.js` `*.css`） | 代码 | **MIT** | `LICENSES/MIT.txt` |
 | `WebSite/icon/`、`header/`、`search/`、`img/` | 第三方品牌图标 | 归各自权利人，仅作链接索引 | 见 `WebSite/LICENSE` |
 | `CodeKey/` | 公众号素材（微信表情包等） | **保留所有权利 (All Rights Reserved)** | 见 `CodeKey/LICENSE` |

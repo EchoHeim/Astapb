@@ -1,5 +1,6 @@
 import { getCollection } from 'astro:content';
 import { withBase } from '../utils/url';
+import { sortPosts } from '../utils/posts';
 
 /**
  * 搜索索引：构建时生成一份纯 JSON，由浏览器在打开搜索框时按需拉取。
@@ -27,16 +28,14 @@ function plain(md: string): string {
 export async function GET() {
   const posts = await getCollection('posts', ({ data }) => !data.draft);
 
-  const index = posts
-    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-    .map((post) => ({
-      t: post.data.title,
-      u: withBase(`${post.id}/`),
-      d: post.data.date.toISOString().slice(0, 10),
-      g: post.data.tags,
-      s: post.data.summary || '',
-      b: plain(post.body || '').slice(0, BODY_LIMIT),
-    }));
+  const index = sortPosts(posts).map((post) => ({
+    t: post.data.title,
+    u: withBase(`${post.id}/`),
+    d: post.data.date.toISOString().slice(0, 10),
+    g: post.data.tags,
+    s: post.data.summary || '',
+    b: plain(post.body || '').slice(0, BODY_LIMIT),
+  }));
 
   return new Response(JSON.stringify(index), {
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
