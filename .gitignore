@@ -17,3 +17,6 @@ a.out
 
 # Local analysis / scratch artifacts (keep .workbuddy/memory/ tracked)
 .workbuddy/_*
+
+# 考研资料转换质量审核报告（working artifact，含第三方资料渲染图，勿提交）
+_review/
