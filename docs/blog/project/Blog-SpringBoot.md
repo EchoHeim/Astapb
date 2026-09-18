@@ -1,10 +1,14 @@
-
-
+---
+title: 基于 SpringBoot 开发的个人博客
+date: 2022-06-23
+tags: [建站]
+summary: 个人博客功能：
+---
 # 基于 SpringBoot 开发的个人博客
 
 **个人博客功能：**
 
-![image-20200319171415655](../images/image-20200319171415655.png)
+![image-20200319171415655](https://gitee.com/wugenqiang/PictureBed/raw/master/CS-Notes/20200428121745.png)
 
 **技术组合：**
 

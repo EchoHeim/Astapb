@@ -1,3 +1,9 @@
+---
+title: 第三章 Python 的数据结构、函数和文件
+date: 2022-06-23
+tags: [Python, Python 数据分析]
+summary: 🐹 本章讨论Python的内置功能，这些功能本书会用到很多。虽然扩展库，比如pandas和Numpy，使处理大数据集很方便，但它们是和Python的内置数据处理工具一同使用的。 我们会从Python最…
+---
 # 第三章 Python 的数据结构、函数和文件
 
 > 🐹 本章讨论Python的内置功能，这些功能本书会用到很多。虽然扩展库，比如pandas和Numpy，使处理大数据集很方便，但它们是和Python的内置数据处理工具一同使用的。

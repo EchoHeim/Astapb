@@ -1,0 +1,21 @@
+---
+import { withBase } from '../utils/url';
+import { tagSlug } from '../utils/tags';
+import type { TagInfo } from '../utils/tags';
+
+interface Props {
+  tags: TagInfo[];
+}
+
+const { tags } = Astro.props;
+---
+
+<div class="tag-cloud">
+  {
+    tags.map((t) => (
+      <a class="tag" href={withBase(`tags/${t.slug}/`)}>
+        {t.name}<span class="count">{t.count}</span>
+      </a>
+    ))
+  }
+</div>

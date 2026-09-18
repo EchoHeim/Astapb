@@ -1,0 +1,182 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase, formatDate, absoluteUrl } from '../utils/url';
+import { tagSlug } from '../utils/tags';
+import { AUTHOR } from '../consts';
+
+export async function getStaticPaths() {
+  const all = await getCollection('posts', ({ data }) => !data.draft);
+  const sorted = all.sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+  );
+
+  return sorted.map((post, i) => {
+    // 相关阅读：同属一级标签、按时间取最近的几篇
+    const cat = post.data.tags[0];
+    const related = cat
+      ? sorted
+          .filter((p) => p.id !== post.id && p.data.tags[0] === cat)
+          .slice(0, 5)
+      : [];
+
+    return {
+      params: { slug: post.id },
+      props: {
+        post,
+        related,
+        newer: i > 0 ? sorted[i - 1] : undefined,
+        older: i < sorted.length - 1 ? sorted[i + 1] : undefined,
+      },
+    };
+  });
+}
+
+const { post, newer, older, related } = Astro.props;
+const { Content, headings } = await render(post);
+
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const category = post.data.tags[0];
+const subTags = post.data.tags.slice(1);
+
+/** 阅读时长：中文按字计、英文按词计，每分钟 400 字 */
+function readingMinutes(body = '') {
+  const text = body.replace(/```[\s\S]*?```/g, ' ').replace(/\s+/g, ' ');
+  const cjk = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
+  const words = (text.replace(/[\u4e00-\u9fa5]/g, ' ').match(/[A-Za-z0-9]+/g) || [])
+    .length;
+  return Math.max(1, Math.round((cjk + words * 1.5) / 400));
+}
+
+const minutes = readingMinutes(post.body);
+const canonical = absoluteUrl(`${post.id}/`);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.summary || '',
+  datePublished: post.data.date.toISOString(),
+  dateModified: post.data.date.toISOString(),
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+  author: { '@type': 'Person', name: AUTHOR.name, url: AUTHOR.github },
+  keywords: post.data.tags.join(', '),
+};
+---
+
+<BaseLayout title={post.data.title} description={post.data.summary} trackProgress>
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLd)}
+    is:inline
+  />
+
+  <article>
+    <header class="post-header">
+      <div class="post-meta">
+        <time datetime={post.data.date.toISOString()}>
+          {formatDate(post.data.date)}
+        </time>
+        <span>约 {minutes} 分钟</span>
+        {
+          category && (
+            <span class="tags">
+              <a class="tag" href={withBase(`tags/${tagSlug(category)}/`)}>
+                {category}
+              </a>
+              {subTags.map((t) => (
+                <a class="tag" href={withBase(`tags/${tagSlug(t)}/`)}>
+                  {t}
+                </a>
+              ))}
+            </span>
+          )
+        }
+      </div>
+      <h1>{post.data.title}</h1>
+    </header>
+
+    {
+      toc.length >= 3 && (
+        <details class="toc-inline">
+          <summary>本文目录（{toc.length} 节）</summary>
+          <ol>
+            {toc.map((h) => (
+              <li class={h.depth === 3 ? 'lvl3' : ''}>
+                <a href={`#${h.slug}`}>{h.text}</a>
+              </li>
+            ))}
+          </ol>
+        </details>
+      )
+    }
+
+    <div class="post-layout">
+      <div class="prose">
+        <Content />
+      </div>
+
+      {
+        toc.length >= 3 && (
+          <aside class="toc-rail" aria-label="文章目录">
+            <p class="toc-rail__title">目录</p>
+            <ol>
+              {toc.map((h) => (
+                <li class={h.depth === 3 ? 'lvl3' : ''}>
+                  <a href={`#${h.slug}`}>{h.text}</a>
+                </li>
+              ))}
+            </ol>
+          </aside>
+        )
+      }
+    </div>
+
+    <footer class="post-footer">
+      <nav class="post-nav" aria-label="上下篇">
+        {
+          older ? (
+            <a class="post-nav__item" href={withBase(`${older.id}/`)} rel="prev">
+              <span class="post-nav__label">← 上一篇</span>
+              <span class="post-nav__title">{older.data.title}</span>
+            </a>
+          ) : (
+            <span class="post-nav__item post-nav__item--empty">已经是最早一篇</span>
+          )
+        }
+        {
+          newer ? (
+            <a
+              class="post-nav__item post-nav__item--next"
+              href={withBase(`${newer.id}/`)}
+              rel="next"
+            >
+              <span class="post-nav__label">下一篇 →</span>
+              <span class="post-nav__title">{newer.data.title}</span>
+            </a>
+          ) : (
+            <span class="post-nav__item post-nav__item--empty">已经是最新一篇</span>
+          )
+        }
+      </nav>
+
+      {
+        related.length > 0 && (
+          <section class="related">
+            <h2>「{category}」下的其他文章</h2>
+            <ul>
+              {related.map((p) => (
+                <li>
+                  <time datetime={p.data.date.toISOString()}>
+                    {formatDate(p.data.date)}
+                  </time>
+                  <a href={withBase(`${p.id}/`)}>{p.data.title}</a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+    </footer>
+  </article>
+</BaseLayout>

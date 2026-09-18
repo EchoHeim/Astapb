@@ -1,3 +1,9 @@
+---
+title: VuePress 创建文档网站
+date: 2022-06-23
+tags: [建站]
+summary: 简单介绍一下，VuePress 是尤雨溪 2018 年 04 月 12 日发布的 Vue 静态网站生成器，支持 Vue 语法，内置 webpack，每一个由 VuePress 生成的页面都是通过 SS…
+---
 # VuePress 创建文档网站
 
 ## VuePress 介绍

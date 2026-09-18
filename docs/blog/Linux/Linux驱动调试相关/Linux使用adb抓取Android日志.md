@@ -1,3 +1,9 @@
+---
+title: Linux 使用 adb 抓取 Android 日志
+date: 2022-06-23
+tags: [Linux, Linux 驱动调试]
+summary: 有信息表示成功
+---
 ### <center> <font size=34 face="STKaiti"> Linux 使用 adb 抓取 Android 日志 </font>    <!-- {docsify-ignore} -->
 
 # 1. adb 安装

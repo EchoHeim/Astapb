@@ -1,3 +1,9 @@
+---
+title: Debian 文件系统移植
+date: 2022-06-23
+tags: [Linux, STM32MP157]
+summary: Linux 主机环境
+---
 ### <center> <font size=34 face="STKaiti"> Debian 文件系统移植 </font>    <!-- {docsify-ignore} -->
 
 # 1. 构建 Debian for ARM

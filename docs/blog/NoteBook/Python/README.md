@@ -1,3 +1,8 @@
+---
+title: Python 王国 ✨
+date: 2022-06-23
+tags: [Python]
+---
 # Python 王国 ✨
 
 ![](https://gitee.com/wugenqiang/PictureBed/raw/master/NoteBook/20200518090717.png)

@@ -1,3 +1,9 @@
+---
+title: 第五章 Pandas 入门
+date: 2022-06-23
+tags: [Python, Python 数据分析]
+summary: pandas是本书后续内容的首选库。它含有使数据清洗和分析工作变得更快更简单的数据结构和操作工具。pandas经常和其它工具一同使用，如数值计算工具NumPy和SciPy，分析库statsmodels…
+---
 # 第五章 Pandas 入门
 
 pandas是本书后续内容的首选库。它含有使`数据清洗`和`分析`工作变得更快更简单的数据结构和操作工具。pandas经常和其它工具一同使用，如数值计算工具NumPy和SciPy，分析库statsmodels和scikit-learn，和数据可视化库matplotlib。pandas是基于NumPy数组构建的，特别是基于数组的函数和不使用for循环的数据处理。

@@ -1,0 +1,56 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { withBase } from '../../utils/url';
+import { buildTagIndex } from '../../utils/tags';
+
+const all = await getCollection('posts', ({ data }) => !data.draft);
+
+// 一级分类 = 文章 tags 数组的第一项；其余算细分标签。
+// 分开呈现的原因：一级分类是"栏目"，数量少、稳定；细分标签是话题，
+// 混在一起会让标签页看起来是一堆无序的胶囊。
+const primary = new Set(all.map((p) => p.data.tags[0]).filter(Boolean));
+const tags = buildTagIndex(all);
+
+const categories = tags.filter((t) => primary.has(t.name));
+const subtags = tags.filter((t) => !primary.has(t.name));
+---
+
+<BaseLayout title="标签" description="按标签浏览全部文章" active="标签">
+  <section class="hero">
+    <h1>标签</h1>
+    <p>
+      {categories.length} 个分类 · {subtags.length} 个细分标签 · 覆盖 {all.length} 篇文章
+    </p>
+  </section>
+
+  <section class="tag-group">
+    <h2>分类</h2>
+    <div class="tag-cloud">
+      {
+        categories.map((t) => (
+          <a class="tag" href={withBase(`tags/${t.slug}/`)}>
+            {t.name}
+            <span class="count">{t.count}</span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  {
+    subtags.length > 0 && (
+      <section class="tag-group">
+        <h2>细分标签</h2>
+        <div class="tag-cloud">
+          {subtags.map((t) => (
+            <a class="tag" href={withBase(`tags/${t.slug}/`)}>
+              {t.name}
+              <span class="count">{t.count}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>

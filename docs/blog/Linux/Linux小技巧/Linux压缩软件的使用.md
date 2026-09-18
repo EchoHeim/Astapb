@@ -1,3 +1,9 @@
+---
+title: Linux 压缩软件的使用
+date: 2022-06-23
+tags: [Linux, Linux 小技巧]
+summary: "文件名 | 描述 :--- | :--- .Z | compress 程序压缩的档案 .bz2 | bzip2 程序压缩的档案 .gz | gzip 程序压缩的档案 .tar | tar 程序打包的数…"
+---
 ### <center> <font size=34 face="STKaiti"> Linux 压缩软件的使用 </font>    <!-- {docsify-ignore} -->
 
 # 1. 文件后缀名含义

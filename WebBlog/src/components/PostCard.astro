@@ -1,0 +1,33 @@
+---
+import { withBase, formatDate } from '../utils/url';
+import { tagSlug } from '../utils/tags';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+  /** 是否显示摘要（归档、搜索等密集列表可关掉） */
+  showSummary?: boolean;
+}
+
+const { post, showSummary = true } = Astro.props;
+const href = withBase(`${post.id}/`);
+---
+
+<li class="post-item">
+  <div class="post-meta">
+    <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+    {
+      post.data.tags.length > 0 && (
+        <span class="tags">
+          {post.data.tags.map((t) => (
+            <a class="tag" href={withBase(`tags/${tagSlug(t)}/`)}>
+              {t}
+            </a>
+          ))}
+        </span>
+      )
+    }
+  </div>
+  <h2><a href={href}>{post.data.title}</a></h2>
+  {showSummary && post.data.summary && <p class="post-summary">{post.data.summary}</p>}
+</li>

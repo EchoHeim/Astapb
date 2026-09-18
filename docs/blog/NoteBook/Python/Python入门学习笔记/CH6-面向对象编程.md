@@ -1,3 +1,9 @@
+---
+title: 第六章 面向对象编程
+date: 2022-06-23
+tags: [Python, Python 入门]
+summary: 面向对象编程——Object Oriented Programming，简称 OOP，是一种程序设计思想。OOP 把对象作为程序的基本单元，一个对象包含了数据和操作数据的函数。
+---
 # 第六章 面向对象编程
 
 面向对象编程——Object Oriented Programming，简称 OOP，是一种程序设计思想。OOP 把对象作为程序的基本单元，一个对象包含了数据和操作数据的函数。

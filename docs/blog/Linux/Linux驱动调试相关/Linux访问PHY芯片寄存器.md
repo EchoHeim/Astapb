@@ -1,3 +1,9 @@
+---
+title: Linux访问PHY芯片寄存器
+date: 2022-06-23
+tags: [Linux, Linux 驱动调试]
+summary: 在嵌入式linux开发中，可以通过smi/mdio总线访问PHY芯片寄存器，获取PHY芯片的状态。
+---
 ### <center> <font size=34 face="STKaiti"> Linux访问PHY芯片寄存器 </font>    <!-- {docsify-ignore} -->
 
 > 在嵌入式linux开发中，可以通过smi/mdio总线访问PHY芯片寄存器，获取PHY芯片的状态。

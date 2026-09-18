@@ -1,3 +1,9 @@
+---
+title: 多个Activity共享全局变量
+date: 2022-06-23
+tags: [Android]
+summary: 首先新建一个 activity 用来存放需要共享的全局变量的成员和方法，比如这里我新建一个 MyDataActivity
+---
 ### <center> <font size=34 face="STKaiti"> 多个Activity共享全局变量 </font>    <!-- {docsify-ignore} -->
 
 首先新建一个 `activity` 用来存放需要共享的全局变量的成员和方法，比如这里我新建一个 `MyDataActivity`

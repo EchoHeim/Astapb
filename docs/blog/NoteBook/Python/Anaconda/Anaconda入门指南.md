@@ -1,3 +1,9 @@
+---
+title: Anaconda 入门指南
+date: 2022-06-23
+tags: [Python, Anaconda]
+summary: 1、下载地址：Anaconda
+---
 # Anaconda 入门指南
 
 ## 一、下载安装 Anaconda

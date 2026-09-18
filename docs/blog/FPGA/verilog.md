@@ -1,3 +1,9 @@
+---
+title: Verilog
+date: 2023-07-02
+tags: [FPGA]
+summary: Quartus II 官方下载
+---
 ## 1. 开发环境
 
 [Quartus II 官方下载](https://www.intel.com/content/www/us/en/software-kit/711920/intel-quartus-ii-subscription-edition-design-software-version-13-0sp1-for-windows.html?)

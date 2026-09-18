@@ -1,0 +1,38 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostList from '../../components/PostList.astro';
+import { buildTagIndex } from '../../utils/tags';
+import { withBase } from '../../utils/url';
+
+export async function getStaticPaths() {
+  const all = await getCollection('posts', ({ data }) => !data.draft);
+  const index = buildTagIndex(all);
+
+  return index.map((tag) => {
+    const posts = all
+      .filter((p) => p.data.tags.includes(tag.name))
+      .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+    return { params: { tag: tag.slug }, props: { tag, posts } };
+  });
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<BaseLayout
+  title={`标签：${tag.name}`}
+  description={`标签「${tag.name}」下的 ${posts.length} 篇文章`}
+  active="标签"
+>
+  <section class="hero">
+    <h1>{tag.name}</h1>
+    <p>{posts.length} 篇文章</p>
+  </section>
+
+  <PostList posts={posts} />
+
+  <p style="margin-top:30px">
+    <a href={withBase('tags/')}>← 返回全部标签</a>
+  </p>
+</BaseLayout>

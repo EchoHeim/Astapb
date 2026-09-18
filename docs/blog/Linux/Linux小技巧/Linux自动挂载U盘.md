@@ -1,3 +1,9 @@
+---
+title: Linux 自动挂载U盘
+date: 2022-06-23
+tags: [Linux, Linux 小技巧]
+summary: Linux 自动挂载U盘 实现热插拔
+---
 ### <center> <font size=34 face="STKaiti"> Linux 自动挂载U盘 </font>    <!-- {docsify-ignore} -->
 
 > Linux 自动挂载U盘 实现热插拔

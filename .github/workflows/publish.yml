@@ -1,8 +1,14 @@
 # 构建单一产物并发布到 GitHub Pages
 #
-# 一个仓库只能发布 1 个 Pages 站点，因此这里把两个站点合并进同一个产物：
-#   博客  docs/      -> https://shilong.js.org/
-#   导航  WebSite/   -> https://shilong.js.org/aa/
+# 一个仓库只能发布 1 个 Pages 站点，因此这里把两部分合并进同一个产物：
+#   博客  WebBlog/  (Astro 构建产物)  -> https://shilong.js.org/
+#   导航  WebSite/                    -> https://shilong.js.org/aa/
+#
+# 2026-09-18：博客已由 docsify 切换为 Astro，并接管根路径。
+#   `docs/` 目录仍然保留在仓库里 —— 它现在是博客的**内容源**
+#   （WebBlog/src/content.config.ts 指向 ../docs/blog），但不再参与发布。
+#   好处是产物从约 247 MB 降到约 2 MB，部署时间大幅缩短，
+#   同时原始 Markdown 与第三方资料不再被公开托管。
 #
 # 使用前必须在仓库 Settings -> Pages -> Build and deployment -> Source
 # 选择 "GitHub Actions"，否则 deploy-pages 会报 Get Pages site failed。
@@ -12,7 +18,7 @@ name: Deploy sites to GitHub Pages
 on:
   push:
     branches: ["master"]
-    # 只更新素材库时不必重新部署两个站点（产物约 400+ MB，一次部署成本不低）
+    # 只更新素材库时不必重新部署
     paths-ignore:
       - "CodeKey/**"
   workflow_dispatch:
@@ -35,33 +41,47 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: WebBlog/package-lock.json
+
+      - name: Build new blog (Astro)
+        working-directory: WebBlog
+        run: |
+          npm ci
+          npm run build
+          # 产物结构自检：这几个文件缺失说明内容集合没读到文章
+          for f in index.html rss.xml sitemap-index.xml search-index.json favicon.ico; do
+            test -f "dist/$f" || { echo "缺少 dist/$f"; exit 1; }
+          done
+          echo "文章页数：$(find dist -name index.html | wc -l)"
+
       - name: Assemble site
         run: |
           set -euo pipefail
           rm -rf _site
           mkdir -p _site
 
-          # 博客：docs/ 的内容直接放到产物根目录
-          cp -r docs/. _site/
+          # 博客：Astro 产物直接放到站点根目录
+          cp -r WebBlog/dist/. _site/
 
           # 导航站：WebSite/ 的内容放到子路径 aa/
           mkdir -p _site/aa
           cp -r WebSite/. _site/aa/
-
-          # 清理不该对外发布的本地目录
           rm -rf _site/aa/.workbuddy
           rm -f _site/aa/README.md
 
-          # 可选：排除第三方版权资料，可同时大幅加快部署（约减少 400 MB）
-          # rm -rf "_site/blog/尚德机构-考研" "_site/blog/港股打新"
-
           # 自定义域名必须位于产物根目录，否则每次部署都会被重置
           echo "shilong.js.org" > _site/CNAME
-          # 关闭 Jekyll，避免下划线开头的文件（_sidebar.md 等）被过滤
+          # 关闭 Jekyll（本产物已是纯静态，不需要它再做一次处理）
           touch _site/.nojekyll
 
           echo "---- artifact preview ----"
           ls -la _site
+          du -sh _site
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

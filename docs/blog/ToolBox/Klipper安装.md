@@ -1,3 +1,9 @@
+---
+title: Klipper安装
+date: 2022-06-23
+tags: [ToolBox]
+summary: "! 国内网络访问 github 有时会很慢，可以参考 这篇文章 改善一下"
+---
 ### <center> <font size=34 face="STKaiti"> Klipper安装 </font>    <!-- {docsify-ignore} -->
 
 # 1. git 下载kiauh脚本

@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostList from '../../components/PostList.astro';
+import Pager from '../../components/Pager.astro';
+import { PAGE_SIZE } from '../../consts';
+
+export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
+  const all = await getCollection('posts', ({ data }) => !data.draft);
+  const sorted = all.sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+  );
+  // 第 1 页由 index.astro 负责，这里只产出第 2 页起
+  return paginate(sorted, { pageSize: PAGE_SIZE }).slice(1);
+};
+
+const { page } = Astro.props;
+---
+
+<BaseLayout title={`第 ${page.currentPage} 页`}>
+  <h2 class="section-title" style="margin-top:34px">
+    最新文章
+    <span class="count">（第 {page.currentPage} / {page.lastPage} 页）</span>
+  </h2>
+  <PostList posts={page.data} />
+  <Pager
+    currentPage={page.currentPage}
+    lastPage={page.lastPage}
+    prefix=""
+    urlPattern="page/[page]/"
+  />
+</BaseLayout>

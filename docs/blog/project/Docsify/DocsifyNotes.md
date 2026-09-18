@@ -1,3 +1,9 @@
+---
+title: Docsify 使用手册
+date: 2022-06-23
+tags: [建站]
+summary: "在软件开发过程中，编程人员经常需要写文档，如开发文档、接口 API 文档、软件使用手册等，也会编写 Blog 记录开发过程，技术感悟（比如我的博客：MacLodge's Blog ）。"
+---
 ### <center> <font size=34 face="STKaiti"> Docsify 使用手册 </font>    <!-- {docsify-ignore} -->
 
 # 0. 引言

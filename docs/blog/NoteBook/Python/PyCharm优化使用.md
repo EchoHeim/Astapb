@@ -1,3 +1,9 @@
+---
+title: PyCharm 优化使用
+date: 2022-06-23
+tags: [Python]
+summary: 1、打开设置对话框
+---
 # PyCharm 优化使用
 
 ## 设置 Python 路径（解释器设置）

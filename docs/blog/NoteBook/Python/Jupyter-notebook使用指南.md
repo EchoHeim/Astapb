@@ -1,3 +1,9 @@
+---
+title: Jupyter notebook 使用指南
+date: 2022-06-23
+tags: [Python]
+summary: 在我们的日常学习中，能够编写和运行 Python 文件的程序很多，比如 Python 安装自带的 IDE、程序员喜爱的Pycharm、数据科学全家桶 Anaconda，还有 Spyder、Thonny…
+---
 # Jupyter notebook 使用指南
 
 ## 前言

@@ -1,3 +1,9 @@
+---
+title: Shell脚本编程
+date: 2022-06-23
+tags: [NoteBook]
+summary: "!/bin/bash !/bin/sh"
+---
 # Shell脚本编程
 
 ## 声明脚本解释器

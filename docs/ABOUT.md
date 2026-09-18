@@ -1,88 +1,65 @@
 # docs/ 工作区说明
 
-> 本目录是 **MacLodge's Blog** 的源目录，线上地址 <https://shilong.js.org/>。
+> ⚠️ **本目录不对外发布，也不再有任何站点代码。**
+> 线上站点由 `WebBlog/`（Astro）构建并部署到 <https://shilong.js.org/>。
+>
+> 本目录现在只有一个职责：**博客的文章内容源**。
+> `blog/**/*.md` 被 `WebBlog/src/content.config.ts` 读取，
+> 文章列表、标签页、归档、RSS、搜索索引全部由它们生成。
 
-## 为什么这里叫 ABOUT.md 而不是 README.md
+## 2026-09-18 清理了什么
 
-docsify 会把 **`README.md` 当作站点首页**渲染，所以 `docs/README.md` 已经被占用
-（内容是个人简介、公众号二维码、赞赏码），它属于**站点内容**而不是维护说明。
+docsify 那一整套已经删除，共 105 个文件 / 约 14 MB：
 
-因此本目录的维护说明单独放在 `ABOUT.md`，不参与站点渲染。
-
----
-
-## 站点是怎么工作的
-
-| 文件 / 目录 | 作用 |
+| 已删 | 说明 |
 | --- | --- |
-| `index.html` | docsify 入口，所有插件与站点配置都在这里（`window.$docsify`） |
-| `_coverpage.md` | 封面页 |
-| `_navbar.md` | 顶部导航栏 |
-| `.nojekyll` | 关闭 GitHub Pages 的 Jekyll 处理，否则 `_` 开头的文件会被过滤 |
-| `CNAME` | 自定义域名 `shilong.js.org`（部署时由 workflow 在产物根重新写入） |
-| `favicon.ico` | 站点图标 |
-| `pwa.js` | 离线化支持（当前在 `index.html` 中被注释，未启用） |
-| `README.md` | 站点首页（个人简介 / 公众号 / 赞赏） |
-| `LICENSE` | 本目录的许可说明 |
+| `index.html`、`_coverpage.md`、`_navbar.md`、`README.md` | docsify 入口与站点配置 |
+| `css/`、`js/` | 站点样式与脚本（search.js、jquery、goup、click_heart…） |
+| `plugin/` | 58 个自托管资源（docsify 本体、Prism、KaTeX、Mermaid…） |
+| `pwa.js`、`CNAME`、`.nojekyll` | 离线化与发布相关文件；域名现在由 workflow 写入产物根 |
+| `sponsor/{README.md,drinks,simple,src}` | 赞赏页的 docsify 实现 + 2 MB 的 artitalk / jquery |
+| `blog/**/_sidebar.md`（14 个）、`blog/Catalog/`（5 个）、`blog/blog_start.md` | 手写导航与索引页，新站点全部自动生成 |
 
-启用的 docsify 能力：侧边栏、导航栏、封面、分页导航、字数统计、全文搜索、
-页脚、emoji、图片缩放、代码复制、回到顶部、Live2D 看板娘、访问量统计。
+如果想恢复其中某一部分，它们都还在 git 里：
 
-**侧边栏与导航栏的规则**：docsify 会去**当前路径下**找 `_sidebar.md` / `_navbar.md`。
-根目录没有 `_sidebar.md`，所以首页不显示侧边栏；进入 `blog/` 后会加载 `blog/_sidebar.md`，
-再进入子分类又会加载该子目录自己的 `_sidebar.md`。
+```bash
+git restore docs/plugin            # 恢复整个目录
+git restore docs/blog/_sidebar.md  # 恢复单个文件
+```
 
----
+## 保留了什么，为什么
 
-## 内容分区（`blog/`）
-
-| 目录 | 内容 |
+| 保留 | 原因 |
 | --- | --- |
-| `Catalog/` | 各分类的集中索引页（C++、Python、ToolBox、Android） |
-| `Android/` | Android 开发随笔 |
-| `C_C++/` | C++ 学习笔记、C 语言实用技巧 |
-| `FPGA/` | Verilog 基础知识（环境、语法、状态机、编程规范） |
-| `Linux/` | Linux 应用编程、小技巧、驱动调试、raspberryPi、stm32mp157 |
-| `LVGL/` | LVGL 图形库笔记 |
-| `NoteBook/` | Python 体系（入门 / 数据分析 / 数据结构）、Shell、正则、工具 |
-| `Python/` | 实用脚本笔记（如自动上报本机 IP） |
-| `ToolBox/` | Git、Klipper、Markdown、Shell 语法、域名与网络工具 |
-| `project/` | 静态站生成器对比（Docsify / Docute / Hexo / Jekyll / VuePress） |
-| `尚德机构-考研/` | ⚠️ **第三方付费课程资料**，未授权，见该目录 `LICENSE` |
-| `港股打新/` | ⚠️ **第三方资料**，未授权，见该目录 `LICENSE` |
+| `blog/**/*.md` | 文章内容源，**动它就是改线上文章** |
+| `blog/NoteBook/Python/vgsales.csv` | 被 `6小时Python入门.md` 引用的数据文件 |
+| `images/` | 新站点通过 jsDelivr 依赖：`Qart_CodeMonkey.gif`、`logo.png`、`coverpage.png` |
+| `sponsor/images/` | 新站点关于页依赖：`AliPayQR.png`、`WeChatQR.png` |
+| `ABOUT.md`、`LICENSE` | 本说明与许可声明 |
+| `favicon.ico` | 站点图标的原始文件（已复制到 `WebBlog/public/`） |
+| `FreeBorders.md` | **一篇原创文章**（Clash 客户端用法），但它不在 `blog/` 下，所以新站点读不到 —— 待决定是搬进 `blog/ToolBox/` 还是删除 |
 
-站点资源目录：`css/`（样式）、`js/`（脚本）、`plugin/`（本地插件）、
-`images/`（图片）、`sponsor/`（赞赏页）。
+> 注意：`images/` 里还有几个只服务于旧站点的文件（`2233.gif` 是 docsify 角标、
+> `avatar_fuki/koko.jpeg` 是聊天插件头像、`cute_01.gif` 是复制弹窗配图），
+> 合计约 1 MB。没有删是因为它们无害，且可能被你后续复用。
 
----
+## 改文章的约定
 
-## 新增一篇文章
+**改 `blog/**/*.md` 就是在改线上内容。** 具体流程见 [WebBlog/README](../WebBlog/README.md)，
+要点：
 
-1. 在对应分类目录下新建 `.md` 文件（例如 `blog/Linux/Linux小技巧/xxx.md`）；
-2. 在**该分类的** `_sidebar.md` 里加一条链接 —— 不加链接文章不会被导航到，
-   但全文搜索仍可能命中；
-3. 提交并推送，workflow 会自动重新部署；
-4. 注意：文章默认按 **CC BY-NC-SA 4.0** 授权，转载时请保留原文链接与出处。
+1. 新文章放 `docs/blog/<分类>/`，**不写 frontmatter 也能发** ——
+   构建前的 `sync-content.mjs` 会自动补全标题、日期、标签、摘要；
+2. `git commit && git push`，GitHub Actions 自动构建发布；
+3. **不要用相对路径引用图片** —— 文件不存在会让构建直接失败。
+   不确定就先跑 `cd WebBlog && npm run check`；
+4. 想先不发：frontmatter 里加 `draft: true`。
 
-`index.html` 里引用站点自身资源时请使用**相对路径**（如 `css/custom.css`），
-不要用 `../` —— 一旦站点被移动到子路径，`../` 会立刻失效。
+## 与线上站点的关系
 
----
-
-## 许可
-
-| 内容 | 许可证 |
+| 你改的东西 | 会影响线上吗 |
 | --- | --- |
-| 文章 `**/*.md`、原创图片 | CC BY-NC-SA 4.0 |
-| 站点代码 `index.html`、`pwa.js`、`css/`、`js/`、`plugin/` | MIT |
-| 第三方资料目录 | 未授权，不适用任何开放许可 |
-
-许可正文见 [`../LICENSES/`](../LICENSES/) 与 [LICENSE](LICENSE)。
-
----
-
-## 部署关系
-
-本目录的内容会被 `.github/workflows/publish.yml` **整体复制到产物根目录**，
-因此 `docs/index.html` 就是 <https://shilong.js.org/> 的入口页面。
-修改目录结构时请同步检查 workflow 中的复制逻辑。
+| `blog/**/*.md` | ✅ 会（内容源） |
+| `images/`、`sponsor/images/` | ✅ 会（jsDelivr 直接分发，注意有缓存延迟） |
+| `ABOUT.md`、`LICENSE` | ❌ 不会，只是仓库内的说明 |
+| 其它任何文件 | ❌ 不会，本目录已无站点代码 |

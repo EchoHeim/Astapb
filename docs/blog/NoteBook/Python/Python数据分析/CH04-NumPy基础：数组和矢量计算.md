@@ -1,3 +1,9 @@
+---
+title: 第四章 Numpy 基础
+date: 2022-06-23
+tags: [Python, Python 数据分析]
+summary: NumPy（Numerical Python的简称）是Python数值计算最重要的基础包。大多数提供科学计算的包都是用NumPy的数组作为构建基础。
+---
 # 第四章 Numpy 基础
 
 NumPy（Numerical Python的简称）是Python数值计算最重要的基础包。大多数提供科学计算的包都是用NumPy的数组作为构建基础。

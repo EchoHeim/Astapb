@@ -1,3 +1,9 @@
+---
+title: string 类
+date: 2022-06-23
+tags: [C/C++, C++ 学习笔记]
+summary: 在 C++ 中，大大加强了对字符串的支持和处理，除了兼容 C 语言的字符串，还内置了完全可以替换 C 语言中的字符数组和字符串指针的 string 类。
+---
 ### <center> <font size=34 face="STKaiti"> string 类 </font>    <!-- {docsify-ignore} -->
 
 # 1. 引言

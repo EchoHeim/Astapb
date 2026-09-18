@@ -1,3 +1,9 @@
+---
+title: Linux 文件共享
+date: 2022-06-23
+tags: [Linux, Linux 小技巧]
+summary: Linux 主机与嵌入式开发板文件共享
+---
 ### <center> <font size=34 face="STKaiti"> Linux 文件共享 </font>    <!-- {docsify-ignore} -->
 
 # 1. NFS服务

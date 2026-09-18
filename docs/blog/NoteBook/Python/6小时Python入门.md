@@ -1,3 +1,9 @@
+---
+title: 6 小时 Python 入门
+date: 2022-06-23
+tags: [Python]
+summary: 以下操作均在 Windows 环境下进行操作，先说明一下哈
+---
 # 6 小时 Python 入门
 
 > 以下操作均在 Windows 环境下进行操作，先说明一下哈

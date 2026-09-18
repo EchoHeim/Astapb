@@ -1,0 +1,124 @@
+---
+import {
+  type SearchDoc,
+  loadIndex,
+  renderHits,
+  scoreDocs,
+} from '../scripts/search';
+---
+
+<dialog class="search-dialog" id="search-dialog" aria-label="搜索文章">
+  <div class="search-dialog__head">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" aria-hidden="true">
+      <circle cx="11" cy="11" r="7" />
+      <path d="M20 20l-4.3-4.3" />
+    </svg>
+    <input
+      class="search-input"
+      id="search-input"
+      type="search"
+      placeholder="搜索标题、标签或正文…"
+      autocomplete="off"
+      spellcheck="false"
+      aria-label="搜索关键词"
+      aria-controls="search-results"
+    />
+    <span class="search-dialog__hint">Esc</span>
+  </div>
+  <ul class="search-results" id="search-results" role="listbox"></ul>
+</dialog>
+
+<script>
+  import { type SearchDoc, loadIndex, renderHits, scoreDocs } from '../scripts/search';
+
+  const dialog = document.getElementById('search-dialog') as HTMLDialogElement | null;
+  const input = document.getElementById('search-input') as HTMLInputElement | null;
+  const list = document.getElementById('search-results') as HTMLUListElement | null;
+
+  if (dialog && input && list) {
+    let docs: SearchDoc[] | null = null;
+    let loading: Promise<SearchDoc[]> | null = null;
+    let activeIndex = -1;
+    let hits: ReturnType<typeof scoreDocs> = [];
+
+    function ensureIndex(): Promise<SearchDoc[]> {
+      if (docs) return Promise.resolve(docs);
+      // 首次打开搜索才拉索引，避免给首屏增加负担
+      loading ??= loadIndex().then((d) => (docs = d));
+      return loading;
+    }
+
+    function render(query: string) {
+      hits = scoreDocs(docs || [], query);
+      activeIndex = -1;
+      renderHits(list!, hits, query, activeIndex);
+    }
+
+    function moveActive(delta: number) {
+      const anchors = Array.from(list!.querySelectorAll<HTMLAnchorElement>('a'));
+      if (!anchors.length) return;
+      activeIndex = (activeIndex + delta + anchors.length) % anchors.length;
+      anchors.forEach((a, i) =>
+        a.setAttribute('data-active', String(i === activeIndex))
+      );
+      anchors[activeIndex].scrollIntoView({ block: 'nearest' });
+    }
+
+    async function open() {
+      if (dialog!.open) return;
+      dialog!.showModal();
+      input!.value = '';
+      list!.innerHTML = '<li class="search-empty">正在载入索引…</li>';
+      input!.focus();
+      await ensureIndex();
+      render('');
+    }
+
+    document.querySelectorAll('[data-search-open]').forEach((btn) => {
+      btn.addEventListener('click', open);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      const t = e.target as HTMLElement;
+      const typing =
+        t instanceof HTMLInputElement ||
+        t instanceof HTMLTextAreaElement ||
+        t.isContentEditable;
+      if (typing) return;
+      // 键盘优先：/ 或 Ctrl/Cmd+K 唤起搜索
+      if (e.key === '/' || (e.key.toLowerCase() === 'k' && (e.metaKey || e.ctrlKey))) {
+        e.preventDefault();
+        void open();
+      }
+    });
+
+    let debounce: number | undefined;
+    input.addEventListener('input', () => {
+      window.clearTimeout(debounce);
+      debounce = window.setTimeout(() => render(input!.value), 90);
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        moveActive(1);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        moveActive(-1);
+      } else if (e.key === 'Enter') {
+        const anchors = Array.from(list!.querySelectorAll<HTMLAnchorElement>('a'));
+        const target = anchors[activeIndex >= 0 ? activeIndex : 0];
+        if (target) {
+          e.preventDefault();
+          location.href = target.href;
+        }
+      }
+    });
+
+    dialog.addEventListener('click', (e) => {
+      // 点击遮罩空白处关闭
+      if (e.target === dialog) dialog!.close();
+    });
+  }
+</script>

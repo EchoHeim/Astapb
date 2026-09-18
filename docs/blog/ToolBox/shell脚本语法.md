@@ -1,3 +1,9 @@
+---
+title: shell 脚本语法
+date: 2023-01-09
+tags: [ToolBox]
+summary: Shell 既是一种命令语言，又是一种程序设计语言。
+---
 ### <center> <font size=34 face="STKaiti"> shell 脚本语法 </font>    <!-- {docsify-ignore} -->
 
 # 1. 前言

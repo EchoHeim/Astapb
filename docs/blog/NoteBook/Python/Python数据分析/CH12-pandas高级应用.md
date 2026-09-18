@@ -1,3 +1,9 @@
+---
+title: 第十二章 Pandas 高级应用
+date: 2022-06-23
+tags: [Python, Python 数据分析]
+summary: 前面的章节关注于不同类型的数据规整流程和NumPy、pandas与其它库的特点。随着时间的发展，pandas发展出了更多适合高级用户的功能。本章就要深入学习pandas的高级功能。
+---
 # 第十二章 Pandas 高级应用
 
 前面的章节关注于不同类型的数据规整流程和NumPy、pandas与其它库的特点。随着时间的发展，pandas发展出了更多适合高级用户的功能。本章就要深入学习pandas的高级功能。

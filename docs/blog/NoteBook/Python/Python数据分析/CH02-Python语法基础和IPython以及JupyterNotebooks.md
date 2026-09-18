@@ -1,3 +1,9 @@
+---
+title: 第二章 Python 语法基础，IPython 和 Jupyter Notebooks
+date: 2022-06-23
+tags: [Python, Python 数据分析]
+summary: 我们现在使用的库，有 pandas、scikit-learn 和 statsmodels，2017年，数据科学、数据分析和机器学习的资源已经很多，原来通用的科学计算拓展到了计算机科学家、物理学家和其它…
+---
 # 第二章 Python 语法基础，IPython 和 Jupyter Notebooks
 
 > 我们现在使用的库，有 pandas、scikit-learn 和 statsmodels，2017年，数据科学、数据分析和机器学习的资源已经很多，原来通用的科学计算拓展到了计算机科学家、物理学家和其它研究领域的工作人员。学习 Python 和成为软件工程师的优秀书籍也有了。

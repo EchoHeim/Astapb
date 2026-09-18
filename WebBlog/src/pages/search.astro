@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="搜索" description="搜索全部文章" hideSearch>
+  <section class="hero">
+    <h1>搜索</h1>
+    <p>输入关键词，匹配标题、标签与正文。</p>
+  </section>
+
+  <div style="margin-top:24px">
+    <input
+      class="search-page-input"
+      id="page-search-input"
+      type="search"
+      placeholder="例如：树莓派 / pandas / 中断"
+      autocomplete="off"
+      spellcheck="false"
+      aria-label="搜索关键词"
+      aria-controls="page-search-results"
+    />
+  </div>
+
+  <h2 class="section-title" id="page-search-title">全部文章</h2>
+  <ul class="search-results" id="page-search-results" role="listbox"></ul>
+</BaseLayout>
+
+<script>
+  import { loadIndex, renderHits, scoreDocs } from '../scripts/search';
+
+  const input = document.getElementById('page-search-input') as HTMLInputElement | null;
+  const list = document.getElementById('page-search-results') as HTMLUListElement | null;
+  const title = document.getElementById('page-search-title');
+
+  if (input && list) {
+    let docs = (await loadIndex()).sort((a, b) => (a.d < b.d ? 1 : -1));
+    const total = docs.length;
+
+    function render(query: string) {
+      if (query.trim()) {
+        const hits = scoreDocs(docs, query);
+        if (title) title.textContent = `找到 ${hits.length} 篇`;
+        renderHits(list!, hits, query, -1);
+      } else {
+        if (title) title.textContent = `全部文章（${total}）`;
+        renderHits(
+          list!,
+          docs.map((doc) => ({ doc, score: 0 })),
+          '',
+          -1
+        );
+      }
+    }
+
+    let debounce: number | undefined;
+    input.addEventListener('input', () => {
+      window.clearTimeout(debounce);
+      debounce = window.setTimeout(() => render(input!.value), 90);
+    });
+
+    render('');
+    input.focus();
+
+    const q = new URLSearchParams(location.search).get('q');
+    if (q) {
+      input.value = q;
+      render(q);
+    }
+  }
+</script>

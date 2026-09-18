@@ -1,0 +1,54 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase, formatDate } from '../utils/url';
+import { tagSlug } from '../utils/tags';
+
+const all = await getCollection('posts', ({ data }) => !data.draft);
+const sorted = all.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+/** 按年份分组，年份内按时间倒序 */
+const byYear = new Map<string, typeof sorted>();
+for (const post of sorted) {
+  const y = String(post.data.date.getFullYear());
+  if (!byYear.has(y)) byYear.set(y, []);
+  byYear.get(y)!.push(post);
+}
+const years = [...byYear.keys()].sort((a, b) => Number(b) - Number(a));
+---
+
+<BaseLayout title="归档" description="按时间浏览全部文章" active="归档">
+  <section class="hero">
+    <h1>归档</h1>
+    <p>
+      {sorted.length} 篇文章 · 跨 {years.length} 年
+    </p>
+  </section>
+
+  {
+    years.map((y) => (
+      <section class="archive-year">
+        <h2>
+          {y} 年<span class="count">（{byYear.get(y)!.length} 篇）</span>
+        </h2>
+        <ul class="archive-list">
+          {byYear.get(y)!.map((post) => (
+            <li>
+              <time datetime={post.data.date.toISOString()}>
+                {formatDate(post.data.date).slice(5)}
+              </time>
+              <a href={withBase(`${post.id}/`)}>{post.data.title}</a>
+              <span class="tags">
+                {post.data.tags.slice(0, 1).map((t) => (
+                  <a class="tag" href={withBase(`tags/${tagSlug(t)}/`)}>
+                    {t}
+                  </a>
+                ))}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</BaseLayout>

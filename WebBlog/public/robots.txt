@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /aa/
+
+Sitemap: https://shilong.js.org/sitemap-index.xml

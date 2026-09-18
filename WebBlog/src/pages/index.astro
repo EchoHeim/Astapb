@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostList from '../components/PostList.astro';
+import Pager from '../components/Pager.astro';
+import { PAGE_SIZE, SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { buildTagIndex } from '../utils/tags';
+import { formatDate, withBase } from '../utils/url';
+
+const all = await getCollection('posts', ({ data }) => !data.draft);
+const sorted = all.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const posts = sorted.slice(0, PAGE_SIZE);
+const lastPage = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
+const tagCount = buildTagIndex(all).length;
+const span = `${formatDate(sorted[sorted.length - 1].data.date)} 起`;
+---
+
+<BaseLayout description={SITE_DESCRIPTION}>
+  <section class="hero">
+    <h1>{SITE_TITLE}</h1>
+    <p>{SITE_DESCRIPTION}</p>
+    <div class="hero__stats">
+      <span><b>{sorted.length}</b> 篇文章</span>
+      <span><b>{tagCount}</b> 个标签</span>
+      <span>{span}</span>
+      <span><a href={withBase('rss.xml')}>RSS 订阅</a></span>
+    </div>
+  </section>
+
+  <h2 class="section-title">
+    最新文章<span class="count">（共 {sorted.length} 篇）</span>
+  </h2>
+  <PostList posts={posts} />
+  <Pager currentPage={1} lastPage={lastPage} prefix="" urlPattern="page/[page]/" />
+</BaseLayout>

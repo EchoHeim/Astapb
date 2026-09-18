@@ -1,0 +1,26 @@
+---
+import { SITE_TITLE, AUTHOR } from '../consts';
+import { withBase } from '../utils/url';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <p>
+      &copy; {year} {SITE_TITLE} · 原创内容采用
+      <a
+        href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"
+        target="_blank"
+        rel="noopener noreferrer">CC BY-NC-SA 4.0</a
+      > 许可协议，转载请注明出处。
+    </p>
+    <p>
+      <a href={`mailto:${AUTHOR.email}`}>{AUTHOR.email}</a>
+      · <a href={AUTHOR.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+      · <a href={withBase('rss.xml')}>RSS 订阅</a>
+      · <a href={withBase('search/')}>搜索</a>
+      · <a href="/aa/" target="_blank" rel="noopener noreferrer">导航站</a>
+    </p>
+  </div>
+</footer>

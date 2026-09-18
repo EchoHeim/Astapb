@@ -1,3 +1,9 @@
+---
+title: Docute 4 创建文档网站
+date: 2022-06-23
+tags: [建站]
+summary: Docute 本质上就是一个 JavaScript 文件，它可以获取 Markdown 文件并将它们呈现为单页面应用。
+---
 # Docute 4 创建文档网站
 
 ## 1 Docute 介绍

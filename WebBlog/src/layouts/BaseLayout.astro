@@ -1,0 +1,300 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SearchDialog from '../components/SearchDialog.astro';
+import {
+  SITE_TITLE,
+  SITE_DESCRIPTION,
+  AUTHOR,
+  THEME_STORAGE_KEY,
+} from '../consts';
+import { withBase, absoluteUrl } from '../utils/url';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** og:image */
+  image?: string;
+  active?: string;
+  /** 文章页显示阅读进度条 */
+  trackProgress?: boolean;
+  /** 搜索页自带输入框，不需要再挂全局搜索弹窗 */
+  hideSearch?: boolean;
+}
+
+const {
+  title,
+  description,
+  image,
+  active,
+  trackProgress = false,
+  hideSearch = false,
+} = Astro.props;
+const pageTitle = title ? `${title} · ${SITE_TITLE}` : SITE_TITLE;
+const desc = description || SITE_DESCRIPTION;
+const canonical = absoluteUrl(Astro.url.pathname.replace(withBase(''), ''));
+---
+
+<!doctype html>
+<html lang="zh-CN" data-theme="light" data-theme-key={THEME_STORAGE_KEY}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={desc} />
+    <link rel="canonical" href={canonical} />
+
+    <link rel="icon" href={withBase('favicon.ico')} sizes="any" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={SITE_TITLE}
+      href={withBase('rss.xml')}
+    />
+    <link rel="sitemap" type="application/xml" href={withBase('sitemap-index.xml')} />
+
+    <meta property="og:type" content={title ? 'article' : 'website'} />
+    <meta property="og:site_name" content={SITE_TITLE} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:url" content={canonical} />
+    {image && <meta property="og:image" content={image} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="author" content={AUTHOR.name} />
+
+    <script is:inline>
+      // 主题必须在首屏绘制前定下来，否则会闪一下默认色。
+      // 这里刻意写成内联同步脚本：外链模块脚本来不及在首次绘制前执行。
+      (function () {
+        var root = document.documentElement;
+        try {
+          var saved = localStorage.getItem(root.dataset.themeKey || 'blog-theme');
+          var theme =
+            saved === 'light' || saved === 'dark'
+              ? saved
+              : window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light';
+          root.setAttribute('data-theme', theme);
+        } catch (e) {
+          /* 隐私模式下 localStorage 会抛异常，忽略即可 */
+        }
+      })();
+    </script>
+
+    <script is:inline>
+      // 老站点用 docsify 的 hash 路由（/#/blog/...），接管根路径后这些外链会失效。
+      // 这里把已知形态的旧链接就地重定向到新地址，避免访客停在空白页。
+      (function () {
+        var hash = location.hash;
+        if (!hash || hash.indexOf('#/') !== 0) return;
+        var p = hash.slice(2).split('?')[0].split('#')[0];
+        try {
+          p = decodeURIComponent(p);
+        } catch (e) {}
+        p = p.replace(/^\/+/, '');
+        if (!p) return;
+
+        if (p === 'blog/README' || p === 'blog/README.md' || p === 'README.md') {
+          location.replace('/about/');
+          return;
+        }
+        if (p.indexOf('blog_start') === 0) {
+          location.replace('/');
+          return;
+        }
+
+        var slug =
+          '/' +
+          p
+            .replace(/^blog\//, '')
+            .replace(/\.md$/i, '')
+            .split('/')
+            .map(function (s) {
+              return s
+                .toLowerCase()
+                .replace(/\+\+/g, 'pp')
+                .replace(/\+/g, 'p')
+                .replace(/\s+/g, '-')
+                .replace(/[^\w\u4e00-\u9fa5-]/g, '')
+                .replace(/-+/g, '-')
+                .replace(/^-|-$/g, '');
+            })
+            .join('/') +
+          '/';
+        location.replace(slug);
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到主要内容</a>
+
+    {trackProgress && <div class="progress" id="progress" aria-hidden="true"></div>}
+
+    <Header active={active} />
+
+    <main id="main" class="container">
+      <slot />
+    </main>
+
+    <Footer />
+    {!hideSearch && <SearchDialog />}
+
+    <button class="to-top" id="to-top" type="button" aria-label="回到顶部" data-show="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 19V5M5 12l7-7 7 7" />
+      </svg>
+    </button>
+
+    <script>
+      const themeKey =
+        document.documentElement.dataset.themeKey || 'blog-theme';
+
+      /* -------- 主题切换 -------- */
+      function currentTheme() {
+        return document.documentElement.getAttribute('data-theme') === 'dark'
+          ? 'dark'
+          : 'light';
+      }
+      function applyTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        try {
+          localStorage.setItem(themeKey, t);
+        } catch {
+          /* 忽略 */
+        }
+        document.dispatchEvent(new CustomEvent('themechange', { detail: t }));
+      }
+      document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          applyTheme(currentTheme() === 'dark' ? 'light' : 'dark');
+        });
+      });
+      // 没手动选过就跟着系统走
+      window
+        .matchMedia('(prefers-color-scheme: dark)')
+        .addEventListener('change', (e) => {
+          let saved = null;
+          try {
+            saved = localStorage.getItem(themeKey);
+          } catch {
+            /* 忽略 */
+          }
+          if (saved !== 'light' && saved !== 'dark') {
+            document.documentElement.setAttribute(
+              'data-theme',
+              e.matches ? 'dark' : 'light'
+            );
+          }
+        });
+
+      /* -------- 移动端导航抽屉 -------- */
+      const nav = document.getElementById('site-nav');
+      const navToggle = document.querySelector('[data-nav-toggle]');
+      if (nav && navToggle) {
+        const setOpen = (open) => {
+          nav.dataset.open = String(open);
+          navToggle.setAttribute('aria-expanded', String(open));
+        };
+        setOpen(false);
+        navToggle.addEventListener('click', () =>
+          setOpen(nav.dataset.open !== 'true')
+        );
+        nav.addEventListener('click', (e) => {
+          if (e.target instanceof HTMLAnchorElement) setOpen(false);
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') setOpen(false);
+        });
+      }
+
+      /* -------- 回到顶部 -------- */
+      const toTop = document.getElementById('to-top');
+      if (toTop) {
+        toTop.addEventListener('click', () =>
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        );
+      }
+
+      /* -------- 滚动相关：进度条 + 回到顶部显隐 + 目录高亮 -------- */
+      const progress = document.getElementById('progress');
+      const tocLinks = Array.from(
+        document.querySelectorAll<HTMLAnchorElement>('.toc-rail a[href^="#"]')
+      );
+      const headings = tocLinks
+        .map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))))
+        .filter((el): el is HTMLElement => Boolean(el));
+
+      let ticking = false;
+      function onScroll() {
+        const y = window.scrollY;
+        if (progress) {
+          const max = document.body.scrollHeight - window.innerHeight;
+          progress.style.width =
+            max > 0 ? `${Math.min(100, (y / max) * 100)}%` : '0%';
+        }
+        if (toTop) toTop.dataset.show = String(y > 600);
+
+        if (headings.length) {
+          // 取最后一个已经滚过顶部安全线的标题作为当前章节
+          let idx = -1;
+          for (let i = 0; i < headings.length; i++) {
+            if (headings[i].getBoundingClientRect().top <= 88) idx = i;
+            else break;
+          }
+          tocLinks.forEach((a, i) =>
+            a.setAttribute('aria-current', String(i === idx))
+          );
+        }
+        ticking = false;
+      }
+      window.addEventListener(
+        'scroll',
+        () => {
+          if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(onScroll);
+          }
+        },
+        { passive: true }
+      );
+      onScroll();
+
+      /* -------- 代码块复制按钮 -------- */
+      document.querySelectorAll<HTMLElement>('.prose pre').forEach((pre) => {
+        if (pre.querySelector('.code-copy')) return;
+        const code = pre.querySelector('code');
+        if (!code) return;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'code-copy';
+        btn.textContent = '复制';
+        btn.addEventListener('click', async () => {
+          const text = code.innerText;
+          try {
+            await navigator.clipboard.writeText(text);
+          } catch {
+            // 非 HTTPS 或旧浏览器：退回选区方案
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            ta.remove();
+          }
+          btn.textContent = '已复制';
+          btn.dataset.done = 'true';
+          setTimeout(() => {
+            btn.textContent = '复制';
+            delete btn.dataset.done;
+          }, 1600);
+        });
+        pre.appendChild(btn);
+      });
+    </script>
+  </body>
+</html>

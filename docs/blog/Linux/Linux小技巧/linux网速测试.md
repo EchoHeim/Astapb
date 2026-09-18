@@ -1,3 +1,9 @@
+---
+title: Linux网络速率测试
+date: 2022-06-23
+tags: [Linux, Linux 小技巧]
+summary: 此程序是基于Python开发的脚本程序，利用了speedtest.net的服务来测量出上下行的宽带。Speedtest-cli能根据机房离测速服务器的物理距离来列出测速服务器，或者针对某一服务器进行测…
+---
 ### <center> <font size=34 face="STKaiti"> Linux网络速率测试 </font>    <!-- {docsify-ignore} -->
 
 # 1. speedtest工具介绍
