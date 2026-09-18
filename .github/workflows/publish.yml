@@ -1,0 +1,83 @@
+# 构建单一产物并发布到 GitHub Pages
+#
+# 一个仓库只能发布 1 个 Pages 站点，因此这里把两个站点合并进同一个产物：
+#   博客  docs/      -> https://shilong.js.org/
+#   导航  WebSite/   -> https://shilong.js.org/aa/
+#
+# 使用前必须在仓库 Settings -> Pages -> Build and deployment -> Source
+# 选择 "GitHub Actions"，否则 deploy-pages 会报 Get Pages site failed。
+
+name: Deploy sites to GitHub Pages
+
+on:
+  push:
+    branches: ["master"]
+    # 只更新素材库时不必重新部署两个站点（产物约 400+ MB，一次部署成本不低）
+    paths-ignore:
+      - "CodeKey/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Assemble site
+        run: |
+          set -euo pipefail
+          rm -rf _site
+          mkdir -p _site
+
+          # 博客：docs/ 的内容直接放到产物根目录
+          cp -r docs/. _site/
+
+          # 导航站：WebSite/ 的内容放到子路径 aa/
+          mkdir -p _site/aa
+          cp -r WebSite/. _site/aa/
+
+          # 清理不该对外发布的本地目录
+          rm -rf _site/aa/.workbuddy
+          rm -f _site/aa/README.md
+
+          # 可选：排除第三方版权资料，可同时大幅加快部署（约减少 400 MB）
+          # rm -rf "_site/blog/尚德机构-考研" "_site/blog/港股打新"
+
+          # 自定义域名必须位于产物根目录，否则每次部署都会被重置
+          echo "shilong.js.org" > _site/CNAME
+          # 关闭 Jekyll，避免下划线开头的文件（_sidebar.md 等）被过滤
+          touch _site/.nojekyll
+
+          echo "---- artifact preview ----"
+          ls -la _site
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

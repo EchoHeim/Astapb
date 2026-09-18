@@ -14,3 +14,6 @@
 *.swp
 *.tar.gz
 a.out
+
+# Local analysis / scratch artifacts (keep .workbuddy/memory/ tracked)
+.workbuddy/_*

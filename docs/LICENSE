@@ -1,0 +1,33 @@
+# docs/ 目录许可
+
+本目录是个人知识博客站点（docsify），内容按类型分别授权。
+
+## 适用范围
+
+| 内容 | 许可证 |
+| --- | --- |
+| 文章正文 `**/*.md` | **CC BY-NC-SA 4.0** |
+| 原创图片 `images/`、`sponsor/` | **CC BY-NC-SA 4.0** |
+| 站点代码 `index.html`、`pwa.js`、`css/`、`js/`、`plugin/` | **MIT** |
+| `blog/尚德机构-考研/` | **第三方资料，未授权** —— 见该目录 `LICENSE` |
+| `blog/港股打新/` | **第三方资料，未授权** —— 见该目录 `LICENSE` |
+| 第三方 CDN 资源与 docsify 插件 | 版权归各自作者，按其原始许可证使用 |
+
+许可正文：
+
+- CC BY-NC-SA 4.0 → `../LICENSES/CC-BY-NC-SA-4.0.md`
+- MIT → `../LICENSES/MIT.txt`
+
+## 转载要求
+
+转载文章时请保留原文链接并注明来源：
+
+> 本文作者：MacLodge（程序小猴）
+> 原文地址：https://shilong.js.org/
+> 许可协议：CC BY-NC-SA 4.0
+
+**禁止将本目录内容用于商业用途**（付费课程、出版物、商品化周边等）。
+
+---
+
+Copyright (c) 2022-present MacLodge (EchoHeim) <shilong.native@foxmail.com>
