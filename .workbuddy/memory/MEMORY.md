@@ -37,6 +37,23 @@
 - GitHub：单文件 >100 MB 直接拒绝；仓库建议 <1 GB。当前最大单文件 81.46 MB，已很接近。
 - GitHub Pages：**一个仓库只能发布 1 个站点**（分支目录或 Actions 产物其一），且只能绑 1 个自定义域名。
 
+## 文档落点约定
+| 文件 | 内容 |
+| --- | --- |
+| `README.md` | 根总览：定位 / 两站点 / 工作区导航表 / 部署 / 联系 / 历史 |
+| `docs/ABOUT.md` | docs 工作区说明 —— **不能叫 README.md**，该名被 docsify 占用为站点首页 |
+| `WebSite/README.md`、`CodeKey/README.md`、`scripts/README.md`、`LICENSES/README.md`、`.github/README.md` | 各工作区说明 |
+
+注意：`docs/blog/README.md`、`docs/sponsor/README.md`、`docs/blog/project/README.md`、
+`docs/blog/NoteBook/Python/README.md`、`scripts/report_ip/README.md` 是**站点内容/子说明**，不是工作区 README。
+
+## 待处理风险（尚未修复）
+- **凭据泄漏**：`scripts/report_ip/autoemail.py` 含明文 SMTP 授权码、`scripts/test.sh` 含明文 WiFi 密码，
+  均已在 git 历史 → 需轮换凭据。**改文件无效。**
+- `git` 不跟踪空目录：`CodeKey/AI 日报/`、`WebSite/icon/{digital,net,others}` 克隆后不存在。
+- WebSite 图标 404 根因：`create.js` 按分类中文名拼路径，与 `main.js` 数据不匹配。
+- 考研/港股第三方资料仍公开在仓库；git 历史体积未清理。
+
 ## 约定
 - 中文目录/文件名 → 建议 `git config core.quotepath false`。
 - `.gitignore` 已加 `.workbuddy/_*`，避免本地扫描临时文件被误提交（`.workbuddy/memory/` 仍需跟踪）。
