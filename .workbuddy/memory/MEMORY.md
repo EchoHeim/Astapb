@@ -19,7 +19,7 @@
 - 零 UI 框架；图标池 `src/lib/icons.ts` 用 `import.meta.glob('/icon/**/*.png')`，key=文件名。**别改回按分类中文名拼路径的旧思路**（曾 24/97 静默 404）。缺图标→首字母色块兜底，**不许用别家 logo 顶替**。
 - `scripts/verify-icons.mjs`（prebuild）靠 Node 22.18+ 原生 TS type-stripping import `.ts` 数据模块，坏图标 exit 1。
 - 主题契约：`data-theme` + `data-theme-key="nav-theme"` + 内联防闪脚本；`tokens.css` 的 dark 值是旧站原始值，**改它就是改视觉保真**。锚点高亮用整行（多列换行时单锚点会亮错行）。
-- `vite.config.ts` 的 `base:'/aa/'`；`WebSite/.gitignore` 必须是 `.workbuddy/`（根 `.gitignore` 的 `.workbuddy/_*` 锚定根目录，管不到子目录）。
+- 图标归一化：`scripts/normalize-icon.py` + `scripts/normalize-icons-batch.py` 把 `icon/`、`header/`、`search/` 的品牌 logo 批量处理成 256×256 统一圆形色板风格，保留原 logo 图形与颜色，仅统一画布/背景板。处理前先备份到 `.workbuddy/_backup/original-icons/`。
 
 ## 部署
 - 正式：GitHub Pages，域名 `shilong.js.org`。`publish.yml` 构建单一产物：`WebBlog/dist/.`→根 + `WebSite/dist/.`→`/aa/`；Node 22，缓存两个 package-lock；前提 **Settings→Pages→Source = "GitHub Actions"**。
