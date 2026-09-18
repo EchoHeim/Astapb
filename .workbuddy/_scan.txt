@@ -1,0 +1,88 @@
+=== docs top ===
+d---- blog
+d---- css
+d---- images
+d---- js
+d---- plugin
+d---- sponsor
+-a--- _coverpage.md
+-a--- _navbar.md
+-a--- .nojekyll
+-a--- CNAME
+-a--- favicon.ico
+-a--- FreeBorders.md
+-a--- index.html
+-a--- pwa.js
+-a--- README.md
+=== docs subdirs (depth2) ===
+blog
+css
+images
+js
+plugin
+sponsor
+blog\港股打新
+blog\尚德机构-考研
+blog\Android
+blog\C_C++
+blog\Catalog
+blog\FPGA
+blog\Linux
+blog\LVGL
+blog\NoteBook
+blog\project
+blog\Python
+blog\ToolBox
+blog\C_C++\C++学习笔记
+blog\C_C++\C语言实用技巧
+blog\Linux\Linux驱动调试相关
+blog\Linux\Linux小技巧
+blog\Linux\Linux应用编程
+blog\Linux\raspberryPi
+blog\Linux\stm32mp157
+blog\NoteBook\Python
+blog\project\Docsify
+blog\project\Docute
+blog\project\Hexo-Butterfly
+blog\project\Hexo-NexT
+blog\project\Jekyll
+blog\project\VuePress
+blog\尚德机构-考研\1221-考前冲刺
+blog\尚德机构-考研\22级考试大纲及解析
+blog\尚德机构-考研\笔试小册子
+blog\尚德机构-考研\逻辑
+blog\尚德机构-考研\模考
+blog\尚德机构-考研\数学
+blog\尚德机构-考研\写作
+blog\尚德机构-考研\英语
+plugin\css
+plugin\js
+sponsor\drinks
+sponsor\images
+sponsor\simple
+sponsor\src
+sponsor\src\css
+sponsor\src\js
+=== extension stats ===
+.pdf : 162
+.md : 142
+.js : 62
+.sh : 40
+ : 33
+.svg : 15
+.css : 14
+.sample : 13
+.png : 11
+.pptx : 9
+.c : 6
+.docx : 5
+.cfg : 3
+.py : 3
+.html : 3
+.gif : 3
+.rules : 2
+.jpeg : 2
+.ico : 2
+.conf : 2
+=== total size MB ===
+754.96

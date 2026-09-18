@@ -1,0 +1,24 @@
+=== git log ===
+647b04f Create CNAME
+86072a0 Delete CNAME
+b038944 Create publish
+4c40a5b 鏍峰紡淇敼
+c9ce9bb 鏍峰紡淇敼
+49fd2f0 浠ｇ爜鍧楁牸寮忓寲
+7d285e7 鏍煎紡鍖栦唬鐮?459efd6 澧炲姞verilog鍩虹鐭ヨ瘑
+d40ac12 澧炲姞Clash浣跨敤璇存槑鏂囨。
+63e76ab Merge branch 'master' of github.com:EchoHeim/Astapb
+56088f7 鏍煎紡鍖栦唬鐮?9101fd4 澧炲姞 绠＄悊绫昏仈鑰?璧勬枡
+cdab47b 澧炲姞 娓偂鎵撴柊 pdf璧勬枡
+9ea6456 merge
+cef40e7 Formatting Code js/css
+7aeb03d update readme
+98570b7 update shell MD
+d3c91e2 add backup sh
+56afd10 scripts change
+b7d0a68 update h616 menu
+
+=== sub .git dirs ===
+D:\Personal\Astapb\.git
+=== docs/CNAME ===
+shilong.js.org
