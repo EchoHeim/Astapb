@@ -1,5 +1,6 @@
 import { CATEGORIES } from '../data/categories';
 import { h } from './dom';
+import { scrollLine } from './header';
 
 export interface AnchorsHandle {
   /** 网格重渲染后调用：同步存在性并重新绑定滚动高亮。 */
@@ -76,7 +77,10 @@ export function createAnchors(container: HTMLElement): AnchorsHandle {
       return;
     }
 
-    const line = window.innerHeight * 0.25;
+    // 判定线取吸顶搜索区的下沿：卡片从下面滚上来、刚露出一点即算「当前」。
+    // 搜索区高度不是常量（视口变窄会让锚点换行），所以由 lib/header.ts 统一量，
+    // 不能再用固定比例的 innerHeight。
+    const line = scrollLine();
 
     // 当前行 = 第一条尚未滚过该线的卡片所在的整行。
     // 不能只看 top：同一行内所有卡片的 top 完全相同。

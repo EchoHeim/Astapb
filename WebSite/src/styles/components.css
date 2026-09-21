@@ -51,12 +51,18 @@
 
 .search-box input {
   width: 100%;
-  height: 4rem;
-  line-height: 4rem;
-  padding: 0 2em;
-  font-size: 1.2rem;
+  height: 3.1rem;
+  line-height: 3.1rem;
+  padding: 0 2.9rem 0 1.4rem;
+  font-size: 1.1rem;
   border-radius: 30px;
-  background: url('../../img/search.png') no-repeat right center var(--surface);
+  /* 拆成独立属性而不用 background 简写：简写会连 background-size 一起重置，
+     而右侧那个放大镜必须缩放 —— 原图 56px 比 3.1rem 高的输入框还高，不缩放会被裁掉。 */
+  background-color: var(--surface);
+  background-image: url('../../img/search.png');
+  background-repeat: no-repeat;
+  background-position: right 1.1rem center;
+  background-size: 1.25rem 1.25rem;
 }
 
 .search-box input::placeholder {
@@ -71,11 +77,20 @@
   background-color: var(--surface-hover);
 }
 
-/* 搜索框下方那个装饰 Logo（旧 HTML 里就是紧跟 input 的一个 img） */
+/*
+ * 搜索框左侧的品牌 Logo，挂在行的**外侧**（right: 100%）。
+ *
+ * 之前让它参与流内布局，结果搜索框被推离视口正中约 33px ——
+ * 「居中」是这次的硬要求，所以抽出流内。挂在外面意味着窄屏会跑出可视区，
+ * 因此 650px 以下直接隐藏（它本就是 alt="" 的装饰元素）。
+ */
 .search-logo {
-  width: 1.5rem;
-  margin-top: 0.5rem;
-  margin-left: 0.5rem;
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 0.75rem);
+  transform: translateY(-50%);
+  width: 1.6rem;
+  height: 1.6rem;
 }
 
 /* ---------------- 分类锚点（新增） ---------------- */
@@ -83,9 +98,8 @@
 .anchors {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.3rem;
-  margin-top: 2rem;
-  overflow-y: auto;
 }
 
 .anchors a {
@@ -107,15 +121,19 @@
 
 /* ---------------- 提示文案（旧 #search p） ---------------- */
 
+/*
+ * 提示文案。旧版是左栏底部竖排的四行，字号只有 0.6rem（根字号 14px → 8.4px），
+ * 已低于可读下限，而它承载的恰好是「怎么用」这条核心说明。
+ * 搬到顶部后改成单行居中，字号提到 0.75rem。
+ */
 #searchHint {
-  padding: 2rem 0;
-  font-size: 0.6rem;
-  line-height: 1.9;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.1rem 0.9rem;
+  font-size: 0.75rem;
+  line-height: 1.6;
   color: var(--muted);
-}
-
-#searchHint span {
-  display: block;
 }
 
 #searchHint a {
@@ -132,13 +150,14 @@
 
 /* ---------------- 搜索引擎图标列（旧 #searchItem） ---------------- */
 
+/* 图标从 3rem 收到 2.4rem：吸顶区每一像素都在吃视口高度。
+   间距改由 #searchItem 的 gap 提供（见 layout.css），不再用 li 的 margin。 */
 #searchItem li {
-  width: 3rem;
-  height: 3rem;
-  margin: 0.3rem;
+  width: 2.4rem;
+  height: 2.4rem;
   border-radius: 2rem;
   overflow: hidden;
-  box-shadow: 0 2px 2px 2px var(--shadow-1);
+  box-shadow: 0 1px 1px 1px var(--shadow-1);
 }
 
 .engine {
@@ -153,8 +172,9 @@
 
 /* ---------------- 分类卡片（旧 .item / .wrap） ---------------- */
 
+/* 列间距交给 #grid 的 gap，这里不留 margin —— 有 margin 的话卡片会在固定轨道内缩进，
+   实际宽度就不等于 --col-w 了。 */
 .item {
-  margin: 0 1rem;
   overflow: hidden;
   /* 旧版由 JS 内联算 height，这里交给 CSS 变量，分类各自的可见条数可配 */
   height: calc(12rem + var(--row-h) * var(--visible, 6));
@@ -212,6 +232,19 @@
 .site:hover mark,
 .site:focus-visible mark {
   background: rgba(255, 255, 255, 0.3);
+}
+
+/*
+ * 列宽固定之后，长站名（TheNounProject、黑神话·悟空Wiki）必须能被裁掉，
+ * 否则会溢出卡片。同时强制单行 —— .item 的高度是按「一条占一行」算的
+ * （12rem + 2.6rem × visible），一旦某条折成两行，可见条数就对不上了。
+ * 完整站名仍可从 <li title> 的悬浮提示看到。
+ */
+.site-name {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .site img,
@@ -275,8 +308,12 @@
 
 /* ---------------- 空状态 ---------------- */
 
+/* 空状态是 #grid 的直接子项，而 #grid 现在是网格：
+   不跨满全部列的话，它会被塞进一个 --col-w 宽的格子里。 */
 .empty {
-  margin: 2rem 1rem;
+  grid-column: 1 / -1;
+  margin: 2rem 0;
   font-size: 0.95rem;
+  text-align: center;
   color: var(--muted);
 }

@@ -9,6 +9,7 @@ import { TOTAL_SITES } from './data/categories';
 import { DEFAULT_ENGINE_ID, ENGINES } from './data/engines';
 import { createAnchors } from './lib/anchors';
 import { mount, openExternal } from './lib/dom';
+import { observeHeaderHeight } from './lib/header';
 import { createGrid, renderEngines } from './lib/render';
 import { initTheme } from './lib/theme';
 
@@ -70,6 +71,11 @@ window.addEventListener('keydown', (event) => {
 });
 
 initTheme(mount('#themeToggle'));
+
+// 量出吸顶搜索区的高度写进 --header-h：锚点跳转的避让距离（CSS）与
+// 滚动高亮的判定线（anchors.ts）都读它。要在 syncQuery() 之前跑，
+// 免得首屏那一次 refresh 用到兜底值。
+observeHeaderHeight();
 
 // 首屏：不过滤，渲染全部 17 个分类
 hintCount.textContent = `共 ${TOTAL_SITES} 个站点`;

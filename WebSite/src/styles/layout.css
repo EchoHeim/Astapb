@@ -1,49 +1,86 @@
-/* 页面骨架。三栏结构、20% 固定左栏、18vh/20vh 的顶距都与旧 style.css 一致。 */
+/*
+ * 页面骨架：顶部居中的搜索区 + 下方固定列宽的分类网格。
+ *
+ * 布局演进：旧版是三栏结构 —— 左栏占 20% 流式宽度、内部再 position: fixed，
+ * 搜索框与一列纵向的引擎图标钉在左侧。现在整块搜索区搬到顶部并居中，
+ * 分类网格拿到完整页宽，因此列数可以更多、排布也更规整。
+ */
 
 #main {
   display: flex;
-  align-items: flex-start;
+  flex-flow: column nowrap;
   min-height: 100%;
 }
 
-/* 左栏占 20% 流式宽度，内部再固定定位，滚动时搜索框不跟着跑 */
+/*
+ * 搜索区吸顶。
+ *
+ * 之所以要 sticky 而不是普通流式：旧版的左栏是 fixed 的，搜索框任何时候都在。
+ * 若改成普通流式，17 个分类的长页面滚两屏之后搜索框就够不着了 ——
+ * 那是相对旧版的功能退化。桌面端保持常驻，移动端在 responsive.css 里放开。
+ */
 #search {
-  flex: 0 0 20%;
-  align-self: stretch;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  width: 100%;
+  background: var(--bg);
 }
 
 #search > div {
-  position: fixed;
   display: flex;
   flex-flow: column nowrap;
-  align-items: stretch;
-  padding: 20% 1rem 0 1rem;
-  width: 20%;
-  height: 100%;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem 0.75rem 1rem;
 }
 
-/* 提示文案钉在左栏底部（旧版靠 space-between 实现，这里改用 auto 外边距，
-   这样中间多插一个分类锚点也不会把它顶走） */
-#searchHint {
-  margin-top: auto;
+/* 搜索框那一行。整行居中且宽度就是输入框宽度 —— Logo 是绝对定位的，
+   不占流内空间，否则它会把输入框往右挤出视口正中。 */
+.search-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 34rem;
 }
 
-/* 搜索引擎那一列 */
+/* min-width: 0 让输入框能在窄屏下收缩，否则 flex 子项不会小于内容宽度 */
+.search-box {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* 搜索引擎图标：横向一排、居中换行 */
 #searchItem {
-  margin-top: 20vh;
-  margin-right: 2rem;
-}
-
-#content {
-  margin-top: 18vh;
-}
-
-#content > div {
   display: flex;
   flex-flow: row wrap;
+  justify-content: center;
+  gap: 0.35rem;
 }
 
-/* 锚点跳转时给卡片留一点上边距，别贴着视口顶 */
+/* 分类网格拿到整页宽度 */
+#content {
+  width: 100%;
+  padding: 1.5rem 1rem 4rem 1rem;
+}
+
+/*
+ * 固定列宽网格。
+ *
+ * `repeat(auto-fill, var(--col-w))` 让浏览器按容器宽度决定列数，但每列恒为 --col-w；
+ * 不够放下一列的剩余空间由 justify-content: center 均分到两侧，gap 保持恒定。
+ * 这正好满足「每列宽度固定 + 整体居中」，而 flex 的 row wrap 做不到
+ * —— flex 下各卡片按自身内容宽度排布，宽度参差不齐（旧版就是这么回事）。
+ */
+#grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, var(--col-w));
+  gap: 1.25rem;
+  justify-content: center;
+}
+
+/* 锚点跳转时避开吸顶的搜索区。--header-h 由 lib/header.ts 量出后写入 */
 .item[id^='cat-'] {
-  scroll-margin-top: 2rem;
+  scroll-margin-top: calc(var(--header-h) + 1rem);
 }

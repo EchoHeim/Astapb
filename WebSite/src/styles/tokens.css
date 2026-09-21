@@ -10,6 +10,16 @@
   /* 折叠卡片的行高：图标 2rem + 上下 padding 各 .3rem，
      与旧 create.js 里 `height = 12 + 2.6 * n rem` 的 2.6 是同一个数 */
   --row-h: 2.6rem;
+
+  /* 分类网格的固定列宽。每个卡片恒为这个宽度，不随内容伸缩，
+     剩余空间由 #grid 的 justify-content: center 均分到两侧。
+     13rem 是按最长站名（TheNounProject / 黑神话·悟空Wiki）实测定的：
+     图标 2rem + 间距 .3rem + 文字约 11.6rem + 左右 padding 2rem ≈ 12.1rem，留一点余量。 */
+  --col-w: 13rem;
+
+  /* 吸顶搜索区的高度。JS 会在挂载后量出真实值覆盖它（见 lib/header.ts），
+     这里只作为 ResizeObserver 生效前的兜底，避免首帧锚点跳转被遮挡。 */
+  --header-h: 9rem;
 }
 
 [data-theme='dark'] {
@@ -27,6 +37,9 @@
   --fade-to: rgba(43, 43, 43, 1);
   --mark-bg: rgba(47, 179, 136, 0.3);
   --ring: #2fb388;
+  /* 暗色下原本缺这一项，导致 .theme-toggle 与吸顶区分隔线的 border 声明整条失效。
+     浅色版在下面，两套都给上。 */
+  --border: rgba(255, 255, 255, 0.14);
 }
 
 [data-theme='light'] {

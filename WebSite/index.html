@@ -63,18 +63,22 @@
     <div id="main">
       <div id="search">
         <div>
-          <div class="search-box">
-            <input
-              id="searchBox"
-              type="text"
-              autocomplete="off"
-              autocapitalize="off"
-              spellcheck="false"
-              placeholder="搜索站点，或输入关键词"
-              aria-label="搜索关键词"
-            />
+          <div class="search-row">
             <img class="search-logo" alt="" />
+            <div class="search-box">
+              <input
+                id="searchBox"
+                type="text"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
+                placeholder="搜索站点，或输入关键词"
+                aria-label="搜索关键词"
+              />
+            </div>
           </div>
+
+          <ul id="searchItem" aria-label="外部搜索引擎"></ul>
 
           <nav id="anchors" class="anchors" aria-label="分类导航"></nav>
 
@@ -91,8 +95,6 @@
           </p>
         </div>
       </div>
-
-      <ul id="searchItem" aria-label="外部搜索引擎"></ul>
 
       <div id="content">
         <div id="grid"></div>

@@ -2,4 +2,21 @@ node_modules/
 dist/
 *.local
 .DS_Store
-.workbuddy/
+Thumbs.db
+
+# .workbuddy 下的会话数据。
+# 与仓库根 .gitignore 的约定保持一致：memory/ 要留档进版本库，
+# 其余 _ 开头的目录是验证/分析脚手架（截图、无头 Chrome profile 等），用完即可丢。
+#
+# 注意这里是 `.workbuddy/*` 而不是 `.workbuddy/`。写成后者会把 memory/ 一起挡在
+# 版本库外面，和仓库根「keep .workbuddy/memory/ tracked」的约定冲突。
+.workbuddy/*
+!.workbuddy/memory/
+
+# 本地视觉验证产物：截图输出目录，以及无头 Chrome 的 --user-data-dir。
+# Chrome profile 动辄几万个碎文件、每个几十 MB，绝不能进版本库。
+# 加前导斜杠锚定到本目录，避免误伤其它层级里的同名目录
+# （.workbuddy/_shots 由上面的 .workbuddy/* 负责）。
+/_shot/
+/_shots/
+/_verify/

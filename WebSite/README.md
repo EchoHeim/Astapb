@@ -2,8 +2,8 @@
 
 > 线上地址：<https://shilong.js.org/aa/>
 
-一个**纯静态**的网站导航页，由 Vite + TypeScript 构建：左侧是聚合搜索框与分类锚点，
-右侧按分类平铺常用网站。
+一个**纯静态**的网站导航页，由 Vite + TypeScript 构建：顶部是吸顶的聚合搜索区
+（搜索框 + 9 个外部搜索引擎 + 分类锚点），下方按分类以**固定列宽**平铺常用网站。
 
 界面设计与交互灵感来自 [lackar.com/aa（AnywhereAnything）](http://lackar.com/aa/)——
 喜欢那种"简约但不简单"的风格，原站又时常打不开，于是复刻了一份本地静态版。
@@ -39,6 +39,7 @@ React（约 45 KB gzip）或 Vue（约 34 KB）在这里没有可换来的东西
 | `src/lib/render.ts` | 渲染分类网格与搜索引擎列 |
 | `src/lib/filter.ts` | 站内过滤 |
 | `src/lib/anchors.ts` | 分类锚点与滚动高亮 |
+| `src/lib/header.ts` | 吸顶搜索区的高度测量（锚点避让与滚动高亮共用） |
 | `src/lib/theme.ts` | 深浅色主题切换 |
 | `src/lib/dom.ts` | 建 DOM 助手、高亮、外链打开 |
 | `src/styles/` | `tokens` / `base` / `layout` / `components` / `responsive` |
@@ -110,6 +111,31 @@ npm run preview   # 预览构建产物
 `MagoTV` 等键，但把 Flickr 的标套到 36kr、彼岸图、游戏星辰上，比留白更容易误导。
 想补真实图标时，把文件丢进 `icon/` 并填上键名即可。
 
+### 与旧版的行为对照：布局
+
+面板从左侧搬到了顶部，分类网格从「按内容宽度自排」改成固定列宽：
+
+| 项 | 旧 | 现 |
+| --- | --- | --- |
+| 搜索区位置 | 左栏 20%，内部 `position: fixed` | 顶部整宽居中，桌面端 `position: sticky` 吸顶 |
+| 搜索引擎图标列 | 纵向一列，靠 `margin-top: 20vh` 顶位 | 横向一排，居中换行 |
+| 分类列宽 | flex `row wrap`，各卡片按内容宽度伸缩，宽窄不一 | CSS Grid `repeat(auto-fill, var(--col-w))`，每列恒为 `--col-w` |
+| 列间距 | `.item` 的 `margin: 0 1rem` | `#grid` 的 `gap`（margin 会吃进固定轨道，已移除） |
+| 顶距 | `#content { margin-top: 18vh }` 等魔法数 | 由吸顶区高度 + `padding` 决定，无 vh 常量 |
+
+两处连带处理：
+
+- **长站名会被省略号截断**。列宽固定后 `TheNounProject`、`黑神话·悟空Wiki` 这类名字
+  可能超出卡片，`.site-name` 用 `nowrap + ellipsis` 裁掉。这里刻意不给它换行 ——
+  `.item` 的高度是按「一条占一行」算的（`12rem + 2.6rem × visible`），
+  某条折成两行就会让可见条数对不上。完整站名仍可从 `<li title>` 的悬浮提示看到。
+- **吸顶区会遮住锚点跳转目标**，所以 `lib/header.ts` 用 `ResizeObserver` 量出真实高度
+  写进 `--header-h`，供 `scroll-margin-top` 使用；锚点的滚动高亮判定线也改用它，
+  不再用固定比例的 `innerHeight`。高度不是常量 —— 视口变窄会让锚点换行。
+
+移动端（≤650px）搜索区不吸顶，主题按钮移到右下角悬浮。这与旧版
+「桌面 fixed 左栏 / 移动改流式」是同一个思路：手机上顶部区域占视口比例大，常年钉住不划算。
+
 ### 与旧版的行为对照：其他
 
 重构中顺手修掉的几处（都不影响整体观感）：
@@ -121,6 +147,9 @@ npm run preview   # 预览构建产物
 - 输入框聚焦时的高亮规则用了 `background` 简写，会把搜索图标一起重置掉；改为只改背景色。
 - 折叠卡片的渐变遮罩会给最后一条可见项挡住点击；加了 `pointer-events: none`。
 - 移动端不再用 `margin: 21rem` 去顶开固定面板，改为流式排布，面板加内容不会错位。
+- 提示文案从 `0.6rem`（根字号 14px → 8.4px，已低于可读下限）提到 `0.75rem`。
+- 暗色主题补上了缺失的 `--border`，此前 `border: 0.5px solid var(--border)` 整条声明
+  在深色下是失效的（右上角主题按钮的圆形描边就受此影响）。
 
 ## ⚠️ 仍存在的已知问题
 

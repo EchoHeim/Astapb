@@ -1,7 +1,7 @@
 # Astapb 项目长期备忘
 
 ## 定位
-个人知识分享库：`WebBlog/` = Astro 博客（文章源 `docs/` + 代码，根路径 `/`）；`WebSite/` = 导航站（Vite+TS，`/aa/`）；`CodeKey/` = 公众号素材；`scripts/` = 小工具。
+个人知识分享库：`WebBlog/` = Astro 博客（文章源 `docs/` + 代码，根路径 `/`）；`WebSite/` = 导航站（Vite+TS，`/aa/`）；`CodeKey/` = 公众号「程序小猴」素材（63 张表情包 + AI日报，运营方案在 `运营方案/`）；`scripts/` = 小工具。
 
 ## 内容目录契约（改目录名必踩）
 内容目录 = `WebBlog/docs/`，改名须同源改三处：`content.config.ts` 的 `loader.base`、`sync-content.mjs` 的 `BLOG`、`migrate-assets.mjs` 的 `BLOG`。
@@ -29,6 +29,11 @@
 - 丢 `.md` 进 `WebBlog/docs/<分类>/` → push 即上线。不写 frontmatter 也行（prebuild 自动补 title/date/tags/summary）。
 - **禁相对路径引图；禁 GitHub 附件当图床**（源仓库一变全 404 且救不回）。图片放仓库走 jsDelivr。
 - 标签名不能含 `/`（`C/C++` 有映射）。新增分类要同步 `sync-content.mjs` 的 `TAG_RULES`。
+
+## 公众号「程序小猴」
+素材库 `CodeKey/`，结构 01-IP形象/02-封面模板/03-正文插图/**04-选题与文案库（唯一复利资产）**/05-栏目素材/06-运营方案/**07-发布登记（发文前跑 check-publish.mjs 查重）**。
+**实测（26年9月8篇）：打开率中位 0.44%、涨粉 0/8。工具实操完成率 55% vs AI日报 31%，阅读差 3.8 倍 → 主力栏目＝「工具实测」，日报只报「能用的工具」，删估值/论战/榜单。**日报话题离读者越远阅读越低（68→9→4→3）。
+表情包上架微信表情开放平台是公域涨粉入口；日报「小猴点评」是护城河，属二次创作需留来源声明。
 
 ## 待处理风险
 - **凭据泄漏（必须轮换，改文件无效）**：`scripts/report_ip/autoemail.py` SMTP 授权码、`scripts/test.sh` WiFi 密码，均已进 git 历史。

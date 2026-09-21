@@ -1,63 +1,73 @@
 /*
  * 移动端断点，沿用旧 mobile.css 的 650px。
  *
- * 一处有意改动：旧版在移动端让左栏继续保持 position:fixed，再用
- * `#searchItem { margin: 21rem auto 0 auto }` 把引擎图标列顶到它下面 ——
- * 21rem 是照着当时面板高度手算的，面板里加一行内容就会错位。
- * 这里改成静态流式排布，高度由内容决定，不再有魔法数字。
+ * 与桌面端的两处差异：
+ *   1. 放开吸顶。手机上顶部区域占视口比例本来就大，常年钉住不划算 ——
+ *      这与旧版「桌面 fixed 左栏 / 移动改流式」是同一个思路。
+ *   2. 收窄固定列宽。13rem 的列在 375px 宽的屏上放不下两列。
+ *
+ * 旧版这里还有个 `#searchItem { margin: 21rem auto 0 auto }`，
+ * 21rem 是照着当时面板高度手算出来的，面板里加一行就错位。
+ * 现在高度全由内容与 gap 决定，没有魔法数字可错。
  */
 
 @media only screen and (max-width: 650px) {
-  #main {
-    flex-flow: column;
+  :root {
+    /* 10.5rem = 147px：360px 宽的屏上正好放两列（2×147 + 12.6 间距 < 可用宽） */
+    --col-w: 10.5rem;
   }
 
   #search {
-    flex-basis: 100%;
+    position: static;
   }
 
+  /* 主题按钮在移动端改成右下角的悬浮按钮。
+     原来它钉在右上角，顶部就得空出 3.5rem 给它，那条空白带很显眼；
+     挪到右下角之后顶部间距回到正常的 0.75rem，整个搜索区矮了约 40px。 */
   #search > div {
-    position: static;
-    width: 100%;
-    height: auto;
-    padding: 3.5rem 1rem 0 1rem;
+    padding: 0.75rem 0.75rem 0.75rem 0.75rem;
+  }
+
+  .search-row {
+    max-width: 100%;
+  }
+
+  /* Logo 挂在行外侧，窄屏没有富余空间给它，隐藏掉（纯装饰） */
+  .search-logo {
+    display: none;
   }
 
   .search-box input {
-    height: 3.2rem;
-    line-height: 3.2rem;
+    height: 2.9rem;
+    line-height: 2.9rem;
     font-size: 1rem;
   }
 
-  .anchors {
-    margin-top: 1.25rem;
-    overflow-y: visible;
+  #searchItem li {
+    width: 2.1rem;
+    height: 2.1rem;
   }
 
   #searchHint {
-    margin-top: 1.5rem;
-    padding: 0 0 1rem 0;
-    text-align: center;
-  }
-
-  #searchItem {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    margin: 1.5rem auto 0 auto;
+    font-size: 0.7rem;
   }
 
   #content {
-    margin-top: 2rem;
+    padding: 1.25rem 0.75rem 3rem 0.75rem;
+  }
+
+  #grid {
+    gap: 0.9rem;
+  }
+
+  /* 手机上搜索区不吸顶，锚点跳转不需要额外让位 */
+  .item[id^='cat-'] {
+    scroll-margin-top: 1rem;
   }
 
   .theme-toggle {
-    top: 0.75rem;
-    right: 0.75rem;
-  }
-
-  /* 窄屏下每屏只放一个分类，避免卡片被挤到只剩半列 */
-  #grid {
-    justify-content: center;
+    top: auto;
+    bottom: 1rem;
+    right: 1rem;
   }
 }
