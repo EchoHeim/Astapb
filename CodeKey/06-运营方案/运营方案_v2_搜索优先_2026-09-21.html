@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>程序小猴 · 运营方案 v2：把搜索流量做成主引擎（2026-09-21）</title>
+<style>
+  :root{
+    --green:#09B83E; --green-dark:#06872D; --green-soft:#E8F8EE; --green-line:#BEE9CC;
+    --ink:#16201A; --ink2:#4A554D; --ink3:#7C877F;
+    --line:#E2E7E3; --bg:#F5F7F5; --card:#FFFFFF;
+    --red:#A32D2D; --red-soft:#FCEBEB; --red-line:#F0C9C9;
+    --amber:#854F0B; --amber-soft:#FAEEDA; --amber-line:#EFD6A8;
+    --blue:#185FA5; --blue-soft:#E6F1FB; --blue-line:#B5D4F4;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;padding:0 20px 80px;background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:940px;margin:0 auto}
+  header.hero{margin:0 -20px 36px;padding:52px 40px 44px;background:linear-gradient(135deg,#06872D 0%,#09B83E 100%);color:#fff}
+  header.hero .inner{max-width:940px;margin:0 auto}
+  .kicker{font-size:13px;letter-spacing:.12em;opacity:.82;margin:0 0 12px}
+  header.hero h1{margin:0 0 14px;font-size:29px;line-height:1.35;font-weight:600;letter-spacing:-.01em}
+  header.hero p{margin:0;font-size:15px;opacity:.92;max-width:680px}
+  .meta{margin-top:24px;display:flex;flex-wrap:wrap;gap:10px}
+  .meta span{font-size:12.5px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28)}
+
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 34px;margin-bottom:20px}
+  h2{margin:0 0 20px;font-size:20px;font-weight:600;display:flex;align-items:center;gap:12px}
+  h2 .num{flex:0 0 auto;width:30px;height:30px;border-radius:9px;background:var(--green-soft);color:var(--green-dark);font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center}
+  h3{margin:28px 0 12px;font-size:16px;font-weight:600}
+  h3:first-of-type{margin-top:0}
+  p{margin:0 0 14px}
+  ul,ol{margin:0 0 16px;padding-left:22px}
+  li{margin-bottom:7px}
+  strong{font-weight:600}
+  code{font-family:ui-monospace,Consolas,monospace;font-size:13px;background:#EEF2EF;border:1px solid #DFE5E1;border-radius:5px;padding:1px 5px}
+  .lead{font-size:15.5px;color:var(--ink2);margin-bottom:22px}
+
+  .kpis{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:8px}
+  .kpi{background:#F7F9F8;border-radius:11px;padding:14px 16px}
+  .kpi .lbl{font-size:12.5px;color:var(--ink3);margin:0 0 4px}
+  .kpi .val{font-size:23px;font-weight:600;line-height:1.2;margin:0}
+  .kpi .sub{font-size:12px;color:var(--ink3);margin:4px 0 0}
+  .kpi.bad .val{color:var(--red)}
+  .kpi.warn .val{color:var(--amber)}
+  .kpi.good .val{color:var(--green-dark)}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:#F2F5F3;font-weight:600;font-size:12.5px;color:var(--ink2);white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  .tbl-wrap{overflow-x:auto;margin:0 0 18px;border:1px solid var(--line);border-radius:10px}
+  .tbl-wrap table{margin:0}
+  .num-col{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .hl{background:#FFFBF0}
+  .hl td{border-bottom-color:#F0E2C0}
+
+  .box{border-radius:11px;padding:16px 20px;margin:0 0 18px;font-size:14.5px}
+  .box p:last-child{margin-bottom:0}
+  .box .lbl{font-weight:600;font-size:13px;letter-spacing:.04em;display:block;margin-bottom:6px}
+  .box.bad{background:var(--red-soft);border:1px solid var(--red-line)}
+  .box.bad .lbl{color:var(--red)}
+  .box.tip{background:var(--amber-soft);border:1px solid var(--amber-line)}
+  .box.tip .lbl{color:var(--amber)}
+  .box.good{background:var(--green-soft);border:1px solid var(--green-line)}
+  .box.good .lbl{color:var(--green-dark)}
+  .box.info{background:var(--blue-soft);border:1px solid var(--blue-line)}
+  .box.info .lbl{color:var(--blue)}
+
+  .bars{margin:6px 0 20px}
+  .bar-row{display:grid;grid-template-columns:minmax(0,1fr) 58px;gap:10px;align-items:center;margin-bottom:7px;font-size:13px}
+  .bar-track{position:relative;height:20px;background:#F1F4F2;border-radius:5px;overflow:hidden;min-width:60px}
+  .bar-fill{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:#8FBF9F}
+  .bar-fill.top{background:var(--green)}
+  .bar-fill.zero{background:#D8DEDA}
+  .bar-label{font-size:12.5px;color:var(--ink3);margin:0 0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bar-val{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink2)}
+
+  .cmp{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-bottom:18px}
+  .cmp .card{border:1px solid var(--line);border-radius:11px;padding:18px 20px}
+  .cmp .card.win{border:2px solid var(--green);background:#FBFFFC}
+  .cmp .card h4{margin:0 0 12px;font-size:15px}
+  .cmp .card .row{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:5px 0;border-bottom:1px dashed #E8EDEA}
+  .cmp .card .row:last-child{border-bottom:none}
+  .cmp .card .row b{font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+
+  .steps{counter-reset:s;list-style:none;padding:0;margin:0 0 12px}
+  .steps li{counter-increment:s;position:relative;padding-left:42px;margin-bottom:16px;font-size:14.5px}
+  .steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:26px;height:26px;border-radius:8px;background:var(--green-soft);color:var(--green-dark);font-size:12.5px;font-weight:600;display:flex;align-items:center;justify-content:center}
+  .steps li b{display:block;margin-bottom:2px}
+
+  .funnel{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin:0 0 18px}
+  .funnel .step{border:1px solid var(--line);border-radius:11px;padding:14px 16px;background:#FBFFFC}
+  .funnel .step .t{font-size:13.5px;font-weight:600;margin:0 0 4px}
+  .funnel .step .d{font-size:12.5px;color:var(--ink3);margin:0;line-height:1.55}
+
+  footer{text-align:center;color:var(--ink3);font-size:13px;padding:24px 0 0}
+  .small{font-size:13.5px;color:var(--ink2)}
+  .tag{display:inline-block;font-size:11.5px;padding:1px 8px;border-radius:999px;background:var(--green-soft);color:var(--green-dark);border:1px solid var(--green-line);white-space:nowrap}
+  .tag.p0{background:var(--red-soft);color:var(--red);border-color:var(--red-line)}
+  .tag.p1{background:var(--amber-soft);color:var(--amber);border-color:var(--amber-line)}
+  .tag.p2{background:#F1F4F2;color:var(--ink3);border-color:var(--line)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="inner">
+    <p class="kicker">运营方案 v2 · 2026-09-21</p>
+    <h1>你不是内容不行，是「流量结构」配错了内容</h1>
+    <p>这批后台数据补上了上一份诊断里悬着的四个问题。答案改变了结论：<strong>这个账号的命脉不是粉丝推送，是搜一搜。</strong><br>
+    本版已纳入两项新决定：<strong>日报改为「只发布、不群发」</strong>、<strong>表情包已上架微信表情开放平台</strong>。</p>
+    <div class="meta">
+      <span>数据区间 2026-08-22 ~ 09-20</span>
+      <span>阅读总人数 586</span>
+      <span>粉丝 227</span>
+      <span>累计已发文 177 篇</span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <h2><span class="num">0</span>先说结论</h2>
+  <p class="lead">三条，按重要性排序。第一条推翻了上一版的判断，第二条解释了「阅读量低」到底是什么低。</p>
+
+  <div class="box good">
+    <span class="lbl">结论一 · 你本质上是一个「搜索站点」，不是一个「推送账号」</span>
+    <p>全站阅读里 <strong>69.6% 来自搜一搜</strong>，来自公众号消息推送的只有 11.9%。
+    你唯一一篇跑到量级的文章（图吧工具箱，259 阅读，占全站 44%）不是粉丝看的，是<strong>搜索搜来的陌生人</strong>看的。</p>
+    <p>所以第一优先级应该从「提升粉丝活跃度」换成「<strong>把搜索流量做成可持续的内容资产</strong>」。</p>
+  </div>
+
+  <div class="box bad">
+    <span class="lbl">结论二 · 产能和产出倒挂，但两条轨道可以解耦</span>
+    <p>9 月 4 日到 21 日共发了 22 条：<strong>AI 日报占 59% 的发文量，只贡献 15% 的阅读</strong>；
+    工具实测只占 32%，却贡献 83%。<strong>你把六成产能投在了产出最低的栏目上。</strong></p>
+    <p>好消息是这两个栏目其实不冲突。日报不靠推送活着（打开率 0.44%，一篇推送只换约 1 个阅读），
+    所以把日报改成「<strong>只发布、不群发</strong>」，几乎不损失它已有的阅读，却能把每天的群发位完整让给工具实测
+    ——<strong>产出与群发位解耦，是这份方案里最划算的一步</strong>，操作规范见第 6 节抓手四。</p>
+  </div>
+
+  <div class="box tip">
+    <span class="lbl">结论三 · 粉丝这条路目前杠杆极小，别再往里投精力</span>
+    <p>227 个粉丝 × 送达阅读率 0.44% ≈ <strong>每篇推送只能从粉丝那里拿到约 1 个阅读</strong>。
+    就算把打开率做到行业健康线 8%，也只有 18 个阅读。所以现阶段「提升粉丝活跃度」的收益上限非常低——
+    <strong>先用搜索把粉丝基数做大，粉丝活跃度是结果，不是抓手。</strong></p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">1</span>上次悬着的四个问题，现在有答案了</h2>
+  <p>上一份诊断（<code>数据诊断_2026-09.html</code>）结尾列了四个「有这四个数就能确诊」的问题。这批截图把它们全填上了：</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead>
+      <tr><th style="width:26%">上一次的问题</th><th style="width:34%">这次拿到的答案</th><th>它改变了什么</th></tr>
+    </thead>
+    <tbody>
+      <tr class="hl">
+        <td><strong>总粉丝数是多少？</strong></td>
+        <td>累计关注 <strong>227</strong>，月净增 +0.89%（约 <strong>+2 个/月</strong>）</td>
+        <td>打开了关键换算：0.44% × 227 ≈ <strong>1 人/篇</strong>。推送这条路目前几乎没有产出，涨粉也近乎停滞。</td>
+      </tr>
+      <tr class="hl">
+        <td><strong>阅读来源怎么构成？</strong></td>
+        <td>搜一搜 <strong>69.6%</strong>｜公众号消息 11.9%｜主页 10.9%｜聊天会话 4.3%｜朋友圈 2.2%｜推荐 1.9%</td>
+        <td>决定了主攻方向：<strong>打公域搜索，不是唤醒老粉</strong>。这是整份方案的地基。</td>
+      </tr>
+      <tr>
+        <td><strong>9/16 之前发过文章吗？</strong></td>
+        <td>发过。<strong>累计 177 篇</strong>，最早可回溯到 2020 / 2022 年，且老文章今天仍在吃搜索流量</td>
+        <td>排除了「停更导致粉丝沉睡」这个病因。<strong>病根是内容结构和流量结构错配</strong>，处方完全不同。</td>
+      </tr>
+      <tr>
+        <td><strong>送达基数为什么对不上？</strong></td>
+        <td>基数是一致的（≈227）。那一列统计的是<strong>「送达后被打开」</strong>，不含搜索来的阅读</td>
+        <td>解释了「0.44% 却有三到九个阅读」：差额全部来自搜索。与 69.6% 完全吻合。<span class="small">（建议在单篇详情里再确认一次）</span></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">2</span>30 天全量数据快照</h2>
+
+  <div class="kpis">
+    <div class="kpi"><p class="lbl">阅读总人数（30 天）</p><p class="val">586</p><p class="sub">其中 44% 来自同一篇</p></div>
+    <div class="kpi bad"><p class="lbl">粉丝净增</p><p class="val">+0.89%</p><p class="sub">约 +2 人/月</p></div>
+    <div class="kpi bad"><p class="lbl">送达阅读率</p><p class="val">0.44%</p><p class="sub">≈ 227 粉里 1 人点开</p></div>
+    <div class="kpi good"><p class="lbl">搜一搜占比</p><p class="val">69.6%</p><p class="sub">真正的流量来源</p></div>
+    <div class="kpi good"><p class="lbl">工具实测 篇均阅读</p><p class="val">54</p><p class="sub">7 篇 / 378 阅读</p></div>
+    <div class="kpi warn"><p class="lbl">AI 日报 篇均阅读</p><p class="val">5</p><p class="sub">13 篇 / 68 阅读</p></div>
+  </div>
+
+  <h3>流量来源构成</h3>
+  <div class="bars">
+    <div class="bar-row"><div><p class="bar-label">搜一搜</p><div class="bar-track"><div class="bar-fill top" style="width:100%"></div></div></div><div class="bar-val">69.6%</div></div>
+    <div class="bar-row"><div><p class="bar-label">公众号消息（粉丝推送）</p><div class="bar-track"><div class="bar-fill" style="width:17.1%"></div></div></div><div class="bar-val">11.9%</div></div>
+    <div class="bar-row"><div><p class="bar-label">公众号主页</p><div class="bar-track"><div class="bar-fill" style="width:15.7%"></div></div></div><div class="bar-val">10.9%</div></div>
+    <div class="bar-row"><div><p class="bar-label">聊天会话（转发）</p><div class="bar-track"><div class="bar-fill" style="width:6.2%"></div></div></div><div class="bar-val">4.3%</div></div>
+    <div class="bar-row"><div><p class="bar-label">其它</p><div class="bar-track"><div class="bar-fill" style="width:4.5%"></div></div></div><div class="bar-val">3.1%</div></div>
+    <div class="bar-row"><div><p class="bar-label">朋友圈</p><div class="bar-track"><div class="bar-fill" style="width:3.2%"></div></div></div><div class="bar-val">2.2%</div></div>
+    <div class="bar-row"><div><p class="bar-label">推荐</p><div class="bar-track"><div class="bar-fill zero" style="width:2.7%"></div></div></div><div class="bar-val">1.9%</div></div>
+  </div>
+
+  <h3>单篇阅读 TOP 7（占全站 72%）</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>内容标题</th><th>发布</th><th class="num-col">阅读人数</th><th class="num-col">占比</th></tr></thead>
+    <tbody>
+      <tr class="hl"><td><strong>实用软件分享 ---- 图吧工具箱 WinUI3 社区版 v1.6.1</strong></td><td>09-09</td><td class="num-col">259</td><td class="num-col">44.20%</td></tr>
+      <tr class="hl"><td>腾讯 WorkBuddy 联手 DeepSeek：AI 不只陪你聊天，开始真正替你干活了</td><td>09-17</td><td class="num-col">76</td><td class="num-col">12.97%</td></tr>
+      <tr><td>AI日报｜8月26日：国务院「人工智能+」行动意见通过，国家级 AI 战略全面提速</td><td>08-26</td><td class="num-col">42</td><td class="num-col">7.17%</td></tr>
+      <tr><td>Office Tool Plus 简单使用方法</td><td>09-19</td><td class="num-col">14</td><td class="num-col">2.39%</td></tr>
+      <tr><td>三国 Q 版人物画像 <span class="small">（2020 年老文，仍在吃搜索）</span></td><td>04-02</td><td class="num-col">12</td><td class="num-col">2.05%</td></tr>
+      <tr><td>免费 VPS（4核32G） <span class="small">（2022 年老文，仍在吃搜索）</span></td><td>07-24</td><td class="num-col">11</td><td class="num-col">1.88%</td></tr>
+      <tr><td>AI日报｜9月16日：Anthropic 呼吁全行业「踩刹车」…</td><td>09-16</td><td class="num-col">9</td><td class="num-col">1.54%</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="small">注意第 5、6 行：2020 年和 2022 年的老文章今天还在产出阅读。这就是「搜索资产」的样子——<strong>写一次，持续被找到</strong>。而日报写完第二天就归零。</p>
+</section>
+
+<section>
+  <h2><span class="num">3</span>五个发现</h2>
+
+  <h3>发现 ①：搜一搜 69.6%，公众号消息只剩 11.9%</h3>
+  <p>把这两个数字放在一起看，账号的画像就清楚了：<strong>粉丝推送给你的流量，不到搜索的六分之一。</strong></p>
+  <p>这不一定是坏事，但它意味着你现在的考核指标是错的。你在盯「打开率」，而打开率只解释 11.9% 的流量——
+  就像餐厅盯着一扇只走 12% 客人的门，纠结那扇门的门把手好不好看。</p>
+  <div class="box info">
+    <span class="lbl">换个说法</span>
+    <p>你不是在运营一个「公众号」，你是在运营一个<strong>被搜索引擎收录的技术内容站，恰好托管在微信里</strong>。
+    这个定位一旦接受，后面所有动作都清楚了：<strong>你写的东西必须有人会去搜，标题里必须有会被搜到的词。</strong></p>
+  </div>
+
+  <h3>发现 ②：一篇图吧工具箱 = 13 篇 AI 日报的总和</h3>
+  <div class="cmp">
+    <div class="card win">
+      <h4>工具实测 <span style="font-size:12px;color:var(--ink3);font-weight:400">n=7</span></h4>
+      <div class="row"><span>阅读合计</span><b>378</b></div>
+      <div class="row"><span>占比</span><b>83%</b></div>
+      <div class="row"><span>篇均阅读</span><b>54</b></div>
+      <div class="row"><span>剔除图吧后篇均</span><b>21</b></div>
+      <div class="row"><span>阅读完成率</span><b>57% ~ 75%</b></div>
+    </div>
+    <div class="card">
+      <h4>AI 日报 <span style="font-size:12px;color:var(--ink3);font-weight:400">n=13</span></h4>
+      <div class="row"><span>阅读合计</span><b>68</b></div>
+      <div class="row"><span>占比</span><b>15%</b></div>
+      <div class="row"><span>篇均阅读</span><b>5</b></div>
+      <div class="row"><span>最高一篇</span><b>9</b></div>
+      <div class="row"><span>阅读完成率</span><b>25% ~ 33%</b></div>
+    </div>
+  </div>
+  <p>即使把图吧工具箱那一篇完全剔掉，工具类的篇均（21）仍然是日报（5）的 <strong>4 倍</strong>。
+  而且注意完成率：<strong>工具类 57~75%，日报只有 25~33%</strong>——完成率是比值，不受粉丝基数影响，这个差距是可信的。</p>
+  <p><strong>日报的问题不是「写得不好」，是「没人会去搜」。</strong>「AI日报｜9月16日：Anthropic 呼吁全行业踩刹车」——这句话里没有一个词是读者会主动输入搜索框的。
+  它唯一的曝光渠道就是推送，而推送打开率是 0.44%。<strong>这就是为什么它永远只有 3~9 个阅读。</strong></p>
+
+  <h3>发现 ③：标题里带精确版本号的那一篇，赢了 63 倍</h3>
+  <p>9 月 9 日同一天发了两篇图吧工具箱：</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>标题</th><th class="num-col">阅读</th><th>差别</th></tr></thead>
+    <tbody>
+      <tr><td>实用软件分享 ---- 图吧工具箱 WinUI3 社区</td><td class="num-col">4</td><td>没有版本号</td></tr>
+      <tr class="hl"><td>实用软件分享 ---- 图吧工具箱 WinUI3 社区版 <strong>v1.6.1</strong></td><td class="num-col">252</td><td><strong>带精确版本号</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>这个对比有干扰因素（两篇的群发状态可能不同），所以不能直接下结论。但方向和其他所有数据一致：
+  <strong>标题里的精确字符串（软件全名、版本号、平台、报错原文）就是搜索命中率。</strong>
+  读者搜的是「图吧工具箱 WinUI3 v1.6.1」，不是「实用软件分享」。</p>
+
+  <h3>发现 ④：你们自己定的「24 小时回填」窗口是错的</h3>
+  <p>把 <code>往期数据.csv</code> 里 24 小时记录的值，和今天后台的真实值对一下：</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>文章</th><th class="num-col">24h 记录</th><th class="num-col">现在真实值</th><th class="num-col">倍数</th></tr></thead>
+    <tbody>
+      <tr><td>Office Tool Plus 简单使用方法</td><td class="num-col">7</td><td class="num-col">25</td><td class="num-col">3.6×</td></tr>
+      <tr><td>实用软件分享 OTP（长标题版）</td><td class="num-col">4</td><td class="num-col">14</td><td class="num-col">3.5×</td></tr>
+      <tr><td>WorkBuddy × DeepSeek</td><td class="num-col">68</td><td class="num-col">76</td><td class="num-col">1.1×</td></tr>
+      <tr><td>AI日报 9月16日</td><td class="num-col">9</td><td class="num-col">9</td><td class="num-col">1.0×</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="box tip">
+    <span class="lbl">这条直接推翻了你们素材库里的一条假设</span>
+    <p><code>往期数据表说明.md</code> 里写「24 小时数据已占最终值的 85% 以上」——
+    <strong>这个假设只对资讯型内容成立，对搜索型内容完全不成立。</strong></p>
+    <p>工具文在 24 小时后还能再涨 3 倍以上，因为它靠的是搜索，而搜索排名是慢慢爬上去的；日报 24 小时后就定型了，因为除了推送没有第二个入口。</p>
+    <p><strong>后果很严重：按 24 小时回填，你系统性地低估了工具文、高估了日报</strong>，过去每一次「哪类内容好」的判断都偏了。
+    回填窗口必须改成 <strong>7 天</strong>。本次已按 7 天值重新校正 <code>往期数据.csv</code>。</p>
+  </div>
+
+  <h3>发现 ⑤：一天发两篇，第二篇基本是白发</h3>
+  <p>订阅号每天只能群发 1 次。所以同一天的第二篇只能走「发布」，不进消息列表，<strong>等于花钱买了张没人看的票</strong>。</p>
+  <p>9 月里至少有 5 天发了两篇（9/9、9/12、9/17、9/18、9/19），第二篇的阅读是 2、4、3、4、14——
+  最典型的是 9/17：<strong>08:04 那篇《WorkBuddy 联手 DeepSeek》拿到 79 个阅读，08:15 那篇同标题的只拿到 2 个。</strong></p>
+  <div class="box bad">
+    <span class="lbl">代价</span>
+    <p>把两篇合并成一篇更完整的文章，几乎必然好过「79 + 2」。
+    而且每条重复推送都在给读者一个取消关注的理由——在粉丝月增只有 2 个的情况下，这个代价格外贵。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">4</span>重新定义问题</h2>
+  <p>你提的两个目标是「提升内容质量」和「提升粉丝活跃度」。数据说：<strong>第一个是真问题，第二个现在还不是。</strong></p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th style="width:50%">旧问题（现在做，收益很小）</th><th>新问题（现在做，收益最大）</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>怎么让 227 个粉丝更活跃？<br><span class="small">上限：打开率从 0.44% 做到 8%，每篇也就多 17 个阅读。</span></td>
+        <td><strong>怎么让搜一搜每天稳定送来 100+ 个新读者？</strong><br><span class="small">上限：图吧工具箱一篇就跑出 259，而你手上还有 10 个同类素材。</span></td>
+      </tr>
+      <tr>
+        <td>怎么把日报写得更好看？<br><span class="small">上限：13 篇日报目前合计 68 阅读。</span></td>
+        <td><strong>怎么把「工具实测」从 1 篇爆款变成一条可复制的产品线？</strong><br><span class="small">上限：篇均 54 → 每周 2 篇 → 每月 400+ 阅读来自搜索。</span></td>
+      </tr>
+      <tr>
+        <td>要不要多做点互动、投票、留言引导？<br><span class="small">3~9 个阅读的基数上，留言必然是 0。</span></td>
+        <td><strong>怎么把搜索来的人变成粉丝？</strong><br><span class="small">这是唯一能打破「227 粉」天花板的地方。</span></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>目标漏斗：把「搜索陌生人」变成「复访粉丝」</h3>
+  <div class="funnel">
+    <div class="step"><p class="t">① 搜索进店</p><p class="d">有人搜「图吧工具箱」，你的文章被找到。这是唯一有量级的入口，要做大。</p></div>
+    <div class="step"><p class="t">② 内容留人</p><p class="d">结构清楚、步骤完整、有你的真实踩坑。完成率 50%+ 才算过关。</p></div>
+    <div class="step"><p class="t">③ 钩子转化</p><p class="d">文末 + 关键词回复给一个「关注就能立刻拿到」的东西。目前这一环完全空缺（0 涨粉）。</p></div>
+    <div class="step"><p class="t">④ 复访互动</p><p class="d">关键词回复、菜单、合集，让老读者有理由再打开对话框——这才叫「粉丝活跃度」。</p></div>
+    <div class="step"><p class="t">⑤ 分享拉新</p><p class="d">分享率 ≥1.5%。图吧 2.78%、WorkBuddy 7.89%，你已经有能让人转的内容。</p></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">5</span>板块架构：5 个板块里，只有 2 个站得住</h2>
+  <p class="lead">这不是「内容好不好」的问题。另外 3 个板块会让搜一搜<strong>搞不清你是谁</strong>——对一条 69.6% 靠搜索吃饭的账号，这是最贵的一种代价。</p>
+
+  <div class="box bad">
+    <span class="lbl">机制：搜索排名里有一条因子叫「账号垂直度」</span>
+    <p>搜一搜的排序因子中，<strong>账号权威度约占 25%</strong>，而「内容垂直度」是它的组成部分。
+    一个号如果横跨软件工具 / 历史人物 / 音乐演出 / 文学随笔四个互不相关的领域，
+    算法无法给它打上任何一个领域的标签，结果是<strong>每个领域的排名都上不去</strong>。</p>
+  </div>
+
+  <p>再算一道很简单的算术：<strong>227 个粉丝 ÷ 5 个板块 ≈ 每个板块只有约 45 个人可能感兴趣。</strong>
+  而非搜索型的板块拿不到公域流量，量级就是 5~10 阅读——你已经有实测样本了：
+  「易买单·星动之夜——许巍朴树音乐 Live」= <strong>8 阅读</strong>。</p>
+
+  <h3>逐个评估</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th style="width:19%">板块</th><th style="width:26%">数据依据</th><th style="width:22%">有人会去搜吗</th><th>结论</th></tr></thead>
+    <tbody>
+      <tr class="hl"><td><strong>实用软件分享</strong></td><td>7 篇 = 378 阅读（83%），篇均 54，完成率 57~75%</td><td><strong>有</strong>——软件名本身就是搜索词</td><td><strong>主力板块</strong>，吃掉最多产能</td></tr>
+      <tr><td><strong>AI 日报</strong></td><td>13 篇 = 68 阅读（15%），篇均 5.2</td><td>部分有（新工具 / 新功能 / 价格 / 政策）</td><td><strong>保留但降级</strong>：只发布不群发，只报能搜的条目</td></tr>
+      <tr><td><strong>历史人物志</strong></td><td>无素材、无数据。唯一旁证：「三国 Q 版人物画像」老文 12 阅读</td><td>有，但<strong>竞争极其激烈</strong></td><td><strong>不建议</strong>：227 粉的号在「曹操」这类大词上排不进去，且与主业无关</td></tr>
+      <tr><td><strong>音乐演唱会现场</strong></td><td>「星动之夜」= 8 阅读</td><td><strong>几乎没有</strong>——热度一过归零</td><td><strong>不放公众号</strong>，改由视频号承接</td></tr>
+      <tr><td><strong>小说读后感悟随笔</strong></td><td>无</td><td>几乎没有</td><td><strong>不建议</strong>：无搜索需求、无一手独特性</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>三个被否掉的板块，卡住的是同一组原因：<strong>① 没有搜索需求，或者竞争不过权威大号；② 没有你的一手经历（选题第③问）；③ 稀释账号垂直度。</strong></p>
+
+  <h3>但兴趣不用放弃——把它「交叉」，不要「平行」</h3>
+  <p>这是本节最有用的一条建议：<strong>把兴趣和主业交叉，而不是在同一个号里平行并列。</strong>
+  同样满足兴趣，但每一条都带着一个可被搜索的工具名，而且都是你真用过的东西：</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th style="width:15%">你的兴趣</th><th style="width:36%">平行做（会把号做散）</th><th>交叉做（留在赛道内，还自带搜索词）</th></tr></thead>
+    <tbody>
+      <tr><td><strong>历史人物</strong></td><td>「曹操的一生」<br><span class="small">和百科、专业历史号正面竞争，必输</span></td><td>「用 Obsidian 建三国人物关系图谱」<br>「用 Python 统计二十四史里的人物词频」</td></tr>
+      <tr><td><strong>音乐现场</strong></td><td>「许巍演唱会观后感」</td><td>「演唱会手机录音怎么救回来：Audacity 降噪实测」<br>「用 ffmpeg 批量剪辑现场视频」</td></tr>
+      <tr><td><strong>小说随笔</strong></td><td>「读完《XX》的感想」</td><td>「用 Calibre 管理并转换 500 本电子书」<br>「把阅读器笔记自动同步进 Obsidian」</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="box good">
+    <span class="lbl">最终结构：1 主力 + 1 维持 + 1 储备</span>
+    <p><strong>主力｜实用软件分享</strong> —— 吃掉绝大部分产能，承担全部拉新。</p>
+    <p><strong>维持｜AI 日报</strong> —— 走「只发布」轨道，不占群发位，负责更新频率与热点长尾。</p>
+    <p><strong>储备｜技术干货（Linux / 嵌入式 / Python）</strong> —— <code>WebBlog/docs/</code> 里已有 100+ 篇现成素材，
+    而且全是你的一手经历，比「历史人物志」强得多。等主力跑顺了再上。</p>
+    <p class="small"><strong>注意分界：</strong>「树莓派根分区扩容」「U 盘自动挂载」「Samba 共享」这类<strong>具体问题的实操文属于主力板块</strong>
+    （既可搜、又有一手经历）；只有纯知识体系类（如「Python 入门笔记」）才归储备。</p>
+    <p><strong>兴趣类内容（演出 / 历史 / 随笔）→ 交给视频号「小猴随心记」</strong>，公众号只在文末挂一个入口，不占图文产能。</p>
+  </div>
+
+  <div class="box info">
+    <span class="lbl">为什么这些内容在视频号成立、在公众号不成立</span>
+    <p>两个平台的流量逻辑完全不同：<strong>视频号是推荐驱动</strong>（算法主动推给可能感兴趣的人），
+    <strong>公众号是搜索驱动</strong>（没人搜就等于没写）。</p>
+    <p>你在视频号讲历史、发现场片段，能吃到推荐流量；同样的内容放进公众号图文，就是 8 个阅读。
+    <strong>不是内容不行，是放错了地方。</strong></p>
+  </div>
+
+  <p class="small">另外提醒：「板块」在公众号里的落地形式其实就是「<strong>合集</strong>」（配置方法见 <code>固定模块.md</code> 第九节）。
+  主页最多挂 10 个合集，但建议只挂 3~4 个——所以「分几个板块」这件事，本来就不该超过 3~4 个。</p>
+</section>
+
+<section>
+  <h2><span class="num">6</span>内容质量：四个可以量化的抓手</h2>
+  <p>「提升内容质量」太抽象，拆成四个能改、能验的变量：</p>
+
+  <h3>抓手一 · 砍长度：日报从 7 条压到 3 条</h3>
+  <p>日报完成率 25%~33%，说明<strong>读者读不完</strong>。不是内容差，是份量超过了需求。
+  从 7 条压到 3 条，完成率的目标是 50%+。<strong>少即是多，这里是真的少即是多。</strong></p>
+
+  <h3>抓手二 · 换结构：工具文用「五段式」</h3>
+  <p>不要再写「XX 工具介绍」。写成一个完整的解决过程：</p>
+  <ol class="steps">
+    <li><b>我遇到了什么麻烦</b>真实场景开头，不要从「XX 是一款优秀的软件」开始。</li>
+    <li><b>试了哪几个，为什么不行</b>这一段是别人抄不走的——它是你的经历，不是百科。</li>
+    <li><b>最后选它，以及完整步骤</b>截图 + 命令 + 参数，要能让读者照着做出来。</li>
+    <li><b>它做不到什么</b>写局限。这一条让文章可信，也是评论区最容易被讨论的地方。</li>
+    <li><b>关键词段落</b>结尾自然带出软件全名、版本号、常见报错原文——这些是搜索的抓手。</li>
+  </ol>
+
+  <h3>抓手三 · 分两套标题公式</h3>
+  <div class="cmp">
+    <div class="card win">
+      <h4>搜索型（工具实测用）</h4>
+      <p class="small" style="margin-bottom:10px">公式：<strong>软件全名 + 版本/平台 + 它解决的具体问题</strong></p>
+      <div class="row"><span>图吧工具箱 WinUI3 社区版 v1.6.1：清理 C 盘前先看这篇</span></div>
+      <div class="row"><span>LocalSend 局域网传文件：不装微信不插 U 盘，手机电脑互传</span></div>
+      <div class="row"><span>Office Tool Plus 部署 Office：不装全家桶，也不怕激活失败</span></div>
+      <p class="small" style="margin:10px 0 0">要点：把读者会输入搜索框的字，原样放进标题。</p>
+    </div>
+    <div class="card">
+      <h4>日报型（保留原规则）</h4>
+      <p class="small" style="margin-bottom:10px">公式：<strong>主体 + 动作 + 最反直觉的数字或结论</strong></p>
+      <div class="row"><span>AI日报｜华为昇腾960超节点登场，微软AI CEO炮轰Anthropic</span></div>
+      <p class="small" style="margin:10px 0 0">要点：具体名词就是搜索关键词，不要虚化。报错、榜单类条目直接不写。</p>
+    </div>
+  </div>
+
+  <h3>抓手四 · 日报「只发布、不群发」模式的操作规范</h3>
+  <p>这个模式成立的前提只有一个：<strong>日报的阅读入口从「推送」换成「搜一搜」。</strong>
+  推送那条路对日报本来就只有约 1 个阅读，让出去不心疼；但换到搜索这条路，标题必须能被搜到，
+  否则每周 5~6 篇会全部是 0 阅读。</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th style="width:20%">项</th><th style="width:34%">旧做法（群发模式）</th><th>新做法（只发布模式）</th></tr></thead>
+    <tbody>
+      <tr class="hl">
+        <td><strong>标题前缀</strong></td>
+        <td><code>AI日报｜9月21日：稚晖君19999元人形机器人开卖…</code><br><span class="small">开头 12 个字零搜索价值</span></td>
+        <td><code>稚晖君人形机器人 19999 元开卖，Anthropic 砸 20 亿做 AI 安全体检｜9.21 AI日报</code><br><strong>把最可能被搜的实体提到最前，栏目标识后置</strong></td>
+      </tr>
+      <tr>
+        <td><strong>选题筛子</strong></td>
+        <td>今天哪条最热</td>
+        <td><strong>这条有没有人会去搜？</strong>留下：新工具、新功能、具体产品、价格、政策；砍掉：估值、论战、榜单</td>
+      </tr>
+      <tr>
+        <td><strong>篇幅</strong></td>
+        <td>7 条</td>
+        <td>3~4 条（完成率 25~33% 说明读者读不完）</td>
+      </tr>
+      <tr>
+        <td><strong>群发位</strong></td>
+        <td>每天 1 次，被日报占用</td>
+        <td><strong>完全不占用。</strong>每天的群发位留给工具实测；某天没有工具实测可发，当天就不群发</td>
+      </tr>
+      <tr>
+        <td><strong>后台操作</strong></td>
+        <td>「群发」</td>
+        <td>「<strong>发布</strong>」——不推送、不占群发次数，进入公众号主页与合集，可被搜一搜收录</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="box tip">
+    <span class="lbl">必须先做一次 7 天小规模验证，再全量推</span>
+    <p>「只发布的内容也能被搜一搜收录并获得阅读」——这是一个<strong>假设，不是结论</strong>。公开资料里对搜一搜爬虫的描述是「定期遍历<strong>已群发</strong>的文章」，
+    这暗示「只发布」的内容在收录上可能不如群发；现有数据里唯一可参考的样本也只有那篇 4 阅读的图吧工具箱（而且它可能是重复内容）。</p>
+    <p>所以不要一上来就把整周都切过去。做法是：<strong>先按新模式发 1 篇只发布的日报（标题带明确搜索词），7 天后去后台看两件事</strong>——
+    ① 它的阅读来源里有没有「搜一搜」；② 你自己复制完整标题在搜一搜里搜，能不能搜到这篇文章（搜不到＝未被收录；搜得到但搜关键词搜不到＝已收录、只是排名靠后）。
+    两条都通过再全量切换；如果连完整标题都搜不到，说明这套玩法在你这个号上不成立，得回到群发模式重新分配。</p>
+  </div>
+
+  <div class="box good">
+    <span class="lbl">配套动作（不做这个，只发布模式会伤到主页）</span>
+    <p>只发布的内容会全部堆在公众号主页上，而主页已经占了 10.9% 的流量。
+    <strong>新读者点进主页，第一屏看到的应该是「实用软件分享」合集，而不是一屏个位数阅读的日报。</strong>
+    所以必须建两个合集标签——<code>实用软件分享</code>（工具实测）和 <code>AI 日报</code>，并让前者在主页靠前展示。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">7</span>搜索资产矩阵：接下来 30 天铺这 10 个词</h2>
+  <p>原则只有一条：<strong>一个关键词 = 一篇文章 = 一个能吃一到三年的流量入口。</strong>
+  下面这 10 个词全部基于你已有的素材，不需要从零启动。</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead>
+      <tr><th style="width:24%">目标搜索词</th><th style="width:26%">用户搜它的场景</th><th>素材来源</th><th style="width:8%">优先级</th></tr>
+    </thead>
+    <tbody>
+      <tr class="hl">
+        <td><strong>图吧工具箱 WinUI3</strong></td>
+        <td>找下载、找更新、找报错</td>
+        <td>已有爆款（259 阅读）→ 做续篇：<em>v1.6.1 之后的进阶用法与常见报错</em>，同词二次收割</td>
+        <td><span class="tag p0">P0</span></td>
+      </tr>
+      <tr class="hl">
+        <td><strong>Office Tool Plus 部署 / 激活</strong></td>
+        <td>装 Office、避全家桶、激活失败</td>
+        <td>已有两篇（25 + 14）→ <strong>合并成一篇「终极版」重发</strong>，一次性解决重复推送问题</td>
+        <td><span class="tag p0">P0</span></td>
+      </tr>
+      <tr class="hl">
+        <td><strong>LocalSend 局域网传输</strong></td>
+        <td>手机电脑互传文件，不想装微信</td>
+        <td>已有 1 篇仅 4 阅读——<strong>标题没带软件全名</strong>，直接重写一版</td>
+        <td><span class="tag p0">P0</span></td>
+      </tr>
+      <tr>
+        <td><strong>Oh-My-Posh 终端美化</strong></td>
+        <td>想让终端好看、配置报错</td>
+        <td><code>CodeKey/05-栏目素材/Oh-My-Posh公众号推荐文章.md</code>（现成素材）</td>
+        <td><span class="tag p1">P1</span></td>
+      </tr>
+      <tr>
+        <td><strong>WinUI3 / Windows 任务栏美化</strong></td>
+        <td>折腾系统外观</td>
+        <td>与图吧工具箱同源，可拆成独立一篇</td>
+        <td><span class="tag p1">P1</span></td>
+      </tr>
+      <tr>
+        <td><strong>免费 VPS 4核32G</strong></td>
+        <td>想白嫖云服务器</td>
+        <td>2022 年的老文今天还在吃 11 阅读 → <strong>更新一版 2026 版</strong>，接住老流量</td>
+        <td><span class="tag p1">P1</span></td>
+      </tr>
+      <tr>
+        <td><strong>树莓派 根分区 扩容</strong></td>
+        <td>分区满了，不敢重装系统</td>
+        <td><code>WebBlog/docs/Linux/Linux小技巧/Linux扩展根分区.md</code></td>
+        <td><span class="tag p1">P1</span></td>
+      </tr>
+      <tr>
+        <td><strong>Linux 自动挂载 U 盘（udev）</strong></td>
+        <td>每次插盘都要手动 mount</td>
+        <td><code>.../Linux自动挂载U盘.md</code></td>
+        <td><span class="tag p2">P2</span></td>
+      </tr>
+      <tr>
+        <td><strong>Samba 文件共享配置</strong></td>
+        <td>板子和电脑互传文件</td>
+        <td><code>.../Linux文件共享.md</code></td>
+        <td><span class="tag p2">P2</span></td>
+      </tr>
+      <tr>
+        <td><strong>GitHub 访问加速 / 免费域名</strong></td>
+        <td>GitHub 打不开、想申请免费域名</td>
+        <td><code>WebBlog/docs/ToolBox/Github快速访问.md</code>、<code>eu.org二级域名.md</code>、<code>js.org二级域名.md</code></td>
+        <td><span class="tag p2">P2</span></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="box good">
+    <span class="lbl">为什么这 10 个词值得赌</span>
+    <p>它们有共同特征：<strong>① 是一个具体软件或具体报错，不是知识领域；② 有人真的会去搜；③ 你有一手使用经历。</strong>
+    这正好对上 <code>选题池.md</code> 里那三问评估法。图吧工具箱已经用 259 阅读证明过这条路走得通。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">8</span>涨粉闭环：把搜索来的人留下</h2>
+  <p>上一份诊断指出「8 篇零涨粉」。现在有了 30 天全量数据，结论更硬：<strong>整个 9 月，靠内容带来的新增关注接近于零。</strong>
+  而流量其实不差（586 人次），<strong>问题出在漏斗断在了最后一环。</strong></p>
+
+  <ol class="steps">
+    <li>
+      <b>本周内把自动回复真的配上去</b>
+      <code>04-选题与文案库/固定模块.md</code> 里已经写好了被关注回复和四条关键词（<code>日报</code> / <code>猴米</code> / <code>博客</code> / <code>合集</code>）——
+      但只有在后台真的配置了才会生效。这一步 30 分钟，是整份方案里 ROI 最高的动作。
+    </li>
+    <li>
+      <b>加一条与搜索内容同源的钩子：回复「软件」</b>
+      搜索来的读者是被「工具」吸引进来的，最可能转化的钩子也是工具。
+      建议做一份《程序员必备工具箱清单》，回复「软件」领取，并在<strong>每一篇工具文文末都放</strong>。
+    </li>
+    <li>
+      <b>把公众号主页和合集整理好</b>
+      公众号主页占了 10.9% 的流量——说明<strong>真的有人在主动翻你的主页</strong>。
+      现在主页上如果没有清晰的分类和合集标签，这些人翻两下就走了。菜单按 <code>固定模块.md</code> 配三栏，把博客当内容后台接进去。
+    </li>
+    <li>
+      <b>表情包已上架 —— 现在把它接成「双向导流」闭环</b>
+      表情开放平台是这个号唯一的第二个公域入口，而且用户是在<strong>和别人聊天时看到你的表情</strong>的——
+      那是最自然、也最没有广告感的品牌曝光位。上架只是把门打开了，还差三件事：
+      <ul style="margin-top:8px">
+        <li><strong>在表情详情里留下可搜索的线索</strong>：表情包名称与简介里写清「程序小猴」，让用户在表情平台能搜到你、能找到出处。</li>
+        <li><strong>公众号 → 表情平台</strong>：把文末钩子和关键词回复统一成一句话——「回复【猴米】领全套，或直接在微信表情里搜『猴米』」。</li>
+        <li><strong>专门发一篇文章</strong>《我们在微信表情上架了：搜「猴米」就能用》，标题自带搜索词，这篇本身就是一个小搜索入口，同时给了老粉一个主动打开对话框的理由。</li>
+      </ul>
+      同时<strong>建立表情平台数据台账</strong>，每周记一次「下载量 / 发送量」。
+      发送量涨但关注没动，说明表情里的品牌线索不够；两个都在涨，说明这条通路真的通了。
+    </li>
+  </ol>
+</section>
+
+<section>
+  <h2><span class="num">9</span>执行排期</h2>
+
+  <h3>第一个 14 天：止血 + 把爆款复制一次</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th style="width:14%">时间</th><th style="width:38%">动作</th><th>验收标准</th></tr></thead>
+    <tbody>
+      <tr><td>第 1 天</td><td>停掉同日重复推送；一天只发一篇，发布前跑 <code>check-publish.mjs</code></td><td>之后两周内不再出现同日两篇</td></tr>
+      <tr><td>第 1–2 天</td><td>后台配置被关注回复 + 四条关键词回复 + 三栏菜单</td><td>用另一个微信号关注自己，走通全流程</td></tr>
+      <tr><td>第 3–4 天</td><td>把 Office Tool Plus 两篇合并重写为「终极版」，重发（新主题标识）</td><td>7 天后阅读 ≥ 40</td></tr>
+      <tr><td>第 5–7 天</td><td>写《LocalSend 局域网传文件：不装微信不插 U 盘》</td><td>标题含软件全名；7 天后阅读 ≥ 30</td></tr>
+      <tr><td>第 8–11 天</td><td>写图吧工具箱续篇（进阶用法 + 常见报错），沿用爆款关键词</td><td>7 天后阅读 ≥ 50</td></tr>
+      <tr><td>第 12–14 天</td><td>按新模式发 1 篇「只发布」的日报做 7 天验证（标题带搜索词）；同时建好两个合集标签</td><td>7 天后该篇阅读来源出现「搜一搜」，且搜一搜能搜到它；主页首屏出现「实用软件分享」合集</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>第 15–30 天：把产品线跑成节奏</h3>
+  <ul>
+    <li><strong>发布节奏定为：每周 2 篇工具实测（走群发，周二 / 周五）+ 每周 5~6 篇日报（只发布，不群发）。</strong>
+    两条轨道独立跑：<strong>工具实测占用群发位，决定账号的量级；日报走搜一搜收录，负责维持更新频率和长尾。</strong>
+    日报的每一条都必须过第 6 节抓手四那把筛子，否则产量再高也不产生阅读。</li>
+    <li>按第 7 节的矩阵继续铺 Oh-My-Posh、免费 VPS 2026 版、树莓派扩容。</li>
+    <li>每篇发布后 <strong>7 天</strong>回填 <code>往期数据.csv</code>，并记录该篇的「阅读来源构成」。</li>
+    <li>30 天结束时做一次复盘：对比「工具实测 vs 日报」的篇均阅读与完成率，看资源转移是否奏效。</li>
+  </ul>
+
+  <div class="box tip">
+    <span class="lbl">暂时不要做</span>
+    <p>开新栏目、做封面美化、上视频号、做「猴米打工记」。
+    <strong>在「搜索流量能不能稳定产出」这件事验证之前，加方向只会稀释有限的精力。</strong>
+    等工具实测能量产稳定阅读了，再谈第二个栏目。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">10</span>数据基建：要改的五处</h2>
+  <p>前三条是素材库内部的口径修正，后两条是「之前完全没在用、但对搜索型账号最关键」的后台能力。</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th style="width:26%">改哪里</th><th style="width:30%">改成什么</th><th>为什么</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>往期数据表说明.md</code></td>
+        <td>回填窗口 <strong>24 小时 → 7 天</strong></td>
+        <td>发现④：搜索型内容 24h 后还能涨 3 倍以上。按 24h 回填会系统性低估工具文。本次已按 7 天值校正 <code>往期数据.csv</code>。</td>
+      </tr>
+      <tr>
+        <td><code>往期数据.csv</code></td>
+        <td>新增一列「<strong>目标搜索词</strong>」</td>
+        <td>现在看不出「哪篇文章是为了吃哪个词写的」，也就无法判断关键词有没有被拿下——这是搜索策略唯一的反馈信号。</td>
+      </tr>
+      <tr>
+        <td><code>05-栏目素材/</code></td>
+        <td>每篇发布 7 天后，存一张<strong>单篇阅读来源图</strong></td>
+        <td>只有它能回答「这篇的搜一搜占比是多少」。每 20 篇对比一次，就知道 SEO 有没有真的见效。</td>
+      </tr>
+      <tr class="hl">
+        <td><strong>后台 · 搜索分析</strong><br><span class="small">数据分析 → 搜索分析</span></td>
+        <td>每 7 天看一次：<strong>TOP 查询词 + 曝光 + 点击 + 自己的排名</strong></td>
+        <td><strong>这是本号最重要的一个数据源，之前完全没在用。</strong>它是唯一能直接看到「读者在搜什么、你排第几」的地方。
+        <strong>用法：筛出排名 5~15 位的潜力词，回去给对应的旧文补标题关键词和相关段落</strong>——性价比远高于新写一篇。</td>
+      </tr>
+      <tr class="hl">
+        <td><strong>发布流程</strong><br><span class="small"><code>固定模块.md</code> 第十节</span></td>
+        <td>每篇必勾 <strong>原创声明</strong>，并手填摘要与文末标签</td>
+        <td>搜一搜官方口径：<strong>内容相同时优先展示「声明原创」的文章。</strong>
+        而主页现在显示「<strong>56 篇原创内容</strong>」、已发表却有 <strong>177 篇</strong>——只有约三分之一开了声明。
+        这是纯粹白送的损失，从下一篇起每篇都勾。</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="small">本次已完成的：把 9 月 4 日–21 日的 14 条发文补录进 <code>往期数据.csv</code>，把 3 条 24 小时值更新为 7 天真实值，
+  并在 <code>固定模块.md</code> 新增第九~十一节（合集配置、搜一搜开关清单、搜索分析用法）。</p>
+</section>
+
+<section>
+  <h2><span class="num">11</span>已确认的决定 &amp; 还需要一件事</h2>
+
+  <div class="box good">
+    <span class="lbl">已确认（2026-09-21）</span>
+    <p><strong>① 日报保持每周 5~6 篇，但改为「只发布、不群发」。</strong>
+    这个决定是对的——日报本来就不靠推送（一篇只换约 1 个阅读），让出群发位给工具实测几乎是白赚。
+    前提是日报标题必须按第 6 节抓手四改造，并且要先做 7 天小规模验证。</p>
+    <p><strong>② 表情包已上架微信表情开放平台。</strong>
+    从「待办」转为「导流资产」，具体动作见第 8 节第 4 条。</p>
+  </div>
+
+  <ol class="steps">
+    <li>
+      <b>9/17 那篇「送达阅读率 0%」的 WorkBuddy，当时是不是只点了「发布」没点「群发」？</b>
+      这个答案决定了那条 2 阅读的重复推送是操作失误还是策略问题。
+      顺手也建议确认一下后台「发布」和「群发」这两个按钮的位置，避免以后误操作——
+      在「只发布」模式下，这两个按钮按错一次就等于浪费了当天的群发位。
+    </li>
+    <li>
+      <b>日报每篇大概花你多长时间？</b>
+      这决定了「每周 5~6 篇」是不是可持续的。如果每篇要 1 小时以上，那就是每周 5~6 小时的产能投入——
+      在工具实测还没能量产之前，这会直接挤掉最值钱的那个栏目。
+      <strong>如果日报能压到 20~30 分钟一篇（借助 AI 辅助整理），这个节奏完全没问题。</strong>
+    </li>
+  </ol>
+</section>
+
+<footer>
+  <p>程序小猴 · 运营方案 v2（搜索优先）<br>
+  数据来源：公众号后台 发表记录 / 数据概况 / 流量分析 / 用户分析 · 区间 2026-08-22 ~ 2026-09-20<br>
+  本文件与 <code>数据诊断_2026-09.html</code>、<code>程序小猴_公众号运营优化方案.html</code> 配套阅读，本版结论以本文件为准。</p>
+</footer>
+
+</div>
+</body>
+</html>
