@@ -48,7 +48,14 @@ export const AUTHOR = {
  *     'https://cdn.jsdelivr.net/gh/EchoHeim/Astapb-assets@main';
  */
 export const ASSETS_BASE =
-  'https://cdn.jsdelivr.net/gh/EchoHeim/Astapb@master/WebBlog';
+  // 本地开发走站内相对路径：`astro dev` 本来就把仓库根目录当静态资源目录
+  // （实测 /images/xxx.png、/sponsor/images/xxx.png 都是 200），所以新加的图
+  // 不用先 commit + push 就能在本地看到 —— 否则 jsDelivr 取不到未提交的文件，
+  // 本地只会看到裂图，而且这个失败是静默的，很容易误判成样式问题。
+  // 构建产物不受影响，仍走下面的 CDN。
+  import.meta.env?.DEV
+    ? ''
+    : 'https://cdn.jsdelivr.net/gh/EchoHeim/Astapb@master/WebBlog';
 
 /** 首页每页文章数 */
 export const PAGE_SIZE = 10;
@@ -65,6 +72,21 @@ export const NAV = [
 export const EXTERNAL_LINKS = [
   { label: '导航站', href: 'https://shilong.js.org/aa/' },
   { label: 'GitHub', href: 'https://github.com/EchoHeim/Astapb' },
+];
+
+/**
+ * 报头右上角的图标入口 —— 排在搜索按钮左边，34px 见方，与搜索/主题按钮同一排。
+ *
+ * 和 EXTERNAL_LINKS 的分工：那边是文字链接，跟主导航排在一起；这边是图标按钮，
+ * 适合放头像类的社交主页。图标走 ASSETS_BASE，与站内其它资源同一套分发方式。
+ * `label` 同时用作 aria-label 和 title（图标按钮没有可见文字，必须给可读名称）。
+ */
+export const HEADER_ICONS = [
+  {
+    label: 'B 站主页',
+    href: 'https://space.bilibili.com/97643323',
+    icon: `${ASSETS_BASE}/images/2233.gif`,
+  },
 ];
 
 /** 主题：'auto' 跟随系统，其余为固定值。localStorage 键名 */

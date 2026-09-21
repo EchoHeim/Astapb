@@ -1,5 +1,11 @@
 ---
-import { SITE_TITLE, SITE_SINCE, NAV, EXTERNAL_LINKS } from '../consts';
+import {
+  SITE_TITLE,
+  SITE_SINCE,
+  NAV,
+  EXTERNAL_LINKS,
+  HEADER_ICONS,
+} from '../consts';
 import { withBase } from '../utils/url';
 
 interface Props {
@@ -53,6 +59,21 @@ function isCurrent(href: string): boolean {
     </nav>
 
     <div class="tools">
+      {
+        HEADER_ICONS.map((item) => (
+          <a
+            class="icon-btn icon-btn--img"
+            href={item.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={item.label}
+            title={item.label}
+          >
+            <img src={item.icon} alt="" width="24" height="24" decoding="async" />
+          </a>
+        ))
+      }
+
       <button
         class="icon-btn"
         type="button"

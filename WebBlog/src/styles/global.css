@@ -335,11 +335,36 @@ main {
   stroke-linejoin: round;
 }
 
+/* 图片型图标按钮（报头右上角的社交入口，如 B 站头像）。
+   与 svg 图标共用 34px 底座；动图本身带透明通道，所以不再补底色，
+   只在悬停时轻微放大，和旁边两个按钮的背景反馈形成一致的“可按”感。 */
+.icon-btn--img img {
+  width: 24px;
+  height: 24px;
+  display: block;
+  object-fit: contain;
+  border-radius: 3px;
+  transition: transform 0.18s;
+}
+.icon-btn--img:hover img {
+  transform: scale(1.08);
+}
+@media (prefers-reduced-motion: reduce) {
+  .icon-btn--img img,
+  .icon-btn--img:hover img {
+    transition: none;
+    transform: none;
+  }
+}
+
 /* 主题按钮：亮/暗两个图标切换显示 */
 [data-theme="dark"] .theme-toggle__light {
   display: none;
 }
-.theme-toggle__dark {
+/* 选择器必须带上 .icon-btn 前缀（权重 0-2-0）：
+   上面 `.icon-btn svg { display: block }` 是 0-1-1，单靠 `.theme-toggle__dark`
+   （0-1-0）压不住它，浅色主题下月亮图标会跟着太阳一起露出来、上下叠成两个。 */
+.icon-btn .theme-toggle__dark {
   display: none;
 }
 [data-theme="dark"] .theme-toggle__dark {
@@ -1701,13 +1726,19 @@ main {
   text-align: center;
 }
 .qr-row img {
-  width: 148px;
-  height: 148px;
+  /* 显示尺寸放大到原来的两倍（148px → 296px），内边距同步 6px → 12px，
+     整块等比放大。宽高不再写两个死值：aspect-ratio 定比例、height:auto，
+     窄屏时 max-width 一收高度自己跟着缩，不会把卡片撑出横向滚动条
+     （实测 390/360/320px 下分别是 296/270/230px，均无横向溢出）。 */
+  width: 296px;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  max-width: 100%;
   object-fit: contain;
   border: 1px solid var(--rule);
   border-radius: var(--radius);
   background: #fff;
-  padding: 6px;
+  padding: 12px;
 }
 .qr-row figcaption {
   margin-top: 8px;
@@ -2212,6 +2243,16 @@ main {
   }
   .dialog {
     padding: 8vh 12px 12px;
+  }
+}
+
+/* 报头一行放不下「站名 + 4 个图标按钮」时的兜底（实测视口 < 400px 就会溢出，
+   把汉堡按钮挤出屏幕右侧、移动端导航直接打不开）。这里只留 M 标记，
+   站名在本页 <title> 和页脚都还在。不想藏站名的话，可以改成隐藏
+   .icon-btn--img（B 站入口只在宽屏出现），改这一处即可。 */
+@media (max-width: 400px) {
+  .brand__name {
+    display: none;
   }
 }
 
