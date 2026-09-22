@@ -7,9 +7,10 @@
   "scripts": {
     "sync": "node scripts/sync-content.mjs",
     "check": "node scripts/sync-content.mjs --check",
-    "predev": "node scripts/sync-content.mjs",
+    "ai:build": "node scripts/sync-ai-brief.mjs",
+    "predev": "node scripts/sync-content.mjs && node scripts/sync-ai-brief.mjs",
     "dev": "astro dev",
-    "prebuild": "node scripts/sync-content.mjs",
+    "prebuild": "node scripts/sync-content.mjs && node scripts/sync-ai-brief.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "migrate-assets": "node scripts/migrate-assets.mjs"

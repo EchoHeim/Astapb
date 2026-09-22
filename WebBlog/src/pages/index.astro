@@ -4,10 +4,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PostList from '../components/PostList.astro';
 import Pager from '../components/Pager.astro';
 import Sidebar from '../components/Sidebar.astro';
-import { PAGE_SIZE, SITE_TITLE, SITE_DESCRIPTION, AUTHOR } from '../consts';
+import {
+  PAGE_SIZE,
+  SITE_TITLE,
+  SITE_DESCRIPTION,
+  AUTHOR,
+  AI_BRIEF,
+} from '../consts';
 import { buildTagIndex, buildCategoryTree } from '../utils/tags';
 import { withBase } from '../utils/url';
 import { sortPosts } from '../utils/posts';
+import aiBrief from '../data/ai-brief.json';
 
 const all = await getCollection('posts', ({ data }) => !data.draft);
 const sorted = sortPosts(all);
@@ -23,6 +30,15 @@ const startLabel = oldest
   ? `${oldest.data.date.getFullYear()} 年 ${oldest.data.date.getMonth() + 1} 月`
   : '';
 const years = new Set(sorted.map((p) => p.data.date.getFullYear())).size;
+
+/**
+ * AI 简报入口 —— 全站唯一一处指向简报的链接。
+ * 这里只放「入口」本身：期数与最近更新日期，不展开任何简报内容。
+ */
+const briefCount = aiBrief.total;
+const briefLatest = aiBrief.latest
+  ? `${aiBrief.latest.slice(5, 7)} / ${aiBrief.latest.slice(8)}`
+  : '';
 ---
 
 <BaseLayout description={SITE_DESCRIPTION}>
@@ -44,6 +60,29 @@ const years = new Set(sorted.map((p) => p.data.date.getFullYear())).size;
       </div>
     </div>
   </section>
+
+  {
+    briefCount > 0 && (
+      <section class="ai-strip" aria-label={AI_BRIEF.title}>
+        <div class="wrap">
+          <a class="ai-entry" href={withBase('AI动态/')}>
+            <span class="ai-entry__mark" aria-hidden="true">AI</span>
+            <span class="ai-entry__txt">
+              <span class="ai-entry__kicker">AI 简报 · Briefing</span>
+              <span class="ai-entry__title">{AI_BRIEF.tagline}</span>
+              <span class="ai-entry__note">
+                已更新 {briefCount} 期{briefLatest && ` · 最近更新 ${briefLatest}`} · 按月份归档
+              </span>
+            </span>
+            <span class="ai-entry__go">
+              进入简报
+              <span class="ai-entry__arrow" aria-hidden="true">→</span>
+            </span>
+          </a>
+        </div>
+      </section>
+    )
+  }
 
   <div class="wrap">
     <div class="layout">

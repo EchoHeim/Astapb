@@ -1,0 +1,118 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { withBase } from '../../utils/url';
+import { AI_BRIEF } from '../../consts';
+import manifest from '../../data/ai-brief.json';
+
+/**
+ * AI 简报目录页。
+ *
+ * 这是「AI 简报」这个入口的落地页，**有意不出现在导航、侧栏、搜索、RSS
+ * 与站点地图里** —— 按约定，简报内容只从首页那一个入口进入。
+ * 因此全站只有两处引向这里：首页的入口区块，以及每期简报页里的「返回目录」。
+ *
+ * 数据来自 scripts/sync-ai-brief.mjs 生成的 src/data/ai-brief.json，
+ * 那个脚本在 predev / prebuild 时自动跑，所以这里不需要任何运行时开销。
+ */
+type BriefItem = {
+  date: string;
+  day: string;
+  title: string;
+  summary: string;
+  tags: string[];
+  url: string;
+  minutes: number;
+};
+type BriefMonth = { key: string; label: string; count: number; items: BriefItem[] };
+type BriefManifest = {
+  generatedAt: string;
+  total: number;
+  latest: string;
+  months: BriefMonth[];
+};
+
+const { months, total, latest } = manifest as BriefManifest;
+const newest = months[0]?.items[0];
+
+/** 2026-09-22 → 2026 / 09 / 22 */
+const slash = (iso: string) => iso.replace(/-/g, ' / ');
+const dayOf = (iso: string) => iso.slice(8);
+const ymOf = (iso: string) => `${iso.slice(0, 4)} / ${iso.slice(5, 7)}`;
+---
+
+<BaseLayout
+  title={AI_BRIEF.title}
+  description={AI_BRIEF.description}
+>
+  <div class="wrap">
+    <div class="page-head">
+      <div class="page-head__kicker">AI Briefing · {AI_BRIEF.title}</div>
+      <h1>{AI_BRIEF.title}</h1>
+      <p>
+        {AI_BRIEF.lede}
+        {
+          total > 0 && (
+            <>
+              {' '}目前已收录 <b>{total}</b> 期
+              {latest && <>，最近一期更新于 {latest}</>}。
+            </>
+          )
+        }
+      </p>
+    </div>
+
+    {
+      !newest ? (
+        <p class="empty">还没有生成任何简报。往 AI 日报目录里丢一份 Markdown，重新构建即可。</p>
+      ) : (
+        <>
+          <section class="ai-latest">
+            <a class="ai-latest__card" href={withBase(newest.url)}>
+              <div class="ai-latest__lab">最新一期 · {slash(newest.date)}</div>
+              <h2 class="ai-latest__t">{newest.title}</h2>
+              {newest.summary && <p class="ai-latest__s">{newest.summary}</p>}
+              <div class="ai-latest__go">
+                阅读全文
+                <span aria-hidden="true">→</span>
+              </div>
+            </a>
+          </section>
+
+          {months.map((month) => (
+            <section class="year">
+              <div class="year__h">
+                <b>{month.label}</b>
+                <span>{month.count} 期</span>
+                <span class="rule" aria-hidden="true" />
+              </div>
+
+              {month.items.map((item) => (
+                <div class="row">
+                  <span class="row__d">
+                    <time datetime={item.date}>{slash(item.date)}</time>
+                  </span>
+                  <h3 class="row__t">
+                    <a href={withBase(item.url)}>{item.title}</a>
+                  </h3>
+                  <span class="row__c">
+                    {item.minutes} 分钟
+                    <span class="row__tags">
+                      {item.tags.slice(0, 2).map((t) => (
+                        <span class="tag">#{t}</span>
+                      ))}
+                    </span>
+                  </span>
+                </div>
+              ))}
+            </section>
+          ))}
+        </>
+      )
+    }
+
+    <p class="back-link">
+      <a href={withBase('')}>← 回到博客首页</a>
+      <span class="ai-hint">{AI_BRIEF.note}</span>
+    </p>
+  </div>
+</BaseLayout>

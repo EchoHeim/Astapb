@@ -89,5 +89,26 @@ export const HEADER_ICONS = [
   },
 ];
 
+/**
+ * AI 简报 —— 唯一入口在首页，其它位置（导航 / 侧栏 / 搜索 / RSS / 站点地图）
+ * 一律不出现，这是刻意的：简报内容只从那一个入口进。
+ *
+ * 内容由 `scripts/sync-ai-brief.mjs` 从仓库里的 `CodeKey/AI 日报/*.md`
+ * 生成到 `docs/AI动态/YYYY-MM/`，清单落在 `src/data/ai-brief.json`。
+ * 这里只放展示文案，改文案不用动页面代码。
+ */
+export const AI_BRIEF = {
+  title: 'AI 简报',
+  /** 入口与目录页的说明文字 */
+  description:
+    'AI 简报 —— 把 AI 圈每天的新工具和新动静，压缩成 5 分钟的读量。',
+  lede:
+    '把 AI 圈每天的新工具和新动静，压缩成 5 分钟的读量：值得关注的模型与算力动向、能下载能上手的开源项目，以及每条的实用判断。',
+  /** 入口区块上的一句短语 */
+  tagline: '每日更新 · 5 分钟读完一圈 AI 动态',
+  /** 目录页页脚的小字说明 */
+  note: '简报按月份归档，随日报同步更新（工作日 08:00 前后）。',
+};
+
 /** 主题：'auto' 跟随系统，其余为固定值。localStorage 键名 */
 export const THEME_STORAGE_KEY = 'blog-theme';

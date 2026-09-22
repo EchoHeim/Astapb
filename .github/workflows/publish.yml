@@ -16,9 +16,22 @@ name: Deploy sites to GitHub Pages
 on:
   push:
     branches: ["master"]
-    # 只更新素材库时不必重新部署
+    # 素材库（CodeKey）里只有 `AI 日报/` 参与博客构建，其余目录改了不必重新部署。
+    #
+    # 注意：**不能**写成 `CodeKey/**` 一刀切 —— 那样每天都新丢进
+    # `CodeKey/AI 日报/` 的日报原稿也不会触发构建，线上就永远停在旧内容上。
+    # GitHub 又不允许 paths 与 paths-ignore 同时出现，所以只能逐个列出要忽略的
+    # 子目录（目录级匹配必须带 `/**`，只写目录名匹配不到目录里的文件）。
+    #
+    # 漏列新素材目录的后果只是多跑一次构建，不会漏部署，所以这里可以放心枚举。
     paths-ignore:
-      - "CodeKey/**"
+      - "CodeKey/01-IP形象/**"
+      - "CodeKey/02-封面与版式模板/**"
+      - "CodeKey/03-正文插图/**"
+      - "CodeKey/04-选题与文案库/**"
+      - "CodeKey/05-栏目素材/**"
+      - "CodeKey/06-运营方案/**"
+      - "CodeKey/07-发布登记/**"
   workflow_dispatch:
 
 permissions:
@@ -57,7 +70,10 @@ jobs:
           for f in index.html rss.xml sitemap-index.xml search-index.json favicon.ico; do
             test -f "dist/$f" || { echo "缺少 dist/$f"; exit 1; }
           done
+          # AI 简报入口（首页唯一的入口页）必须真的生成出来
+          test -f "dist/AI动态/index.html" || { echo "缺少 AI 简报入口页"; exit 1; }
           echo "文章页数：$(find dist -name index.html | wc -l)"
+          echo "简报期数：$(find dist/AI动态 -name '*.html' | wc -l)"
 
       - name: Build nav site (Vite)
         working-directory: WebSite

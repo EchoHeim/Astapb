@@ -4,7 +4,7 @@
 
    组织顺序：设计令牌 → 基础 → 布局 → 报头 → 首页 hero → 内容栅格 →
              文章列表 → 侧栏 → 文章页 → 正文排版 → 文末 → 归档/标签 →
-             关于 → 页脚 → 搜索 → 返回顶部 → 响应式 → 打印
+             关于 → 页脚 → 搜索 → 返回顶部 → 杂项 → 响应式 → AI 简报 → 打印
    主题通过 <html data-theme="light|dark"> 切换，由 BaseLayout 的内联脚本
    在首屏渲染前写入，避免闪白/闪黑。
    ========================================================================== */
@@ -2178,6 +2178,24 @@ main {
   .hero__stats b {
     font-size: 25px;
   }
+  /* 入口卡窄屏折成两行：标记 + 文案，动作链接落到文案下方并对齐左缘 */
+  .ai-entry {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 14px 16px;
+    padding: 18px 20px;
+  }
+  .ai-entry__mark {
+    width: 36px;
+    height: 36px;
+    font-size: 13px;
+  }
+  .ai-entry__title {
+    font-size: 17px;
+  }
+  .ai-entry__go {
+    grid-column: 2;
+    justify-content: flex-start;
+  }
   .item {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -2256,7 +2274,176 @@ main {
   }
 }
 
-/* ------------------------------------------------------------ 19. 打印 */
+/* ------------------------------------------------- 19. AI 简报入口 / 目录 */
+
+/* 首页那个**唯一**的简报入口：一条横卡，不做整块底色，避免跟 hero 抢注意力。
+   样式刻意做得比文章条目更「按钮」一点 —— 它是入口，不是内容。 */
+.ai-strip {
+  padding: 34px 0 0;
+}
+.ai-entry {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 22px;
+  padding: 20px 24px;
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--paper-2);
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+}
+.ai-entry:hover {
+  border-color: var(--rule-2);
+  background: var(--paper-3);
+  transform: translateY(-1px);
+}
+.ai-entry__mark {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 4px;
+  background: var(--accent);
+  color: var(--paper);
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+}
+.ai-entry__txt {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+.ai-entry__kicker {
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+}
+.ai-entry__title {
+  font-family: var(--serif);
+  font-size: 18.5px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  line-height: 1.45;
+}
+.ai-entry__note {
+  font-size: 12px;
+  color: var(--sub);
+}
+.ai-entry__go {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: var(--accent-ink);
+  white-space: nowrap;
+}
+.ai-entry__arrow {
+  transition: transform 0.2s;
+}
+.ai-entry:hover .ai-entry__arrow {
+  transform: translateX(3px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ai-entry,
+  .ai-entry__arrow {
+    transition: none;
+  }
+  .ai-entry:hover {
+    transform: none;
+  }
+  .ai-entry:hover .ai-entry__arrow {
+    transform: none;
+  }
+}
+
+/* 简报目录页顶部的最新一期 */
+.ai-latest {
+  padding: 40px 0 0;
+}
+.ai-latest__card {
+  display: block;
+  padding: 26px 28px;
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-lg);
+  background: var(--paper-2);
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+}
+.ai-latest__card:hover {
+  border-color: var(--rule-2);
+  background: var(--paper-3);
+  transform: translateY(-1px);
+}
+.ai-latest__lab {
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.ai-latest__t {
+  font-family: var(--serif);
+  font-size: clamp(20px, 2.4vw, 26px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  margin: 0 0 10px;
+  text-wrap: balance;
+}
+.ai-latest__s {
+  margin: 0 0 16px;
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: var(--ink-2);
+  max-width: 44rem;
+}
+.ai-latest__go {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: var(--accent-ink);
+}
+.ai-latest__go span {
+  transition: transform 0.2s;
+}
+.ai-latest__card:hover .ai-latest__go span {
+  transform: translateX(3px);
+}
+
+/* 目录行的右栏：期数信息 + 打头两个话题标签 */
+.row__c .row__tags {
+  display: inline-flex;
+  gap: 5px;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+.row__c .row__tags .tag {
+  font-size: 10.5px;
+  padding: 1px 6px;
+}
+
+/* 目录页脚：返回链接在左，更新说明靠右 */
+.back-link {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.ai-hint {
+  font-size: 12px;
+  color: var(--faint);
+}
+
+/* ---------------------------------------------------------- 20. 打印 */
 
 @media print {
   .masthead,

@@ -100,7 +100,7 @@ export interface GridHandle {
 }
 
 /**
- * 分类网格。97 个条目的重建成本可以忽略，所以过滤时直接整体重渲染，
+ * 分类网格。259 个条目的重建成本可以忽略，所以过滤时直接整体重渲染，
  * 不做 DOM diff —— 换来的是一份没有「状态残留」可能的简单实现。
  */
 export function createGrid(

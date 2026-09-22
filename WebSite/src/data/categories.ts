@@ -1,22 +1,31 @@
 import type { Category } from './types';
 
 /**
- * 站点数据 —— 全部 17 个分类 / 97 个条目。
+ * 站点数据 —— 全部 20 个分类 / 259 个条目。
  *
- * 内容与原 `main.js` 的 `resource` 数组逐条对齐，URL 未做任何改动。
+ * 内容分两部分：
  *
- * 图标策略（这次重构改动的部分）：
- *   1. 原本能正确取到图的 73 条，图标键**原样保留**，视觉与旧版完全一致；
- *   2. 原本取不到图的 24 条里，「旅行 → Bilibili」指的确实是 bilibili.com，
- *      所以恢复成真实的 bilibili 图标；
- *   3. 其余 23 条（36kr、少数派、iconfont、EU.ORG、goorm、游戏分类 14 条、
- *      其他分类 4 条）**刻意不写 icon**，渲染成首字母色块。
- *      这是有意为之：此前它们是静默 404 的空白，而扁平图标池里虽然有
- *      `flickr` / `openedv` / `MagoTV` 等键，把它们套到 36kr、EU.ORG、
- *      星露谷物语 Wiki 上只会显示成别家的 Logo，比留白更糟。
- *      想补真实图标时，把文件丢进 `icon/<任意目录>/` 并在下面填上键名即可。
+ *   1. **原有部分（97 条）**：与原 `main.js` 的 `resource` 数组逐条对齐，
+ *      顺序、名称、URL 一个都没动。
+ *   2. **新增部分（162 条）**：2026-09 从 lackar.com/aa（AnywhereAnything）补录。
+ *      原站已下线，数据取自 Common Crawl 的 CC-MAIN-2019-18 快照
+ *      （`lackar.com/aa/`，2019-04-22），逐条比对本项目已有 URL 后去重。
+ *      原站的数据模型是「在此站内搜索」，存的是站内搜索模板；本项目要的是
+ *      「跳转到站点首页」，所以这里存的是首页地址。
  *
- * `visible: 6` 对应旧代码里写死的 `createItem(val, div, 6)`。
+ * 补录时跳过的条目见 `docs/aa-import.md`（关停站点、已改名品牌，以及两处
+ * 「用 Google 搜某站」的伪条目）。
+ *
+ * 图标策略：
+ *   1. 原有 97 条**一条都没改**，图标键原样保留；
+ *   2. 新增条目里能对上真实 Logo 的只有 CocoaChina（`cocoachina`），照实写；
+ *   3. 其余**刻意不写 icon**，渲染成首字母色块。
+ *      这是有意为之：扁平图标池里的公司 Logo 大多是别家的，把它们套到
+ *      新站点上比留白更糟。想补真实图标时，把文件丢进 `icon/<任意目录>/`
+ *      并在下面填上键名即可（键名写错构建会失败，不会静默留白）。
+ *
+ * `visible: 6` 对应旧代码里写死的 `createItem(val, div, 6)`；新增的三个分类
+ * （电影 / 应用 / 搜索）沿用同一个值。
  */
 export const CATEGORIES: Category[] = [
   {
@@ -34,6 +43,20 @@ export const CATEGORIES: Category[] = [
       { icon: 'worldcat', name: 'WorldCat', url: 'https://www.worldcat.org/' },
       { icon: 'ted', name: 'TED', url: 'https://www.ted.com/' },
       { icon: 'ted', name: '51自学网', url: 'https://www.51zxw.net/' },
+      // ---- 以下为 aa 补录 ----
+      { name: '丁香园', url: 'https://www.dxy.cn/' },
+      { name: '下厨房', url: 'https://www.xiachufang.com/' },
+      { name: 'MBA智库', url: 'https://www.mbalib.com/' },
+      { name: '百度文库', url: 'https://wenku.baidu.com/' },
+      { name: '果壳', url: 'https://www.guokr.com/' },
+      { name: 'WIPO', url: 'https://www.wipo.int/' },
+      { name: 'Fandom', url: 'https://www.fandom.com/' },
+      { name: 'Slideshare', url: 'https://www.slideshare.net/' },
+      { name: 'Delicious', url: 'https://del.icio.us/' },
+      { name: 'Instructables', url: 'https://www.instructables.com/' },
+      { name: 'ICPSR', url: 'https://www.icpsr.umich.edu/' },
+      { name: 'Howcast', url: 'https://www.howcast.com/' },
+      { name: 'Internet Archive', url: 'https://archive.org/' },
     ],
   },
   {
@@ -48,6 +71,18 @@ export const CATEGORIES: Category[] = [
       { icon: 'sinaweibo', name: '小红书', url: 'https://www.xiaohongshu.com/' },
       { icon: 'sinaweibo', name: '百度贴吧', url: 'https://tieba.baidu.com/' },
       { icon: 'sinaweibo', name: '知乎', url: 'https://www.zhihu.com/' },
+      // ---- 以下为 aa 补录 ----
+      { name: 'Reddit', url: 'https://www.reddit.com/' },
+      { name: 'LinkedIn', url: 'https://www.linkedin.com/' },
+      { name: 'Mastodon', url: 'https://mastodon.social/' },
+      { name: 'Medium', url: 'https://medium.com/' },
+      { name: '简书', url: 'https://www.jianshu.com/' },
+      { name: '微信公众号', url: 'https://mp.weixin.qq.com/' },
+      { name: '痞客邦', url: 'https://www.pixnet.net/' },
+      { name: 'Tagboard', url: 'https://tagboard.com/' },
+      { name: '天涯社区', url: 'https://www.tianya.cn/' },
+      { name: '猫扑', url: 'https://www.mop.com/' },
+      { name: '凯迪网络', url: 'https://www.kdnet.net/' },
     ],
   },
   {
@@ -66,6 +101,18 @@ export const CATEGORIES: Category[] = [
       { icon: 'apnews', name: 'AP美联社', url: 'https://apnews.com/' },
       { icon: 'bbcnews', name: 'BBC news', url: 'https://www.bbc.com/news' },
       { icon: 'reuters', name: '路透社', url: 'https://www.reuters.com/' },
+      // ---- 以下为 aa 补录 ----
+      { name: '腾讯新闻', url: 'https://news.qq.com/' },
+      { name: '新华网', url: 'http://www.news.cn/' },
+      { name: '凤凰网', url: 'https://www.ifeng.com/' },
+      { name: '好奇心日报', url: 'https://www.qdaily.com/' },
+      { name: '煎蛋', url: 'https://jandan.net/' },
+      { name: 'CNN', url: 'https://edition.cnn.com/' },
+      { name: 'Bloomberg', url: 'https://www.bloomberg.com/' },
+      { name: '卫报', url: 'https://www.theguardian.com/' },
+      { name: 'Google 新闻', url: 'https://news.google.com/' },
+      { name: 'Feedly', url: 'https://feedly.com/' },
+      { name: 'Wikinews', url: 'https://en.wikinews.org/' },
     ],
   },
   {
@@ -81,6 +128,20 @@ export const CATEGORIES: Category[] = [
       { icon: 'pinterest', name: 'Pinterest', url: 'https://www.pinterest.com/' },
       { icon: 'iconmonstr', name: 'iconmonstr', url: 'https://iconmonstr.com/' },
       { icon: 'tumblr', name: 'Tumblr', url: 'https://www.tumblr.com/' },
+      // ---- 以下为 aa 补录 ----
+      { name: 'Pixiv', url: 'https://www.pixiv.net/' },
+      { name: 'ArtStation', url: 'https://www.artstation.com/' },
+      { name: 'deviantArt', url: 'https://www.deviantart.com/' },
+      { name: 'Artsy', url: 'https://www.artsy.net/' },
+      { name: 'ArtStack', url: 'https://artstack.com/' },
+      { name: 'Niice', url: 'https://niice.co/' },
+      { name: 'MyFonts', url: 'https://www.myfonts.com/' },
+      { name: 'Adobe Fonts', url: 'https://fonts.adobe.com/' },
+      { name: 'ArchDaily', url: 'https://www.archdaily.com/' },
+      { name: 'Houzz', url: 'https://www.houzz.com/' },
+      { name: 'Sketchfab', url: 'https://sketchfab.com/' },
+      { name: 'Hypebeast', url: 'https://hypebeast.com/' },
+      { name: 'Google Arts & Culture', url: 'https://artsandculture.google.com/' },
     ],
   },
   {
@@ -92,6 +153,19 @@ export const CATEGORIES: Category[] = [
       { icon: 'flickr', name: 'wallhaven', url: 'https://wallhaven.cc/' },
       { icon: 'flickr', name: 'flickr', url: 'https://www.flickr.com/' },
       { icon: 'flickr', name: '彼岸图', url: 'https://pic.netbian.com/' },
+      // ---- 以下为 aa 补录 ----
+      { name: 'Instagram', url: 'https://www.instagram.com/' },
+      { name: '500px', url: 'https://500px.com/' },
+      { name: 'Lofter', url: 'https://www.lofter.com/' },
+      { name: '天空之城', url: 'https://www.skypixel.com/' },
+      { name: 'Google 相册', url: 'https://photos.google.com/' },
+      { name: 'Wikimedia Commons', url: 'https://commons.wikimedia.org/' },
+      { name: 'Imgur', url: 'https://imgur.com/' },
+      { name: 'Giphy', url: 'https://giphy.com/' },
+      { name: 'NASA Image Library', url: 'https://images.nasa.gov/' },
+      { name: 'iStockphoto', url: 'https://www.istockphoto.com/' },
+      { name: '视觉中国', url: 'https://www.vcg.com/' },
+      { name: 'Getty Images', url: 'https://www.gettyimages.com/' },
     ],
   },
   {
@@ -106,6 +180,9 @@ export const CATEGORIES: Category[] = [
       { icon: 'doubanmusic', name: '豆瓣音乐', url: 'https://m.douban.com/music/' },
       { icon: 'bandcamp', name: 'bandcamp', url: 'https://bandcamp.com/' },
       { icon: 'pandora', name: 'Pandora', url: 'https://www.pandora.com/' },
+      // ---- 以下为 aa 补录 ----
+      { name: '酷狗音乐', url: 'https://www.kugou.com/' },
+      { name: 'Last.fm', url: 'https://www.last.fm/' },
     ],
   },
   {
@@ -121,6 +198,12 @@ export const CATEGORIES: Category[] = [
       { icon: 'iqiyi', name: '爱奇艺', url: 'https://www.iqiyi.com/' },
       { icon: 'MagoTV', name: '芒果TV', url: 'https://www.mgtv.com/' },
       { icon: 'letv', name: '乐视视频', url: 'https://www.le.com/' },
+      // ---- 以下为 aa 补录 ----
+      { name: '斗鱼', url: 'https://www.douyu.com/' },
+      { name: '梨视频', url: 'https://www.pearvideo.com/' },
+      { name: '搜狐视频', url: 'https://tv.sohu.com/' },
+      { name: 'AcFun', url: 'https://www.acfun.cn/' },
+      { name: '秒拍', url: 'https://www.miaopai.com/' },
     ],
   },
   {
@@ -131,6 +214,20 @@ export const CATEGORIES: Category[] = [
     sites: [
       { name: '36kr', url: 'https://www.36kr.com/' },
       { name: '少数派', url: 'https://sspai.com/' },
+      // ---- 以下为 aa 补录 ----
+      { name: 'The Verge', url: 'https://www.theverge.com/' },
+      { name: 'Engadget', url: 'https://www.engadget.com/' },
+      { name: 'TechCrunch', url: 'https://techcrunch.com/' },
+      { name: 'The Next Web', url: 'https://thenextweb.com/' },
+      { name: 'Ars Technica', url: 'https://arstechnica.com/' },
+      { name: 'CNET', url: 'https://www.cnet.com/' },
+      { name: 'GigaOM', url: 'https://gigaom.com/' },
+      { name: 'Fast Company', url: 'https://www.fastcompany.com/' },
+      { name: '爱范儿', url: 'https://www.ifanr.com/' },
+      { name: 'IT之家', url: 'https://www.ithome.com/' },
+      { name: '数字尾巴', url: 'https://www.dgtle.com/' },
+      { name: 'PingWest 品玩', url: 'https://www.pingwest.com/' },
+      { name: 'Kickstarter', url: 'https://www.kickstarter.com/' },
     ],
   },
   {
@@ -143,6 +240,16 @@ export const CATEGORIES: Category[] = [
       { icon: 'smzdm', name: '什么值得买', url: 'https://www.smzdm.com/' },
       { icon: 'tmall', name: '天猫', url: 'https://www.tmall.com/' },
       { icon: 'amazon', name: '亚马逊', url: 'https://www.amazon.com/' },
+      // ---- 以下为 aa 补录 ----
+      { name: '苏宁易购', url: 'https://www.suning.com/' },
+      { name: '蘑菇街', url: 'https://www.mogujie.com/' },
+      { name: '阿里巴巴', url: 'https://www.1688.com/' },
+      { name: '一号店', url: 'https://www.yhd.com/' },
+      { name: 'eBay', url: 'https://www.ebay.com/' },
+      { name: 'Etsy', url: 'https://www.etsy.com/' },
+      { name: 'ASOS', url: 'https://www.asos.com/' },
+      { name: 'Fancy', url: 'https://fancy.com/' },
+      { name: 'Chiphell', url: 'https://www.chiphell.com/' },
     ],
   },
   {
@@ -152,7 +259,22 @@ export const CATEGORIES: Category[] = [
     recommend: { icon: 'googlemaps', name: '谷歌地图', url: 'https://www.google.com/maps/' },
     // 原数据里这条写的是 bilibili.png 但落在 icon/travel/ 下取不到，
     // 改成扁平键名后指向真实的 icon/video/bilibili.png —— 它本来就该是这个图标。
-    sites: [{ icon: 'bilibili', name: 'Bilibili', url: 'https://www.bilibili.com/' }],
+    sites: [
+      { icon: 'bilibili', name: 'Bilibili', url: 'https://www.bilibili.com/' },
+      // ---- 以下为 aa 补录 ----
+      { name: '高德地图', url: 'https://www.amap.com/' },
+      { name: '百度地图', url: 'https://map.baidu.com/' },
+      { name: 'Google Earth', url: 'https://earth.google.com/web/' },
+      { name: '大众点评', url: 'https://www.dianping.com/' },
+      { name: '马蜂窝', url: 'https://www.mafengwo.cn/' },
+      { name: 'Airbnb', url: 'https://www.airbnb.cn/' },
+      { name: '穷游网', url: 'https://www.qyer.com/' },
+      { name: 'TripAdvisor', url: 'https://www.tripadvisor.com/' },
+      { name: 'Foursquare', url: 'https://foursquare.com/' },
+      { name: 'Lonely Planet', url: 'https://www.lonelyplanet.com/' },
+      { name: 'GOV.UK', url: 'https://www.gov.uk/' },
+      { name: 'Wikivoyage', url: 'https://www.wikivoyage.org/' },
+    ],
   },
   {
     id: 'books',
@@ -162,6 +284,14 @@ export const CATEGORIES: Category[] = [
     sites: [
       { icon: 'weread', name: '微信读书', url: 'https://weread.qq.com/' },
       { icon: 'Goodreads', name: 'Goodreads', url: 'https://www.goodreads.com/' },
+      // ---- 以下为 aa 补录 ----
+      { name: 'Google 图书', url: 'https://books.google.com/' },
+      { name: '起点中文网', url: 'https://www.qidian.com/' },
+      { name: '多看阅读', url: 'https://www.duokan.com/' },
+      { name: '书格', url: 'https://www.shuge.org/' },
+      { name: 'Issuu', url: 'https://issuu.com/' },
+      { name: 'Phaidon', url: 'https://www.phaidon.com/' },
+      { name: 'Wikibooks', url: 'https://www.wikibooks.org/' },
     ],
   },
   {
@@ -179,6 +309,18 @@ export const CATEGORIES: Category[] = [
       { icon: 'codepen', name: 'W3Schools', url: 'https://www.w3school.com.cn/' },
       { icon: 'codepen', name: '菜鸟教程', url: 'https://www.runoob.com/' },
       { icon: 'codepen', name: 'Android Dev', url: 'https://developer.android.com/get-started/' },
+      // ---- 以下为 aa 补录 ----
+      { icon: 'cocoachina', name: 'CocoaChina', url: 'https://www.cocoachina.com/' },
+      { name: 'Cocoa Controls', url: 'https://www.cocoacontrols.com/' },
+      { name: 'Code4App', url: 'http://www.code4app.com/' },
+      { name: 'V2EX', url: 'https://www.v2ex.com/' },
+      { name: 'CSDN', url: 'https://www.csdn.net/' },
+      { name: 'Processing', url: 'https://processing.org/' },
+      { name: 'Shodan', url: 'https://www.shodan.io/' },
+      { name: 'Pastebin', url: 'https://pastebin.com/' },
+      { name: 'PublicAPIs', url: 'https://publicapis.dev/' },
+      { name: 'GoDaddy', url: 'https://www.godaddy.com/' },
+      { name: 'Name.com', url: 'https://www.name.com/' },
     ],
   },
   {
@@ -242,6 +384,17 @@ export const CATEGORIES: Category[] = [
       { name: 'Tekqart', url: 'https://www.tekqart.com/' },
       { name: 'Switch321', url: 'https://www.switch321.com/' },
       { name: '三国杀', url: 'https://web.sanguosha.com/' },
+      // ---- 以下为 aa 补录 ----
+      { name: 'IGN', url: 'https://www.ign.com/' },
+      { name: 'GameSpot', url: 'https://www.gamespot.com/' },
+      { name: 'Polygon', url: 'https://www.polygon.com/' },
+      { name: 'Twitch', url: 'https://www.twitch.tv/' },
+      { name: 'IndieDB', url: 'https://www.indiedb.com/' },
+      { name: 'itch.io', url: 'https://itch.io/' },
+      { name: 'Indienova', url: 'https://indienova.com/' },
+      { name: 'VGChartz', url: 'https://www.vgchartz.com/' },
+      { name: 'Minecraft Wiki', url: 'https://minecraft.wiki/' },
+      { name: '游侠网', url: 'https://www.ali213.net/' },
     ],
   },
   {
@@ -254,6 +407,65 @@ export const CATEGORIES: Category[] = [
       { name: 'SteamPY', url: 'https://steampy.com/home' },
       { name: '星露谷物语Wiki', url: 'https://zh.stardewvalleywiki.com/' },
       { name: '黑神话·悟空Wiki', url: 'https://wiki.biligame.com/wukong/' },
+      // ---- 以下为 aa 补录 ----
+      { name: '天眼查', url: 'https://www.tianyancha.com/' },
+      { name: '企查查', url: 'https://www.qcc.com/' },
+      { name: '雪球', url: 'https://xueqiu.com/' },
+      { name: 'TradingEconomics', url: 'https://tradingeconomics.com/' },
+      { name: '金山词霸', url: 'https://www.iciba.com/' },
+      { name: 'Urban Dictionary', url: 'https://www.urbandictionary.com/' },
+      { name: 'Ludwig', url: 'https://ludwig.guru/' },
+      { name: 'Forvo', url: 'https://forvo.com/' },
+      { name: 'Wiktionary', url: 'https://www.wiktionary.org/' },
+      { name: 'Wikiquote', url: 'https://www.wikiquote.org/' },
+      { name: '萌娘百科', url: 'https://zh.moegirl.org.cn/' },
+      { name: '伪基百科', url: 'https://uncyclopedia.com/' },
+      { name: '9GAG', url: 'https://9gag.com/' },
+      { name: 'IFTTT', url: 'https://ifttt.com/' },
+    ],
+  },
+  // ---- 以下 3 个分类为 aa 独有，本次补录时新增 ----
+  {
+    id: 'movie',
+    name: '电影',
+    visible: 6,
+    recommend: { icon: 'doubanmovie', name: '豆瓣电影', url: 'https://movie.douban.com/' },
+    sites: [
+      { name: 'IMDb', url: 'https://www.imdb.com/' },
+      { name: '时光网', url: 'https://www.mtime.com/' },
+      { name: '烂番茄', url: 'https://www.rottentomatoes.com/' },
+    ],
+  },
+  {
+    id: 'app',
+    name: '应用',
+    visible: 6,
+    recommend: { icon: 'appstore', name: 'App Store', url: 'https://www.apple.com/app-store/' },
+    sites: [
+      { name: 'Google Play', url: 'https://play.google.com/' },
+      { name: '酷安', url: 'https://www.coolapk.com/' },
+      { name: '应用宝', url: 'https://sj.qq.com/' },
+      { name: '豌豆荚', url: 'https://www.wandoujia.com/' },
+      { name: 'Chrome 网上应用店', url: 'https://chromewebstore.google.com/' },
+      { name: 'Product Hunt', url: 'https://www.producthunt.com/' },
+      { name: 'AlternativeTo', url: 'https://alternativeto.net/' },
+      { name: 'BetaList', url: 'https://betalist.com/' },
+      { name: 'CreativeApplications', url: 'https://www.creativeapplications.net/' },
+    ],
+  },
+  {
+    id: 'search',
+    name: '搜索',
+    visible: 6,
+    recommend: { icon: 'google', name: 'Google', url: 'https://www.google.com/' },
+    sites: [
+      { name: '百度', url: 'https://www.baidu.com/' },
+      { name: '搜狗', url: 'https://www.sogou.com/' },
+      { name: '必应 Bing', url: 'https://www.bing.com/' },
+      { name: 'DuckDuckGo', url: 'https://duckduckgo.com/' },
+      { name: 'Yahoo!', url: 'https://www.yahoo.com/' },
+      { name: 'Naver', url: 'https://www.naver.com/' },
+      { name: 'Wolfram|Alpha', url: 'https://www.wolframalpha.com/' },
     ],
   },
 ];

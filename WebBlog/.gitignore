@@ -3,6 +3,12 @@ node_modules/
 dist/
 .astro/
 
+# AI 简报的构建镜像
+# 正本在 docs/AI动态/（随仓库提交），这里由 scripts/sync-ai-brief.mjs
+# 在每次 predev / prebuild 时从正本重建 —— Astro 只把 public/ 收进产物，
+# 所以必须在构建前生成一份，但不能重复提交。
+public/AI动态/
+
 .workbuddy/verify/*
 *.log
 

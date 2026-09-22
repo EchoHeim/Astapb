@@ -72,8 +72,20 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      // 搜索页与 404 不需要被收录
-      filter: (page) => !page.includes('/search') && !page.includes('/404'),
+      /**
+       * 搜索页与 404 不需要被收录。
+       *
+       * AI 简报也一并排除：按约定它只从首页那一个入口进入，
+       * 导航 / 侧栏 / 搜索 / RSS / 站点地图里都不该出现它。
+       * 想让它被搜索引擎收录，删掉下面两行判断即可。
+       *
+       * 中文路径在 sitemap 里可能是百分号编码的，两种写法都要判。
+       */
+      filter: (page) =>
+        !page.includes('/search') &&
+        !page.includes('/404') &&
+        !page.includes('AI动态') &&
+        !page.includes(encodeURIComponent('AI动态')),
     }),
   ],
 });

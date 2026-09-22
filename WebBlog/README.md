@@ -44,6 +44,7 @@ Astro 构建的静态博客。**文章、图片、站点代码全都在本目录
 | 路径 | 作用 |
 | --- | --- |
 | `docs/` | **文章源**。`docs/<分类>/xxx.md`，新文章放这里 |
+| `docs/AI动态/YYYY-MM/` | **AI 简报**产物（脚本生成，按月份分文件夹）。**勿手改**，见下文 |
 | `images/` | 站点图片（公众号二维码、logo 等），由 `ASSETS_BASE` 经 jsDelivr 分发 |
 | `sponsor/images/` | 赞赏二维码 |
 | `docs/NoteBook/Python/vgsales.csv` | 被 `6小时Python入门.md` 引用的数据文件 |
@@ -70,13 +71,16 @@ Astro 构建的静态博客。**文章、图片、站点代码全都在本目录
 | `src/pages/about.astro` | 关于页 |
 | `src/pages/rss.xml.js` | RSS 订阅源 |
 | `src/pages/search-index.json.ts` | 搜索索引端点（构建时生成） |
+| `src/pages/AI动态/index.astro` | **AI 简报目录页**（首页入口的落地页，见下文） |
+| `src/data/ai-brief.json` | AI 简报清单（脚本生成，首页入口与目录页读它） |
 | `src/styles/global.css` | 全站样式与主题变量 |
 | `src/scripts/search.ts` | 搜索打分与渲染，弹窗与搜索页共用 |
 | `src/utils/posts.ts` | 文章排序（含稳定的第二排序键，见下） |
 | `src/utils/tags.ts` `url.ts` | 标签 slug、URL 拼接 |
 | `scripts/sync-content.mjs` | **构建前自动跑**：补全 frontmatter + 体检 |
+| `scripts/sync-ai-brief.mjs` | **构建前自动跑**：从 `CodeKey/AI 日报/` 生成 AI 简报 |
 | `scripts/migrate-assets.mjs` | 把被引用的图片/附件镜像到独立资源仓库 |
-| `public/` | `favicon.ico`、`robots.txt` |
+| `public/` | `favicon.ico`、`robots.txt`；`public/AI动态/` 是简报的构建镜像（已 gitignore） |
 
 > **为什么单独有个 `src/utils/posts.ts`**：这批文章有大量同一天发布的
 > （`Python 数据分析` 那 14 章全是 2022-06-23）。只按日期排序时，同日期内部
@@ -131,6 +135,68 @@ summary: 一句话摘要，用于列表、RSS 和搜索引擎描述
 
 ---
 
+## AI 简报
+
+首页 hero 下方有一条 **AI 简报入口**，落地页是 `/AI动态/`，里面按月份列出每期简报。
+
+> **它只从首页那一个入口进。** 导航栏、侧栏、搜索索引、RSS、标签页、归档页、
+> 站点地图里**都不出现** —— 这是刻意的约束，不是漏配。想放开的话，
+> 最少要同时改 4 处（`consts.ts` 的 `NAV`/`Footer`/`Sidebar`、`search-index.json.ts`
+> 与 `rss.xml.js` 只读 posts 集合、`astro.config.mjs` 的 sitemap filter），
+> 改一处只会得到"半开"的状态。
+
+### 内容从哪来
+
+来自仓库里另一棵目录的公众号日报原稿：
+
+```
+CodeKey/AI 日报/AI日报_9月22日.md
+      │  scripts/sync-ai-brief.mjs（predev / prebuild 自动跑，也可单独跑）
+      ├─→ docs/AI动态/2026-09/2026-09-22.html   正本，自包含 HTML，随仓库提交
+      ├─→ public/AI动态/…                        构建镜像，已 gitignore
+      └─→ src/data/ai-brief.json                 清单（首页入口 + 目录页读）
+```
+
+**为什么要落两份**：Astro 只把 `public/` 收进构建产物，不会去 `docs/` 里捞静态文件
+（那里是内容集合的 Markdown 源）。而正本按约定放 `docs/AI动态/`，所以脚本会再镜像一份。
+镜像这一步**每次运行都会无条件执行** —— CI 检出的仓库里 `public/AI动态/` 是空的，
+只靠 `docs/` 重建镜像，链接才不会 404。
+
+### 原稿要求
+
+脚本兼容两种写法，都会自动处理：
+
+| 写法 | 例子 |
+| --- | --- |
+| 纯正文 | 首行 `# AI日报｜9月19日：标题`，正文直接跟在后面 |
+| 带发布配置块 | 开头是 `## ⚙️ 发布配置`（标题/摘要/话题标签各一个代码块），正文从后面的 `# 标题` 开始 |
+
+脚本会自动：清洗标题（去掉 `AI日报｜9月19日：` 前缀与 `｜9.21 AI日报` 后缀）、
+剔除 `## 本期未采用`（编辑留档）与结尾的话题标签行、把 🐵 署名条移到标题下方、
+把 `💡 小猴点评` 领起的段落整体折成高亮卡片。
+
+### 怎么更新一期
+
+用户把新的 `AI日报_X月X日.md` 放进 `CodeKey/AI 日报/` 之后：
+
+```bash
+cd WebBlog
+node scripts/sync-ai-brief.mjs      # 重新生成（等价于 npm run ai:build）
+git add docs/AI动态 src/data/ai-brief.json "CodeKey/AI 日报"
+git commit -m "AI 简报：新增 X 月 X 日期"
+git push origin master
+```
+
+**只 add 这三处**，别顺手 `git add -A` 把无关改动带上去。
+`npm run dev` / `npm run build` 也会自动跑这一步，所以本地预览与 CI 都不会漏。
+
+### 新增一期时不用改任何代码
+
+脚本按 `YYYY-MM` 自动建月份目录，清单按月份分组倒序，上一期/下一期链接自动算。
+只有当**原稿格式变了**（新增字段、换标题写法）才需要动 `scripts/sync-ai-brief.mjs`。
+
+---
+
 ## 本地开发
 
 ```bash
@@ -139,10 +205,14 @@ npm install
 
 npm run sync      # 只跑内容同步与体检（会写文件）
 npm run check     # 只体检，不写文件
-npm run dev       # 开发服务器
-npm run build     # prebuild 会自动跑 sync，然后产出 dist/
+npm run ai:build  # 只重新生成 AI 简报
+npm run dev       # 开发服务器（predev 会自动跑 sync + ai:build）
+npm run build     # prebuild 会自动跑 sync + ai:build，然后产出 dist/
 npm run preview   # 预览构建结果
 ```
+
+> 本机 `astro dev` 只监听 **IPv6**：用 `http://localhost:4321/`，
+> `127.0.0.1:4321` 会 ECONNREFUSED。端口被占先看 `.astro/dev.json`。
 
 ---
 
