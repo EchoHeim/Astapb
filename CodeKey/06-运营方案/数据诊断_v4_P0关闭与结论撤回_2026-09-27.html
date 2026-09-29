@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>程序小猴 · 数据诊断 v4：P0 缺口关闭与两个被推翻的结论（2026-09-27）</title>
+<style>
+  :root{
+    --green:#09B83E; --green-dark:#06872D; --green-soft:#E8F8EE; --green-line:#BEE9CC;
+    --ink:#16201A; --ink2:#4A554D; --ink3:#7C877F;
+    --line:#E2E7E3; --bg:#F5F7F5; --card:#FFFFFF;
+    --red:#A32D2D; --red-soft:#FCEBEB; --red-line:#F0C9C9;
+    --amber:#854F0B; --amber-soft:#FAEEDA; --amber-line:#EFD6A8;
+    --blue:#185FA5; --blue-soft:#E6F1FB; --blue-line:#B5D4F4;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;padding:0 20px 80px;background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:940px;margin:0 auto}
+  header.hero{margin:0 -20px 36px;padding:52px 40px 44px;background:linear-gradient(135deg,#06872D 0%,#09B83E 100%);color:#fff}
+  header.hero .inner{max-width:940px;margin:0 auto}
+  .kicker{font-size:13px;letter-spacing:.12em;opacity:.82;margin:0 0 12px}
+  header.hero h1{margin:0 0 14px;font-size:29px;line-height:1.35;font-weight:600;letter-spacing:-.01em}
+  header.hero p{margin:0;font-size:15px;opacity:.92;max-width:680px}
+  .meta{margin-top:24px;display:flex;flex-wrap:wrap;gap:10px}
+  .meta span{font-size:12.5px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28)}
+
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 34px;margin-bottom:20px}
+  h2{margin:0 0 20px;font-size:20px;font-weight:600;display:flex;align-items:center;gap:12px}
+  h2 .num{flex:0 0 auto;width:30px;height:30px;border-radius:9px;background:var(--green-soft);color:var(--green-dark);font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center}
+  h3{margin:28px 0 12px;font-size:16px;font-weight:600}
+  h3:first-of-type{margin-top:0}
+  p{margin:0 0 14px}
+  ul,ol{margin:0 0 16px;padding-left:22px}
+  li{margin-bottom:7px}
+  strong{font-weight:600}
+  code{font-family:ui-monospace,Consolas,monospace;font-size:13px;background:#EEF2EF;border:1px solid #DFE5E1;border-radius:5px;padding:1px 5px}
+  pre{background:#1E2521;color:#DCE6DF;border-radius:10px;padding:16px 18px;overflow-x:auto;font-family:ui-monospace,Consolas,monospace;font-size:12.5px;line-height:1.7;margin:0 0 18px}
+  .lead{font-size:15.5px;color:var(--ink2);margin-bottom:22px}
+
+  .kpis{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:8px}
+  .kpi{background:#F7F9F8;border-radius:11px;padding:14px 16px}
+  .kpi .lbl{font-size:12.5px;color:var(--ink3);margin:0 0 4px}
+  .kpi .val{font-size:23px;font-weight:600;line-height:1.2;margin:0}
+  .kpi .sub{font-size:12px;color:var(--ink3);margin:4px 0 0}
+  .kpi.bad .val{color:var(--red)}
+  .kpi.warn .val{color:var(--amber)}
+  .kpi.good .val{color:var(--green-dark)}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:#F2F5F3;font-weight:600;font-size:12.5px;color:var(--ink2);white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  .tbl-wrap{overflow-x:auto;margin:0 0 18px;border:1px solid var(--line);border-radius:10px}
+  .tbl-wrap table{margin:0}
+  .num-col{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .hl{background:#FFFBF0}
+  .hl td{border-bottom-color:#F0E2C0}
+  .strike{text-decoration:line-through;color:var(--ink3)}
+
+  .box{border-radius:11px;padding:16px 20px;margin:0 0 18px;font-size:14.5px}
+  .box p:last-child{margin-bottom:0}
+  .box .lbl{font-weight:600;font-size:13px;letter-spacing:.04em;display:block;margin-bottom:6px}
+  .box.bad{background:var(--red-soft);border:1px solid var(--red-line)}
+  .box.bad .lbl{color:var(--red)}
+  .box.tip{background:var(--amber-soft);border:1px solid var(--amber-line)}
+  .box.tip .lbl{color:var(--amber)}
+  .box.good{background:var(--green-soft);border:1px solid var(--green-line)}
+  .box.good .lbl{color:var(--green-dark)}
+  .box.info{background:var(--blue-soft);border:1px solid var(--blue-line)}
+  .box.info .lbl{color:var(--blue)}
+
+  .bars{margin:6px 0 20px}
+  .bar-row{display:grid;grid-template-columns:minmax(0,1fr) 58px;gap:10px;align-items:center;margin-bottom:7px;font-size:13px}
+  .bar-track{position:relative;height:20px;background:#F1F4F2;border-radius:5px;overflow:hidden;min-width:60px}
+  .bar-fill{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:#8FBF9F}
+  .bar-fill.top{background:var(--green)}
+  .bar-fill.zero{background:#D8DEDA}
+  .bar-label{font-size:12.5px;color:var(--ink3);margin:0 0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bar-val{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink2)}
+
+  .cmp{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-bottom:18px}
+  .cmp .card{border:1px solid var(--line);border-radius:11px;padding:18px 20px}
+  .cmp .card.win{border:2px solid var(--green);background:#FBFFFC}
+  .cmp .card h4{margin:0 0 12px;font-size:15px}
+  .cmp .card .row{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:5px 0;border-bottom:1px dashed #E8EDEA}
+  .cmp .card .row:last-child{border-bottom:none}
+  .cmp .card .row b{font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+
+  .steps{counter-reset:s;list-style:none;padding:0;margin:0 0 12px}
+  .steps li{counter-increment:s;position:relative;padding-left:42px;margin-bottom:16px;font-size:14.5px}
+  .steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:26px;height:26px;border-radius:8px;background:var(--green-soft);color:var(--green-dark);font-size:12.5px;font-weight:600;display:flex;align-items:center;justify-content:center}
+  .steps li b{display:block;margin-bottom:2px}
+
+  footer{text-align:center;color:var(--ink3);font-size:13px;padding:24px 0 0}
+  .small{font-size:13.5px;color:var(--ink2)}
+  .tag{display:inline-block;font-size:11.5px;padding:1px 8px;border-radius:999px;background:var(--green-soft);color:var(--green-dark);border:1px solid var(--green-line);white-space:nowrap}
+  .tag.p0{background:var(--red-soft);color:var(--red);border-color:var(--red-line)}
+  .tag.p1{background:var(--amber-soft);color:var(--amber);border-color:var(--amber-line)}
+  .tag.p2{background:#F1F4F2;color:var(--ink3);border-color:var(--line)}
+  .tag.ok{background:var(--green-soft);color:var(--green-dark);border-color:var(--green-line)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="inner">
+    <p class="kicker">数据诊断 v4 · 2026-09-27</p>
+    <h1>三个 P0 缺口全部关闭，其中两个结论要撤回</h1>
+    <p>拿到后台「下载数据」导出的趋势表和两篇单篇明细之后，上一轮列出的三个必答问题全部有了答案。
+    答案里有好消息（「只发布」确实被搜一搜收录），也有要打自己脸的地方。</p>
+    <div class="meta">
+      <span>区间 2026-08-28 ~ 09-26</span>
+      <span>阅读 701 人次 / 发表 33 篇</span>
+      <span>搜一搜 72.0%</span>
+      <span>P0 关闭 3 / 3</span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <h2><span class="num">0</span>这轮拿到了什么</h2>
+
+  <p class="lead">三份文件，恰好把上一轮列的三条 P0 全部补齐，另外多给了两篇「读者是谁」的画像。</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>文件</th><th>补齐了什么</th><th>上一轮的对应 P0</th></tr></thead>
+    <tbody>
+      <tr><td><code>tendency_….xls</code><br><span class="small">趋势数据，08-28 ~ 09-26</span></td>
+        <td>每日分渠道阅读、每日发表篇数、<strong>按文章归因的来源构成（含搜一搜）</strong></td>
+        <td><span class="tag ok">解决</span>「只发布有没有被搜一搜收录」</td></tr>
+      <tr class="hl"><td><code>数据明细（Gemini 4 Pro…）.xls</code></td>
+        <td>09-22 日报：阅读 19、送达 227、完读率、停留 31s、逐日来源、性别/年龄/地域</td>
+        <td><span class="tag ok">解决</span>单篇来源构成 + 送达口径</td></tr>
+      <tr class="hl"><td><code>数据明细（HEU KMS Activator….xls</code></td>
+        <td>09-25 工具文：阅读 51、完读率、停留 61s、<strong>新增关注 2</strong>、逐日来源</td>
+        <td><span class="tag ok">解决</span>同上 + 首次拿到新增关注</td></tr>
+      <tr><td>两张「发表记录」截图</td>
+        <td><strong>09-19 ~ 09-27 完整发表清单</strong>（后台共发表 183 次），含每篇的赞/分享/收藏</td>
+        <td><span class="tag ok">解决</span>「9/23、9/24、9/26、9/27 在不在列表里」</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="box bad">
+    <span class="lbl">顺带发现一个台账漏洞</span>
+    <p>趋势表里 <strong>09-20 当天发表篇数 = 0</strong>，发表记录里也没有 09-20。
+    但 <code>发布登记表.csv</code> 里躺着一行 <code>ai-daily-20260920</code>，
+    <code>AI日报_9月20日.md</code> 也确实写好了。<strong>那篇写了没发，台账却当成发了。</strong>
+    查重脚本现在会误以为 09-20 的主题已用过。建议核一下，把该行标成「未发布」或直接删掉。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">1</span>判据成立：只发布的内容，确实被搜一搜收录了</h2>
+
+  <p class="lead">上一轮说这是「『日报只发布』策略的生死判据」，因为方案 v2 里它是假设不是结论。现在是结论了。</p>
+
+  <p>09-22 那篇日报（<em>Gemini 4 Pro 价格曝光，云栖大会今日开幕</em>）没有群发。它的 19 个阅读里，<strong>15 个来自搜一搜，占 79%</strong>。逐日拆开看：</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>日期</th><th class="num-col">全部</th><th class="num-col">搜一搜</th><th>其余来源</th></tr></thead>
+    <tbody>
+      <tr><td>09-22（发布日 08:13）</td><td class="num-col">14</td><td class="num-col"><strong>11</strong></td><td>公众号消息 2 · 公众号主页 1 · 其他 2</td></tr>
+      <tr><td>09-23</td><td class="num-col">2</td><td class="num-col">1</td><td>其他 1</td></tr>
+      <tr><td>09-24</td><td class="num-col">3</td><td class="num-col">3</td><td>—</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="box good">
+    <span class="lbl">结论</span>
+    <p>发布当天就有 11 个人从搜一搜点进来，占当天全部的 73%。
+    <strong>「不群发」不等于「没人看」——微信搜一搜会把「发布」的内容照常收录并给排名。</strong>
+    这条判据成立，方案 v2 的方向没问题。</p>
+  </div>
+
+  <p class="small">旁证：09-21 那篇（旧标题）搜一搜 7 / 共 11，同样过半。
+  更极端的对照是 09-25 发的 HEU KMS——搜一搜 45 / 共 51，<strong>88%</strong>。</p>
+
+  <div class="box info">
+    <span class="lbl">但别读过头</span>
+    <p>「只发布」解决的是<strong>有没有入口</strong>，不是<strong>来多少人</strong>。
+    入口有了，来多少完全取决于有没有人在搜这个词——这正是下一节。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">2</span>日报的天花板，是标题里那个实体有没有人搜</h2>
+
+  <p class="lead">这是全篇最重要的一节，因为它同时推翻了我上一轮的一个结论。</p>
+
+  <h3>2.1 先撤回：上一轮那个「新标题赢 73%」是 n=1 的产物</h3>
+
+  <p>上一轮我拿 09-21（旧标题，11）对比 09-22（新标题，19），说「标题去前缀，+73%」。
+  现在发表记录把 09-23 之后的标题形态全暴露了——<strong>09-22 起所有日报都是新格式</strong>，
+  所以样本从 1 篇变成了 4 篇。把日报按标题格式分组：</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>标题格式</th><th>样本</th><th class="num-col">均值</th><th class="num-col">中位数</th><th>明细</th></tr></thead>
+    <tbody>
+      <tr><td>旧格式（带<br><code>AI日报｜X月X日：</code>前缀）</td><td>14 篇</td><td class="num-col">5.9</td><td class="num-col">4.5</td>
+        <td class="small">09-01 8 · 09-04 4 · 09-07 4 · 09-08 5 · 09-09 3 · 09-10 7 · 09-11 9 · 09-12 4 · 09-15 8 · 09-16 9 · 09-17 3 · 09-18 4 · 09-19 3 · 09-21 11</td></tr>
+      <tr><td>新格式（实体前置，无前缀）</td><td>4 篇</td><td class="num-col">7.0</td><td class="num-col"><strong>3.5</strong></td>
+        <td class="small">09-22 <strong>19</strong> · 09-23 4 · 09-24 2 · 09-25 3</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="box bad">
+    <span class="lbl">撤回</span>
+    <p>去掉 09-22 那一个极端值，新格式只剩 4 / 2 / 3，均值 3.0、中位数 3——
+    <strong>两个都低于旧格式（均值 5.9、中位数 4.5）</strong>。均值那 +1.1 全是 09-22 一篇扛的。
+    <strong>「去前缀能提升阅读」目前没有证据支持，上一轮的 +73% 必须撤回。</strong>
+    前缀该不该去是另一回事（它占版面、零搜索价值，这个论证仍成立），但它不是阅读量的解释变量。</p>
+  </div>
+
+  <h3>2.2 真正的解释变量：标题里的实体有没有搜索量</h3>
+
+  <p>把四篇新格式日报按「标题里的实体是否有人真的会去搜」重排，一眼就分开了：</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>发布</th><th>标题里的实体</th><th>实体性质</th><th class="num-col">阅读</th><th class="num-col">搜一搜</th></tr></thead>
+    <tbody>
+      <tr class="hl"><td>09-22</td><td>云栖大会 · Gemini 4 Pro</td><td>当天正在发生的大会 + 大厂模型</td><td class="num-col"><strong>19</strong></td><td class="num-col"><strong>15</strong></td></tr>
+      <tr><td>09-21</td><td>稚晖君 · 人形机器人</td><td>有名有姓的人 + 大众话题</td><td class="num-col">11</td><td class="num-col">7</td></tr>
+      <tr><td>09-23</td><td>平头哥 真武V900</td><td>新芯片代号，圈内小词</td><td class="num-col">4</td><td class="num-col">&lt;7</td></tr>
+      <tr><td>09-24</td><td>Claude Opus 5.5 · GPT-6</td><td>模型版本号，非当下热点</td><td class="num-col">2</td><td class="num-col">&lt;7</td></tr>
+      <tr><td>09-25</td><td>真武V900 · Qwen4</td><td>与 09-23 同一实体，二刷</td><td class="num-col">3</td><td class="num-col">&lt;7</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p class="small">「&lt;7」是下限估计：来源构成表只列出搜一搜阅读 ≥7 的文章，这几篇没进榜，说明搜索来量个位数。</p>
+
+  <div class="box good">
+    <span class="lbl">结论</span>
+    <p>同一账号、同一模板、同一时段、同样的发布方式，<strong>只因标题里的实体不同，结果差 5~8 倍</strong>。
+    「有人会去搜吗」这条选题第一标准，第一次拿到了量化支撑——
+    所以它是<strong>标题层</strong>的标准，不只是选题层的：<strong>写标题时，主实体必须是有人主动搜的词</strong>，
+    而不是「今天 AI 圈在聊什么」。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">3</span>两种内容的流量曲线不一样，所以回填窗口也不一样</h2>
+
+  <p class="lead">上一轮我从「7 天值 vs 30 天值」倒推出工具文要 14 天回填。现在有逐日曲线，能直接看到形状。</p>
+
+  <div class="cmp">
+    <div class="card win">
+      <h4>工具文 · HEU KMS（09-25 09:11 发布）= 爬坡型</h4>
+      <div class="row"><span>09-25 当天 · 搜一搜</span><b>16</b></div>
+      <div class="row"><span>09-26 次日 · 搜一搜</span><b>29</b></div>
+      <div class="row"><span>次日 / 当天</span><b>1.8×</b></div>
+      <div class="row"><span>两天合计</span><b>51</b></div>
+    </div>
+    <div class="card">
+      <h4>日报 · Gemini 4 Pro（09-22 08:13 发布）= 脉冲型</h4>
+      <div class="row"><span>09-22 当天 · 搜一搜</span><b>11</b></div>
+      <div class="row"><span>09-23 次日 · 搜一搜</span><b>1</b></div>
+      <div class="row"><span>09-24 第三日 · 搜一搜</span><b>3</b></div>
+      <div class="row"><span>当天占全部搜索量</span><b>73%</b></div>
+    </div>
+  </div>
+
+  <div class="box tip">
+    <span class="lbl">可执行的差别</span>
+    <ul style="margin-bottom:0">
+      <li><strong>日报：7 天回填够用</strong>，当天就吃掉七成，之后基本不动。</li>
+      <li><strong>工具文：7 天回填会低估</strong>，次日还在翻倍，建议 <strong>14 天</strong>回填；过早下结论会砍掉本来能长的选题。</li>
+      <li>这不是风格问题，是<strong>搜索排序的爬升速度</strong>问题——常青工具词的排名是慢慢往上走的，新闻词的排名只有当天。</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">4</span>不发文章的日子，阅读反而更高</h2>
+
+  <p class="lead">这条最反直觉，也是这轮数据里最有用的一条。</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>日期</th><th>星期</th><th class="num-col">发表篇数</th><th class="num-col">全部阅读</th><th class="num-col">搜一搜</th><th class="num-col">搜索占比</th></tr></thead>
+    <tbody>
+      <tr><td>09-23</td><td>三</td><td class="num-col">1</td><td class="num-col">27</td><td class="num-col">20</td><td class="num-col">74%</td></tr>
+      <tr><td>09-24</td><td>四</td><td class="num-col">1</td><td class="num-col">27</td><td class="num-col">20</td><td class="num-col">74%</td></tr>
+      <tr><td>09-25</td><td>五</td><td class="num-col">2</td><td class="num-col">36</td><td class="num-col">24</td><td class="num-col">67%</td></tr>
+      <tr class="hl"><td>09-26</td><td>六</td><td class="num-col"><strong>0</strong></td><td class="num-col"><strong>41</strong></td><td class="num-col"><strong>38</strong></td><td class="num-col"><strong>93%</strong></td></tr>
+      <tr class="hl"><td>09-20</td><td>日</td><td class="num-col"><strong>0</strong></td><td class="num-col">22</td><td class="num-col">21</td><td class="num-col"><strong>95%</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="box good">
+    <span class="lbl">结论</span>
+    <p><strong>当天有多少人读，主要由「存量内容在搜一搜的排名」决定，跟今天发不发关系不大。</strong>
+    09-26 一整天没发，却刷出区间内第三高的单日阅读（41），全靠 09-25 那篇工具文被收录后往上爬。</p>
+    <p>推论有两条，都跟手上做的决定直接相关：</p>
+    <ul style="margin-bottom:0">
+      <li><strong>「今天没写完，要不要硬发一篇凑数」——不用。</strong>发一篇扑街的，不如把产能省下来。掉不了量。</li>
+      <li><strong>产能应该压在「能被搜到且长尾长」的工具文上。</strong>日报最多影响当天那几个字能不能被搜到，工具文影响的是之后两周每天的量。</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">5</span>09-25 那次双发，是一次干净到不像话的对照</h2>
+
+  <p class="lead">同一天、同一批粉丝、相隔 20 分钟、同一个人写的。除了内容类型，其他变量全一样。</p>
+
+  <div class="cmp">
+    <div class="card win">
+      <h4>09:11 · 工具实测《HEU KMS Activator：六种激活方式，原理一次讲清》</h4>
+      <div class="row"><span>阅读</span><b>51</b></div>
+      <div class="row"><span>搜一搜来源</span><b>45（88%）</b></div>
+      <div class="row"><span>平均停留</span><b>61 秒</b></div>
+      <div class="row"><span>新增关注</span><b>2</b></div>
+      <div class="row"><span>分享 / 收藏</span><b>2 / 1</b></div>
+    </div>
+    <div class="card">
+      <h4>08:51 · AI 日报《真武V900算力翻三倍，Qwen4已投入训练》</h4>
+      <div class="row"><span>阅读</span><b>3</b></div>
+      <div class="row"><span>搜一搜来源</span><b>&lt;7</b></div>
+      <div class="row"><span>平均停留</span><b>—</b></div>
+      <div class="row"><span>新增关注</span><b>0</b></div>
+      <div class="row"><span>分享 / 收藏</span><b>0 / 0</b></div>
+    </div>
+  </div>
+
+  <p><strong>17 倍。</strong>上一轮我说「上一篇工具文比后一篇 Office Tool Plus 更能打」，
+  现在可以说得更狠：<strong>工具文和日报不是一个量级的东西</strong>，把它们当成两个平级栏目来分配产能，是当前最大的资源错配。</p>
+
+  <p class="small">注意：这不等于「砍掉日报」。日报承担的是另一个职能——第 8 节的人群画像显示，它拉来的人明显更泛。</p>
+</section>
+
+<section>
+  <h2><span class="num">6</span>口径修正：完读率在小样本下会虚高</h2>
+
+  <p class="lead">这条要改的是一份已经写进文件里的规则。</p>
+
+  <p><code>往期数据表说明.md</code> 里写着「阅读完成率 健康线 ≥ 50%」，并按这个标准记录了「工具实测 57%~75%」。
+  现在两篇样本长大了，数字掉到一半以下：</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>文章</th><th class="num-col">阅读</th><th class="num-col">完读率</th><th class="num-col">平均停留</th><th>早期（24h 小样本）记录值</th></tr></thead>
+    <tbody>
+      <tr><td>HEU KMS（工具文）</td><td class="num-col">51</td><td class="num-col"><strong>19.6%</strong></td><td class="num-col"><strong>61 秒</strong></td><td class="strike">57%~75%</td></tr>
+      <tr><td>Gemini 4 Pro（日报）</td><td class="num-col">19</td><td class="num-col"><strong>26.3%</strong></td><td class="num-col">31 秒</td><td class="strike">25%~33%</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>原因不复杂：早期那 57%~75% 是「7 个阅读里 4 个人读完」这种分母算出来的。
+  等阅读涨到 51，而且绝大部分是<strong>从搜索进来的陌生人</strong>——他们扫两眼就走，完读率自然被拉到 20% 以下。</p>
+
+  <div class="box tip">
+    <span class="lbl">改法</span>
+    <ul style="margin-bottom:0">
+      <li><strong>删除「完读率 ≥ 50%」这条健康线</strong>，它对长文天然不公平（工具文比日报长，完读率反而更低）。</li>
+      <li><strong>改看平均停留时长</strong>：61 秒 vs 31 秒，工具文是日报的两倍，这个差是实打实的内容深度差。</li>
+      <li>回填规则补一句：<strong>阅读 &lt; 20 时不看完读率</strong>（分母太小），等满 7 天再算。</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">7</span>同一实体连着发，第二篇必然扑</h2>
+
+  <p class="lead">三组对照，方向完全一致。</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>实体</th><th>第一篇</th><th>第二篇</th><th class="num-col">结果</th></tr></thead>
+    <tbody>
+      <tr><td>图吧工具箱</td><td>09-09《图吧工具箱 WinUI3 社区版 v1.6.1》</td><td>09-09 同日另一篇《图吧工具箱 WinUI3 社区》</td><td class="num-col">264 → 4</td></tr>
+      <tr><td>Office Tool Plus</td><td>09-19《简单使用方法》</td><td>09-19 同日《把复杂的 Office 安装部署变简单》</td><td class="num-col">60 → 35</td></tr>
+      <tr class="hl"><td>真武 V900</td><td>09-23《平头哥真武V900发布》</td><td>09-25《真武V900算力翻三倍》</td><td class="num-col">4 → 3</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>图吧那组最狠——同一主题、同一天、第二篇只有 4 个阅读。而且注意<strong>第三组是隔了一天，照样没用</strong>：
+  同一个实体在搜一搜里只有一个坑位，第二篇进不去。</p>
+
+  <div class="box bad">
+    <span class="lbl">查重脚本有个盲区</span>
+    <p><code>check-publish.mjs</code> 是按<strong>主题标识</strong>（<code>ai-daily-YYYYMMDD</code> / <code>tool-&lt;名&gt;</code>）查重的。
+    09-23 和 09-25 那两篇的主题标识完全不同，所以它<strong>一声没吭</strong>。
+    建议加一道「实体词」检查：<strong>核心实体词 14 天内重复出现即告警</strong>，不管主题标识是什么。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">8</span>读者是谁：第一次拿到画像</h2>
+
+  <p class="lead">只有两篇样本，别当普查用。但两篇互相印证的部分可以信。</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>维度</th><th>HEU KMS（工具文 · 51 人）</th><th>Gemini 4 Pro（日报 · 19 人）</th></tr></thead>
+    <tbody>
+      <tr><td>性别</td><td>男 92.2% / 女 7.8%</td><td>男 78.9% / 女 <strong>21.1%</strong></td></tr>
+      <tr><td>年龄峰值</td><td>26-35 岁（37.3%）</td><td>26-35 岁（<strong>42.1%</strong>）</td></tr>
+      <tr><td>地域第一</td><td>广东 17.7%</td><td>广东 <strong>36.8%</strong></td></tr>
+      <tr><td>其余地域</td><td>上海 9.8 · 北京 7.8 · 江苏/福建/浙江/河南/江西 各 5.9</td><td>北京 15.8 · 上海 10.5 · 浙江 10.5</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="box info">
+    <span class="lbl">读法</span>
+    <ul style="margin-bottom:0">
+      <li><strong>两篇的年龄峰值都是 26-35 岁</strong>——和「嵌入式 / 软件工具」的账号定位对得上。</li>
+      <li><strong>工具文更「垂直」</strong>：男性 92%，地域分散（8 个省份各占 5.9%，长尾铺得开）。</li>
+      <li><strong>日报更能「破圈」</strong>：女性占比从 7.8% 跳到 21.1%，且广东一地占 36.8%。日报拉来的是更泛的读者，工具文留下的是更准的读者。</li>
+      <li>这解释了为什么两个栏目都值得留——<strong>但产能配比不该是 1:1</strong>。</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">9</span>台账欠了六行，先补上</h2>
+
+  <p class="lead">两份台账都停在 09-21，所以查重脚本现在是瞎的。下面可以直接粘。</p>
+
+  <h3>9.1 <code>往期数据.csv</code> 追加</h3>
+  <p class="small">这 5 行<strong>已经写进文件了</strong>。09-27 那篇（阅读还是 0）没写——0 不是测量值，是还没测。<br>
+  注意：按 <code>往期数据表说明.md</code> 的规矩这些行都还没满 7 天，所以备注统一带 <strong>【未满7天·复核日】</strong> 前缀，
+  到日子要覆盖成正式值。文件是 UTF-8 with BOM + CRLF，追加时照原样，否则 Excel 打开乱码。</p>
+  <pre>2026-09-22,AI日报,"Gemini 4 Pro 价格曝光，云栖大会今日开幕",热点型,19,0,0,0.88%,26.32%,0.00%,【未满7天·09-29复核】搜一搜 15/19=79%；新标题格式首篇
+2026-09-23,AI日报,"平头哥真武V900发布，骁龙端侧日跑百万token",热点型,4,0,0,0.88%,,0.00%,【未满7天】搜一搜&lt;7；实体与 09-25 重复
+2026-09-24,AI日报,"Claude Opus 5.5 降本 40%，GPT-6 同夜降价 50%",数字型,2,0,0,0.88%,,0.00%,【未满7天】搜一搜&lt;7
+2026-09-25,AI日报,"真武V900算力翻三倍，Qwen4已投入训练",热点型,3,0,0,,,0.00%,【未满7天】实体与 09-23 重复；08:51 发布
+2026-09-25,工具实测,"HEU KMS Activator：六种激活方式，原理一次讲清",结论型,51,2,2,1.32%,19.61%,3.92%,【未满7天·10-02复核】搜一搜 45/51=88%；平均停留 61s</pre>
+
+  <h3>9.2 <code>发布登记表.csv</code> 追加（这条更急——查重靠它）</h3>
+  <p class="small">6 行，<strong>也已写进文件</strong>。查重脚本现在能看到 16 条记录。</p>
+  <pre>2026-09-22,公众号,AI日报,"Gemini 4 Pro 价格曝光，云栖大会今日开幕",ai-daily-20260922,Gemini|云栖大会|Gemini 4 Pro,新标题格式首篇；搜一搜 15/19=79%
+2026-09-23,公众号,AI日报,"平头哥真武V900发布，骁龙端侧日跑百万token",ai-daily-20260923,平头哥|真武V900|骁龙|端侧,⚠️ 实体与 09-25 重复（第二篇仅 3 阅读）
+2026-09-24,公众号,AI日报,"Claude Opus 5.5 降本 40%，GPT-6 同夜降价 50%",ai-daily-20260924,Claude|Opus 5.5|GPT-6|降价,
+2026-09-25,公众号,AI日报,"真武V900算力翻三倍，Qwen4已投入训练",ai-daily-20260925,真武V900|Qwen4|算力,⚠️ 实体与 09-23 重复；08:51 发布
+2026-09-25,公众号,工具实测,"HEU KMS Activator：六种激活方式，原理一次讲清",tool-heu-kms,HEU KMS|激活|KMS|Windows,09:11 发布；搜一搜 88%；新增关注 2
+2026-09-27,公众号,AI日报,"苹果开源 LensVLM-9B，基座模型是阿里千问",ai-daily-20260927,LensVLM|苹果|千问|Qwen|开源,08:09 发布；后台已自动生成贴图草稿</pre>
+
+  <h3>9.3 查重脚本加了第 5 道检查</h3>
+  <p><code>check-publish.mjs</code> 现在多一道「<strong>实体重合</strong>」：剥掉模板前缀后，算候选标题与近 14 天内各标题的
+  <strong>最长公共子串</strong>，≥10 字判高（阻断发布、退出码 1），4~9 字判中（只提醒）。新增 <code>--window=</code> 参数。</p>
+  <p class="small">已实测：<em>真武V900 重写</em>被中风险拦下并同时点出 09-23 与 09-25 两条；<em>Office Tool Plus 重发</em>触发高风险、退出码 1；<em>树莓派根分区扩容</em>零命中。</p>
+
+  <h3>9.4 顺手清掉一行错的</h3>
+  <p><code>发布登记表.csv</code> 里 <code>ai-daily-20260920</code> 那行，后台趋势表显示当天发表 0 篇。建议改成
+  「未发布（稿件留存稿）」或删除，否则会有一次假阳性查重。</p>
+</section>
+
+<section>
+  <h2><span class="num">10</span>还剩什么没拿到</h2>
+
+  <p class="lead">P0 清空了，剩下的是「能把动作做准」的数据，不是「能不能判断」的数据。</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>优先级</th><th>要什么</th><th>在哪取</th><th>能解决什么</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tag p1">P1</span></td>
+        <td><strong>搜索分析：TOP 查询词 + 曝光 + 点击 + 排名</strong></td>
+        <td>数据分析 → 搜索分析</td>
+        <td>「实体有没有人搜」现在只能事后从阅读量倒推。<strong>有了这个词表就能事前判断</strong>——顺便挑排名 5~15 位的词回去补旧文标题，这是 ROI 最高的动作，至今零数据。</td></tr>
+      <tr><td><span class="tag p1">P1</span></td>
+        <td>粉丝总数变化（09-21 时是 227）</td>
+        <td>首页 / 用户分析</td>
+        <td>HEU KMS 带来 2 个新增关注，是首个正数。想知道半个月净增几人——方案 v2 基线是 +2 人/月。</td></tr>
+      <tr><td><span class="tag p2">P2</span></td>
+        <td>09-17 那篇「送达阅读率 0%」的 WorkBuddy，当时按的是「发布」还是「群发」</td>
+        <td>单篇详情</td>
+        <td>从诊断 v1 挂到现在。在「只发布」模式下，这两个按钮按错一次就废掉当天群发位。</td></tr>
+      <tr class="hl"><td><span class="tag p2">P2</span></td>
+        <td>09-27 那篇自动生成的<strong>「贴图草稿」</strong>效果</td>
+        <td>发表记录里的提示条</td>
+        <td>后台提示「已自动将文章生成成贴图草稿，发布后优先推荐给非粉丝用户」。<strong>如果这条路走通，等于多一个非粉丝触达入口</strong>——值得单独盯三天。</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="box good">
+    <span class="lbl">下一轮想做的判断（等数据）</span>
+    <p>把「实体搜索量」从定性变成定量：拿搜索分析的词表，给每篇日报标题的主实体标一个「搜索热度档位」，
+    再和阅读量做回归。<strong>如果拟合得住，以后选题会前就有一个可算的筛子。</strong></p>
+  </div>
+</section>
+
+<footer>
+  数据来源：公众号后台「下载数据」导出（趋势 08-28~09-26、单篇明细 09-22 / 09-25）+ 发表记录截图 2 张（09-27 08:23）。<br>
+  本文所有数字为后台原始值，未做季节调整或外推。样本量小的地方已逐处标注。
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+# WebSite/ 目录许可
+
+本目录是**网站导航资源区**（复刻 [lackar.com/aa](http://lackar.com/aa/) 的静态导航站）。
+代码与第三方素材分别授权。
+
+## 一、代码 —— MIT
+
+适用文件：`index.html`、`create.js`、`main.js`、`style.css`、`mobile.css`
+
+许可正文见 `../LICENSES/MIT.txt`。
+
+```
+Copyright (c) 2022-present MacLodge (EchoHeim) <shilong.native@foxmail.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, subject to the inclusion of the above copyright notice.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
+```
+
+## 二、第三方图标与品牌标识 —— 归各自权利人所有
+
+适用目录：`icon/`、`header/`、`search/`、`img/`、`public/`
+
+其中出现的 GitHub、Steam、淘宝、YouTube、Facebook、Pinterest 等
+**图标、Logo、商标、品牌名称，版权与商标权均归各自权利人所有**。
+
+本仓库对它们的收录**仅用于链接索引与视觉标识**（指向对应官方网站），
+具体事实包括：
+
+- **不构成**任何形式的授权、许可或代理关系
+- **不主张**任何权利
+- **不代表**对方认可、赞助或背书本站
+- 收录**不代表**本人与上述主体存在任何关联
+
+若权利人认为使用方式不当，请联系 **shilong.native@foxmail.com**，
+本人将立即移除相关素材。
+
+## 三、站内数据
+
+`src/data/categories.ts` 与 `src/data/engines.ts` 中的网站地址与分类清单为本人整理，
+适用 **MIT**（同第一部分）。
+
+---
+
+Copyright (c) 2022-present MacLodge (EchoHeim) <shilong.native@foxmail.com>

@@ -1,0 +1,18 @@
+{
+  "name": "astapb-nav",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "网站导航站（复刻 lackar.com/aa）—— Vite + TypeScript 构建，产物部署到 /aa/",
+  "scripts": {
+    "dev": "vite",
+    "check": "node scripts/verify-icons.mjs",
+    "prebuild": "node scripts/verify-icons.mjs",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0"
+  }
+}

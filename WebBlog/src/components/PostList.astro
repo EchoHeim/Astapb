@@ -1,0 +1,24 @@
+---
+import PostCard from './PostCard.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  posts: CollectionEntry<'posts'>[];
+  /** 是否显示摘要 */
+  showSummary?: boolean;
+}
+
+const { posts, showSummary = true } = Astro.props;
+---
+
+{
+  posts.length === 0 ? (
+    <p class="empty">这里还没有文章。</p>
+  ) : (
+    <div class="list">
+      {posts.map((post) => (
+        <PostCard post={post} showSummary={showSummary} />
+      ))}
+    </div>
+  )
+}

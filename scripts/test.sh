@@ -6,8 +6,7 @@ url=https://issuepcdn.baidupcs.com/issue/netdisk/yunguanjia/BaiduNetdisk_7.19.0.
 
 function test_download() {
     j=$1
-    for ((i=1; i<=j; i++))
-    do
+    for ((i = 1; i <= j; i++)); do
         sudo nmcli dev wifi connect BIQU-F password 123456789 ifname wlan0
         [[ -f BaiduNetdisk_7.19.0.18.exe ]] && rm -f BaiduNetdisk_7.19.0.18.exe
         sync

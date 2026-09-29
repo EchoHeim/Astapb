@@ -1,0 +1,39 @@
+# ── Astro 博客专属规则 ─────────────────────────────────
+# 仓库级通用规则（备份文件、OS 垃圾、Python 缓存、.workbuddy 约定）
+# 在根 .gitignore，不在这里重复。
+
+# 构建产物与依赖
+node_modules/
+dist/
+.astro/
+
+# AI 简报的构建镜像
+# 正本在 docs/AI动态/（随仓库提交），这里由 scripts/sync-ai-brief.mjs
+# 在每次 predev / prebuild 时从正本重建 —— Astro 只把 public/ 收进产物，
+# 所以必须在构建前生成一份，但不能重复提交。
+public/AI动态/
+
+# 本地环境
+.env
+.env.production
+*.local
+
+# 日志
+*.log
+
+# ── .workbuddy 下的会话数据 ────────────────────────────
+# 与仓库根「keep .workbuddy/memory/ tracked」的约定保持一致。
+#
+# 这里是 `.workbuddy/*` 而不是 `.workbuddy/`。写成后者会把 memory/ 一起挡在
+# 版本库外面，和根约定冲突 —— WebSite/.gitignore 早就踩过这个坑，本目录原先只
+# 忽略了 verify/，导致 _shots/ 之类会漏进来，现已对齐。
+.workbuddy/*
+!.workbuddy/memory/
+
+# ── 本地视觉验证产物 ───────────────────────────────────
+# 截图输出目录，以及无头 Chrome 的 --user-data-dir。
+# Chrome profile 动辄几万个碎文件、每个几十 MB，绝不能进版本库。
+# 加前导斜杠锚定到本目录，避免误伤其它层级里的同名目录。
+/_shot/
+/_shots/
+/_verify/

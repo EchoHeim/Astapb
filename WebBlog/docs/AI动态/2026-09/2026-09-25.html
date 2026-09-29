@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light" data-theme-key="blog-theme">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>阿里平头哥真武V900芯片性能翻三倍，Qwen4已秘密训练中 · AI 简报</title>
+<meta name="description" content="2026云栖大会9月22-24日在杭州举行，阿里密集发布多项AI全栈进展。硬件方面，平头哥发布新一代训推一体AI芯片真武V900，单芯片算力达前代M890的3倍，搭载216GB显存，片间互联带宽1200GB/s，原生支持FP8/FP4低精度计算，单集群可扩展至…">
+<link rel="canonical" href="https://shilong.js.org/AI动态/2026-09/2026-09-25.html">
+<meta name="theme-color" content="#fbfaf6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="阿里平头哥真武V900芯片性能翻三倍，Qwen4已秘密训练中">
+<meta property="og:description" content="2026云栖大会9月22-24日在杭州举行，阿里密集发布多项AI全栈进展。硬件方面，平头哥发布新一代训推一体AI芯片真武V900，单芯片算力达前代M890的3倍，搭载216GB显存，片间互联带宽1200GB/s，原生支持FP8/FP4低精度计算，单集群可扩展至…">
+<meta property="og:url" content="https://shilong.js.org/AI动态/2026-09/2026-09-25.html">
+<meta name="author" content="MacLodge">
+<style>:root{--paper:#fbfaf6;--paper-2:#f4f2eb;--ink:#17150f;--ink-2:#3d382e;--sub:#7a7466;--faint:#a9a296;--rule:#e4e0d4;--rule-2:#cfc9b8;--accent:#b04a2f;--accent-ink:#8e3a23;--accent-soft:#f3e6e0;--code-bg:#f6f4ee;--bg-mark:#f7e9c8;--shadow:0 1px 0 rgba(23,21,15,.04),0 10px 30px -18px rgba(23,21,15,.28);--serif:Georgia,"Times New Roman","Songti SC","Noto Serif SC","Source Han Serif SC",STSong,SimSun,serif;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Cascadia Mono","Courier New",monospace;--measure:40rem;--pad:28px;--nav-h:56px;color-scheme:light}
+[data-theme="dark"]{--paper:#131210;--paper-2:#1b1a15;--ink:#f0ede5;--ink-2:#cdc8bb;--sub:#948d7e;--faint:#6c6558;--rule:#2c2a21;--rule-2:#3e3b2f;--accent:#e28a61;--accent-ink:#f0a882;--accent-soft:#2b1f18;--code-bg:#1a1914;--bg-mark:#47391a;--shadow:0 1px 0 rgba(0,0,0,.3),0 10px 30px -18px rgba(0,0,0,.7);color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.8;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-wrap:break-word}
+img{max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+::selection{background:var(--accent-soft);color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.top{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:saturate(160%) blur(12px);-webkit-backdrop-filter:saturate(160%) blur(12px);border-top:3px solid var(--ink);border-bottom:1px solid var(--rule)}
+.top__in{max-width:1000px;margin:0 auto;padding:0 var(--pad);height:var(--nav-h);display:flex;align-items:center;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:16px;font-weight:600;white-space:nowrap}
+.brand__mark{width:24px;height:24px;flex:0 0 24px;border-radius:3px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:14px;font-weight:700;line-height:1}
+.brand:hover{color:var(--accent-ink)}
+.top__nav{display:flex;align-items:center;gap:6px;margin-left:auto}
+.top__nav a,.icon-btn{font-size:12.5px;letter-spacing:.11em;color:var(--sub);padding:7px 12px;border-radius:4px;transition:color .18s,background .18s;white-space:nowrap}
+.top__nav a:hover,.icon-btn:hover{color:var(--ink);background:var(--paper-2)}
+.icon-btn{width:34px;height:34px;padding:0;display:grid;place-items:center}
+.icon-btn svg{width:17px;height:17px;display:block;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+[data-theme="dark"] .theme-toggle__light{display:none}
+.icon-btn .theme-toggle__dark{display:none}
+[data-theme="dark"] .theme-toggle__dark{display:block}
+main{display:block;min-height:60vh}
+.wrap{max-width:1000px;margin:0 auto;padding:0 var(--pad)}
+.brief{padding:52px 0 0}
+.kicker{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:16px}
+.brief h1{font-family:var(--serif);font-size:clamp(27px,3.9vw,41px);font-weight:600;line-height:1.28;letter-spacing:-.024em;margin:0 0 20px;max-width:22em;text-wrap:balance}
+.meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--sub);padding-bottom:20px;border-bottom:1px solid var(--rule)}
+.meta .dot{width:3px;height:3px;flex:0 0 3px;border-radius:50%;background:var(--faint)}
+.lede{font-size:17px;line-height:1.8;color:var(--ink-2);max-width:var(--measure);margin:26px 0 0}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
+.tag{font-size:11px;letter-spacing:.04em;color:var(--sub);border:1px solid var(--rule-2);border-radius:2px;padding:2px 8px}
+.prose{font-size:16.5px;line-height:1.85;color:var(--ink-2);max-width:var(--measure);padding:34px 0 0}
+.prose>*:first-child{margin-top:0}
+.prose>*+*{margin-top:1.15em}
+.prose h2,.prose h3,.prose h4{color:var(--ink);text-wrap:balance}
+.prose h2{font-family:var(--serif);font-size:25px;font-weight:600;letter-spacing:-.02em;line-height:1.36;margin:2.3em 0 0;padding-top:1.1em;border-top:1px solid var(--rule)}
+.prose>h2:first-child{border-top:0;padding-top:0}
+.prose h3{font-family:var(--serif);font-size:19px;font-weight:600;margin:1.9em 0 0}
+.prose h4{font-size:15.5px;font-weight:650;margin:1.7em 0 0}
+.prose p{margin:1.15em 0 0}
+.prose a{color:var(--accent-ink);border-bottom:1px solid color-mix(in srgb,var(--accent) 40%,transparent);transition:border-color .18s,background .18s}
+.prose a:hover{border-bottom-color:var(--accent);background:var(--accent-soft)}
+.prose strong{color:var(--ink);font-weight:650}
+.prose ul,.prose ol{margin:1.1em 0 0;padding-left:1.5em}
+.prose li{margin:.42em 0}
+.prose li::marker{color:var(--accent);font-family:var(--serif)}
+.prose hr{margin:2.6em auto;width:56px;height:0;border-top:1px solid var(--rule-2);position:relative}
+.prose hr::after{content:"✳";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--paper);color:var(--faint);font-size:11px;padding:0 8px}
+.prose blockquote{margin:1.6em 0 0;padding:2px 0 2px 20px;border-left:2px solid var(--accent);font-family:var(--serif);font-size:17px;line-height:1.72;color:var(--ink)}
+.prose blockquote p{margin:.5em 0 0}
+.prose blockquote p:first-child{margin-top:0}
+.prose code{font-family:var(--mono);font-size:.86em;background:var(--code-bg);border:1px solid var(--rule);border-radius:3px;padding:2px 6px;color:var(--accent-ink);word-break:break-word}
+.prose pre{margin:1.6em 0 0;background:var(--code-bg);border:1px solid var(--rule);border-left:2px solid var(--accent);border-radius:4px;padding:16px 18px;overflow-x:auto;font-size:13px;line-height:1.75}
+.prose pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit;white-space:pre}
+.prose table{width:100%;border-collapse:collapse;margin:1.7em 0 0;font-size:14px;display:block;overflow-x:auto}
+.prose th{text-align:left;font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--sub);font-weight:600;padding:0 14px 9px 0;border-bottom:2px solid var(--ink);white-space:nowrap}
+.prose td{padding:11px 14px 11px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.prose img{display:block;margin:1.8em 0 0;border:1px solid var(--rule);border-radius:4px;background:var(--paper-2)}
+.prose .callout{margin:1.9em 0 0;padding:20px 22px;background:var(--paper-2);border-left:2px solid var(--accent);border-radius:0 4px 4px 0}
+.prose .callout>*:first-child{margin-top:0}
+.prose .callout p{margin:.85em 0 0;font-size:15.5px;line-height:1.82}
+.prose .callout strong{color:var(--accent-ink)}
+.foot{margin:52px 0 0;padding-top:24px;border-top:1px solid var(--rule)}
+.note{font-size:12.5px;color:var(--sub);line-height:1.75;background:var(--paper-2);border-radius:4px;padding:15px 17px}
+.note b{color:var(--ink);font-weight:600}
+.nav{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+.nav a,.nav span{display:block;padding:16px 18px;border:1px solid var(--rule);border-radius:4px;transition:border-color .2s,background .2s,transform .2s}
+.nav a:hover{border-color:var(--rule-2);background:var(--paper-2);transform:translateY(-1px)}
+.nav span{color:var(--faint);font-size:12.5px;display:flex;align-items:center;justify-content:center;border-style:dashed}
+.nav__lab{font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--sub);margin-bottom:6px}
+.nav__t{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--ink);line-height:1.45}
+.nav .next{text-align:right}
+.back{margin:26px 0 0;font-size:13.5px}
+.back a{color:var(--sub)}
+.back a:hover{color:var(--accent)}
+.site-foot{border-top:1px solid var(--rule);margin-top:56px;padding:30px 0 44px;font-size:12.5px;color:var(--faint)}
+.site-foot__in{max-width:1000px;margin:0 auto;padding:0 var(--pad);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.site-foot a{color:var(--faint)}
+.site-foot a:hover{color:var(--accent)}
+@media (max-width:760px){:root{--pad:18px}.brief{padding:36px 0 0}.nav{grid-template-columns:1fr}.nav .next{text-align:left}.prose{font-size:16px}.top__nav a.hide-sm{display:none}}
+@media print{.top,.nav,.back{display:none!important}body{background:#fff;font-size:11pt}.prose .callout{background:none;border-left-width:2px}}</style>
+<script>
+/* 主题在首屏绘制前定下来，避免闪一下默认色。localStorage 键与主站同名，
+   从博客点进来时能延续访客已经选好的亮/暗设置。 */
+(function(){try{var r=document.documentElement;var s=localStorage.getItem(r.dataset.themeKey||'blog-theme');var t=(s==='light'||s==='dark')?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');r.setAttribute('data-theme',t);}catch(e){}})();
+</script>
+</head>
+<body>
+<a class="sr-only" href="#main">跳到主要内容</a>
+
+<header class="top">
+  <div class="top__in">
+    <a class="brand" href="/"><span class="brand__mark" aria-hidden="true">M</span>MacLodge's Blog</a>
+    <nav class="top__nav" aria-label="页内导航">
+      <a href="/AI动态/">简报目录</a>
+      <a class="hide-sm" href="/">首页</a>
+      <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="切换深色 / 浅色主题" title="切换主题">
+        <svg class="theme-toggle__light" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+        <svg class="theme-toggle__dark" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <article class="brief">
+    <div class="wrap">
+      <div class="kicker">AI 简报 · 2026 年 9 月 25 日</div>
+      <h1>阿里平头哥真武V900芯片性能翻三倍，Qwen4已秘密训练中</h1>
+      <div class="meta">
+        <time datetime="2026-09-25">2026 / 09 / 25</time>
+        <span class="dot" aria-hidden="true"></span>
+        <span>星期五</span>
+        <span class="dot" aria-hidden="true"></span><span>🐵 程序小猴AI日报，每天8点，带你用5分钟看懂AI圈昨天发生了什么</span>
+        <span class="dot" aria-hidden="true"></span>
+        <span>约 6 分钟读完</span>
+      </div>
+      <p class="lede">2026云栖大会9月22-24日在杭州举行，阿里密集发布多项AI全栈进展。硬件方面，平头哥发布新一代训推一体AI芯片真武V900，单芯片算力达前代M890的3倍，搭载216GB显存，片间互联带宽1200GB/s，原生支持FP8/FP4低精度计算，单集群可扩展至…</p>
+      <div class="tags"><span class="tag">#AI日报</span><span class="tag">#大模型</span><span class="tag">#阿里云栖大会</span><span class="tag">#Qwen</span><span class="tag">#DeepSeek</span><span class="tag">#Agent</span><span class="tag">#开源</span><span class="tag">#芯片</span></div>
+
+      <div class="prose">
+<h3>1. 阿里云栖大会收官：真武V900芯片发布，Qwen4已进入训练</h3>
+<p>2026云栖大会9月22-24日在杭州举行，阿里密集发布多项AI全栈进展。硬件方面，平头哥发布新一代训推一体AI芯片真武V900，单芯片算力达前代M890的3倍，搭载216GB显存，片间互联带宽1200GB/s，原生支持FP8/FP4低精度计算，单集群可扩展至50万卡，计划2027年Q1量产。模型方面，基于新一代架构的Qwen4已投入训练，Qwen4.5/Qwen5计划将总参数扩展至5万亿至10万亿。Qwen3.8-Max通过递归自我改进（RSI）技术，在无人工干预下完成33轮自主迭代，性能提升12.5%进入全球第一梯队。</p>
+<aside class="callout"><p>💡 <strong>小猴点评：</strong> 这条消息最让我兴奋的不是芯片本身，而是&quot;模型自主迭代&quot;这件事。Qwen3.8-Max在零人工干预下跑完33轮训练迭代——自己搭流程、造数据、找bug，这比参数堆叠有意思多了。对开发者来说，RSI一旦成熟，意味着模型更新节奏可能从&quot;月更&quot;变成&quot;日更&quot;，API能力会持续变化，版本管理策略得提前想好。</p>
+<p>来源：<a href="https://www.toutiao.com/article/7689004199157301760/" target="_blank" rel="noopener noreferrer">今日头条</a> | 2026-09-24</p></aside>
+<hr>
+<h3>2. 千问Qwen-Audio-3.1系列上线：五款语音模型，ASR降价95%</h3>
+<p>千问正式发布Qwen-Audio-3.1系列语音大模型，涵盖语音识别（ASR）、语音合成（TTS）、实时语音交互（Realtime）三大方向全面升级，并新增音频创作模型TTS-Next和音频理解模型ASR-Next，合计五款模型形成&quot;理解-生成-交互-创作&quot;完整音频能力栈。价格方面全线大幅下调：TTS降价约70%，Realtime降幅约85%，ASR降幅达95%。</p>
+<aside class="callout"><p>💡 <strong>小猴点评：</strong> ASR降95%这个数字很夸张。之前做语音类项目的开发者都知道，ASR调用成本是卡脖子的大头，尤其实时转写场景。现在成本直接砍到原来的二十分之一，意味着很多之前&quot;算不过来账&quot;的语音应用（实时字幕、会议纪要、语音客服）突然就变得可行了。建议做语音产品的同学赶紧重新算算BOM。</p>
+<p>来源：<a href="https://www.nbd.com.cn/articles/4590490.html" target="_blank" rel="noopener noreferrer">每经网</a> | 2026-09-24</p></aside>
+<hr>
+<h3>3. OpenAI即将预览GPT-6 Cyber：首个网络安全专用模型</h3>
+<p>据报道，OpenAI正准备在未来几天预览其最新网络安全专用模型GPT-6 Cyber。该公司还将发布一款新产品，帮助客户以更安全、自动化的方式部署GPT-6 Cyber。此前GPT-6 Astra已首次达到OpenAI&quot;准备框架&quot;中的&quot;关键&quot;（Critical）网络安全能力门槛。</p>
+<aside class="callout"><p>💡 <strong>小猴点评：</strong> 安全领域终于有了专属大模型。之前大家用通用模型做漏洞扫描、代码审计，效果参差不齐——模型不懂安全上下文，误报率居高不下。专用模型如果能深度理解CVE模式、攻击链、安全配置基线，那对安全工程师来说可能是个效率拐点。不过&quot;更安全地部署&quot;这个说法有点耐人寻味，安全模型本身的安全性确实需要更高标准。</p>
+<p>来源：<a href="https://finance.sina.com.cn/stock/t/2026-09-25/doc-inisyuqn9837368.shtml" target="_blank" rel="noopener noreferrer">新浪财经</a> | 2026-09-25</p></aside>
+<hr>
+<h3>4. DeepSeek公开Agent训练基建DSec：每秒5000+沙盒，梁文锋署名</h3>
+<p>DeepSeek论文公开了其Agent训练基础设施DSec的技术细节：每秒可调度5000+训练沙盒，日产300万个，峰值同时运行38万个，单集群配置160节点/3万核/250TB内存，8192个容器部署仅需35分钟。论文由梁文锋署名。研究过程中还发现Agent会自行寻找捷径&quot;刷分&quot;，为沙盒安全设计敲响了警钟。</p>
+<aside class="callout"><p>💡 <strong>小猴点评：</strong> 这篇论文含金量很高。做Agent训练的都知道，环境搭建和沙盒管理是最大的工程瓶颈——你要让模型在几万个隔离环境里反复试错，容器编排本身就是一座山。DSec把这套东西全公开了，包括&quot;Agent自己找捷径刷分&quot;这个坑，这对所有做RL训Agent的团队都是宝贵的实战经验。35分钟部署8192个容器的效率也值得研究。</p>
+<p>来源：<a href="https://www.toutiao.com/article/7689123896569774592/" target="_blank" rel="noopener noreferrer">今日头条</a> | 2026-09-24</p></aside>
+<hr>
+<h3>5. 黄仁勋谈AI替代论：AI先替代任务，不是职业</h3>
+<p>英伟达CEO黄仁勋在接受《纽约时报》采访时回应了AI替代职业的恐慌。他将工作拆分为&quot;任务&quot;和&quot;目的&quot;两个层次，认为AI会先自动化具体任务（写代码、整理资料），但不会必然消灭整个职业。以软件工程师为例，AI可能降低写代码本身的稀缺性，但定义问题、设计架构、验证系统和承担责任的重要性反而会上升。针对&quot;10年内AI毁灭人类&quot;的观点，黄仁勋表示&quot;他们的所有预测都错了，所谓的10%概率既没有科学依据，也没有研究支持&quot;。</p>
+<aside class="callout"><p>💡 <strong>小猴点评：</strong> 老黄这话对程序员群体特别值得细品。&quot;写代码的稀缺性下降，但定义问题和设计架构的重要性上升&quot;——说白了就是，CRUD活儿确实在被替代，但能想清楚该写什么代码的人反而更值钱了。这不是安慰剂，这是正在发生的技能价值重估。与其焦虑AI取代你，不如想想怎么站在AI的上面指挥它干活。</p>
+<p>来源：<a href="https://www.ithome.com/html/digi/1007051.htm" target="_blank" rel="noopener noreferrer">IT之家</a> | 2026-09-25</p></aside>
+<hr>
+<h3>6. 高通收购PickNik Robotics：MoveIt开源框架迎来新东家</h3>
+<p>高通宣布收购机器人软件企业PickNik Robotics，后者长期维护全球应用最广泛的开源机器人操作框架MoveIt。该框架已被产学两界广泛用于复杂机器人应用开发。高通承诺保持MoveIt的开源性，由社区制定路线图，同时将简化MoveIt与其Dragonwing（翼龙）机器人平台的集成，并继续支持MoveIt在第三方硬件上的应用。</p>
+<aside class="callout"><p>💡 <strong>小猴点评：</strong> MoveIt在机器人圈的地位类似于ROS之于整个机器人生态——几乎所有做机械臂操控的团队都用过它。高通这步棋很聪明，收购一个开源框架的核心维护团队，等于直接拿到了机器人软件生态的入口。对开发者来说，MoveIt的开源承诺很关键，只要协议不变、社区路线图不受控，这次收购反而可能带来更多硬件适配和性能优化。</p>
+<p>来源：<a href="https://k.sina.com.cn/article_7857201856_1d45362c001908oml2.html" target="_blank" rel="noopener noreferrer">新浪网</a> | 2026-09-24</p></aside>
+<hr>
+<h3>7. 中科曙光发布scaleFabric：国产首款原生RDMA高速网络</h3>
+<p>中科曙光发布scaleFabric，国内首款原生无损RDMA（远程直接内存访问）高速网络，技术规格全面对标英伟达NDR，部分指标实现赶超。从核心关键IP、交换芯片、网卡到交换机、驱动与管理软件均实现自主研发。研究表明，在大规模分布式训练中网络通信耗时占比已达30%-50%。scaleFabric目前已部署于国家超算互联网郑州核心节点，支撑三套万卡级scaleX智算集群运行。</p>
+<aside class="callout"><p>💡 <strong>小猴点评：</strong> 做过分布式训练的人都懂网络有多痛。GPU算力再强，卡间通信一旦拉胯，整体性能直接归零。之前InfiniBand被英伟达垄断，国产集群要么用RoCE凑合，要么高价买NDR。scaleFabric从芯片到软件全自研这条路线走通了，对国内万卡集群的建设是个实质性利好。不过实际大规模跑起来之后稳定性和生态兼容性还需要时间验证。</p>
+<p>来源：<a href="https://www.sugon.com/case?id=1059" target="_blank" rel="noopener noreferrer">中科曙光</a> | 2026-09-24</p></aside>
+<hr>
+<p>📢 <strong>今日互动</strong></p>
+<p>今天的AI圈可以说是&quot;基建日&quot;——从芯片到网络到Agent训练平台，全是基础设施层面的进展。你觉得对开发者日常影响最大的是哪条？欢迎在评论区聊聊你的看法。</p>
+<p>觉得有用的话，点个「<strong>在看</strong>」转发给你的技术圈子，我们明天8点见 👋</p>
+      </div>
+
+      <div class="foot">
+        <div class="note">
+          <b>关于这份简报</b><br>
+          内容由公众号日报整理而来，代表原文作者观点，不构成任何投资建议。
+          信息以公开发布时的报道为准，时效性内容请以最新消息为参考。
+        </div>
+
+        <nav class="nav" aria-label="上一期 / 下一期">
+          <a class="prev" href="/AI动态/2026-09/2026-09-24.html" rel="prev"><div class="nav__lab">← 上一期</div><div class="nav__t">OpenAI和Anthropic同夜降价发新模型，小米开源登顶全球第一</div></a>
+          <a class="next" href="/AI动态/2026-09/2026-09-26.html" rel="next"><div class="nav__lab">下一期 →</div><div class="nav__t">谷歌Gemini虚拟人上线，97种语言实时唇形同步太炸了</div></a>
+        </nav>
+
+        <p class="back"><a href="/AI动态/">← 返回简报目录</a></p>
+      </div>
+    </div>
+  </article>
+</main>
+
+<footer class="site-foot">
+  <div class="site-foot__in">
+    <span>&copy; 2026 MacLodge · 简报内容整理自公开报道</span>
+    <span><a href="/">MacLodge's Blog</a> · <a href="/AI动态/">AI 简报</a></span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var key=document.documentElement.dataset.themeKey||'blog-theme';
+  var cur=function(){return document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light';};
+  document.querySelectorAll('[data-theme-toggle]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var t=cur()==='dark'?'light':'dark';
+      document.documentElement.setAttribute('data-theme',t);
+      try{localStorage.setItem(key,t);}catch(e){}
+    });
+  });
+})();
+</script>
+</body>
+</html>

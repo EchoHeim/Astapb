@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostList from '../../components/PostList.astro';
+import { buildTagIndex } from '../../utils/tags';
+import { withBase } from '../../utils/url';
+import { sortPosts } from '../../utils/posts';
+
+export async function getStaticPaths() {
+  const all = await getCollection('posts', ({ data }) => !data.draft);
+  const index = buildTagIndex(all);
+
+  return index.map((tag) => {
+    const posts = sortPosts(all.filter((p) => p.data.tags.includes(tag.name)));
+    return { params: { tag: tag.slug }, props: { tag, posts } };
+  });
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<BaseLayout
+  title={`标签：${tag.name}`}
+  description={`标签「${tag.name}」下的 ${posts.length} 篇文章`}
+  active="标签"
+>
+  <div class="wrap">
+    <div class="page-head">
+      <div class="page-head__kicker">Tag · 标签</div>
+      <h1>{tag.name}</h1>
+      <p>共 {posts.length} 篇，按时间倒序排列。</p>
+    </div>
+
+    <div class="page-body">
+      <PostList posts={posts} />
+    </div>
+
+    <p class="back-link">
+      <a href={withBase('tags/')}>← 返回全部标签</a>
+    </p>
+  </div>
+</BaseLayout>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>程序小猴 · 数据诊断 v3：缺口与验证窗口（2026-09-27）</title>
+<style>
+  :root{
+    --green:#09B83E; --green-dark:#06872D; --green-soft:#E8F8EE; --green-line:#BEE9CC;
+    --ink:#16201A; --ink2:#4A554D; --ink3:#7C877F;
+    --line:#E2E7E3; --bg:#F5F7F5; --card:#FFFFFF;
+    --red:#A32D2D; --red-soft:#FCEBEB; --red-line:#F0C9C9;
+    --amber:#854F0B; --amber-soft:#FAEEDA; --amber-line:#EFD6A8;
+    --blue:#185FA5; --blue-soft:#E6F1FB; --blue-line:#B5D4F4;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;padding:0 20px 80px;background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:940px;margin:0 auto}
+  header.hero{margin:0 -20px 36px;padding:52px 40px 44px;background:linear-gradient(135deg,#06872D 0%,#09B83E 100%);color:#fff}
+  header.hero .inner{max-width:940px;margin:0 auto}
+  .kicker{font-size:13px;letter-spacing:.12em;opacity:.82;margin:0 0 12px}
+  header.hero h1{margin:0 0 14px;font-size:29px;line-height:1.35;font-weight:600;letter-spacing:-.01em}
+  header.hero p{margin:0;font-size:15px;opacity:.92;max-width:680px}
+  .meta{margin-top:24px;display:flex;flex-wrap:wrap;gap:10px}
+  .meta span{font-size:12.5px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28)}
+
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 34px;margin-bottom:20px}
+  h2{margin:0 0 20px;font-size:20px;font-weight:600;display:flex;align-items:center;gap:12px}
+  h2 .num{flex:0 0 auto;width:30px;height:30px;border-radius:9px;background:var(--green-soft);color:var(--green-dark);font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center}
+  h3{margin:28px 0 12px;font-size:16px;font-weight:600}
+  h3:first-of-type{margin-top:0}
+  p{margin:0 0 14px}
+  ul,ol{margin:0 0 16px;padding-left:22px}
+  li{margin-bottom:7px}
+  strong{font-weight:600}
+  code{font-family:ui-monospace,Consolas,monospace;font-size:13px;background:#EEF2EF;border:1px solid #DFE5E1;border-radius:5px;padding:1px 5px}
+  .lead{font-size:15.5px;color:var(--ink2);margin-bottom:22px}
+
+  .kpis{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:8px}
+  .kpi{background:#F7F9F8;border-radius:11px;padding:14px 16px}
+  .kpi .lbl{font-size:12.5px;color:var(--ink3);margin:0 0 4px}
+  .kpi .val{font-size:23px;font-weight:600;line-height:1.2;margin:0}
+  .kpi .sub{font-size:12px;color:var(--ink3);margin:4px 0 0}
+  .kpi.bad .val{color:var(--red)}
+  .kpi.warn .val{color:var(--amber)}
+  .kpi.good .val{color:var(--green-dark)}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:#F2F5F3;font-weight:600;font-size:12.5px;color:var(--ink2);white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  .tbl-wrap{overflow-x:auto;margin:0 0 18px;border:1px solid var(--line);border-radius:10px}
+  .tbl-wrap table{margin:0}
+  .num-col{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .hl{background:#FFFBF0}
+  .hl td{border-bottom-color:#F0E2C0}
+
+  .box{border-radius:11px;padding:16px 20px;margin:0 0 18px;font-size:14.5px}
+  .box p:last-child{margin-bottom:0}
+  .box .lbl{font-weight:600;font-size:13px;letter-spacing:.04em;display:block;margin-bottom:6px}
+  .box.bad{background:var(--red-soft);border:1px solid var(--red-line)}
+  .box.bad .lbl{color:var(--red)}
+  .box.tip{background:var(--amber-soft);border:1px solid var(--amber-line)}
+  .box.tip .lbl{color:var(--amber)}
+  .box.good{background:var(--green-soft);border:1px solid var(--green-line)}
+  .box.good .lbl{color:var(--green-dark)}
+  .box.info{background:var(--blue-soft);border:1px solid var(--blue-line)}
+  .box.info .lbl{color:var(--blue)}
+
+  .bars{margin:6px 0 20px}
+  .bar-row{display:grid;grid-template-columns:minmax(0,1fr) 58px;gap:10px;align-items:center;margin-bottom:7px;font-size:13px}
+  .bar-track{position:relative;height:20px;background:#F1F4F2;border-radius:5px;overflow:hidden;min-width:60px}
+  .bar-fill{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:#8FBF9F}
+  .bar-fill.top{background:var(--green)}
+  .bar-fill.zero{background:#D8DEDA}
+  .bar-label{font-size:12.5px;color:var(--ink3);margin:0 0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bar-val{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink2)}
+
+  .cmp{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-bottom:18px}
+  .cmp .card{border:1px solid var(--line);border-radius:11px;padding:18px 20px}
+  .cmp .card.win{border:2px solid var(--green);background:#FBFFFC}
+  .cmp .card h4{margin:0 0 12px;font-size:15px}
+  .cmp .card .row{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:5px 0;border-bottom:1px dashed #E8EDEA}
+  .cmp .card .row:last-child{border-bottom:none}
+  .cmp .card .row b{font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+
+  .steps{counter-reset:s;list-style:none;padding:0;margin:0 0 12px}
+  .steps li{counter-increment:s;position:relative;padding-left:42px;margin-bottom:16px;font-size:14.5px}
+  .steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:26px;height:26px;border-radius:8px;background:var(--green-soft);color:var(--green-dark);font-size:12.5px;font-weight:600;display:flex;align-items:center;justify-content:center}
+  .steps li b{display:block;margin-bottom:2px}
+
+  footer{text-align:center;color:var(--ink3);font-size:13px;padding:24px 0 0}
+  .small{font-size:13.5px;color:var(--ink2)}
+  .tag{display:inline-block;font-size:11.5px;padding:1px 8px;border-radius:999px;background:var(--green-soft);color:var(--green-dark);border:1px solid var(--green-line);white-space:nowrap}
+  .tag.p0{background:var(--red-soft);color:var(--red);border-color:var(--red-line)}
+  .tag.p1{background:var(--amber-soft);color:var(--amber);border-color:var(--amber-line)}
+  .tag.p2{background:#F1F4F2;color:var(--ink3);border-color:var(--line)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="inner">
+    <p class="kicker">数据诊断 v3 · 2026-09-27</p>
+    <h1>数据缺口在哪，验证窗口还剩几天</h1>
+    <p>回答一个问题（光凭公众号名字能不能分析出运营数据），补上两个之前没人算过的角度，并指出一个<strong>即将过期的验证机会</strong>。</p>
+    <div class="meta">
+      <span>现有台账覆盖 09-04 ~ 09-21</span>
+      <span>09-22 之后空白 6 天</span>
+      <span>3 条版日报已积 6 篇</span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <h2><span class="num">0</span>先回答：光凭「程序小猴」这个名字能不能分析</h2>
+
+  <p class="lead">不能。而且这件事上「有个大概的数」比「没有数」更危险。</p>
+
+  <p>公众号的运营数据全部锁在后台里，外部看不到打开率、完读率、取关数、粉丝画像、搜索词和流量来源。
+  第三方平台（新榜、清博这类）能给出的是<strong>估算值</strong>——按公开阅读量反推、按行业均值套模型，口径不透明，
+  误差可能比你要测的效应还大。拿这种数字指导「日报该不该砍到 3 条」这种决策，等于用噪声换判断。</p>
+
+  <div class="box info">
+    <span class="lbl">真正能用的是这两类数据</span>
+    <p><strong>① 仓库里已经沉淀的真实台账</strong> —— <code>04-选题与文案库/往期数据.csv</code>，逐篇的阅读 / 分享 / 涨粉 / 完成率；
+    <code>07-发布登记/发布登记表.csv</code>，发布记录与主题标识。</p>
+    <p><strong>② 你从后台抄给我的数字</strong> —— 只要你能看到，我就能算。这方面不用猜，你截图或手抄几个数，我就能把结论钉死。</p>
+  </div>
+
+  <p>所以下面这份报告，用的全部是<strong>①</strong>。没有一处是我猜的——凡是推断，都会标出来。</p>
+</section>
+
+<section>
+  <h2><span class="num">1</span>手上有什么，缺什么</h2>
+
+  <div class="kpis">
+    <div class="kpi good"><p class="lbl">台账记录</p><p class="val">22 条</p><p class="sub">覆盖 09-04 ~ 09-21</p></div>
+    <div class="kpi bad"><p class="lbl">之后空白</p><p class="val">6 天</p><p class="sub">09-22 ~ 09-27</p></div>
+    <div class="kpi warn"><p class="lbl">发布登记</p><p class="val">10 条</p><p class="sub">最后一行为 09-21</p></div>
+    <div class="kpi"><p class="lbl">现有分析文档</p><p class="val">3 份</p><p class="sub">诊断 v1 + 方案 v1 / v2</p></div>
+  </div>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th style="width:30%">数据源</th><th style="width:22%">现状</th><th>影响</th></tr></thead>
+    <tbody>
+      <tr class="hl">
+        <td><code>往期数据.csv</code></td>
+        <td>最后一行 09-21（当日数据，尚未成熟）</td>
+        <td><strong>这是最大的缺口。</strong>09-21 起启用的「3 条 + 固定模块 + 实体前置标题」新格式，一篇都没回填，改版效果至今无法验证</td>
+      </tr>
+      <tr>
+        <td><code>发布登记表.csv</code></td>
+        <td>10 条，止于 09-21</td>
+        <td>查重脚本靠这张表，不同步就会出现「同一主题换标题再发一次」——9 月已经发生过两对</td>
+      </tr>
+      <tr>
+        <td><code>06-运营方案/</code></td>
+        <td>诊断 v1、方案 v1、方案 v2</td>
+        <td>三份文档的结论互相覆盖，读的人容易拿到过期结论。<strong>建议在文件名上标明版本先后</strong></td>
+      </tr>
+      <tr>
+        <td>后台 · 搜索分析</td>
+        <td><strong>从未导出过</strong></td>
+        <td>唯一能直接看到「读者在搜什么、你排第几」的地方，方案 v2 把它列为最重要的数据源，但至今没数据进库</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">2</span>两个之前没算过的角度</h2>
+
+  <h3>发现 ①：586 个阅读里，一半以上来自两篇文章 —— 「篇均阅读」这个指标根本不该看</h3>
+
+  <p>30 天全站 586 次阅读，分布是这样的：</p>
+
+  <div class="bars">
+    <div class="bar-row"><div><p class="bar-label">图吧工具箱 WinUI3 社区版 v1.6.1（09-09）</p><div class="bar-track"><div class="bar-fill top" style="width:100%"></div></div></div><div class="bar-val">259</div></div>
+    <div class="bar-row"><div><p class="bar-label">腾讯 WorkBuddy 联手 DeepSeek（09-17）</p><div class="bar-track"><div class="bar-fill top" style="width:29.3%"></div></div></div><div class="bar-val">76</div></div>
+    <div class="bar-row"><div><p class="bar-label">AI日报 8月26日（国务院「人工智能+」）</p><div class="bar-track"><div class="bar-fill" style="width:16.2%"></div></div></div><div class="bar-val">42</div></div>
+    <div class="bar-row"><div><p class="bar-label">Office Tool Plus 简单使用方法（09-19）</p><div class="bar-track"><div class="bar-fill" style="width:5.4%"></div></div></div><div class="bar-val">14</div></div>
+    <div class="bar-row"><div><p class="bar-label">三国 Q 版人物画像（2020 年老文）</p><div class="bar-track"><div class="bar-fill" style="width:4.6%"></div></div></div><div class="bar-val">12</div></div>
+    <div class="bar-row"><div><p class="bar-label">免费 VPS 4核32G（2022 年老文）</p><div class="bar-track"><div class="bar-fill" style="width:4.2%"></div></div></div><div class="bar-val">11</div></div>
+    <div class="bar-row"><div><p class="bar-label">其余 150+ 篇合计</p><div class="bar-track"><div class="bar-fill zero" style="width:28.8%"></div></div></div><div class="bar-val">169</div></div>
+  </div>
+
+  <p>前两篇占 <strong>57.2%</strong>，前七篇占 72%。剩下的一百多篇文章，平分不到三成的阅读量。</p>
+
+  <div class="box tip">
+    <span class="lbl">这个分布形状决定了考核指标该换</span>
+    <p>如果阅读量是均匀分布的，那「篇均阅读」有意义，努力方向是「把每篇都写得好一点」。</p>
+    <p>但真实分布是<strong>赢家通吃</strong>——这种形状下，篇均是个被极端值污染的统计量：图吧那一篇就能把全站篇均从 3 拉到 5。
+    <strong>该盯的不是「篇均」，是「一年能写出几篇图吧级」。</strong></p>
+    <p>而图吧那篇的共性是明确的：<strong>标题里有读者会原样输入搜索框的字符串</strong>（软件全名 + 版本号），内容有一手踩坑经历。
+    方案 v2 第 7 节那 10 个搜索词矩阵，赌的就是这个。现在的问题不在方向，在执行（见下一条）。</p>
+  </div>
+
+  <h3>发现 ②：方案定了 6 天，仓库里只看到日报在产出</h3>
+
+  <p>方案 v2 的 14 天排期写得很具体。今天（09-27）是第 7 天，对照一下：</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th style="width:16%">排期</th><th style="width:44%">计划动作</th><th>仓库里能看到什么</th></tr></thead>
+    <tbody>
+      <tr><td>第 1 天</td><td>停掉同日重复推送</td><td>无法从仓库验证（要看后台）</td></tr>
+      <tr><td>第 1–2 天</td><td>配被关注回复 + 四条关键词回复 + 三栏菜单</td><td>无法从仓库验证（要看后台）</td></tr>
+      <tr class="hl"><td>第 3–4 天</td><td>把 Office Tool Plus 两篇合并重写成「终极版」重发</td><td><strong>没看到稿件</strong></td></tr>
+      <tr class="hl"><td>第 5–7 天</td><td>写《LocalSend 局域网传文件：不装微信不插 U 盘》</td><td><strong>没看到稿件</strong>（今天到期）</td></tr>
+      <tr class="hl"><td>第 8–11 天</td><td>图吧工具箱续篇（进阶用法 + 常见报错）</td><td>尚未到期</td></tr>
+      <tr><td>第 12–14 天</td><td>发 1 篇「只发布」的日报做 7 天验证 + 建两个合集</td><td>日报在发（09-22 起 6 篇），合集无法从仓库验证</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="box bad">
+    <span class="lbl">需要你确认的一件事</span>
+    <p>09-22 到 09-27，仓库里新增的是 <strong>6 份 AI 日报稿</strong>，工具实测 <strong>0 篇</strong>；
+    <code>发布登记表.csv</code> 也停在了 09-21。</p>
+    <p>两种可能，你比我清楚是哪种：<br>
+    <strong>① 工具文确实还没写</strong> —— 那这 6 天里，公众号的群发位（每天只能群发 1 次）白白空置了 6 次。
+    方案里最核心的一步就是「日报让出群发位给工具实测」，日报是让出来了，但没人接。<br>
+    <strong>② 写了、发了，只是没登记</strong> —— 那问题在流程：台账不同步，查重脚本就是瞎的，改版效果也永远算不出来。</p>
+  </div>
+
+  <div class="box info">
+    <span class="lbl">一个提醒</span>
+    <p>「日报只发布、不群发」这个策略的前提是<strong>群发位被工具实测填满</strong>。
+    如果工具文产量跟不上，那这段时间账号就等同于<strong>完全不触达粉丝</strong>——227 个粉丝里，没有一个会知道你还在更新。
+    这跟「停更」在粉丝侧的效果是一样的。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">3</span>一个还剩几天的验证窗口</h2>
+
+  <p class="lead">方案 v2 里有一句：「必须先做 7 天小规模验证，再全量推。」这个窗口现在正好到期。</p>
+
+  <p>09-21 那篇《稚晖君人形机器人 19999 元开卖》是<strong>第一篇完整套用新格式的日报</strong>（3 条正文 + 一句话快讯 + 实体前置标题）。
+  按 7 天回填口径，它<strong>明天（09-28）就满 7 天</strong>。之后 09-22、09-24、09-27 三篇同格式，分别排在 09-29、10-01、10-04 满期。</p>
+
+  <div class="box good">
+    <span class="lbl">也就是说：回填一次，能同时验证三个悬着的问题</span>
+    <p><strong>① 日报砍到 3 条，完成率有没有从 25~33% 起到 50%？</strong>
+    这是方案 v2「抓手一」的唯一验收标准，也是判断「读者到底读不读得完」的直接证据。</p>
+    <p><strong>② 「只发布、不群发」的内容，到底会不会被搜一搜收录？</strong>
+    方案 v2 明确写过：这是<strong>假设，不是结论</strong>，公开资料暗示搜一搜爬的是「已群发」的文章。
+    现在已经有 6 篇只发布的日报在线上躺着了——它们的阅读来源里有没有「搜一搜」，是这套模式成立与否的判决书。</p>
+    <p><strong>③ 标题里的实体前置，有没有真的带来搜索阅读？</strong>
+    对比一下旧标题（<code>AI日报｜9月21日：稚晖君19999元人形机器人开卖…</code>）和新标题（<code>稚晖君人形机器人19999元开卖…</code>）带来的阅读量，就能知道那 12 个字的位置值多少钱。</p>
+  </div>
+
+  <p>这三件事值得优先于写新稿——<strong>不用产出任何新内容，只要去后台把数字抄下来</strong>。
+  而且窗口会过期：再过一周，日报会继续堆积，到时候你面对的是一堆数字而不是几个数字，判断成本高得多。</p>
+</section>
+
+<section>
+  <h2><span class="num">4</span>去后台抄这些数（按性价比排序）</h2>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th style="width:26%">要什么</th><th style="width:28%">在哪看</th><th>用来回答什么问题</th></tr></thead>
+    <tbody>
+      <tr class="hl">
+        <td><strong>09-21 / 09-22 / 09-24 / 09-27 四篇日报的<br>阅读人数、送达阅读率、阅读完成率、分享人数</strong></td>
+        <td>内容管理 → 已发表 → 单篇「详情」</td>
+        <td>3 条版是否解决了完读率问题（目标 ≥50%）</td>
+      </tr>
+      <tr class="hl">
+        <td><strong>这四篇的「阅读来源」构成</strong></td>
+        <td>单篇详情 → 阅读来源</td>
+        <td>只发布的内容有没有被搜一搜收录。这是整套「只发布」策略的生死判据</td>
+      </tr>
+      <tr>
+        <td><strong>粉丝总数</strong>（09-21 时是 227）</td>
+        <td>首页 / 用户分析</td>
+        <td>这半个月净增多少。方案 v2 的基线是 +2 人/月</td>
+      </tr>
+      <tr>
+        <td><strong>搜索分析里的 TOP 查询词 + 曝光 + 点击 + 排名</strong></td>
+        <td>数据分析 → 搜索分析</td>
+        <td>读者到底在搜什么。筛排名 5~15 位的潜力词，回去给旧文补标题关键词——这是 ROI 最高的动作，至今零数据</td>
+      </tr>
+      <tr>
+        <td><strong>09-22 之后实际发布了什么</strong></td>
+        <td>后台发表记录</td>
+        <td>确认群发位有没有空置（见第 2 节发现 ②）</td>
+      </tr>
+      <tr>
+        <td><strong>单篇的「送达人数」</strong></td>
+        <td>单篇详情</td>
+        <td>确认 0.44% 的分母口径（227 还是别的数）</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p class="small">前两组是重点。<strong>其余三项可以慢慢补，前两组这两天不抄，验证窗口就白开了。</strong></p>
+</section>
+
+<section>
+  <h2><span class="num">5</span>顺手要修的两个流程口径</h2>
+
+  <h3>① 文件名的日期和标题里的日期对不上</h3>
+  <p>现在 <code>AI日报_9月26日.md</code> 的标题写的是「9月25日」，<code>AI日报_9月24日.md</code> 标题写「9月23日」——
+  文件名按<strong>发布日</strong>、标题按<strong>内容日</strong>，而 <code>往期数据.csv</code> 的「发布日期」列用的是发布日。</p>
+  <p>后果：以后想按日期对齐「哪天的稿子表现如何」，会发现三个地方三套日期。新格式（标题不带日期）已经规避了一半，
+  建议<strong>索性把发布日当唯一 key</strong>，内容日期只写在正文里。</p>
+
+  <h3>② 一份数据台账，两个地方在写</h3>
+  <p><code>往期数据.csv</code>（表现数据）和 <code>发布登记表.csv</code>（发布记录 + 主题标识）目前各自更新，两边都停在 09-21。
+  查重靠后者的主题标识，复盘靠前者——<strong>任何一个断更，另一半就是失效的</strong>。</p>
+  <p>建议合并成一次动作：<strong>发布后立刻登记（登记表加一行），满 7 天回填（数据表加一行）</strong>，
+  两次都只需一两分钟，但断掉一次就要回头补一整批。</p>
+</section>
+
+<section>
+  <h2><span class="num">6</span>这份报告没能回答的</h2>
+  <p>诚实标出来，免得你拿它当全貌：</p>
+  <ul>
+    <li><strong>09-22 之后的所有表现数据</strong> —— 后台才有，仓库里没有。</li>
+    <li><strong>后台的自动回复、菜单、合集到底配没配</strong> —— 方案 v2 把这一步列为 ROI 最高的动作，但配没配只能你自己确认。</li>
+    <li><strong>取关数、粉丝画像、单篇的送达基数</strong> —— 这些数字你还没给我，拿不到。</li>
+    <li><strong>9/17 那篇「送达阅读率 0%」当时是「发布」还是「群发」</strong> —— 这个问题从诊断 v1 挂到现在，还悬着。</li>
+  </ul>
+  <p>把上面第 4 节的数抄给我，或者直接截图丢过来，我可以出下一版：<strong>带真实前后对比的改版验收报告</strong>。</p>
+</section>
+
+<footer>
+  <p>程序小猴 · 数据诊断 v3（缺口与验证窗口）<br>
+  数据来源：<code>往期数据.csv</code>（09-04 ~ 09-21）、<code>发布登记表.csv</code>、诊断 v1 与方案 v2 的 30 天全量口径 · 生成于 2026-09-27<br>
+  本文件结论以 <code>运营方案_v2_搜索优先_2026-09-21.html</code> 为上位依据，此处只补充其未覆盖的角度。</p>
+</footer>
+
+</div>
+</body>
+</html>

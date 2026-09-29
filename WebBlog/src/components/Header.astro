@@ -1,0 +1,122 @@
+---
+import {
+  SITE_TITLE,
+  SITE_SINCE,
+  NAV,
+  EXTERNAL_LINKS,
+  HEADER_ICONS,
+} from '../consts';
+import { withBase } from '../utils/url';
+
+interface Props {
+  active?: string;
+}
+
+const { active } = Astro.props;
+const currentPath = Astro.url.pathname;
+
+function isCurrent(href: string): boolean {
+  if (href === '') {
+    return /^\/$/.test(withBase('').replace(/\/+$/, '') + '/') && /^\/$/.test(currentPath);
+  }
+  return currentPath.startsWith(withBase(href));
+}
+---
+
+<header class="masthead">
+  <div class="masthead__inner">
+    <a class="brand" href={withBase('')}>
+      <span class="brand__mark" aria-hidden="true">M</span>
+      <span class="brand__name">{SITE_TITLE}</span>
+      <span class="brand__sup">{SITE_SINCE}</span>
+    </a>
+
+    <nav class="nav" id="site-nav" data-open="false" aria-label="主导航">
+      {
+        NAV.map((item) => (
+          <a
+            class="nav__link"
+            href={withBase(item.href)}
+            aria-current={isCurrent(item.href) ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <span class="nav__divider" aria-hidden="true"></span>
+      {
+        EXTERNAL_LINKS.map((item) => (
+          <a
+            class="nav__link"
+            href={item.href}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="tools">
+      {
+        HEADER_ICONS.map((item) => (
+          <a
+            class="icon-btn icon-btn--img"
+            href={item.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={item.label}
+            title={item.label}
+          >
+            <img src={item.icon} alt="" width="24" height="24" decoding="async" />
+          </a>
+        ))
+      }
+
+      <button
+        class="icon-btn"
+        type="button"
+        data-search-open
+        aria-label="搜索文章"
+        title="搜索（按 / 键）"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" />
+          <path d="M20.5 20.5L16.7 16.7" />
+        </svg>
+      </button>
+
+      <button
+        class="icon-btn theme-toggle"
+        type="button"
+        data-theme-toggle
+        aria-label="切换深色 / 浅色主题"
+        title="切换主题"
+      >
+        <svg class="theme-toggle__light" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.2" />
+          <path
+            d="M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"
+          ></path>
+        </svg>
+        <svg class="theme-toggle__dark" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"></path>
+        </svg>
+      </button>
+
+      <button
+        class="icon-btn nav-toggle"
+        type="button"
+        data-nav-toggle
+        aria-expanded="false"
+        aria-controls="site-nav"
+        aria-label="打开导航菜单"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 6h18M3 12h18M3 18h18" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>

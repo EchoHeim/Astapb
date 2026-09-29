@@ -1,30 +1,85 @@
-## 1. MFAST 简介
+# Astapb · 个人知识分享库
 
-- 脚本作用
+> 互联网是有记忆的，我想留下一些成长的脚印。
 
-  为了简化本人在实际工作中的重复操作流程
+一个仓库，三类内容：**知识博客**、**网站导航**、**公众号素材库**。
 
-- 目录结构
+代码、原创图文、第三方资料在仓库内**分区域授权**，不存在单一的许可证 ——
+判定规则见 [LICENSE](LICENSE)。
 
-  > 具体内容可查看相应文件夹中的 `Readme.md` 文件。
+---
 
-  | 文件夹  |            说明            |
-  | :-----: | :------------------------: |
-  | scripts |    实用小工具(通用脚本)    |
-  |  shell  | 工作中编写的各平台功能脚本 |
+## 站点
 
-- 主程序
+| 站点 | 地址 | 源 | 说明 |
+| --- | --- | --- | --- |
+| MacLodge's Blog | <https://shilong.js.org/> | `WebBlog/` | Astro 构建，2026-09-18 起接管根路径 |
+| 网站导航 AnywhereAnything | <https://shilong.js.org/aa/> | `WebSite/` | 纯静态 |
 
-    `Astapb/mfast.sh`
+两个站点由**同一个 GitHub Pages 产物**提供 —— 因为一个仓库只能发布一个 Pages 站点，
+所以这里用 Actions 把两部分拼进同一产物，靠子路径区分。
 
-    > 脚本运行 `不具有`通用性
+> **正式部署目标只有 GitHub Pages。**
+> 账号 `echoheim-projects` 下另有一个同名 Vercel 项目连着本仓库，
+> 但它因项目设置里的 Node 版本过期而持续构建失败，**不是有效的部署目标**。
+> 详见 [WebBlog/README](WebBlog/README.md) 的「部署到 GitHub Pages」一节。
 
-## 2. 功能包含
+博客的文章、图片与站点代码**全部在 `WebBlog/` 目录内**（2026-09-18 由仓库根的
+`docs/` 整体迁入），不再跨目录引用。详见 [WebBlog/README](WebBlog/README.md)。
 
-> * 自动备份本工具
-> * 构建debian文件系统
-> * 编译树莓派内核源码
-> * 编译和烧录stm32mp157源码
-> * 编译H616源码 (`基于OrangePi`)
+---
 
-![image](https://user-images.githubusercontent.com/26021085/192084452-73850abe-87c9-4388-85dd-5eb2a55a445f.png)
+## 工作区
+
+| 目录 | 内容 | 许可证 | 详细说明 |
+| --- | --- | --- | --- |
+| `WebBlog/` | 博客站（Astro）→ `/`：文章源 `docs/`、图片 `images/` `sponsor/`、站点代码 `src/` | 代码 MIT<br>文章 CC BY-NC-SA 4.0 | [README](WebBlog/README.md) |
+| `WebSite/` | 网站导航站（纯静态）→ `/aa/` | 代码 MIT<br>图标归原权利人 | [README](WebSite/README.md) |
+| `CodeKey/` | 公众号「程序小猴」素材库 | **保留所有权利** | [README](CodeKey/README.md) |
+| `scripts/` | 实用小工具（Python / Shell） | MIT | [README](scripts/README.md) |
+| `LICENSES/` | 各许可证正文 | —— | [README](LICENSES/README.md) |
+| `.github/` | CI 配置 | MIT | [README](.github/README.md) |
+
+---
+
+## 部署
+
+推送到 `master` 后由 [`.github/workflows/publish.yml`](.github/workflows/publish.yml) 自动构建并发布：
+
+```
+WebBlog/docs/  ──┐
+                 ├──►  astro build  ──►  WebBlog/dist/  ──┐
+WebBlog/src/   ──┘                                        │
+                                                          ├──►  _site/  ──►  GitHub Pages
+WebSite/  ────────────────────────────────────────────────┘
+
+_site/      = 博客  →  https://shilong.js.org/
+_site/aa/   = 导航  →  https://shilong.js.org/aa/
+```
+
+产物约 2 MB —— 过去的 docsify 产物的 1% 不到。原始 Markdown、
+第三方考研资料与前端源码都不再进入发布产物。
+
+**前置条件**：仓库 `Settings → Pages → Build and deployment → Source` 必须选择
+**GitHub Actions**（已于 2026-09-18 生效），否则 `deploy-pages` 会报 `Get Pages site failed`。
+
+---
+
+## 联系
+
+| 渠道 | 地址 |
+| --- | --- |
+| 博客 | <https://shilong.js.org> |
+| GitHub | <https://github.com/EchoHeim> |
+| 邮箱 | shilong.native@foxmail.com |
+| 微信公众号 | 程序小猴 |
+
+---
+
+## 历史
+
+本仓库原本是一个嵌入式工程工具箱（`mfast` 交互式构建工具链，用于 H616 / STM32MP157 /
+树莓派的编译与烧录），2026-09-18 提交 `39bbf28` 将其整体移除，转型为知识分享库。
+
+那段代码仍保留在 git 历史中，可用 `git show 39bbf28` 找回；
+它当时采用 GPL-3.0，其历史授权不受本次许可调整影响。

@@ -1,16 +1,56 @@
 #
-# NOTE! Don't add files that are generated in specific
-# subdirectories here. Add them in the ".gitignore" file
-# in that subdirectory instead.
+# 仓库级通用 .gitignore
 #
-# NOTE! Please use 'git ls-files -i --exclude-standard'
-# command after changing this file, to see if there are
-# any tracked files which get ignored after the change.
+# ┌─ 分层约定（改这个文件前先读）────────────────────────────┐
+# │ 本文件只放「跨项目、与本仓库无关」的通用规则：           │
+# │   备份/编辑器临时文件、操作系统垃圾、Python 缓存、        │
+# │   根目录脚手架文件、.workbuddy 本地工作数据。             │
+# │                                                          │
+# │ 站点专属规则一律写进各自的子目录：                        │
+# │   WebBlog/.gitignore  → Astro 博客（node_modules/dist…）  │
+# │   WebSite/.gitignore  → Vite 导航站（node_modules/dist…） │
+# │ 已跟踪文件的忽略清理见 web 端流程说明，勿在根文件里堆项目规则。│
+# └──────────────────────────────────────────────────────────┘
 #
-# Normal rules
+# 改完请跑：git ls-files -i --exclude-standard
+# 它会列出「已被跟踪、但现在被 ignore 命中」的文件 —— 这些需要 git rm --cached。
 #
 
+# ── 备份 / 编辑器临时文件 ──────────────────────────────
 *.bak
 *.swp
+*~
 *.tar.gz
 a.out
+
+# ── 操作系统垃圾 ──────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# ── 编辑器 / IDE（站点级目录同理，各子项目自行忽略）──
+.vscode/
+.idea/
+.fleet/
+
+# ── Python 缓存（scripts/ 下有 .py）────────────────────
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# ── 根目录下 _ 开头的临时/脚手架文件与目录 ─────────────
+# 例：_kill.txt、_cleanup-log.txt、_st.txt
+#     _review/（考研资料转换质量审核报告，含第三方资料渲染图，勿提交）
+/_*
+
+# ── 根目录下的日志 ────────────────────────────────────
+/*.log
+
+# ── .workbuddy 本地工作数据 ───────────────────────────
+# 约定：memory/ 要留档进版本库（项目记忆的唯一事实来源），
+#       其余 _ 前缀目录（_shots 无头 Chrome profile、_scratch、_preview…）
+#       和 tmp/ 都是本机脚手架，用完即弃，一律不入库。
+.workbuddy/_*
+.workbuddy/tmp/

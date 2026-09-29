@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light" data-theme-key="blog-theme">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>苹果开源VLM模型，基座居然是中国千问 · AI 简报</title>
+<meta name="description" content="9月23日至24日，苹果在Hugging Face正式上架并开源了视觉语言模型apple/LensVLM-9B。开发者在模型页面发现，Base Model一栏赫然写着&quot;Built on Qwen3.5-9B&quot;——这家以封闭著称的硬件巨头，用中国开源模型的权重做…">
+<link rel="canonical" href="https://shilong.js.org/AI动态/2026-09/2026-09-27.html">
+<meta name="theme-color" content="#fbfaf6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="苹果开源VLM模型，基座居然是中国千问">
+<meta property="og:description" content="9月23日至24日，苹果在Hugging Face正式上架并开源了视觉语言模型apple/LensVLM-9B。开发者在模型页面发现，Base Model一栏赫然写着&quot;Built on Qwen3.5-9B&quot;——这家以封闭著称的硬件巨头，用中国开源模型的权重做…">
+<meta property="og:url" content="https://shilong.js.org/AI动态/2026-09/2026-09-27.html">
+<meta name="author" content="MacLodge">
+<style>:root{--paper:#fbfaf6;--paper-2:#f4f2eb;--ink:#17150f;--ink-2:#3d382e;--sub:#7a7466;--faint:#a9a296;--rule:#e4e0d4;--rule-2:#cfc9b8;--accent:#b04a2f;--accent-ink:#8e3a23;--accent-soft:#f3e6e0;--code-bg:#f6f4ee;--bg-mark:#f7e9c8;--shadow:0 1px 0 rgba(23,21,15,.04),0 10px 30px -18px rgba(23,21,15,.28);--serif:Georgia,"Times New Roman","Songti SC","Noto Serif SC","Source Han Serif SC",STSong,SimSun,serif;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Cascadia Mono","Courier New",monospace;--measure:40rem;--pad:28px;--nav-h:56px;color-scheme:light}
+[data-theme="dark"]{--paper:#131210;--paper-2:#1b1a15;--ink:#f0ede5;--ink-2:#cdc8bb;--sub:#948d7e;--faint:#6c6558;--rule:#2c2a21;--rule-2:#3e3b2f;--accent:#e28a61;--accent-ink:#f0a882;--accent-soft:#2b1f18;--code-bg:#1a1914;--bg-mark:#47391a;--shadow:0 1px 0 rgba(0,0,0,.3),0 10px 30px -18px rgba(0,0,0,.7);color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.8;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-wrap:break-word}
+img{max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+::selection{background:var(--accent-soft);color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.top{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:saturate(160%) blur(12px);-webkit-backdrop-filter:saturate(160%) blur(12px);border-top:3px solid var(--ink);border-bottom:1px solid var(--rule)}
+.top__in{max-width:1000px;margin:0 auto;padding:0 var(--pad);height:var(--nav-h);display:flex;align-items:center;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:16px;font-weight:600;white-space:nowrap}
+.brand__mark{width:24px;height:24px;flex:0 0 24px;border-radius:3px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:14px;font-weight:700;line-height:1}
+.brand:hover{color:var(--accent-ink)}
+.top__nav{display:flex;align-items:center;gap:6px;margin-left:auto}
+.top__nav a,.icon-btn{font-size:12.5px;letter-spacing:.11em;color:var(--sub);padding:7px 12px;border-radius:4px;transition:color .18s,background .18s;white-space:nowrap}
+.top__nav a:hover,.icon-btn:hover{color:var(--ink);background:var(--paper-2)}
+.icon-btn{width:34px;height:34px;padding:0;display:grid;place-items:center}
+.icon-btn svg{width:17px;height:17px;display:block;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+[data-theme="dark"] .theme-toggle__light{display:none}
+.icon-btn .theme-toggle__dark{display:none}
+[data-theme="dark"] .theme-toggle__dark{display:block}
+main{display:block;min-height:60vh}
+.wrap{max-width:1000px;margin:0 auto;padding:0 var(--pad)}
+.brief{padding:52px 0 0}
+.kicker{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:16px}
+.brief h1{font-family:var(--serif);font-size:clamp(27px,3.9vw,41px);font-weight:600;line-height:1.28;letter-spacing:-.024em;margin:0 0 20px;max-width:22em;text-wrap:balance}
+.meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--sub);padding-bottom:20px;border-bottom:1px solid var(--rule)}
+.meta .dot{width:3px;height:3px;flex:0 0 3px;border-radius:50%;background:var(--faint)}
+.lede{font-size:17px;line-height:1.8;color:var(--ink-2);max-width:var(--measure);margin:26px 0 0}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
+.tag{font-size:11px;letter-spacing:.04em;color:var(--sub);border:1px solid var(--rule-2);border-radius:2px;padding:2px 8px}
+.prose{font-size:16.5px;line-height:1.85;color:var(--ink-2);max-width:var(--measure);padding:34px 0 0}
+.prose>*:first-child{margin-top:0}
+.prose>*+*{margin-top:1.15em}
+.prose h2,.prose h3,.prose h4{color:var(--ink);text-wrap:balance}
+.prose h2{font-family:var(--serif);font-size:25px;font-weight:600;letter-spacing:-.02em;line-height:1.36;margin:2.3em 0 0;padding-top:1.1em;border-top:1px solid var(--rule)}
+.prose>h2:first-child{border-top:0;padding-top:0}
+.prose h3{font-family:var(--serif);font-size:19px;font-weight:600;margin:1.9em 0 0}
+.prose h4{font-size:15.5px;font-weight:650;margin:1.7em 0 0}
+.prose p{margin:1.15em 0 0}
+.prose a{color:var(--accent-ink);border-bottom:1px solid color-mix(in srgb,var(--accent) 40%,transparent);transition:border-color .18s,background .18s}
+.prose a:hover{border-bottom-color:var(--accent);background:var(--accent-soft)}
+.prose strong{color:var(--ink);font-weight:650}
+.prose ul,.prose ol{margin:1.1em 0 0;padding-left:1.5em}
+.prose li{margin:.42em 0}
+.prose li::marker{color:var(--accent);font-family:var(--serif)}
+.prose hr{margin:2.6em auto;width:56px;height:0;border-top:1px solid var(--rule-2);position:relative}
+.prose hr::after{content:"✳";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--paper);color:var(--faint);font-size:11px;padding:0 8px}
+.prose blockquote{margin:1.6em 0 0;padding:2px 0 2px 20px;border-left:2px solid var(--accent);font-family:var(--serif);font-size:17px;line-height:1.72;color:var(--ink)}
+.prose blockquote p{margin:.5em 0 0}
+.prose blockquote p:first-child{margin-top:0}
+.prose code{font-family:var(--mono);font-size:.86em;background:var(--code-bg);border:1px solid var(--rule);border-radius:3px;padding:2px 6px;color:var(--accent-ink);word-break:break-word}
+.prose pre{margin:1.6em 0 0;background:var(--code-bg);border:1px solid var(--rule);border-left:2px solid var(--accent);border-radius:4px;padding:16px 18px;overflow-x:auto;font-size:13px;line-height:1.75}
+.prose pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit;white-space:pre}
+.prose table{width:100%;border-collapse:collapse;margin:1.7em 0 0;font-size:14px;display:block;overflow-x:auto}
+.prose th{text-align:left;font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--sub);font-weight:600;padding:0 14px 9px 0;border-bottom:2px solid var(--ink);white-space:nowrap}
+.prose td{padding:11px 14px 11px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.prose img{display:block;margin:1.8em 0 0;border:1px solid var(--rule);border-radius:4px;background:var(--paper-2)}
+.prose .callout{margin:1.9em 0 0;padding:20px 22px;background:var(--paper-2);border-left:2px solid var(--accent);border-radius:0 4px 4px 0}
+.prose .callout>*:first-child{margin-top:0}
+.prose .callout p{margin:.85em 0 0;font-size:15.5px;line-height:1.82}
+.prose .callout strong{color:var(--accent-ink)}
+.foot{margin:52px 0 0;padding-top:24px;border-top:1px solid var(--rule)}
+.note{font-size:12.5px;color:var(--sub);line-height:1.75;background:var(--paper-2);border-radius:4px;padding:15px 17px}
+.note b{color:var(--ink);font-weight:600}
+.nav{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+.nav a,.nav span{display:block;padding:16px 18px;border:1px solid var(--rule);border-radius:4px;transition:border-color .2s,background .2s,transform .2s}
+.nav a:hover{border-color:var(--rule-2);background:var(--paper-2);transform:translateY(-1px)}
+.nav span{color:var(--faint);font-size:12.5px;display:flex;align-items:center;justify-content:center;border-style:dashed}
+.nav__lab{font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--sub);margin-bottom:6px}
+.nav__t{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--ink);line-height:1.45}
+.nav .next{text-align:right}
+.back{margin:26px 0 0;font-size:13.5px}
+.back a{color:var(--sub)}
+.back a:hover{color:var(--accent)}
+.site-foot{border-top:1px solid var(--rule);margin-top:56px;padding:30px 0 44px;font-size:12.5px;color:var(--faint)}
+.site-foot__in{max-width:1000px;margin:0 auto;padding:0 var(--pad);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.site-foot a{color:var(--faint)}
+.site-foot a:hover{color:var(--accent)}
+@media (max-width:760px){:root{--pad:18px}.brief{padding:36px 0 0}.nav{grid-template-columns:1fr}.nav .next{text-align:left}.prose{font-size:16px}.top__nav a.hide-sm{display:none}}
+@media print{.top,.nav,.back{display:none!important}body{background:#fff;font-size:11pt}.prose .callout{background:none;border-left-width:2px}}</style>
+<script>
+/* 主题在首屏绘制前定下来，避免闪一下默认色。localStorage 键与主站同名，
+   从博客点进来时能延续访客已经选好的亮/暗设置。 */
+(function(){try{var r=document.documentElement;var s=localStorage.getItem(r.dataset.themeKey||'blog-theme');var t=(s==='light'||s==='dark')?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');r.setAttribute('data-theme',t);}catch(e){}})();
+</script>
+</head>
+<body>
+<a class="sr-only" href="#main">跳到主要内容</a>
+
+<header class="top">
+  <div class="top__in">
+    <a class="brand" href="/"><span class="brand__mark" aria-hidden="true">M</span>MacLodge's Blog</a>
+    <nav class="top__nav" aria-label="页内导航">
+      <a href="/AI动态/">简报目录</a>
+      <a class="hide-sm" href="/">首页</a>
+      <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="切换深色 / 浅色主题" title="切换主题">
+        <svg class="theme-toggle__light" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+        <svg class="theme-toggle__dark" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <article class="brief">
+    <div class="wrap">
+      <div class="kicker">AI 简报 · 2026 年 9 月 27 日</div>
+      <h1>苹果开源VLM模型，基座居然是中国千问</h1>
+      <div class="meta">
+        <time datetime="2026-09-27">2026 / 09 / 27</time>
+        <span class="dot" aria-hidden="true"></span>
+        <span>星期日</span>
+        <span class="dot" aria-hidden="true"></span><span>🐵 程序小猴AI日报，每天8点，带你用5分钟看懂AI圈昨天发生了什么</span>
+        <span class="dot" aria-hidden="true"></span>
+        <span>约 5 分钟读完</span>
+      </div>
+      <p class="lede">9月23日至24日，苹果在Hugging Face正式上架并开源了视觉语言模型apple/LensVLM-9B。开发者在模型页面发现，Base Model一栏赫然写着&quot;Built on Qwen3.5-9B&quot;——这家以封闭著称的硬件巨头，用中国开源模型的权重做…</p>
+      <div class="tags"><span class="tag">#AI日报</span><span class="tag">#人工智能</span><span class="tag">#大模型</span><span class="tag">#开源AI</span><span class="tag">#苹果LensVLM</span><span class="tag">#千问Qwen</span><span class="tag">#谷歌Gemini4</span><span class="tag">#太空算力</span></div>
+
+      <div class="prose">
+<h2>1. 苹果开源LensVLM-9B，基座模型竟是阿里千问</h2>
+<p>9月23日至24日，苹果在Hugging Face正式上架并开源了视觉语言模型apple/LensVLM-9B。开发者在模型页面发现，Base Model一栏赫然写着&quot;Built on Qwen3.5-9B&quot;——这家以封闭著称的硬件巨头，用中国开源模型的权重做了自己的底座。LensVLM采用&quot;先粗扫、再细看&quot;的选择性上下文扩展方案，处理长文档时Token消耗降低约84%，KV Cache占用从约1.6GB压到约250MB，同一块显卡能同时服务更多用户。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：苹果选千问做基座，说明开源社区里&quot;好模型就是好模型&quot;，不看国籍。对开发者来说，这意味着国产开源模型的工程质量已经被全球顶级厂商认可。下次你选型的时候，不妨也多看看国产开源方案——连苹果都在用了。</p></aside>
+<hr>
+<h2>2. 中国AI模型全球采用率飙升：OpenRouter占比突破57%</h2>
+<p>据CNBC 9月26日报道，中国AI模型在全球主流开发者平台的市场份额实现跨越式增长。OpenRouter数据显示，9月14日当周中国模型词元调用量占比达57%至67%，而2月仅为6%至13%；在Vercel平台，8月中国模型占比升至55%，1月仅为11%。OpenRouter主管表示，今年发布的中国开源模型能可靠应用于高级智能体场景，尤其在编程方面，且成本极具竞争力。全球南方企业是近期中国AI模型的最大用户，使用的词元中超过三分之二来自中国模型。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：数据不会骗人。当你的API调用成本只有对方的1/20到1/60，性能又追到第一梯队，开发者自然会用脚投票。对于做SaaS和API产品的开发者来说，现在用国产模型做后端已经不是&quot;省钱的妥协&quot;，而是&quot;合理的技术选型&quot;。</p></aside>
+<hr>
+<h2>3. 谷歌&quot;太阳捕手&quot;计划：首颗TPU算力卫星10月1日发射</h2>
+<p>谷歌CEO皮查伊宣布，Project Suncatcher的首颗太空算力卫星原型MVP将于10月1日搭乘SpaceX Transporter-18任务升空。卫星体积约一台冰箱大小，搭载4颗Trillium TPU芯片，算力相当于一台地面服务器，太阳能板提供约1千瓦电力。TPU将以每次约15分钟的突发模式运行Gemini模型，随后关闭散热。2027年计划发射两颗卫星测试激光互联组网，长期目标是81颗卫星在约650公里高度组成计算集群。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：太空数据中心的瓶颈不是芯片有多强，而是散热——真空中只能靠辐射散热，跑15分钟就得歇菜。但谷歌把它和当年无人驾驶项目类比（花了15年才出成果），说明这是一场长线押注。对我们开发者来说，短期内不用担心&quot;算力上天&quot;抢你的GPU，但这个技术方向值得关注。</p></aside>
+<hr>
+<h2>4. 谷歌Gemini 4正式进入后训练阶段，目标&quot;远早于年底&quot;发布</h2>
+<p>谷歌DeepMind新负责人Koray Kavukcuoglu在AI Agenda Live峰会上透露，新一代旗舰模型Gemini 4已进入后训练初期阶段，目标在&quot;远早于2026年底&quot;推出早期版本。谷歌实际上跳过了原计划的Gemini 3.5 Pro，把研发资源全部押注Gemini 4，以在推理能力与智能体任务上追赶竞争对手。Kavukcuoglu表示对团队&quot;百分之百有信心&quot;。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：直接跳过3.5 Pro押注4.0，说明谷歌在内部做了取舍判断——渐进式迭代追不上对手，必须跳档。这对做多模型适配的开发者是个提醒：你的prompt和RAG管线可能要为新一代模型做比较大的调整，提前做好抽象层很重要。</p></aside>
+<hr>
+<h2>5. 谷歌、OpenAI、Anthropic拟共建&quot;前沿AI标准局&quot;（SAFA）</h2>
+<p>9月24日至25日，三家头部AI公司被曝拟共同筹建&quot;前沿AI标准局&quot;（SAFA），计划在没有政府监管的情况下独立运作，统一前沿模型评测与治理规则。同期，谷歌Gemini 3.8 Live实时虚拟人正式上线，打通视频生成、语音交互、表情同步全链路，原生兼容97种语言，支持毫秒级唇形同步，所有生成内容内置SynthID隐形水印。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：三大巨头联手搞标准，信号很明确——与其等政府来定规矩，不如行业自己先划好跑道。对开发者来说，统一的评测标准意味着模型之间的横向比较会更透明，选型决策的成本会降低。但也要注意，行业标准往往由大玩家制定，中小开发者的话语权可能被边缘化。</p></aside>
+<hr>
+<h2>6. 宇树科技王兴兴：机器人核心瓶颈在于毫米级精度</h2>
+<p>在第五届全球数字贸易博览会上，宇树科技创始人王兴兴发表主题演讲，称具身智能赛道未来必将迎来专属&quot;ChatGPT时刻&quot;，但当前核心瓶颈是能否解决几毫米的工作误差。同日，四臂具身智能机器人亮相上海2026世界技能博览会，现场书写&quot;花好月圆&quot;；2026全球数字贸易创新大赛的具身智能机器人挑战赛上，人形机器人与市民进行投篮、竞速等互动比赛。宇树科技此前还发布了Dex5-S灵巧手，22个关节均可反向驱动，3.99万元起。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：王兴兴说的&quot;毫米级误差&quot;是具身智能最真实的痛点——软件上能跑的算法，到了物理世界会因为传感器噪声、机械间隙、光照变化等一堆问题打折扣。如果你在做机器人相关的软件开发，仿真环境和真机调试之间的gap可能比你想象的大很多。</p></aside>
+<hr>
+<h2>7. 千问发布Qwen-Audio-3.1系列：5款语音模型全线降价</h2>
+<p>9月23日，千问正式发布Qwen-Audio-3.1系列语音大模型，一次性推出5款模型，覆盖语音识别（ASR）、语音合成（TTS）、实时语音交互（Realtime）及两款下一代架构模型。ASR支持30种语言和16种中文方言，平均字错误率4.55%；TTS支持跨语言音色迁移；Realtime支持全双工多人对话。价格方面全线大幅下调：TTS降价约70%、Realtime降幅约85%、ASR降幅达95%。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：方言识别这件事一直是语音AI的硬伤，千问这次在16种中文方言上做到平均CER 10.38%，温州话和苏州话都识别出来了，这个很实用。加上降价幅度，做语音类产品开发的成本门槛又低了一大截。如果你的产品需要多语言语音交互，现在是个好时机去评估一下。</p></aside>
+<hr>
+<h2>📮 互动时间</h2>
+<p>今天哪条新闻最让你有感触？是苹果用千问做基座让你骄傲了一把，还是太空算力卫星让你觉得科幻照进现实？</p>
+<p>👇 在评论区聊聊你的看法，点赞最高的留言，小猴会在明天的日报里翻牌回复！</p>
+<p>如果这份日报对你有帮助，别忘了<strong>点赞 + 在看 + 转发</strong>三连，你的支持是小猴每天更新的最大动力 💪</p>
+      </div>
+
+      <div class="foot">
+        <div class="note">
+          <b>关于这份简报</b><br>
+          内容由公众号日报整理而来，代表原文作者观点，不构成任何投资建议。
+          信息以公开发布时的报道为准，时效性内容请以最新消息为参考。
+        </div>
+
+        <nav class="nav" aria-label="上一期 / 下一期">
+          <a class="prev" href="/AI动态/2026-09/2026-09-26.html" rel="prev"><div class="nav__lab">← 上一期</div><div class="nav__t">谷歌Gemini虚拟人上线，97种语言实时唇形同步太炸了</div></a>
+          <span>已经是最新一期</span>
+        </nav>
+
+        <p class="back"><a href="/AI动态/">← 返回简报目录</a></p>
+      </div>
+    </div>
+  </article>
+</main>
+
+<footer class="site-foot">
+  <div class="site-foot__in">
+    <span>&copy; 2026 MacLodge · 简报内容整理自公开报道</span>
+    <span><a href="/">MacLodge's Blog</a> · <a href="/AI动态/">AI 简报</a></span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var key=document.documentElement.dataset.themeKey||'blog-theme';
+  var cur=function(){return document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light';};
+  document.querySelectorAll('[data-theme-toggle]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var t=cur()==='dark'?'light':'dark';
+      document.documentElement.setAttribute('data-theme',t);
+      try{localStorage.setItem(key,t);}catch(e){}
+    });
+  });
+})();
+</script>
+</body>
+</html>

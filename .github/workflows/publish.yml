@@ -1,0 +1,133 @@
+# 构建单一产物并发布到 GitHub Pages
+#
+# 一个仓库只能发布 1 个 Pages 站点，因此这里把两部分合并进同一个产物：
+#   博客  WebBlog/  (Astro 构建产物)  -> https://shilong.js.org/
+#   导航  WebSite/                    -> https://shilong.js.org/aa/
+#
+# 2026-09-18：博客已由 docsify 切换为 Astro，并接管根路径。
+#   博客的内容源（Markdown）与图片资源现在都在 WebBlog/ 目录内，
+#   与站点代码同处一个工程，不再跨目录引用。构建只需要 WebBlog/ 这一个目录。
+#
+# 使用前必须在仓库 Settings -> Pages -> Build and deployment -> Source
+# 选择 "GitHub Actions"，否则 deploy-pages 会报 Get Pages site failed。
+
+name: Deploy sites to GitHub Pages
+
+on:
+  push:
+    branches: ["master"]
+    # 素材库（CodeKey）里只有 `AI 日报/` 参与博客构建，其余目录改了不必重新部署。
+    #
+    # 注意：**不能**写成 `CodeKey/**` 一刀切 —— 那样每天都新丢进
+    # `CodeKey/AI 日报/` 的日报原稿也不会触发构建，线上就永远停在旧内容上。
+    # GitHub 又不允许 paths 与 paths-ignore 同时出现，所以只能逐个列出要忽略的
+    # 子目录（目录级匹配必须带 `/**`，只写目录名匹配不到目录里的文件）。
+    #
+    # 漏列新素材目录的后果只是多跑一次构建，不会漏部署，所以这里可以放心枚举。
+    paths-ignore:
+      - "CodeKey/01-IP形象/**"
+      - "CodeKey/02-封面与版式模板/**"
+      - "CodeKey/03-正文插图/**"
+      - "CodeKey/04-选题与文案库/**"
+      - "CodeKey/05-栏目素材/**"
+      - "CodeKey/06-运营方案/**"
+      - "CodeKey/07-发布登记/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: |
+            WebBlog/package-lock.json
+            WebSite/package-lock.json
+
+      - name: Build new blog (Astro)
+        working-directory: WebBlog
+        run: |
+          npm ci
+          npm run build
+          # 产物结构自检：这几个文件缺失说明内容集合没读到文章
+          for f in index.html rss.xml sitemap-index.xml search-index.json favicon.ico; do
+            test -f "dist/$f" || { echo "缺少 dist/$f"; exit 1; }
+          done
+          # AI 简报入口（首页唯一的入口页）必须真的生成出来
+          test -f "dist/AI动态/index.html" || { echo "缺少 AI 简报入口页"; exit 1; }
+          echo "文章页数：$(find dist -name index.html | wc -l)"
+          echo "简报期数：$(find dist/AI动态 -name '*.html' | wc -l)"
+
+      - name: Build nav site (Vite)
+        working-directory: WebSite
+        # 注意：prebuild 会先跑 scripts/verify-icons.mjs，图标键与磁盘对不上就直接失败。
+        # 该脚本依赖 Node 22.18+ 的内置 TS 类型擦除来直接 import 数据模块。
+        run: |
+          npm ci
+          npm run build
+          test -f dist/index.html || { echo "导航站缺少 dist/index.html"; exit 1; }
+          # 图标必须真的被构建收录，数量塌了说明 glob 没匹配到资源目录
+          icons=$(find dist -name '*.png' | wc -l)
+          echo "导航站图标文件数：$icons"
+          test "$icons" -ge 70 || { echo "导航站图标数量异常：$icons"; exit 1; }
+
+      - name: Assemble site
+        run: |
+          set -euo pipefail
+          rm -rf _site
+          mkdir -p _site
+
+          # 博客：Astro 产物直接放到站点根目录
+          cp -r WebBlog/dist/. _site/
+
+          # 导航站：WebSite 的 Vite 产物放到子路径 aa/
+          # （vite.config.ts 里 base='/aa/'，产物内引用已自带该前缀）
+          mkdir -p _site/aa
+          cp -r WebSite/dist/. _site/aa/
+
+          # 自定义域名必须位于产物根目录，否则每次部署都会被重置
+          echo "shilong.js.org" > _site/CNAME
+          # 关闭 Jekyll（本产物已是纯静态，不需要它再做一次处理）
+          touch _site/.nojekyll
+
+          test -f _site/aa/index.html || { echo "导航站没被组装进 _site/aa/"; exit 1; }
+
+          echo "---- artifact preview ----"
+          ls -la _site
+          du -sh _site
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

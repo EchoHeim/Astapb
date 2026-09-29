@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>程序小猴 · 公众号运营诊断与优化方案</title>
+<style>
+  :root{
+    --green:#09B83E; --green-dark:#06872D; --green-soft:#E8F8EE; --green-line:#BEE9CC;
+    --ink:#16201A; --ink2:#4A554D; --ink3:#7C877F;
+    --line:#E2E7E3; --bg:#F5F7F5; --card:#FFFFFF;
+    --amber:#854F0B; --amber-soft:#FAEEDA; --red:#A32D2D; --red-soft:#FCEBEB;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:0 20px 80px; background:var(--bg); color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    font-size:15px; line-height:1.75; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px;margin:0 auto}
+
+  header.hero{
+    margin:0 -20px 40px; padding:56px 40px 48px;
+    background:linear-gradient(135deg,#06872D 0%,#09B83E 100%); color:#fff;
+  }
+  header.hero .inner{max-width:920px;margin:0 auto}
+  .kicker{font-size:13px;letter-spacing:.12em;opacity:.82;margin:0 0 14px}
+  header.hero h1{margin:0 0 14px;font-size:30px;line-height:1.35;font-weight:600;letter-spacing:-.01em}
+  header.hero p{margin:0;font-size:15px;opacity:.92;max-width:640px}
+  .meta{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px}
+  .meta span{
+    font-size:12.5px;padding:5px 12px;border-radius:999px;
+    background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28)
+  }
+
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:32px 34px;margin-bottom:22px}
+  h2{
+    margin:0 0 22px;font-size:20px;font-weight:600;letter-spacing:-.01em;
+    display:flex;align-items:center;gap:12px;
+  }
+  h2 .num{
+    flex:0 0 auto;width:30px;height:30px;border-radius:9px;background:var(--green-soft);
+    color:var(--green-dark);font-size:14px;font-weight:600;
+    display:flex;align-items:center;justify-content:center;
+  }
+  h3{margin:30px 0 12px;font-size:16px;font-weight:600;color:var(--ink)}
+  h3:first-of-type{margin-top:0}
+  h4{margin:22px 0 8px;font-size:14.5px;font-weight:600;color:var(--ink)}
+  p{margin:0 0 14px}
+  ul,ol{margin:0 0 16px;padding-left:22px}
+  li{margin-bottom:7px}
+  strong{font-weight:600}
+  code{
+    font-family:ui-monospace,"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+    font-size:13px;background:#EEF2EF;border:1px solid #DFE5E1;border-radius:5px;padding:1px 5px;
+  }
+  a{color:var(--green-dark)}
+
+  .lead{font-size:15.5px;color:var(--ink2);margin-bottom:24px}
+
+  .tldr{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin-bottom:6px}
+  .tldr .item{background:var(--green-soft);border:1px solid var(--green-line);border-radius:11px;padding:16px 18px}
+  .tldr .item b{display:block;font-size:13px;color:var(--green-dark);margin-bottom:6px;letter-spacing:.03em}
+  .tldr .item p{margin:0;font-size:14px;line-height:1.65;color:var(--ink)}
+
+  table{width:100%;border-collapse:collapse;margin:0 0 18px;font-size:14px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:#F2F5F3;font-weight:600;font-size:13px;color:var(--ink2);white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  .tbl-wrap{overflow-x:auto;margin:0 0 18px;border:1px solid var(--line);border-radius:10px}
+  .tbl-wrap table{margin:0}
+  .tbl-wrap th:first-child,.tbl-wrap td:first-child{padding-left:14px}
+  .tbl-wrap th:last-child,.tbl-wrap td:last-child{padding-right:14px}
+
+  .box{border-radius:11px;padding:16px 20px;margin:0 0 18px;font-size:14.5px}
+  .box p:last-child{margin-bottom:0}
+  .box .lbl{font-weight:600;font-size:13px;letter-spacing:.04em;display:block;margin-bottom:6px}
+  .box.warn{background:var(--red-soft);border:1px solid #F0C9C9}
+  .box.warn .lbl{color:var(--red)}
+  .box.tip{background:var(--amber-soft);border:1px solid #EFD6A8}
+  .box.tip .lbl{color:var(--amber)}
+  .box.good{background:var(--green-soft);border:1px solid var(--green-line)}
+  .box.good .lbl{color:var(--green-dark)}
+
+  pre{
+    background:#F7F9F8;border:1px solid var(--line);border-radius:10px;
+    padding:18px 20px;overflow-x:auto;font-size:13px;line-height:1.7;margin:0 0 18px;
+    font-family:ui-monospace,"SFMono-Regular",Consolas,monospace;color:#243027;
+  }
+  pre .c{color:var(--ink3)}
+  pre .k{color:var(--green-dark);font-weight:600}
+
+  .cols2{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-bottom:18px}
+  .plan{border:1px solid var(--line);border-radius:11px;padding:18px 20px}
+  .plan.pick{border:2px solid var(--green);background:#FBFFFC}
+  .plan h4{margin:0 0 8px;font-size:15px}
+  .plan .tag{
+    display:inline-block;font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:999px;
+    background:var(--green);color:#fff;margin-left:8px;vertical-align:2px;
+  }
+  .plan .tag.alt{background:#E6EAE7;color:var(--ink3)}
+  .plan ul{margin:10px 0 0;padding-left:20px;font-size:14px;color:var(--ink2)}
+  .plan ul li::marker{color:var(--green)}
+
+  .steps{counter-reset:s;list-style:none;padding:0;margin:0 0 12px}
+  .steps li{counter-increment:s;position:relative;padding-left:40px;margin-bottom:14px;font-size:14.5px}
+  .steps li::before{
+    content:counter(s);position:absolute;left:0;top:2px;width:24px;height:24px;border-radius:7px;
+    background:var(--green-soft);color:var(--green-dark);font-size:12.5px;font-weight:600;
+    display:flex;align-items:center;justify-content:center;
+  }
+
+  .road{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  .phase{border:1px solid var(--line);border-radius:11px;padding:18px 20px;background:#FCFDFC}
+  .phase .ph{font-size:12px;font-weight:600;color:var(--green-dark);letter-spacing:.05em;margin-bottom:4px}
+  .phase h4{margin:0 0 12px;font-size:15px}
+  .phase ul{margin:0;padding:0;list-style:none}
+  .phase li{position:relative;padding-left:22px;margin-bottom:9px;font-size:13.5px;line-height:1.6;color:var(--ink2)}
+  .phase li::before{
+    content:"";position:absolute;left:0;top:7px;width:11px;height:11px;
+    border:1.5px solid #C4CDC7;border-radius:3px;
+  }
+
+  .todo{width:100%;border-collapse:collapse;font-size:13.5px}
+  .todo th{background:#F2F5F3}
+  .todo td{height:34px}
+  .todo td.fill{background:#FCFDFC}
+  .todo td.fill::after{content:"________________";color:#D3DAD6;font-size:12px}
+
+  footer{text-align:center;color:var(--ink3);font-size:13px;padding:26px 0 0}
+  hr.sep{border:0;border-top:1px solid var(--line);margin:28px 0}
+  .small{font-size:13.5px;color:var(--ink2)}
+  .nowrap{white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="inner">
+    <p class="kicker">微信公众号运营诊断</p>
+    <h1>程序小猴 · 内容质量与粉丝活跃度提升方案</h1>
+    <p>基于对 <code style="background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.3);color:#fff">CodeKey</code> 素材库与 <code style="background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.3);color:#fff">WebBlog/docs</code> 内容库的盘点，给出一份可落地的运营优化建议。</p>
+    <div class="meta">
+      <span>盘点范围：63 张表情包 · 105 篇原创技术文 · 1 期 AI 日报</span>
+      <span>建议周期：90 天</span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <h2><span class="num">0</span>先说结论</h2>
+  <p class="lead">盘完素材库后，我的判断是：<strong>你不缺内容，也不缺 IP，缺的是「分发机制」和「转化设计」</strong>。</p>
+  <div class="tldr">
+    <div class="item">
+      <b>判断一 · 内容不是瓶颈</b>
+      <p>博客里躺着 105 篇原创技术文（Linux 25、Python 笔记 41、工程实践 11、工具 10、C/C++ 10、Android 6）。这个储备量超过绝大多数日更号，但你<strong>没有一稿多投机制</strong>——博客写完就完了，没有改写成公众号版本。这是当前最大的浪费。</p>
+    </div>
+    <div class="item">
+      <b>判断二 · IP 已经就位，但没变成入口</b>
+      <p>63 张猴米表情包分成三套完整系列，这是现成的涨粉钩子。目前它们只是文件夹里的图片——没上架、没做关键词回复、没进正文。<strong>只要上架表情开放平台，就多了一个持续导流的公域入口。</strong></p>
+    </div>
+    <div class="item">
+      <b>判断三 · CodeKey 现在是「图片仓库」，不是「素材库」</b>
+      <p>只有图片，没有选题、标题、金句、数据。而图片是消耗品，<strong>选题库和数据表才是让每篇文章都比上一篇更好的复利资产</strong>——这两块目前完全空白。</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">1</span>诊断：先搞清「阅读量低」到底低在哪</h2>
+  <p>「阅读量低」是一句感受，不是一个问题。它其实是三个可分别测量的量相加：</p>
+
+  <pre><span class="c">阅读量 ＝</span> 粉丝基数 × 会话打开率   <span class="c">＋</span>   平台推荐流量   <span class="c">＋</span>   社交分享裂变
+          <span class="c">↑ 老粉点不点标题</span>        <span class="c">↑ 看一看 / 搜一搜</span>      <span class="c">↑ 内容值不值得转</span>
+          <span class="c">病根：标题、封面、定位</span>   <span class="c">病根：无关键词、无热点</span>  <span class="c">病根：实用度、共鸣度</span></pre>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>流量来源</th><th>怎么算</th><th>健康参考</th><th>偏低说明什么</th></tr></thead>
+    <tbody>
+      <tr><td>会话打开</td><td>阅读量 ÷ 送达人数</td><td class="nowrap">老号 ≥ 8%<br>新号 ≥ 15%</td><td>标题、封面、账号定位出问题。读者看到推送但没有点开的理由</td></tr>
+      <tr><td>平台推荐</td><td>后台「阅读来源」里推荐占比</td><td class="nowrap">10% – 30%</td><td>内容没有搜索价值（缺具体关键词），也没有热点属性，算法不会推</td></tr>
+      <tr><td>社交分享</td><td>分享人数 ÷ 阅读人数</td><td class="nowrap">≥ 1.5%</td><td>内容不具备转发动机：不实用、不共鸣、或者转发出去显得「没面子」</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="box tip">
+    <span class="lbl">5 分钟自查动作</span>
+    <p>公众号后台 → 内容分析 → 单篇分析 → 看「阅读来源」饼图。<br>
+    · 如果<strong>「公众号会话」占 90% 以上</strong> → 你只有存量没有增量，问题在推荐与分享，去抓关键词和转发动机。<br>
+    · 如果<strong>会话占比正常但绝对值很小</strong> → 粉丝基数本身太小，问题在涨粉入口，去上表情包、做钩子。<br>
+    · 如果<strong>会话占比也低</strong> → 老粉都不点了，问题在标题封面与栏目定位，这是最难但必须先修的。</p>
+  </div>
+
+  <h3>基于素材库现状的初步判断</h3>
+  <ul>
+    <li><strong>内容侧不弱</strong>：105 篇原创技术文，且覆盖 Linux / 嵌入式 / Python / C++ 等有搜索需求的领域，天然适合吃「搜一搜」长尾流量。</li>
+    <li><strong>没有一稿多投机制</strong>：WebBlog 与公众号是两条平行线，同一份劳动没有产生第二份回报。</li>
+    <li><strong>AI 日报格式成立但没成节奏</strong>：<code>AI日报_9月19日.md</code> 已经具备差异化设计——「小猴点评」是核心资产，它把你和纯搬运号区分开了。但目录里只有 1 篇，日更节奏尚未形成。</li>
+    <li><strong>IP 资产闲置</strong>：63 张表情包未上架、未做钩子、未进正文，等于零转化。</li>
+    <li><strong>命名与结构不承载工作流</strong>：<code>序号-uuid.png</code> 无法检索，素材库按文件类型而非按生产流程组织。</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="num">2</span>定位：一个号装三种人格，是阅读量的根因</h2>
+  <p>「程序小猴」目前同时承载三类内容：<strong>AI 日报</strong>（泛人群、资讯）、<strong>技术干货</strong>（垂直人群、Linux/嵌入式/Python）、<strong>猴米 IP / 表情包</strong>（泛人群、娱乐）。</p>
+  <p>问题在于：算法认不出你是谁，读者也说不清关注你能得到什么。而<strong>当读者无法用一句话向朋友介绍你的号时，转发就不会发生</strong>——转发恰恰是阅读量最大的杠杆。这就是为什么「内容还行但阅读量低」经常同时出现。</p>
+
+  <div class="cols2">
+    <div class="plan pick">
+      <h4>方案 A · 主号收敛为双栏目<span class="tag">推荐</span></h4>
+      <p class="small">账号定位收敂为「程序员的 AI 日报 ＋ 硬核技术干货」，猴米 IP 只做包装、不做主内容。</p>
+      <ul>
+        <li>技术内容是唯一难以复制的护城河；表情包谁都能做</li>
+        <li>IP 转为固定版式：首图小猴、文中表情包做情绪标点、文末三连引导图</li>
+        <li>一句话定位清晰：「每天 5 分钟看懂 AI 圈 ＋ 程序员的硬核干货」</li>
+        <li>不需要额外产能，用现有素材即可跑起来</li>
+      </ul>
+    </div>
+    <div class="plan">
+      <h4>方案 B · 拆成两个号<span class="tag alt">不推荐</span></h4>
+      <p class="small">「程序小猴」走 IP 娱乐向，技术内容另开新号。</p>
+      <ul>
+        <li>新号没有推荐权重，冷启动成本极高</li>
+        <li>现有产能无法同时养两个日更号</li>
+        <li>把 105 篇技术资产拆散，两边都变弱</li>
+        <li>唯一适用场景：你打算全职做号且已有团队</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">3</span>栏目：把内容做成「条件反射式期待」</h2>
+  <p>打开率的本质是<strong>读者预期</strong>，不是标题技巧。有固定栏目，读者才知道「什么时候该点开你」。栏目一旦固定，你也就有了稳定的生产节奏，不再靠灵感。</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>栏目</th><th>频率</th><th>核心职责</th><th>单篇定位</th><th>素材来源</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>小猴 AI 日报</strong></td><td class="nowrap">工作日日更</td><td>拉新 / 推荐流量</td>
+        <td>7 条新闻 ＋ 每条一句独家点评</td><td>CodeKey / 05-栏目素材 / AI日报</td>
+      </tr>
+      <tr>
+        <td><strong>小猴拆代码</strong></td><td class="nowrap">周更 1–2 篇</td><td>留存 / 打开率</td>
+        <td>一个具体问题 ＋ 可复制的解法</td><td>WebBlog / docs（Linux / Python / C++ / FPGA）</td>
+      </tr>
+      <tr>
+        <td><strong>猴米打工记</strong></td><td class="nowrap">周更 1 篇</td><td>传播 / IP 认知</td>
+        <td>一张表情包讲一个职场真相</td><td>CodeKey / 01-IP形象</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>内容配比按经典的 <strong>60 / 30 / 10</strong>：60% 价值内容（拆代码）、30% 社群与互动内容（打工记、互动话题）、10% 推广内容。</p>
+
+  <div class="box good">
+    <span class="lbl">为什么 AI 日报是当前最高杠杆的栏目</span>
+    <p><strong>1. 天然带搜索关键词。</strong>「华为昇腾960」「英伟达翻倍」这类具体名词，是搜一搜的长尾流量入口，而技术干货的搜索量远小于热点新闻。<br>
+    <strong>2. 日更形成节奏后，本身就是打开理由。</strong>「每天 8 点看小猴」会沉淀为读者的习惯，这是最稳的会话打开率来源。<br>
+    <strong>3.「小猴点评」是护城河。</strong>市面上不缺新闻搬运，缺的是懂工程师视角的解读。你现有的点评质量（比如从「云天励飞涨 14%」读出国产算力从概念炒作走向实质定价）正是差异点，要继续强化、不能省。</p>
+  </div>
+
+  <div class="box warn">
+    <span class="lbl">日报的版权红线（必须守）</span>
+    <p>日报属于<strong>二次创作</strong>，必须做到三点：① 每篇保留「仅代表个人观点」＋ 引用来源的声明；② 不要整段搬运原文，用改写；③ <strong>你的原创点评应占篇幅的一半以上</strong>——点评才是你的作品，新闻本身不是。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">4</span>CodeKey 素材库重构</h2>
+  <p>这是你这次明确提出的诉求，我按「一篇文章从选题到发布的全生命周期」重新组织了目录。</p>
+
+  <h3>现状的三个问题</h3>
+  <ol>
+    <li><strong>它是「仓库」不是「库」。</strong>只有图片素材，没有选题、标题、金句、数据。图片是一次性消耗品，而选题库和数据表才是复利资产。</li>
+    <li><strong>命名不可读。</strong><code>001-ced5-46c5-bbc2-a017ae152f74.png</code> 这种格式没法按语义检索，上架表情平台时还得手工改名。README 里已经记了这个问题——我写了个脚本，一条命令解决。</li>
+    <li><strong>结构不承载工作流。</strong>素材库应该按生产流程组织（选题 → 文案 → 配图 → 发布 → 复盘），而不是按文件类型。</li>
+  </ol>
+
+  <h3>目标结构</h3>
+  <pre>CodeKey/
+├── <span class="k">01-IP形象/</span>                    <span class="c"># 品牌资产，不可变</span>
+│   ├── 猴米_表情包/
+│   │   ├── 打工小猴/                <span class="c"># 24 张 → 001-摸鱼.png 002-加班.png ...</span>
+│   │   ├── 猴米懂礼貌/              <span class="c"># 19 张</span>
+│   │   └── 猴米上学记/              <span class="c"># 20 张</span>
+│   ├── 头像与二维码/
+│   └── 品牌规范.md                  <span class="c"># 主色 / 辅助色 / 字号 / 字体</span>
+│
+├── <span class="k">02-封面与版式模板/</span>              <span class="c"># 每篇都要用，做成模板复用</span>
+│   ├── AI日报_封面模板.png
+│   ├── 技术干货_封面模板.png
+│   ├── 猴米漫谈_封面模板.png
+│   ├── 文首署名条.png
+│   └── 文末三连引导图.png
+│
+├── <span class="k">03-正文插图/</span>
+│   ├── AI日报/
+│   ├── 技术干货/                    <span class="c"># 架构图、流程图、代码截图</span>
+│   └── 猴米漫谈/
+│
+├── <span class="k">04-选题与文案库/</span>                <span class="c"># ← 目前完全缺失，最重要</span>
+│   ├── 选题池.md                    <span class="c"># 常青选题 + 热点触发选题</span>
+│   ├── 标题库.md                    <span class="c"># 验证过的标题 + 效果标注</span>
+│   ├── 金句库.md                    <span class="c"># 开头钩子 / 结尾金句 / 小猴点评口吻</span>
+│   ├── 固定模块.md                  <span class="c"># 头图语 / 关注引导 / 往期推荐 / 三连话术</span>
+│   └── 往期数据.csv                 <span class="c"># 每篇的送达/阅读/分享/涨粉</span>
+│
+├── <span class="k">05-栏目素材/</span>                    <span class="c"># 已发布内容定稿，按年月归档</span>
+│   ├── AI日报/2026-09/
+│   ├── 技术干货/2026-09/
+│   └── 猴米漫谈/2026-09/
+│
+├── <span class="k">06-运营方案/</span>                    <span class="c"># 本方案 + 工具脚本</span>
+├── LICENSE                          <span class="c"># 保留所有权利</span>
+└── README.md</pre>
+
+  <h3>三条必须守的约定</h3>
+  <ol>
+    <li><strong>编号前缀（01–06）不要改。</strong>数字前缀在文件管理器、GitHub、命令行里的排序都稳定；换中文名开头排序，Windows 与 macOS 结果不一致，会踩坑。</li>
+    <li><strong>原始素材与成品分离。</strong>01–03 存可复用素材，05 存已发布定稿。不要把定稿混回素材区，否则同一个文件会出现多个版本，无法判断哪个是终稿。</li>
+    <li><strong>04 是核心，先建它。</strong>哪怕其他目录还空着，04 里的五份文件也要先立起来——它是唯一能让「下一篇比上一篇好」的部分。</li>
+  </ol>
+
+  <h3>往期数据.csv —— 优化的燃料</h3>
+  <p>没有数据回填，所有「优化」都是猜。<strong>用满 20 篇之后，你就能非常清楚地看到：哪类标题打开率高、哪个栏目带粉、什么时间发数据最好。</strong>建议字段：</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>字段</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td class="nowrap">发布日期</td><td>YYYY-MM-DD</td></tr>
+      <tr><td class="nowrap">标题</td><td>保留原标题，便于复盘标题模式</td></tr>
+      <tr><td class="nowrap">栏目</td><td>AI日报 / 拆代码 / 打工记</td></tr>
+      <tr><td class="nowrap">送达人数</td><td>后台数据</td></tr>
+      <tr><td class="nowrap">阅读量</td><td>后台数据</td></tr>
+      <tr><td class="nowrap">打开率</td><td>＝ 阅读量 ÷ 送达人数，用公式自动算</td></tr>
+      <tr><td class="nowrap">分享人数</td><td>后台数据</td></tr>
+      <tr><td class="nowrap">分享率</td><td>＝ 分享人数 ÷ 阅读量</td></tr>
+      <tr><td class="nowrap">新增关注</td><td>该篇带来的涨粉——这是判断「拉新能力」的关键指标</td></tr>
+      <tr><td class="nowrap">在看数</td><td>后台数据</td></tr>
+      <tr><td class="nowrap">标题类型</td><td>数字型 / 疑问型 / 结论型 / 热点型——用于找规律，这一列最容易被忽略也最有价值</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>顺手解决命名问题</h3>
+  <p>配套脚本已放在 <code>CodeKey/06-运营方案/tools/rename-assets.mjs</code>，三阶段使用，默认干跑不动文件：</p>
+  <pre><span class="c"># 1) 先预览，看它打算怎么改（不改任何文件）</span>
+node CodeKey/06-运营方案/tools/rename-assets.mjs
+
+<span class="c"># 2) 确认后执行：去掉 uuid，改成纯序号 001.png 002.png ...</span>
+<span class="c">#    同时生成 rename-map.json 和 命名对照表.md</span>
+node CodeKey/06-运营方案/tools/rename-assets.mjs --apply
+
+<span class="c"># 3) 在「命名对照表.md」里填好语义名后，落地为 001-摸鱼.png</span>
+node CodeKey/06-运营方案/tools/rename-assets.mjs --apply --semantic</pre>
+  <p class="small">脚本特性：默认 dry-run；目标文件已存在时跳过、绝不覆盖；编号<strong>每套独立</strong>（表情平台是分套上架的）；散落在根目录的 2 张图只报告不移动，避免误归位。</p>
+</section>
+
+<section>
+  <h2><span class="num">5</span>涨粉：把 63 张表情包变成入口</h2>
+  <p>这是投入产出比最高的一件事，因为素材已经在你手上了。</p>
+  <ol class="steps">
+    <li><strong>上架微信表情开放平台。</strong>三套（打工小猴 24 / 猴米懂礼貌 19 / 猴米上学记 20）都能独立提交。表情的详情页与作者页是<strong>天然的公域涨粉入口</strong>，微信会给表情作者页导流，这是很多人忽略的免费流量。建议先上一套试水，看数据再补另外两套。</li>
+    <li><strong>每套保留 2–3 张「引导款」。</strong>比如「关注小猴」「点赞」「在看」的手势图。用户每发一次这张表情，就完成一次品牌曝光。</li>
+    <li><strong>文末关键词钩子。</strong>「回复【猴米】领取全套 63 张表情包」→ 自动回复配网盘或仓库链接。<strong>关键词回复是复访钩子</strong>，能显著提高单篇的多次触达，而这部分触达也会被计入活跃度。</li>
+    <li><strong>把表情包变成文中插画。</strong>「小猴点评」前用一张对应情绪的表情包做视觉标点；长文每 800–1000 字插一张，用来对抗阅读跳出。这一步同时强化 IP 记忆和提升读完率。</li>
+    <li><strong>自定义菜单三栏改版。</strong>
+      <ul>
+        <li>左：往期精选（AI 日报合集，指向历史文章列表）</li>
+        <li>中：技术干货（指向 <code>shilong.js.org</code> 分类导航，把博客变成公众号的内容后台）</li>
+        <li>右：关于小猴（IP 介绍 ＋ 表情包领取 ＋ 商务合作）</li>
+      </ul>
+    </li>
+  </ol>
+  <div class="box warn">
+    <span class="lbl">授权提醒</span>
+    <p>CodeKey 的 LICENSE 已声明「保留所有权利」，这与仓库其他部分的 MIT / CC BY-NC-SA 4.0 不同。<strong>上架表情平台时请确认平台授权条款不要求开放商用许可</strong>，也不要顺便把表情包开源出去——那会让 IP 失去唯一的独占优势。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">6</span>阅读量提升：7 个可直接执行的动作</h2>
+
+  <h3>1. 标题公式化</h3>
+  <p>公式：<strong>具体对象 ＋ 数字或反差 ＋ 结果或悬念</strong>。对照改写示例：</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>常见写法（弱）</th><th>改后（强）</th></tr></thead>
+    <tbody>
+      <tr><td>Linux 内存泄漏排查方法总结</td><td>线上服务内存每天涨 2%，我用 3 条命令定位到根因</td></tr>
+      <tr><td>C++ 智能指针学习笔记</td><td>shared_ptr 循环引用踩了两次坑，才搞懂 weak_ptr</td></tr>
+      <tr><td>Python 数据分析入门分享</td><td>10 万行 CSV 卡了 40 秒，换成这 3 行代码降到 1 秒</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><strong>禁词清单</strong>：浅谈 / 略谈 / 学习笔记 / 总结 / 分享 / 一些思考。这些词对打开率是负贡献，因为它们不传递任何信息增量。<br>
+  <strong>但注意</strong>：AI 日报的标题要保留具体的新闻主体——「华为昇腾960」就是最好的关键词，不要为了制造悬念把它虚化成「某国产芯片」。</p>
+
+  <h3>2. 封面统一化</h3>
+  <p>三个栏目做三套版式，同一栏目永远同一布局（主色固定、栏目名固定位置、主标题固定区域）。目标很明确：<strong>读者在消息列表里滑动时，看到版式就知道是你</strong>。这是建立「品牌识别」成本最低的方式。</p>
+
+  <h3>3. 前 3 行决定生死</h3>
+  <p>第一段直接给结论或给冲突，不要「最近在整理 X 的笔记」这种铺垫。另外<strong>正文首屏不要放图片</strong>——图片会挤占折叠区前的高度，把最关键的钩子推到「展开全文」之后。</p>
+
+  <h3>4. 发布时间与频率绑定</h3>
+  <ul>
+    <li>AI 日报：工作日 <strong>7:30–8:00</strong>（通勤前，配合「每天 8 点」的承诺）</li>
+    <li>技术干货：工作日 <strong>21:00–22:00</strong>（下班后）或周末上午</li>
+  </ul>
+  <p>关键不是找到「黄金时间」，而是<strong>稳定</strong>。固定时间连续发 20 篇，读者会形成生物钟；忽早忽晚会持续损耗打开率。</p>
+
+  <h3>5. 搜一搜 SEO</h3>
+  <p>在标题和正文小标题里埋进具体技术名词（「昇腾 960」「weak_ptr」「内核 oops」「内存泄漏」）。公众号内容会被微信搜一搜索引，<strong>这是唯一能持续产生长尾流量的免费渠道</strong>，而且它的特点是「文章发出去三个月后还在带量」。</p>
+
+  <h3>6. 互动钩子要具体</h3>
+  <p>不要写「欢迎留言讨论」——这句话没有任何触发力。改成<strong>两难选择题</strong>。你日报末尾的做法其实已经写对了：</p>
+  <div class="box good">
+    <p>「华为昇腾960 提前三个季度发布、英伟达喊话明年翻倍、Meta 自研芯片测试中——你觉得三年内国产算力能追平英伟达吗？能 / 不能，说个理由。」</p>
+  </div>
+  <p>保持这个句式：<strong>给足背景 ＋ 二元对立的两难 ＋ 明确的回答指令</strong>。</p>
+
+  <h3>7. 一稿多投流水线</h3>
+  <p>同一份内容洗成 4 个版本，边际成本极低：</p>
+  <pre>WebBlog 长文（源）
+   ├─→ 公众号版本     <span class="c"># 加钩子、拆成 3 屏、配小猴表情包</span>
+   ├─→ 知乎 / 掘金     <span class="c"># 外链回博客，吃外部搜索流量</span>
+   └─→ 视频号 / 小红书  <span class="c"># 图文卡片，复用封面模板</span></pre>
+  <p>同时打通反向导流：公众号文中嵌博客链接，博客文末挂公众号二维码，形成闭环。<strong>这一步能让你现有的 105 篇存量文章立刻变成弹药库</strong>，是本次方案里性价比最高的动作。</p>
+</section>
+
+<section>
+  <h2><span class="num">7</span>90 天执行路线图</h2>
+  <div class="road">
+    <div class="phase">
+      <div class="ph">第 1–2 周</div>
+      <h4>地基</h4>
+      <ul>
+        <li>从后台导出近 10 篇数据，填入「往期数据.csv」</li>
+        <li>CodeKey 目录重构：跑重命名脚本 ＋ 建 04 目录 ＋ 补齐四份文案模板</li>
+        <li>确定账号一句话定位，改公众号简介与自动回复</li>
+        <li>自定义菜单三栏改版</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="ph">第 3–4 周</div>
+      <h4>节奏</h4>
+      <ul>
+        <li>做 3 套封面模板（AI日报 / 拆代码 / 打工记）</li>
+        <li>AI 日报连续日更 10 篇，验证产能与节奏是否可持续</li>
+        <li>从 WebBlog 挑 3 篇改写成公众号版本，测试标题类型</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="ph">第 5–8 周</div>
+      <h4>增长</h4>
+      <ul>
+        <li>表情包提交微信表情开放平台（先上一套试水）</li>
+        <li>上线「回复猴米领表情包」关键词钩子</li>
+        <li>建立一稿多投流程，跑通 2 轮</li>
+        <li>第一次数据复盘：找出 TOP3 篇，拆解共性</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="ph">第 9–12 周</div>
+      <h4>复利</h4>
+      <ul>
+        <li>用复盘结论固化标题库与选题池</li>
+        <li>把爆款特征写成 SOP，靠流程而不是靠灵感</li>
+        <li>评估是否开付费专栏或第二个号</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">8</span>需要你补充的数据</h2>
+  <p>上面是基于素材库结构做的推断。<strong>给我下面这几项，我可以把方案从「通用建议」精修成「针对你账号的诊断报告」</strong>，包括算出真实打开率、定位卡点、给出具体标题改写。</p>
+  <div class="tbl-wrap">
+  <table class="todo">
+    <thead><tr><th style="width:38%">数据项</th><th>值 / 说明</th></tr></thead>
+    <tbody>
+      <tr><td>当前粉丝数</td><td class="fill"></td></tr>
+      <tr><td>近 10 篇：送达人数</td><td class="fill"></td></tr>
+      <tr><td>近 10 篇：阅读量</td><td class="fill"></td></tr>
+      <tr><td>近 10 篇：分享人数 / 在看数</td><td class="fill"></td></tr>
+      <tr><td>近 10 篇：各自带来的新增关注</td><td class="fill"></td></tr>
+      <tr><td>当前发布频率（周更？日更？）</td><td class="fill"></td></tr>
+      <tr><td>后台「阅读来源」构成（会话/推荐/分享占比）</td><td class="fill"></td></tr>
+      <tr><td>你每周能投入固定时间（决定日更是否现实）</td><td class="fill"></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="box tip">
+    <span class="lbl">一个前置提醒</span>
+    <p>如果第 8 项（每周可投入时间）低于 5 小时，<strong>请不要承诺工作日日更</strong>。断更对打开率的伤害大于更新频率带来的收益。这种情况建议：AI 日报改为「每周一三五」，把产能集中到质量上。</p>
+  </div>
+</section>
+
+<footer>
+  <p>程序小猴 · 公众号运营诊断与优化方案<br>
+  基于 CodeKey 素材库（63 张表情包）与 WebBlog/docs（105 篇原创技术文）盘点生成</p>
+</footer>
+
+</div>
+</body>
+</html>

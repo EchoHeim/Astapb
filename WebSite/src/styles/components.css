@@ -1,0 +1,319 @@
+/* 组件样式。数值来源标注了对应的旧 style.css 规则。 */
+
+/* ---------------- 主题切换按钮（新增） ---------------- */
+
+.theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0.5px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  opacity: 0.85;
+  transition: opacity 0.15s ease;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  opacity: 1;
+}
+
+.theme-toggle svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.icon-sun,
+.icon-moon {
+  display: none;
+}
+
+/* 深色下显示太阳（点它去浅色），浅色下显示月亮 */
+[data-theme='dark'] .icon-sun {
+  display: block;
+}
+
+[data-theme='light'] .icon-moon {
+  display: block;
+}
+
+/* ---------------- 搜索框（旧 #searchBox） ---------------- */
+
+.search-box input {
+  width: 100%;
+  height: 3.1rem;
+  line-height: 3.1rem;
+  padding: 0 2.9rem 0 1.4rem;
+  font-size: 1.1rem;
+  border-radius: 30px;
+  /* 拆成独立属性而不用 background 简写：简写会连 background-size 一起重置，
+     而右侧那个放大镜必须缩放 —— 原图 56px 比 3.1rem 高的输入框还高，不缩放会被裁掉。 */
+  background-color: var(--surface);
+  background-image: url('../../img/search.png');
+  background-repeat: no-repeat;
+  background-position: right 1.1rem center;
+  background-size: 1.25rem 1.25rem;
+}
+
+.search-box input::placeholder {
+  color: var(--muted);
+}
+
+/*
+ * 旧规则写的是 `background: #444` 简写，会把背景图一起重置掉，
+ * 于是聚焦瞬间右侧那个小图标会消失。这里改成只改背景色，图标留着。
+ */
+.search-box input:focus {
+  background-color: var(--surface-hover);
+}
+
+/*
+ * 搜索框左侧的品牌 Logo，挂在行的**外侧**（right: 100%）。
+ *
+ * 之前让它参与流内布局，结果搜索框被推离视口正中约 33px ——
+ * 「居中」是这次的硬要求，所以抽出流内。挂在外面意味着窄屏会跑出可视区，
+ * 因此 650px 以下直接隐藏（它本就是 alt="" 的装饰元素）。
+ */
+.search-logo {
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 0.75rem);
+  transform: translateY(-50%);
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+/* ---------------- 分类锚点（新增） ---------------- */
+
+.anchors {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.3rem;
+}
+
+.anchors a {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.85rem;
+  color: var(--list-fg);
+  border-radius: 0.6rem;
+}
+
+.anchors a:hover {
+  background: var(--accent-strong);
+  color: #ffffff;
+}
+
+.anchors a[aria-current='true'],
+.anchors a.is-current {
+  color: var(--accent);
+}
+
+/* ---------------- 提示文案（旧 #search p） ---------------- */
+
+/*
+ * 提示文案。旧版是左栏底部竖排的四行，字号只有 0.6rem（根字号 14px → 8.4px），
+ * 已低于可读下限，而它承载的恰好是「怎么用」这条核心说明。
+ * 搬到顶部后改成单行居中，字号提到 0.75rem。
+ */
+#searchHint {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.1rem 0.9rem;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+#searchHint a {
+  color: var(--accent);
+}
+
+.hint-count {
+  transition: color 0.15s ease;
+}
+
+.hint-count.is-active {
+  color: var(--accent);
+}
+
+/* ---------------- 搜索引擎图标列（旧 #searchItem） ---------------- */
+
+/* 图标从 3rem 收到 2.4rem：吸顶区每一像素都在吃视口高度。
+   间距改由 #searchItem 的 gap 提供（见 layout.css），不再用 li 的 margin。 */
+#searchItem li {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 2rem;
+  overflow: hidden;
+  box-shadow: 0 1px 1px 1px var(--shadow-1);
+}
+
+.engine {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.engine img {
+  width: 100%;
+}
+
+/* ---------------- 分类卡片（旧 .item / .wrap） ---------------- */
+
+/* 列间距交给 #grid 的 gap，这里不留 margin —— 有 margin 的话卡片会在固定轨道内缩进，
+   实际宽度就不等于 --col-w 了。 */
+.item {
+  overflow: hidden;
+  /* 旧版由 JS 内联算 height，这里交给 CSS 变量，分类各自的可见条数可配 */
+  height: calc(12rem + var(--row-h) * var(--visible, 6));
+}
+
+.wrap {
+  padding: 1rem 0;
+  text-align: center;
+}
+
+.wrap h2 {
+  font-weight: normal;
+  font-size: 1.3rem;
+  line-height: 2rem;
+  color: var(--accent);
+}
+
+/* 推荐位在左栏居中：旧版靠 .wrap 的 text-align 居中，这里 img 是 display:block，
+   所以改用 margin auto 达到同样的居中效果。 */
+.recommend {
+  display: block;
+}
+
+.recommend img {
+  width: 5rem;
+  height: 5rem;
+  margin: 0.5rem auto;
+  border-radius: 3rem;
+  box-shadow: 0 4px 4px 4px var(--shadow-2);
+}
+
+.recommend p {
+  line-height: 2rem;
+}
+
+.wrap ul {
+  margin: 1rem 0;
+  text-align: left;
+  color: var(--list-fg);
+}
+
+.site {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 1rem;
+}
+
+.site:hover,
+.site:focus-visible {
+  background: var(--accent-strong);
+  color: #ffffff;
+}
+
+.site:hover mark,
+.site:focus-visible mark {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/*
+ * 列宽固定之后，长站名（TheNounProject、黑神话·悟空Wiki）必须能被裁掉，
+ * 否则会溢出卡片。同时强制单行 —— .item 的高度是按「一条占一行」算的
+ * （12rem + 2.6rem × visible），一旦某条折成两行，可见条数就对不上了。
+ * 完整站名仍可从 <li title> 的悬浮提示看到。
+ */
+.site-name {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.site img,
+.icon-fallback {
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 2rem;
+  box-shadow: 0 2px 2px 2px var(--shadow-1);
+}
+
+/* 没有图标时的首字母色块，背景色由 JS 按站点名推导后内联写入 */
+.icon-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  color: #ffffff;
+}
+
+/* ---------------- 折叠与展开（旧 .test / .item.change） ---------------- */
+
+.clamp-end {
+  position: relative;
+}
+
+.clamp-end::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, var(--fade-from), var(--fade-to));
+  /* 旧版遮罩挂在 li 本身、点击仍然生效；现在 li 里套了 <a>，
+     不放开事件的话最后一条可见项就点不动了 */
+  pointer-events: none;
+}
+
+.item.change {
+  overflow: visible;
+}
+
+.item.change .wrap {
+  position: relative;
+  z-index: 1;
+  background: var(--bg);
+  box-shadow: 0 2px 5px 2px var(--shadow-1);
+}
+
+.item.change .clamp-end::after {
+  background: none;
+}
+
+/* 过滤态：全部命中项直接铺开，不做折叠 */
+#grid.is-filtering .item {
+  height: auto;
+  overflow: visible;
+}
+
+#grid.is-filtering .clamp-end::after {
+  background: none;
+}
+
+/* ---------------- 空状态 ---------------- */
+
+/* 空状态是 #grid 的直接子项，而 #grid 现在是网格：
+   不跨满全部列的话，它会被塞进一个 --col-w 宽的格子里。 */
+.empty {
+  grid-column: 1 / -1;
+  margin: 2rem 0;
+  font-size: 0.95rem;
+  text-align: center;
+  color: var(--muted);
+}

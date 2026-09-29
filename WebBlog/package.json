@@ -1,0 +1,24 @@
+{
+  "name": "astapb-blog",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "MacLodge's Blog —— Astro 构建的静态博客；文章源为同目录下的 docs/",
+  "scripts": {
+    "sync": "node scripts/sync-content.mjs",
+    "check": "node scripts/sync-content.mjs --check",
+    "ai:build": "node scripts/sync-ai-brief.mjs",
+    "predev": "node scripts/sync-content.mjs && node scripts/sync-ai-brief.mjs",
+    "dev": "astro dev",
+    "prebuild": "node scripts/sync-content.mjs && node scripts/sync-ai-brief.mjs",
+    "build": "astro build",
+    "preview": "astro preview",
+    "migrate-assets": "node scripts/migrate-assets.mjs"
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "^7.3.1",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^7.3.3"
+  }
+}
