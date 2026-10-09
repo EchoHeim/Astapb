@@ -26,12 +26,13 @@ on:
     # 漏列新素材目录的后果只是多跑一次构建，不会漏部署，所以这里可以放心枚举。
     paths-ignore:
       - "CodeKey/01-IP形象/**"
-      - "CodeKey/02-封面与版式模板/**"
-      - "CodeKey/03-正文插图/**"
-      - "CodeKey/04-选题与文案库/**"
-      - "CodeKey/05-栏目素材/**"
-      - "CodeKey/06-运营方案/**"
-      - "CodeKey/07-发布登记/**"
+      - "CodeKey/02-视觉素材/**"
+      - "CodeKey/03-选题与成稿/**"
+      - "CodeKey/04-运营方案/**"
+      - "CodeKey/05-发布登记/**"
+      # ⚠️ 这里**不能**出现 `CodeKey/AI 日报/**`。日报原稿要参与博客构建
+      # （WebBlog/scripts/sync-ai-brief.mjs 从它生成「AI 简报」），
+      # 一旦被忽略，线上简报会静默停更且没有任何报错。
   workflow_dispatch:
 
 permissions:

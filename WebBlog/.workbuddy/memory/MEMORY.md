@@ -27,6 +27,33 @@
 - `src/pages/*.json.js` 不支持 TS 语法，端点要写成 `.ts`。
 - **构建前先停预览服务**（Astro 清 `dist` 时被占句柄 → 命令被 SIGTERM）。
 - **`sortPosts()`（`src/utils/posts.ts`）是可复现构建的关键**，凡是列文章一律用它（日期倒序 + id 升序）。
+- **`npm run check` 不是 astro check**，只是跑 `sync-content.mjs --check`（内容 frontmatter 体检）；
+  本机没装依赖时它照样「成功」，别拿它当构建验证。真正的类型检查得靠 `astro check` / `npm run build`。
+- 站点**没启用 view transitions**（`astro:transitions` 全库无引用）→ 组件里直接写普通
+  `<script>` 初始化即可，不用写 `astro:page-load` 监听。
+
+## 组件约定
+- 站点配色一律走 `global.css` 的 CSS 变量（`--paper`/`--rule-2`/`--accent-soft`/`--shadow` 等），
+  深色模式靠 `[data-theme="dark"]` 覆盖自动跟随；**别在新组件里写死颜色**。
+- 图标/图片走 `ASSETS_BASE`（dev 下= 站内相对路径，构建后 = jsDelivr），本地能看到未 commit 的新图。
+- **`ASSETS_BASE` 生产值指向主仓库**（`cdn.jsdelivr.net/gh/EchoHeim/Astapb@master/WebBlog`，
+  不是独立资源仓库）→ `images/`、`sponsor/images/` 里**新增的图必须 commit + push 才上线**，
+  dev 下看不出来。
+
+## 赞赏区（`sponsor/`）
+- `sponsor/` 下的 `index.html`/`style.css`/`script.js`/`README.md` 是上游
+  [Kaiyuan/sponsor-page](https://github.com/Kaiyuan/sponsor-page) `simple/` 版的原样拷贝，
+  **是独立 demo、不参与站点构建**（Astro 只路由 `src/pages`、只拷 `public/`）。
+  只有 `sponsor/images/` 是有用的素材源（且已被 git 跟踪）。
+- 页面侧实现是 `src/components/SponsorSimple.astro`（内联版：徽标 + 分段图标条 + rotateX 翻出二维码），
+  挂在 `src/pages/about.astro` 的「赞赏」卡片。原版是全屏 fixed 浮层，照搬会盖住整页。
+- **★ 这些图标不是方形图标，是 ~3:1 的横向字标**（alipay 448.5×145.5、wechat 531.2×161.7、
+  QQqianbao.png 104×30），且支付宝是 `#074098` 深蓝。→ 容器要**扁长**（现用 62×20），
+  且图标条的底**必须保持浅色**（深色模式用暖白 `#efece2`）—— 塞进方框会糊、放深底上会看不见。
+- `sponsor/images/BTCQR.png` **与上游逐字节相同 = 原作者本人的比特币地址，禁止收录**。
+- `text.png` 是 320×240 但字只占中间 256×66：靠容器 `aspect-ratio:256/66` + `object-fit:cover`
+  裁掉透明边，不用改图。它在深色模式下需要 `invert(1)`。
+- `WeChatQR.png` 已删除，微信码现名 `WePayQR.png`（曾误引旧名 → 裂图）。
 
 ## 写文章约定
 丢 `.md` 进 `WebBlog/docs/<分类>/` → push 即上线（frontmatter 可省，prebuild 自动补）。

@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>苹果开源VLM模型，基座居然是中国千问 · AI 简报</title>
-<meta name="description" content="9月23日至24日，苹果在Hugging Face正式上架并开源了视觉语言模型apple/LensVLM-9B。开发者在模型页面发现，Base Model一栏赫然写着&quot;Built on Qwen3.5-9B&quot;——这家以封闭著称的硬件巨头，用中国开源模型的权重做…">
-<link rel="canonical" href="https://shilong.js.org/AI动态/2026-09/2026-09-27.html">
+<title>StartLux开源决策模型72小时闪电发布，27B版本横扫38项基准任务 · AI 简报</title>
+<meta name="description" content="10月4日，上海AI团队StartLux（原点星辉）发布全球首个专注真实世界决策任务的开源大模型StartLux-Decision，代码与权重全量开源，覆盖0.8B到27B五个参数档位。在DecisionIndex 0.2.1权威评测中，27B版本以63.88…">
+<link rel="canonical" href="https://shilong.js.org/AI动态/2026-10/2026-10-05.html">
 <meta name="theme-color" content="#fbfaf6" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="article">
-<meta property="og:title" content="苹果开源VLM模型，基座居然是中国千问">
-<meta property="og:description" content="9月23日至24日，苹果在Hugging Face正式上架并开源了视觉语言模型apple/LensVLM-9B。开发者在模型页面发现，Base Model一栏赫然写着&quot;Built on Qwen3.5-9B&quot;——这家以封闭著称的硬件巨头，用中国开源模型的权重做…">
-<meta property="og:url" content="https://shilong.js.org/AI动态/2026-09/2026-09-27.html">
+<meta property="og:title" content="StartLux开源决策模型72小时闪电发布，27B版本横扫38项基准任务">
+<meta property="og:description" content="10月4日，上海AI团队StartLux（原点星辉）发布全球首个专注真实世界决策任务的开源大模型StartLux-Decision，代码与权重全量开源，覆盖0.8B到27B五个参数档位。在DecisionIndex 0.2.1权威评测中，27B版本以63.88…">
+<meta property="og:url" content="https://shilong.js.org/AI动态/2026-10/2026-10-05.html">
 <meta name="author" content="MacLodge">
 <style>:root{--paper:#fbfaf6;--paper-2:#f4f2eb;--ink:#17150f;--ink-2:#3d382e;--sub:#7a7466;--faint:#a9a296;--rule:#e4e0d4;--rule-2:#cfc9b8;--accent:#b04a2f;--accent-ink:#8e3a23;--accent-soft:#f3e6e0;--code-bg:#f6f4ee;--bg-mark:#f7e9c8;--shadow:0 1px 0 rgba(23,21,15,.04),0 10px 30px -18px rgba(23,21,15,.28);--serif:Georgia,"Times New Roman","Songti SC","Noto Serif SC","Source Han Serif SC",STSong,SimSun,serif;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Cascadia Mono","Courier New",monospace;--measure:40rem;--pad:28px;--nav-h:56px;color-scheme:light}
 [data-theme="dark"]{--paper:#131210;--paper-2:#1b1a15;--ink:#f0ede5;--ink-2:#cdc8bb;--sub:#948d7e;--faint:#6c6558;--rule:#2c2a21;--rule-2:#3e3b2f;--accent:#e28a61;--accent-ink:#f0a882;--accent-soft:#2b1f18;--code-bg:#1a1914;--bg-mark:#47391a;--shadow:0 1px 0 rgba(0,0,0,.3),0 10px 30px -18px rgba(0,0,0,.7);color-scheme:dark}
@@ -122,52 +122,54 @@ main{display:block;min-height:60vh}
 <main id="main">
   <article class="brief">
     <div class="wrap">
-      <div class="kicker">AI 简报 · 2026 年 9 月 27 日</div>
-      <h1>苹果开源VLM模型，基座居然是中国千问</h1>
+      <div class="kicker">AI 简报 · 2026 年 10 月 5 日</div>
+      <h1>StartLux开源决策模型72小时闪电发布，27B版本横扫38项基准任务</h1>
       <div class="meta">
-        <time datetime="2026-09-27">2026 / 09 / 27</time>
+        <time datetime="2026-10-05">2026 / 10 / 05</time>
         <span class="dot" aria-hidden="true"></span>
-        <span>星期日</span>
+        <span>星期一</span>
         <span class="dot" aria-hidden="true"></span><span>🐵 程序小猴AI日报，每天8点，带你用5分钟看懂AI圈昨天发生了什么</span>
         <span class="dot" aria-hidden="true"></span>
         <span>约 5 分钟读完</span>
       </div>
-      <p class="lede">9月23日至24日，苹果在Hugging Face正式上架并开源了视觉语言模型apple/LensVLM-9B。开发者在模型页面发现，Base Model一栏赫然写着&quot;Built on Qwen3.5-9B&quot;——这家以封闭著称的硬件巨头，用中国开源模型的权重做…</p>
-      <div class="tags"><span class="tag">#AI日报</span><span class="tag">#人工智能</span><span class="tag">#大模型</span><span class="tag">#开源AI</span><span class="tag">#苹果LensVLM</span><span class="tag">#千问Qwen</span><span class="tag">#谷歌Gemini4</span><span class="tag">#太空算力</span></div>
+      <p class="lede">10月4日，上海AI团队StartLux（原点星辉）发布全球首个专注真实世界决策任务的开源大模型StartLux-Decision，代码与权重全量开源，覆盖0.8B到27B五个参数档位。在DecisionIndex 0.2.1权威评测中，27B版本以63.88…</p>
+      <div class="tags"><span class="tag">#AIDaily</span><span class="tag">#大模型</span><span class="tag">#开源模型</span><span class="tag">#StartLux</span><span class="tag">#KimiK3</span><span class="tag">#阶跃星辰</span><span class="tag">#可灵AI</span><span class="tag">#昇腾950</span></div>
 
       <div class="prose">
-<h2>1. 苹果开源LensVLM-9B，基座模型竟是阿里千问</h2>
-<p>9月23日至24日，苹果在Hugging Face正式上架并开源了视觉语言模型apple/LensVLM-9B。开发者在模型页面发现，Base Model一栏赫然写着&quot;Built on Qwen3.5-9B&quot;——这家以封闭著称的硬件巨头，用中国开源模型的权重做了自己的底座。LensVLM采用&quot;先粗扫、再细看&quot;的选择性上下文扩展方案，处理长文档时Token消耗降低约84%，KV Cache占用从约1.6GB压到约250MB，同一块显卡能同时服务更多用户。</p>
-<aside class="callout"><p>💡 <strong>小猴点评</strong>：苹果选千问做基座，说明开源社区里&quot;好模型就是好模型&quot;，不看国籍。对开发者来说，这意味着国产开源模型的工程质量已经被全球顶级厂商认可。下次你选型的时候，不妨也多看看国产开源方案——连苹果都在用了。</p></aside>
+<h2>1. StartLux-Decision开源决策模型发布：72小时从研发到开源，27B版本登顶决策赛道</h2>
+<p>10月4日，上海AI团队StartLux（原点星辉）发布全球首个专注真实世界决策任务的开源大模型StartLux-Decision，代码与权重全量开源，覆盖0.8B到27B五个参数档位。在DecisionIndex 0.2.1权威评测中，27B版本以63.88分横扫38项基准任务，31项超越当前行业标杆Jev 1.13；在上海AI实验室Intern-Decision同源七项测试中准确率达91.82%。整个研发加验证周期仅用72小时，背后是其AutoResearch方法论——将科研流程代码化、决策链路自动化。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：作为开发者最关注的不只是性能数字，而是&quot;72小时出模型&quot;这个信号。AutoResearch本质上是把模型研发本身变成了可复现的工程流水线，如果这套方法论能泛化到其他任务类型，那&quot;训练一个模型&quot;的门槛会被重新定义。另外决策模型直接开源权重，对做Agent和自动化系统的团队来说是个即插即用的好消息。</p></aside>
 <hr>
-<h2>2. 中国AI模型全球采用率飙升：OpenRouter占比突破57%</h2>
-<p>据CNBC 9月26日报道，中国AI模型在全球主流开发者平台的市场份额实现跨越式增长。OpenRouter数据显示，9月14日当周中国模型词元调用量占比达57%至67%，而2月仅为6%至13%；在Vercel平台，8月中国模型占比升至55%，1月仅为11%。OpenRouter主管表示，今年发布的中国开源模型能可靠应用于高级智能体场景，尤其在编程方面，且成本极具竞争力。全球南方企业是近期中国AI模型的最大用户，使用的词元中超过三分之二来自中国模型。</p>
-<aside class="callout"><p>💡 <strong>小猴点评</strong>：数据不会骗人。当你的API调用成本只有对方的1/20到1/60，性能又追到第一梯队，开发者自然会用脚投票。对于做SaaS和API产品的开发者来说，现在用国产模型做后端已经不是&quot;省钱的妥协&quot;，而是&quot;合理的技术选型&quot;。</p></aside>
+<h2>2. 首个昇腾950测试基地在北京通州落成，国产算力商用再进一步</h2>
+<p>10月4日消息，首套搭载昇腾950DT芯片的Atlas 850E设备在北京通州正式达成商用条件，首个昇腾950测试基地同步宣告落成。该基地将为头部大模型企业、高校、科研院所提供算力支撑。华为提供芯片与硬件设备，华鲲振宇负责供应链保障，Mooncake社区完成推理优化与服务转化，智云数科作为建设方与运营主体。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：昇腾950从发布到商用局点落地，节奏明显加快。对做大模型训练的开发者来说，国产算力选项从&quot;能用&quot;走向&quot;有生态&quot;是关键转折。不过真正的考验还是大规模集群训练的稳定性表现，期待后续公开的实测数据。</p></aside>
 <hr>
-<h2>3. 谷歌&quot;太阳捕手&quot;计划：首颗TPU算力卫星10月1日发射</h2>
-<p>谷歌CEO皮查伊宣布，Project Suncatcher的首颗太空算力卫星原型MVP将于10月1日搭乘SpaceX Transporter-18任务升空。卫星体积约一台冰箱大小，搭载4颗Trillium TPU芯片，算力相当于一台地面服务器，太阳能板提供约1千瓦电力。TPU将以每次约15分钟的突发模式运行Gemini模型，随后关闭散热。2027年计划发射两颗卫星测试激光互联组网，长期目标是81颗卫星在约650公里高度组成计算集群。</p>
-<aside class="callout"><p>💡 <strong>小猴点评</strong>：太空数据中心的瓶颈不是芯片有多强，而是散热——真空中只能靠辐射散热，跑15分钟就得歇菜。但谷歌把它和当年无人驾驶项目类比（花了15年才出成果），说明这是一场长线押注。对我们开发者来说，短期内不用担心&quot;算力上天&quot;抢你的GPU，但这个技术方向值得关注。</p></aside>
+<h2>3. Kimi K3.1曝光：支持100万Token上下文，三档推理强度可选</h2>
+<p>多位开发者发现月之暗面API平台后台出现&quot;kimi-k3-1&quot;标识，可通过接口探测并正常调用。官方开放平台也已挂出K3.1预告：支持100万Token上下文窗口，提供Low、High、Max三档推理强度。此前Kimi K3已接入OpenAI Codex付费体系，成为中国首个进入该体系的开源大模型，同时完成了AI自主设计芯片的概念验证——在48小时连续运行中独立完成一款定制芯片的全流程设计。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：三档推理强度是个很实用的设计——简单任务用Low档省算力，复杂推理拉满Max档，这种&quot;按需分配&quot;的思路对控制API调用成本很关键。另外K3自主设计芯片那个实验太疯狂了，用开源EDA工具跑完全流程，虽然还是概念验证阶段，但方向值得每个做硬件的开发者关注。</p></aside>
 <hr>
-<h2>4. 谷歌Gemini 4正式进入后训练阶段，目标&quot;远早于年底&quot;发布</h2>
-<p>谷歌DeepMind新负责人Koray Kavukcuoglu在AI Agenda Live峰会上透露，新一代旗舰模型Gemini 4已进入后训练初期阶段，目标在&quot;远早于2026年底&quot;推出早期版本。谷歌实际上跳过了原计划的Gemini 3.5 Pro，把研发资源全部押注Gemini 4，以在推理能力与智能体任务上追赶竞争对手。Kavukcuoglu表示对团队&quot;百分之百有信心&quot;。</p>
-<aside class="callout"><p>💡 <strong>小猴点评</strong>：直接跳过3.5 Pro押注4.0，说明谷歌在内部做了取舍判断——渐进式迭代追不上对手，必须跳档。这对做多模型适配的开发者是个提醒：你的prompt和RAG管线可能要为新一代模型做比较大的调整，提前做好抽象层很重要。</p></aside>
+<h2>4. 阶跃星辰Step5 Preview发布：成本仅为Claude Opus 5的八分之一，10月15日开源</h2>
+<p>阶跃星辰发布Step5 Preview，采用稀疏MoE架构，支持100万Token上下文，单任务成本仅为Claude Opus 5的八分之一。官方定档10月15日正式开源。这个定价在全球坐标系里攻击性很强——不是比谁更贵，而是比谁更便宜还能打。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：MoE架构+极致成本控制，这套打法对中小开发者特别友好。很多时候不是模型不够好，而是调用成本太高没法落地。如果开源后质量能接近Preview版的表现，那对做SaaS产品集成大模型的团队来说是个很实际的选择。10月15日mark一下。</p></aside>
 <hr>
-<h2>5. 谷歌、OpenAI、Anthropic拟共建&quot;前沿AI标准局&quot;（SAFA）</h2>
-<p>9月24日至25日，三家头部AI公司被曝拟共同筹建&quot;前沿AI标准局&quot;（SAFA），计划在没有政府监管的情况下独立运作，统一前沿模型评测与治理规则。同期，谷歌Gemini 3.8 Live实时虚拟人正式上线，打通视频生成、语音交互、表情同步全链路，原生兼容97种语言，支持毫秒级唇形同步，所有生成内容内置SynthID隐形水印。</p>
-<aside class="callout"><p>💡 <strong>小猴点评</strong>：三大巨头联手搞标准，信号很明确——与其等政府来定规矩，不如行业自己先划好跑道。对开发者来说，统一的评测标准意味着模型之间的横向比较会更透明，选型决策的成本会降低。但也要注意，行业标准往往由大玩家制定，中小开发者的话语权可能被边缘化。</p></aside>
+<h2>5. 可灵AI Kling 4.0开启内测：单次原生生成30秒视频，支持4K HDR</h2>
+<p>可灵AI的Kling 4.0开启内测，将于10月正式上线。单次原生生成最长达30秒视频，长镜头与连续叙事能力进一步提升，最多支持10张关键帧输入，提供4K、1080p的10-bit HDR输出。同时推出的Kling 4.0 Flash已率先开放体验。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：30秒原生生成是个实打实的技术指标突破，之前很多视频生成工具超过10秒就会出现明显的连贯性问题。对做短视频、广告素材的开发者来说，10张关键帧输入意味着可以更精确地控制叙事节奏。等正式版API出来后值得第一时间测试。</p></aside>
 <hr>
-<h2>6. 宇树科技王兴兴：机器人核心瓶颈在于毫米级精度</h2>
-<p>在第五届全球数字贸易博览会上，宇树科技创始人王兴兴发表主题演讲，称具身智能赛道未来必将迎来专属&quot;ChatGPT时刻&quot;，但当前核心瓶颈是能否解决几毫米的工作误差。同日，四臂具身智能机器人亮相上海2026世界技能博览会，现场书写&quot;花好月圆&quot;；2026全球数字贸易创新大赛的具身智能机器人挑战赛上，人形机器人与市民进行投篮、竞速等互动比赛。宇树科技此前还发布了Dex5-S灵巧手，22个关节均可反向驱动，3.99万元起。</p>
-<aside class="callout"><p>💡 <strong>小猴点评</strong>：王兴兴说的&quot;毫米级误差&quot;是具身智能最真实的痛点——软件上能跑的算法，到了物理世界会因为传感器噪声、机械间隙、光照变化等一堆问题打折扣。如果你在做机器人相关的软件开发，仿真环境和真机调试之间的gap可能比你想象的大很多。</p></aside>
+<h2>6. 开源工具LDraw Nova：让大模型自动设计乐高模型，输出CAD文件</h2>
+<p>10月4日，开发者卡洛斯·安特洛在GitHub开源了LDraw Nova工具，能够驱动GPT-6 Astra、Claude Opus 5.5等大模型，从一句提示词出发设计由数千块真实乐高积木组成的模型，并输出详细的CAD文件。作者用它生成了&quot;樱花庭园&quot;——2175块积木，含五层宝塔、锦鲤池和樱花树。实现方式不是逐块摆放，而是通过Python程序直接输出搭建方案。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：这个项目最有意思的地方在于&quot;用AI生成程序，程序再生成搭建方案&quot;的两层抽象。对开发者来说，LDraw Nova的架构设计本身就是一份很好的教材——怎么把大模型的生成能力转化为结构化的工程输出。工具已在GitHub开源，值得star一下研究研究。</p></aside>
 <hr>
-<h2>7. 千问发布Qwen-Audio-3.1系列：5款语音模型全线降价</h2>
-<p>9月23日，千问正式发布Qwen-Audio-3.1系列语音大模型，一次性推出5款模型，覆盖语音识别（ASR）、语音合成（TTS）、实时语音交互（Realtime）及两款下一代架构模型。ASR支持30种语言和16种中文方言，平均字错误率4.55%；TTS支持跨语言音色迁移；Realtime支持全双工多人对话。价格方面全线大幅下调：TTS降价约70%、Realtime降幅约85%、ASR降幅达95%。</p>
-<aside class="callout"><p>💡 <strong>小猴点评</strong>：方言识别这件事一直是语音AI的硬伤，千问这次在16种中文方言上做到平均CER 10.38%，温州话和苏州话都识别出来了，这个很实用。加上降价幅度，做语音类产品开发的成本门槛又低了一大截。如果你的产品需要多语言语音交互，现在是个好时机去评估一下。</p></aside>
+<h2>7. AI五天做出&quot;辐射：纽约&quot;游戏，贝塞斯达紧急发函叫停</h2>
+<p>一位开发者利用Claude Opus 5.5的&quot;跨模态链式工程&quot;能力，仅用五天时间和17条提示词，制作了一款完全可运行的&quot;辐射：纽约&quot;WebGL游戏，包含场景建模、逻辑脚本、音频合成全流程。该作品在Reddit r/gaming板块24小时获得420万浏览。贝塞斯达随后发出版权函要求下架。这一事件把AI游戏开发的&quot;创意门槛坍缩&quot;推到了公众面前。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：技术层面看，大模型的&quot;跨模态链式工程&quot;能力确实惊人——一句话拆成场景建模→逻辑脚本→音频合成→浏览器适配全流程。但版权红线就在那，不管工具多强大，IP合规永远是第一位的。对独立开发者来说，这个故事的正确打开方式是：用AI能力做原创IP，别碰别人的宇宙。</p></aside>
 <hr>
-<h2>📮 互动时间</h2>
-<p>今天哪条新闻最让你有感触？是苹果用千问做基座让你骄傲了一把，还是太空算力卫星让你觉得科幻照进现实？</p>
-<p>👇 在评论区聊聊你的看法，点赞最高的留言，小猴会在明天的日报里翻牌回复！</p>
-<p>如果这份日报对你有帮助，别忘了<strong>点赞 + 在看 + 转发</strong>三连，你的支持是小猴每天更新的最大动力 💪</p>
+<h2>8. 亚马逊开源Strands Decider 2B决策模型，基于Qwen3.5-2B本地可部署</h2>
+<p>10月1日，亚马逊Strands Agents团队发布开源决策模型Strands Decider 2B，基于Qwen3.5-2B预训练底座，替换原生成式头部为轻量评分指针头部（参数约104万），通过rank-16 LoRA微调。模型已在GitHub开源，支持CPU/GPU本地部署。在RTX 3090上通用硬件中位决策延迟113ms，在JevBench上位居2B级模型第三。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：2B参数量+本地部署+113ms延迟，这三个指标组合起来对边缘计算和嵌入式场景非常有吸引力。替换LM head为评分指针头的设计思路也很巧妙——不生成文本，直接输出决策评分，推理开销大幅下降。做IoT和机器人方向的同学可以重点看看。</p></aside>
+<hr>
+<p>以上就是今天的AI圈动态速览。你最关注哪条？欢迎在评论区聊聊你的看法，或者告诉我你希望明天重点关注哪个方向，我来帮你盯着。</p>
+<p>🐵 觉得有用就转发给身边搞开发的朋友，一起跟上AI最新节奏。</p>
       </div>
 
       <div class="foot">
@@ -178,8 +180,8 @@ main{display:block;min-height:60vh}
         </div>
 
         <nav class="nav" aria-label="上一期 / 下一期">
-          <a class="prev" href="/AI动态/2026-09/2026-09-26.html" rel="prev"><div class="nav__lab">← 上一期</div><div class="nav__t">谷歌Gemini虚拟人上线，97种语言实时唇形同步太炸了</div></a>
-          <a class="next" href="/AI动态/2026-09/2026-09-28.html" rel="next"><div class="nav__lab">下一期 →</div><div class="nav__t">Claude Opus 5.5与GPT-6同日发布，大模型价格战全面开打</div></a>
+          <a class="prev" href="/AI动态/2026-10/2026-10-04.html" rel="prev"><div class="nav__lab">← 上一期</div><div class="nav__t">OpenAI安全负责人再次离职，智能体失控引发百余家机构预警</div></a>
+          <a class="next" href="/AI动态/2026-10/2026-10-06.html" rel="next"><div class="nav__lab">下一期 →</div><div class="nav__t">Reflection发布501B开源大模型Beam，国产Agent框架反向兼容Anthropic生态</div></a>
         </nav>
 
         <p class="back"><a href="/AI动态/">← 返回简报目录</a></p>

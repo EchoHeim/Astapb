@@ -16,6 +16,13 @@
   凡是要为吸顶区让位的地方（`scroll-margin-top`、滚动高亮判定线）都读它。
 - `.item` 的高度是折叠机制本身（`12rem + var(--row-h) × visible`），依赖「一条占一行」。
   所以 `.site-name` 必须保持单行 + 省略号，**不能改成允许换行**。
+- **折叠展开的默认条数是数据驱动的**：改各分类默认展示多少条 = 改 `src/data/categories.ts`
+  里该分类的 `visible`，**只动这一个文件**。
+  链条：`visible` → `render.ts` 内联写 `--visible` → `components.css` 算卡片高，
+  同时 `render.ts` 给第 `visible` 条打 `.clamp-end`（渐变遮罩 + `mouseenter` 展开整块）。
+  条目数少于 `visible` 的分类会自动全显示，不用特殊处理。
+  **不要**去改 `--col-w` 或 `--row-h` —— 那是列宽和行高，跟要显示几条无关。
+  （2026-10-01：23 个分类统一从 6 提到 8，卡片高 355px → 459px。）
 
 ## 主题约定
 - 主题键名从 `<html data-theme-key>` 读，默认 `nav-theme`，与博客的 BaseLayout 保持一致。
@@ -31,7 +38,7 @@
 - 可读下限：辅助文字不要低于 `0.75rem`（10.5px）。
 
 ## 内容来源与数据规模（2026-09-22 起）
-- 站点数据 = 原有 97 条 + aa 补录 162 条 + 手工补充 42 条 = **23 个分类 / 301 条**。
+- 站点数据 = 原有 97 条 + aa 补录 162 条 + 手工补充 43 条 = **23 个分类 / 302 条**。
 - **`TOTAL_SITES` 只统计各分类的 `sites`**，「推荐位」不计入。所以一个站点被放成
   推荐位后就不该在 `sites` 里再出现（否则同分类内重复）—— 目前这种情况有两个：
   财经的推荐位天天基金网、Git收藏的推荐位 Cemu。
@@ -49,8 +56,15 @@
   桌面软件 → 软件」判。
 - **用户偏好**：把站点给出时附带的类别只是"初步意向"，他很在意分类是否名副其实；
   拿不准就按性质放 + 在回复里点明，他会直接采纳（这三次都是这么处理的）。
-- 新增条目大多没有图标（有图标 75 / 首字母兜底 226）。图标池里剩下的是别家 Logo，
+- 新增条目大多没有图标（有图标 76 / 首字母兜底 226）。图标池里剩下的是别家 Logo，
   **不要为了填满而套用**。补图标 = 往 `icon/` 丢文件 + 在数据里填键名。
+- **`icon/` 里现有图标都是 100×100**（`epic` / `steam` 等 `icon/game/` 下的是 100²），
+  源图小于 100² 就用 Pillow `LANCZOS` 上采样过去，别直接扔小图进去。
+- **`/favicon.ico` 与 WordPress 上传目录的 `<link rel="icon">` 常常是同一个文件**
+  （ns211 就是这样）。取 ICO 用 Pillow：
+  `im = Image.open(p); im.size = max(im.ico.sizes()); im.convert('RGBA')`。
+  托管 venv `C:\Users\Lodge\.workbuddy\binaries\python\envs\default\Scripts\python.exe`
+  已装 Pillow 12.3.0，直接可用，不用装包。
 - `header/` 现在是 18 个，新增 `appstore.png`(180²)、`doubanmovie.png`(100²)、
   `google.png`(100²)、`tiantianjijin.png`(256²)、`xiaozhongruanjian.png`(192²)、
   `cemu.png`(200²)。
@@ -89,6 +103,20 @@
 
 ## 本机环境坑
 - **`bash` 工具不可用**（缺 `ls` / `dirname` / `grep` / `head` 等 coreutils），改用 PowerShell 工具
+- **`node_modules` 可能不存在**：`npm run build` 里 `tsc` 报「不是内部或外部命令」先怀疑这个，
+  跑一次 `npm install` 即可；之后用 `./node_modules/.bin/tsc` / `vite` 直调绕开 PATH 问题。
+- **`http_proxy` / `HTTP_PROXY`（大小写两套）会劫持 localhost**：
+  curl 打本机服务回 **502**（不是 404 也不是 connection refused，特征很容易误判成"服务挂了"）。
+  无头 Chrome 直接访问本机地址也会落到错误页。
+  - curl 调试：加 `--noproxy '*'`
+  - Chrome：加 `--proxy-server=direct:// --proxy-bypass-list=*`，
+    并把 spawn 子进程 env 里的 `HTTP_PROXY`/`HTTPS_PROXY`/`http_proxy`/`https_proxy` 全部清空。
+- **后台起的静态服务会跨命令消失**：`curl` 前一刻 200、下一刻 000。
+  验证页面时**把静态服务写在同一个 node 进程里**（起服务 → 拉 Chrome → 量 → 关），不要跨命令复用。
+- **自建静态服务不要给所有 404 兜底回 index.html**：资源缺失时模块脚本拿到 `text/html`
+  会被 MIME 校验拦掉，表现为**白屏且几乎无报错**（只有一条 MIME console error）。
+  只有根路径/无扩展名路径才回退，带扩展名的真 404。
+  另外 dist 产物里的资源引用带 `/aa/` 前缀（vite base），服务端要剥掉再找文件。
 - **PowerShell 工具不回显 stdout**，要读输出必须重定向到文件再用 Read
 - **一次性 node 脚本要用 `.cjs` 后缀**：本项目 `package.json` 里有 `"type": "module"`，
   放 `.js` 会被当 ESM 解析，写 `require` 直接 `ReferenceError` 静默失败（脚本没跑，
@@ -114,6 +142,32 @@
   `robocopy <空目录> <_trash> /MIR` 批量删，并**放后台执行**
   （前台约 120s 超时会打断，且 node 输出到文件是缓冲的，中断即丢输出，
   表现为「无输出 + 退出码 1」，极易误判成脚本报错）
+
+## 静态页面视觉验证（2026-10-01 补，做交付型单文件 HTML 时用）
+仓库里已有 `local-html-visual-verify` 技能，**先加载它再动手**。以下是踩过的具体坑：
+- **截图前先把 HTML `cp` 到截图脚本所在目录**。`file://` URL 指向写文件的位置，
+  脚本在 `.workbuddy/_ref/` 却在项目根写 HTML，Chrome 报
+  `net::ERR_FILE_NOT_FOUND`（且**退出码仍是 0**，不看 stderr 会以为成功）。
+- **每个截图任务换一个 `--user-data-dir`**。复用同一目录时 Chrome 会连到上一个
+  还活着的实例，`--screenshot` **静默不生效**——表现为「图片没生成」而不是报错。
+- **`--window-size` 只能截首屏**，长内容会被裁掉。要截某个 section 全高得走 CDP：
+  `Page.captureScreenshot` + `captureBeyondViewport:true` + `clip`（坐标从
+  `getBoundingClientRect()` + `scrollX/Y` 取）。Node 22 自带 `WebSocket` 全局对象，
+  CDP 客户端不用装 `ws` 包，`http.get` 拿 `/json/list` 里的 `webSocketDebuggerUrl` 即可。
+- **`--force-prefers-color-scheme` 在无头模式下不一定生效**；CDP 的
+  `Emulation.setEmulatedMedia` 更可靠。验主题时最稳的是直接
+  `Runtime.evaluate('document.documentElement.setAttribute("data-theme","dark")')`。
+- **验窄屏溢出要同时看 `scrollWidth` 和逐个元素**：`documentElement.scrollWidth === clientWidth`
+  说明页面本身不横滚；此时 `table` 报 `right > clientWidth` 是**正常的**——只要它被
+  `overflow-x:auto` 的容器包着就行。只看元素列表会误判成溢出。
+- 无头截图存下来的图**必须自己 Read 看一眼**。这次的「半应用主题」（浅色面板 +
+  深色文字，标题几乎不可读）在日志里毫无异常，只有看图才发现。
+
+## 主题变量声明（2026-10-01）
+- **`--bg` 之类决定根元素外观的变量，不要在 `[data-theme="dark"]` 里改根元素背景**。
+  正确做法是在基础 `html{...}` 规则上写 `background-color:var(--bg)`，深色块只override变量。
+  原因见 2026-10-01 日志：否则深色下会闪白，且样式快照缺块时会出现不可读的
+  「浅色底 + 深色字」半应用状态。
 
 ## 仓库边界（重要）
 git 仓库根是 **`D:\Personal\Astapb`**，不是本项目目录。根下有三个独立项目：

@@ -1,13 +1,268 @@
 {
-  "generatedAt": "2026-09-27T00:19:47.077Z",
-  "total": 9,
-  "latest": "2026-09-27",
+  "generatedAt": "2026-10-08T01:00:06.942Z",
+  "total": 20,
+  "latest": "2026-10-08",
   "months": [
+    {
+      "key": "2026-10",
+      "label": "2026 年 10 月",
+      "count": 8,
+      "items": [
+        {
+          "date": "2026-10-08",
+          "day": "08",
+          "title": "OpenAI GPT-6全球全量上线，微软把Windows变成\"智能体操作系统\"",
+          "summary": "10月8日，OpenAI正式面向全球所有ChatGPT免费及付费用户全面上线GPT-6，正式取代GPT-5.6 SOL与GPT-5.6 LUNA。GPT-6集成了Astra安全技术改进，强化针对网络、生物与暴力领域滥用的防护能力。此前GPT-6已在部分测试用户…",
+          "tags": [
+            "AI日报",
+            "GPT6",
+            "Claude",
+            "AgentSwarm",
+            "KimiK2",
+            "Mistral",
+            "微软AI",
+            "智能体安全",
+            "开源大模型",
+            "程序小猴"
+          ],
+          "url": "AI动态/2026-10/2026-10-08.html",
+          "minutes": 5
+        },
+        {
+          "date": "2026-10-07",
+          "day": "07",
+          "title": "Mistral发布万亿参数开源模型ML4，欧洲AI正面硬刚",
+          "summary": "法国AI公司Mistral AI于10月6日正式推出Mistral Large 4（代号Le Chonk）公开预览版。这是一款拥有1万亿总参数、490亿激活参数的原生多模态MoE模型，支持100万token上下文窗口，训练语料覆盖超160种语言。模型在3800…",
+          "tags": [
+            "AI日报",
+            "MistralLarge4",
+            "ReflectionAI",
+            "Beam",
+            "EmbeddingGemma2",
+            "Strata推理引擎",
+            "开源大模型",
+            "MiMo",
+            "OpenAI安全",
+            "NVIDIAOpenShell",
+            "AIAgent",
+            "程序员",
+            "开发者日常",
+            "大模型",
+            "技术前沿"
+          ],
+          "url": "AI动态/2026-10/2026-10-07.html",
+          "minutes": 7
+        },
+        {
+          "date": "2026-10-06",
+          "day": "06",
+          "title": "Reflection发布501B开源大模型Beam，国产Agent框架反向兼容Anthropic生态",
+          "summary": "英伟达投资8亿美元的AI初创公司Reflection AI正式发布了其首款开源模型Beam。该模型总参数量达501B、激活参数23B，从零端到端训练，主打推理效率，在编码与智能体任务上表现突出。完整权重将于本月内发布。这是西方厂商在开源模型领域对中国厂商发起的…",
+          "tags": [
+            "AI日报",
+            "大模型",
+            "开源模型",
+            "Reflection",
+            "DeepSeek",
+            "Gemini4Argon",
+            "GPT6",
+            "Agent开发",
+            "AI安全",
+            "技术前沿"
+          ],
+          "url": "AI动态/2026-10/2026-10-06.html",
+          "minutes": 5
+        },
+        {
+          "date": "2026-10-05",
+          "day": "05",
+          "title": "StartLux开源决策模型72小时闪电发布，27B版本横扫38项基准任务",
+          "summary": "10月4日，上海AI团队StartLux（原点星辉）发布全球首个专注真实世界决策任务的开源大模型StartLux-Decision，代码与权重全量开源，覆盖0.8B到27B五个参数档位。在DecisionIndex 0.2.1权威评测中，27B版本以63.88…",
+          "tags": [
+            "AIDaily",
+            "大模型",
+            "开源模型",
+            "StartLux",
+            "KimiK3",
+            "阶跃星辰",
+            "可灵AI",
+            "昇腾950",
+            "具身智能",
+            "AI决策模型",
+            "开发者日报",
+            "程序小猴"
+          ],
+          "url": "AI动态/2026-10/2026-10-05.html",
+          "minutes": 5
+        },
+        {
+          "date": "2026-10-04",
+          "day": "04",
+          "title": "OpenAI安全负责人再次离职，智能体失控引发百余家机构预警",
+          "summary": "OpenAI安全系统团队负责人David Robinson近日宣布离职，他在《大西洋月刊》发表文章称，OpenAI长期形成的\"迭代部署\"文化——先推出产品、在使用中发现问题再改进——随着AI模型能力持续增强，已不再适用且风险越来越大。这是继7月前任安全负责人J…",
+          "tags": [
+            "AI日报",
+            "OpenAI安全",
+            "AI智能体",
+            "Gemini4Argon",
+            "苹果AI隐私",
+            "Suno语音生成",
+            "多智能体协同",
+            "AI安全",
+            "程序小猴"
+          ],
+          "url": "AI动态/2026-10/2026-10-04.html",
+          "minutes": 5
+        },
+        {
+          "date": "2026-10-03",
+          "day": "03",
+          "title": "OpenAI砍掉旗舰Astra，谷歌Anthropic连发新模型围攻",
+          "summary": "OpenAI围绕AI智能体异常行为的内部调查持续扩大。截至9月26日，公司已向超过100家机构通报涉及其AI智能体未经授权活动的事件。为排查约50PB的历史记录，OpenAI投入约7000块GB200和GB300 GPU辅助审查，每天成本超过50万美元。与此同…",
+          "tags": [
+            "AIDaily",
+            "OpenAI",
+            "GPT6",
+            "Gemini4Argon",
+            "ClaudeSonnet55",
+            "AI智能体安全",
+            "Cloudflare",
+            "Clef",
+            "决策模型",
+            "大模型",
+            "AIAgent",
+            "开发者",
+            "技术前沿",
+            "开源模型"
+          ],
+          "url": "AI动态/2026-10/2026-10-03.html",
+          "minutes": 6
+        },
+        {
+          "date": "2026-10-02",
+          "day": "02",
+          "title": "谷歌Gemini 4 Argon百万Token输出炸场，OpenAI一夜间25项更新",
+          "summary": "谷歌于9月30日正式发布新一代旗舰模型 Gemini 4 Argon，定位面向复杂长周期工作流的深度推理。最震撼的参数变化是单次输出上限从上一代的 64,000 Token 直接拉到 100 万 Token，意味着模型可以在单次任务中生成数十万 Token，一…",
+          "tags": [
+            "AI日报",
+            "Gemini4Argon",
+            "OpenAI",
+            "DevDay2026",
+            "Dots智能体",
+            "GPT6.1Sol",
+            "Magnitude",
+            "本地推理",
+            "开源引擎",
+            "DeepSeek",
+            "昇腾",
+            "AIAgent安全",
+            "FTC调查",
+            "生成式AI",
+            "程序小猴"
+          ],
+          "url": "AI动态/2026-10/2026-10-02.html",
+          "minutes": 7
+        },
+        {
+          "date": "2026-10-01",
+          "day": "01",
+          "title": "谷歌Gemini 4 Argon横空出世，代码工程能力登顶；OpenAI因安全失控紧急取消GPT-6.1",
+          "summary": "谷歌9月30日正式发布Gemini 4 Argon，定位为\"迄今最先进的AI模型\"，重点聚焦长流程软件工程、企业知识工作和网络安全防御。该模型在DeepSWE v1.1真实世界软件工程测试中拿下77.9%的得分，超过Claude Opus 5.5的74.2%和…",
+          "tags": [
+            "AI日报",
+            "人工智能",
+            "大模型",
+            "Gemini4",
+            "OpenAI",
+            "华为盘古",
+            "开源AI",
+            "Agent安全",
+            "人形机器人",
+            "程序小猴AI日报"
+          ],
+          "url": "AI动态/2026-10/2026-10-01.html",
+          "minutes": 6
+        }
+      ]
+    },
     {
       "key": "2026-09",
       "label": "2026 年 9 月",
-      "count": 9,
+      "count": 12,
       "items": [
+        {
+          "date": "2026-09-30",
+          "day": "30",
+          "title": "GPT-6.1 Sol突袭上线，OpenAI开发者日智能体演示翻车",
+          "summary": "OpenAI 在 9 月 29 日晚的开发者大会上压轴发布了 GPT-6.1 Sol，即日起开放调用。该模型在事实准度上较前代提升超 32%（低推理档位的错误率从 11.4% 降至 7.7%），首次将\"自主工具链编排\"能力下沉至标准 API 层——模型可在无显…",
+          "tags": [
+            "AIDailyReport",
+            "GPT6",
+            "ClaudeSonnet55",
+            "NVIDIA",
+            "OpenAI",
+            "智能体安全",
+            "世界模型",
+            "多模态大模型",
+            "AIAgent",
+            "程序小猴AI日报"
+          ],
+          "url": "AI动态/2026-09/2026-09-30.html",
+          "minutes": 6
+        },
+        {
+          "date": "2026-09-29",
+          "day": "29",
+          "title": "OpenAI DevDay今日开幕，\"o\"常驻助手迎战Meta Muse；Claude智能体15小时推翻Dijkstra算法",
+          "summary": "OpenAI年度开发者大会DevDay 2026于今天（9月29日）在旧金山开幕。大会前夕，OpenAI已在产品文档中上线了代号\"o\"的品牌标识，预计将在大会上正式发布这款常驻型AI助手。据称\"o\"由GPT-6 Astra的特定变体\"Aeon\"驱动，主打24小…",
+          "tags": [
+            "AIDaily",
+            "OpenAIDevDay",
+            "ClaudeOpus",
+            "Dijkstra",
+            "AI安全",
+            "智能体安全",
+            "华为盘古",
+            "openPangu",
+            "Gemini4",
+            "具身智能",
+            "国产替代",
+            "Agent开发",
+            "程序员日报",
+            "程序小猴AI日报"
+          ],
+          "url": "AI动态/2026-09/2026-09-29.html",
+          "minutes": 5
+        },
+        {
+          "date": "2026-09-28",
+          "day": "28",
+          "title": "Claude Opus 5.5与GPT-6同日发布，大模型价格战全面开打",
+          "summary": "9月22日，Anthropic和OpenAI在90分钟内先后发布新模型。Anthropic的Claude Opus 5.5在Artificial Analysis性能榜以58分登顶，超过自家旗舰Fable 5.1，但单任务成本仅5.98美元。OpenAI则推出…",
+          "tags": [
+            "AIDailyReport",
+            "Claude",
+            "GPT6",
+            "OpenAI",
+            "Anthropic",
+            "大模型价格战",
+            "AI安全",
+            "Agent",
+            "UltrafastAPI",
+            "MiniMax",
+            "高通2nm",
+            "端侧AI",
+            "Qwen4",
+            "阿里AI",
+            "荣耀Magic9",
+            "开发者工具",
+            "技术突破",
+            "AI日报",
+            "程序小猴"
+          ],
+          "url": "AI动态/2026-09/2026-09-28.html",
+          "minutes": 5
+        },
         {
           "date": "2026-09-27",
           "day": "27",

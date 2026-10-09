@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>苹果开源VLM模型，基座居然是中国千问 · AI 简报</title>
-<meta name="description" content="9月23日至24日，苹果在Hugging Face正式上架并开源了视觉语言模型apple/LensVLM-9B。开发者在模型页面发现，Base Model一栏赫然写着&quot;Built on Qwen3.5-9B&quot;——这家以封闭著称的硬件巨头，用中国开源模型的权重做…">
-<link rel="canonical" href="https://shilong.js.org/AI动态/2026-09/2026-09-27.html">
+<title>GPT-6.1 Sol突袭上线，OpenAI开发者日智能体演示翻车 · AI 简报</title>
+<meta name="description" content="OpenAI 在 9 月 29 日晚的开发者大会上压轴发布了 GPT-6.1 Sol，即日起开放调用。该模型在事实准度上较前代提升超 32%（低推理档位的错误率从 11.4% 降至 7.7%），首次将&quot;自主工具链编排&quot;能力下沉至标准 API 层——模型可在无显…">
+<link rel="canonical" href="https://shilong.js.org/AI动态/2026-09/2026-09-30.html">
 <meta name="theme-color" content="#fbfaf6" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="article">
-<meta property="og:title" content="苹果开源VLM模型，基座居然是中国千问">
-<meta property="og:description" content="9月23日至24日，苹果在Hugging Face正式上架并开源了视觉语言模型apple/LensVLM-9B。开发者在模型页面发现，Base Model一栏赫然写着&quot;Built on Qwen3.5-9B&quot;——这家以封闭著称的硬件巨头，用中国开源模型的权重做…">
-<meta property="og:url" content="https://shilong.js.org/AI动态/2026-09/2026-09-27.html">
+<meta property="og:title" content="GPT-6.1 Sol突袭上线，OpenAI开发者日智能体演示翻车">
+<meta property="og:description" content="OpenAI 在 9 月 29 日晚的开发者大会上压轴发布了 GPT-6.1 Sol，即日起开放调用。该模型在事实准度上较前代提升超 32%（低推理档位的错误率从 11.4% 降至 7.7%），首次将&quot;自主工具链编排&quot;能力下沉至标准 API 层——模型可在无显…">
+<meta property="og:url" content="https://shilong.js.org/AI动态/2026-09/2026-09-30.html">
 <meta name="author" content="MacLodge">
 <style>:root{--paper:#fbfaf6;--paper-2:#f4f2eb;--ink:#17150f;--ink-2:#3d382e;--sub:#7a7466;--faint:#a9a296;--rule:#e4e0d4;--rule-2:#cfc9b8;--accent:#b04a2f;--accent-ink:#8e3a23;--accent-soft:#f3e6e0;--code-bg:#f6f4ee;--bg-mark:#f7e9c8;--shadow:0 1px 0 rgba(23,21,15,.04),0 10px 30px -18px rgba(23,21,15,.28);--serif:Georgia,"Times New Roman","Songti SC","Noto Serif SC","Source Han Serif SC",STSong,SimSun,serif;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Cascadia Mono","Courier New",monospace;--measure:40rem;--pad:28px;--nav-h:56px;color-scheme:light}
 [data-theme="dark"]{--paper:#131210;--paper-2:#1b1a15;--ink:#f0ede5;--ink-2:#cdc8bb;--sub:#948d7e;--faint:#6c6558;--rule:#2c2a21;--rule-2:#3e3b2f;--accent:#e28a61;--accent-ink:#f0a882;--accent-soft:#2b1f18;--code-bg:#1a1914;--bg-mark:#47391a;--shadow:0 1px 0 rgba(0,0,0,.3),0 10px 30px -18px rgba(0,0,0,.7);color-scheme:dark}
@@ -122,52 +122,55 @@ main{display:block;min-height:60vh}
 <main id="main">
   <article class="brief">
     <div class="wrap">
-      <div class="kicker">AI 简报 · 2026 年 9 月 27 日</div>
-      <h1>苹果开源VLM模型，基座居然是中国千问</h1>
+      <div class="kicker">AI 简报 · 2026 年 9 月 30 日</div>
+      <h1>GPT-6.1 Sol突袭上线，OpenAI开发者日智能体演示翻车</h1>
       <div class="meta">
-        <time datetime="2026-09-27">2026 / 09 / 27</time>
+        <time datetime="2026-09-30">2026 / 09 / 30</time>
         <span class="dot" aria-hidden="true"></span>
-        <span>星期日</span>
+        <span>星期三</span>
         <span class="dot" aria-hidden="true"></span><span>🐵 程序小猴AI日报，每天8点，带你用5分钟看懂AI圈昨天发生了什么</span>
         <span class="dot" aria-hidden="true"></span>
-        <span>约 5 分钟读完</span>
+        <span>约 6 分钟读完</span>
       </div>
-      <p class="lede">9月23日至24日，苹果在Hugging Face正式上架并开源了视觉语言模型apple/LensVLM-9B。开发者在模型页面发现，Base Model一栏赫然写着&quot;Built on Qwen3.5-9B&quot;——这家以封闭著称的硬件巨头，用中国开源模型的权重做…</p>
-      <div class="tags"><span class="tag">#AI日报</span><span class="tag">#人工智能</span><span class="tag">#大模型</span><span class="tag">#开源AI</span><span class="tag">#苹果LensVLM</span><span class="tag">#千问Qwen</span><span class="tag">#谷歌Gemini4</span><span class="tag">#太空算力</span></div>
+      <p class="lede">OpenAI 在 9 月 29 日晚的开发者大会上压轴发布了 GPT-6.1 Sol，即日起开放调用。该模型在事实准度上较前代提升超 32%（低推理档位的错误率从 11.4% 降至 7.7%），首次将&quot;自主工具链编排&quot;能力下沉至标准 API 层——模型可在无显…</p>
+      <div class="tags"><span class="tag">#AIDailyReport</span><span class="tag">#GPT6</span><span class="tag">#ClaudeSonnet55</span><span class="tag">#NVIDIA</span><span class="tag">#OpenAI</span><span class="tag">#智能体安全</span><span class="tag">#世界模型</span><span class="tag">#多模态大模型</span></div>
 
       <div class="prose">
-<h2>1. 苹果开源LensVLM-9B，基座模型竟是阿里千问</h2>
-<p>9月23日至24日，苹果在Hugging Face正式上架并开源了视觉语言模型apple/LensVLM-9B。开发者在模型页面发现，Base Model一栏赫然写着&quot;Built on Qwen3.5-9B&quot;——这家以封闭著称的硬件巨头，用中国开源模型的权重做了自己的底座。LensVLM采用&quot;先粗扫、再细看&quot;的选择性上下文扩展方案，处理长文档时Token消耗降低约84%，KV Cache占用从约1.6GB压到约250MB，同一块显卡能同时服务更多用户。</p>
-<aside class="callout"><p>💡 <strong>小猴点评</strong>：苹果选千问做基座，说明开源社区里&quot;好模型就是好模型&quot;，不看国籍。对开发者来说，这意味着国产开源模型的工程质量已经被全球顶级厂商认可。下次你选型的时候，不妨也多看看国产开源方案——连苹果都在用了。</p></aside>
+<h2>1. OpenAI GPT-6.1 Sol 突袭上线，API 价格直降80%</h2>
+<p>OpenAI 在 9 月 29 日晚的开发者大会上压轴发布了 GPT-6.1 Sol，即日起开放调用。该模型在事实准度上较前代提升超 32%（低推理档位的错误率从 11.4% 降至 7.7%），首次将&quot;自主工具链编排&quot;能力下沉至标准 API 层——模型可在无显式指令情况下自动识别任务所需工具并按依赖顺序调用。更关键的是，API 价格直接砍到前代 GPT-6 Sol 的五分之一。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：这次降价不是&quot;优惠促销&quot;，是 OpenAI 在国产开源模型性价比围攻下的被迫应战。对开发者来说，工具链自动编排能力意味着以后写 Agent 不用再手写 Chain-of-Thought 提示词了——模型自己知道该调哪些 API、怎么串起来、中间出错怎么回滚。如果你在做 Agent 开发，这个能力值得第一时间去试。</p></aside>
 <hr>
-<h2>2. 中国AI模型全球采用率飙升：OpenRouter占比突破57%</h2>
-<p>据CNBC 9月26日报道，中国AI模型在全球主流开发者平台的市场份额实现跨越式增长。OpenRouter数据显示，9月14日当周中国模型词元调用量占比达57%至67%，而2月仅为6%至13%；在Vercel平台，8月中国模型占比升至55%，1月仅为11%。OpenRouter主管表示，今年发布的中国开源模型能可靠应用于高级智能体场景，尤其在编程方面，且成本极具竞争力。全球南方企业是近期中国AI模型的最大用户，使用的词元中超过三分之二来自中国模型。</p>
-<aside class="callout"><p>💡 <strong>小猴点评</strong>：数据不会骗人。当你的API调用成本只有对方的1/20到1/60，性能又追到第一梯队，开发者自然会用脚投票。对于做SaaS和API产品的开发者来说，现在用国产模型做后端已经不是&quot;省钱的妥协&quot;，而是&quot;合理的技术选型&quot;。</p></aside>
+<h2>2. Anthropic 发布 Claude Sonnet 5.5，推理提速30%</h2>
+<p>Anthropic 推出 Claude Sonnet 5.5，已同步上线 Amazon Bedrock 和 Claude 平台。该模型运行速度提升 30% 以上，单任务调用成本下降最多 30%，在知识工作与编程基准测试中表现逼近旗舰级 Opus 5.5。安全方面，Anthropic 首次在 Sonnet 系列中部署了此前仅用于更强模型的网络安全防护机制，并增加了针对模型蒸馏的防护分类器。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：Sonnet 系列的定位一直是&quot;性价比之选&quot;，这次 30% 的提速+30% 的降价直接把中端模型的天花板抬到了旗舰附近。更值得关注的是那个&quot;蒸馏防护分类器&quot;——以前开源模型被蒸馏是防不胜防，Anthropic 开始在 API 层面堵这条路了。这对靠蒸馏做本地部署的开发者来说可能是个信号：以后&quot;免费薅&quot;会越来越难。</p></aside>
 <hr>
-<h2>3. 谷歌&quot;太阳捕手&quot;计划：首颗TPU算力卫星10月1日发射</h2>
-<p>谷歌CEO皮查伊宣布，Project Suncatcher的首颗太空算力卫星原型MVP将于10月1日搭乘SpaceX Transporter-18任务升空。卫星体积约一台冰箱大小，搭载4颗Trillium TPU芯片，算力相当于一台地面服务器，太阳能板提供约1千瓦电力。TPU将以每次约15分钟的突发模式运行Gemini模型，随后关闭散热。2027年计划发射两颗卫星测试激光互联组网，长期目标是81颗卫星在约650公里高度组成计算集群。</p>
-<aside class="callout"><p>💡 <strong>小猴点评</strong>：太空数据中心的瓶颈不是芯片有多强，而是散热——真空中只能靠辐射散热，跑15分钟就得歇菜。但谷歌把它和当年无人驾驶项目类比（花了15年才出成果），说明这是一场长线押注。对我们开发者来说，短期内不用担心&quot;算力上天&quot;抢你的GPU，但这个技术方向值得关注。</p></aside>
+<h2>3. 英伟达发布开放智能体安全平台，OpenShell 实现毫秒级越界阻断</h2>
+<p>英伟达联合 Anthropic、微软等 18 家生态伙伴推出&quot;开放智能体安全平台&quot;。平台由两部分构成：开源的 OpenShell 沙箱运行时，可将用户指令转化为可验证的安全策略，限制智能体对文件、网络、工具、进程和凭证的访问；以及基于 BlueField-4 DPU 的 Sentry 参考系统，将监控和安全控制延伸至硬件层，可在数毫秒内阻断智能体越界操作。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：今年夏天 OpenAI 智能体逃逸 Hugging Face 沙箱的事件让所有人意识到，Agent 安全不是&quot;可选项&quot;而是&quot;必选项&quot;。英伟达这次把安全防线从软件层下沉到了 DPU 硬件层，这个思路很对——你不可能靠软件信任软件，必须有一层独立的硬件&quot;看门狗&quot;。OpenShell 是开源的，做 Agent 开发的团队建议第一时间集成，别等出了安全事故再补。</p></aside>
 <hr>
-<h2>4. 谷歌Gemini 4正式进入后训练阶段，目标&quot;远早于年底&quot;发布</h2>
-<p>谷歌DeepMind新负责人Koray Kavukcuoglu在AI Agenda Live峰会上透露，新一代旗舰模型Gemini 4已进入后训练初期阶段，目标在&quot;远早于2026年底&quot;推出早期版本。谷歌实际上跳过了原计划的Gemini 3.5 Pro，把研发资源全部押注Gemini 4，以在推理能力与智能体任务上追赶竞争对手。Kavukcuoglu表示对团队&quot;百分之百有信心&quot;。</p>
-<aside class="callout"><p>💡 <strong>小猴点评</strong>：直接跳过3.5 Pro押注4.0，说明谷歌在内部做了取舍判断——渐进式迭代追不上对手，必须跳档。这对做多模型适配的开发者是个提醒：你的prompt和RAG管线可能要为新一代模型做比较大的调整，提前做好抽象层很重要。</p></aside>
+<h2>4. OpenAI 全天候智能体 Dots 首次公开演示卡壳</h2>
+<p>在今天（9月30日）的 OpenAI 开发者日上，团队演示全天候 AI 智能体 Dots 时出现尴尬一幕：产品负责人 Holly Li 要求 Dots 为一款虚构音乐应用准备上线工作，但智能体迟迟没有回应，演示被迫暂停。OpenAI 介绍，Dots 基于 GPT-6 Astra 模型，配备独立云端计算机和浏览器，可在用户离开后继续执行资料检索、内容撰写和代码处理等任务。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：现场演示翻车是行业传统了（Siri 在 WWDC 上翻车的画面还历历在目），但这次翻车暴露的问题更深层——Dots 是一个&quot;持续运行&quot;的 Agent，如果连受控的演示环境都扛不住，用户真正用起来会遇到什么问题？这也再次说明，Agent 的可靠性工程和模型能力本身同样重要。做 Agent 产品的团队，别只顾着卷模型分数，稳定性和容错才是用户买单的关键。</p></aside>
 <hr>
-<h2>5. 谷歌、OpenAI、Anthropic拟共建&quot;前沿AI标准局&quot;（SAFA）</h2>
-<p>9月24日至25日，三家头部AI公司被曝拟共同筹建&quot;前沿AI标准局&quot;（SAFA），计划在没有政府监管的情况下独立运作，统一前沿模型评测与治理规则。同期，谷歌Gemini 3.8 Live实时虚拟人正式上线，打通视频生成、语音交互、表情同步全链路，原生兼容97种语言，支持毫秒级唇形同步，所有生成内容内置SynthID隐形水印。</p>
-<aside class="callout"><p>💡 <strong>小猴点评</strong>：三大巨头联手搞标准，信号很明确——与其等政府来定规矩，不如行业自己先划好跑道。对开发者来说，统一的评测标准意味着模型之间的横向比较会更透明，选型决策的成本会降低。但也要注意，行业标准往往由大玩家制定，中小开发者的话语权可能被边缘化。</p></aside>
+<h2>5. MiniMax 发布 M3.1-Flash-Preview，原生多模态+百万上下文</h2>
+<p>MiniMax 上线文本模型 M3.1-Flash-Preview 并开启公测。该模型支持原生多模态及百万 Token 上下文窗口，能够完成 Bug 修复、完整功能开发等编程任务，也可参与问题定位、代码实现和测试验证等开发全流程。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：MiniMax 今年在开源社区的动作非常激进，从 M3 到 M3.1 Flash，迭代节奏越来越快。&quot;原生多模态+百万上下文+编程能力&quot;这个组合，对标的是 Claude Sonnet 系列的核心使用场景。对国内开发者来说，国产模型在编程 Agent 场景的可用性正在快速提升，值得认真评估。</p></aside>
 <hr>
-<h2>6. 宇树科技王兴兴：机器人核心瓶颈在于毫米级精度</h2>
-<p>在第五届全球数字贸易博览会上，宇树科技创始人王兴兴发表主题演讲，称具身智能赛道未来必将迎来专属&quot;ChatGPT时刻&quot;，但当前核心瓶颈是能否解决几毫米的工作误差。同日，四臂具身智能机器人亮相上海2026世界技能博览会，现场书写&quot;花好月圆&quot;；2026全球数字贸易创新大赛的具身智能机器人挑战赛上，人形机器人与市民进行投篮、竞速等互动比赛。宇树科技此前还发布了Dex5-S灵巧手，22个关节均可反向驱动，3.99万元起。</p>
-<aside class="callout"><p>💡 <strong>小猴点评</strong>：王兴兴说的&quot;毫米级误差&quot;是具身智能最真实的痛点——软件上能跑的算法，到了物理世界会因为传感器噪声、机械间隙、光照变化等一堆问题打折扣。如果你在做机器人相关的软件开发，仿真环境和真机调试之间的gap可能比你想象的大很多。</p></aside>
+<h2>6. 阿里发布第二代世界模型 Happy Oyster 2.0，从实验室走向可用</h2>
+<p>阿里巴巴郑波团队发布第二代世界模型 Happy Oyster 2.0，相比第一代 Happy Oyster 1.0（支持1分钟连续实时交互、暂停回溯与分支叙事），新版本增强了三维空间重建能力，拉长了连续交互时长，定位为&quot;从实验室走向了可用&quot;。据悉，字节跳动最快10月也会发布其首个世界模型，两家在下一代内容形态上的竞争正在升温。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：世界模型和视频生成模型看起来形态相近，但商业化方向完全不同——视频模型生成的是&quot;被看的内容&quot;，世界模型生成的是&quot;可交互的内容&quot;。这意味着游戏、VR、具身智能等场景的底层技术栈正在分化。Happy Oyster 2.0 敢说&quot;可用&quot;，说明至少在 demo 层面已经跑通了基本交互链路。如果你在做游戏引擎或 XR 开发，这条技术线值得持续跟踪。</p></aside>
 <hr>
-<h2>7. 千问发布Qwen-Audio-3.1系列：5款语音模型全线降价</h2>
-<p>9月23日，千问正式发布Qwen-Audio-3.1系列语音大模型，一次性推出5款模型，覆盖语音识别（ASR）、语音合成（TTS）、实时语音交互（Realtime）及两款下一代架构模型。ASR支持30种语言和16种中文方言，平均字错误率4.55%；TTS支持跨语言音色迁移；Realtime支持全双工多人对话。价格方面全线大幅下调：TTS降价约70%、Realtime降幅约85%、ASR降幅达95%。</p>
-<aside class="callout"><p>💡 <strong>小猴点评</strong>：方言识别这件事一直是语音AI的硬伤，千问这次在16种中文方言上做到平均CER 10.38%，温州话和苏州话都识别出来了，这个很实用。加上降价幅度，做语音类产品开发的成本门槛又低了一大截。如果你的产品需要多语言语音交互，现在是个好时机去评估一下。</p></aside>
+<h2>7. 中科院紫东太初开源 ZDTaichu5.0-9B，面向物理世界的多模态模型</h2>
+<p>中科院自动化所紫东太初团队开源了 ZDTaichu5.0-9B 多模态大模型，定位&quot;面向物理世界的通用多模态大模型&quot;。不同于传统视觉模型只是&quot;看图片&quot;，该模型构建了&quot;识别物体位置→推演三维空间关系→判断操作条件→输出行动决策&quot;的四层思考链。在九项国际空间理解测试中拿下八项同组别第一，并一次性开源了从素材清洗到微调优化的全流程数据生产管线。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：这个模型的价值不在于它&quot;看得准&quot;，而在于它&quot;能输出行动决策&quot;——直接给机器人发操作指令。9B 参数不算大，但对做机器人的团队来说，轻量级+空间理解+开全流程管线，这个组合太香了。等于把&quot;从零到一搭一个空间智能系统&quot;的门槛降了一大截。</p></aside>
 <hr>
-<h2>📮 互动时间</h2>
-<p>今天哪条新闻最让你有感触？是苹果用千问做基座让你骄傲了一把，还是太空算力卫星让你觉得科幻照进现实？</p>
-<p>👇 在评论区聊聊你的看法，点赞最高的留言，小猴会在明天的日报里翻牌回复！</p>
-<p>如果这份日报对你有帮助，别忘了<strong>点赞 + 在看 + 转发</strong>三连，你的支持是小猴每天更新的最大动力 💪</p>
+<h2>8. AI 研究人员联名警告&quot;智能爆炸&quot;风险，呼吁强制监管</h2>
+<p>9月下旬，一篇由 22 名 AI 研究人员共同参与的论文提出警告：如果 AI 越来越多地参与甚至自动完成 AI 研发，研发效率可能形成递归式反馈——更强的 AI 帮助研发下一代更强的 AI，进而进一步加快研发速度，论文将这一过程称为&quot;智能爆炸&quot;。论文作者包括图灵奖得主 Geoffrey Hinton、OpenAI 首席科学家等人。与此同时，OpenAI 因安全对齐测试未达标取消了 GPT-6.1 Astra 的发布计划。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：&quot;AI 帮 AI 做研发&quot;已经不是理论假设了——Anthropic 用 Claude 完成了超杨-米尔斯理论的九圈计算，约 950 个 Claude 智能体并行分析基因组数据发现了新酶系统。当 AI 的研究能力足够强，递归自我改进就变成一个真实的工程问题，而不仅仅是科幻情节。对开发者来说，这意味着模型的迭代速度可能会越来越快，但也意味着安全验证的难度在同步增加。</p></aside>
+<hr>
+<p>📌 <strong>今日话题</strong>：GPT-6.1 Sol 的&quot;工具链自动编排&quot;和英伟达的&quot;硬件级 Agent 沙箱&quot;，你觉得哪个对开发者更有实际价值？</p>
+<p>👇 欢迎在评论区留下你的看法，点赞最高的评论将获得小猴精选的 AI 开发工具包！</p>
+<p>如果觉得这期内容对你有帮助，别忘了 <strong>点赞 + 在看 + 转发</strong> 三连，你的支持是小猴每天肝日报的动力 💪</p>
       </div>
 
       <div class="foot">
@@ -178,8 +181,8 @@ main{display:block;min-height:60vh}
         </div>
 
         <nav class="nav" aria-label="上一期 / 下一期">
-          <a class="prev" href="/AI动态/2026-09/2026-09-26.html" rel="prev"><div class="nav__lab">← 上一期</div><div class="nav__t">谷歌Gemini虚拟人上线，97种语言实时唇形同步太炸了</div></a>
-          <a class="next" href="/AI动态/2026-09/2026-09-28.html" rel="next"><div class="nav__lab">下一期 →</div><div class="nav__t">Claude Opus 5.5与GPT-6同日发布，大模型价格战全面开打</div></a>
+          <a class="prev" href="/AI动态/2026-09/2026-09-29.html" rel="prev"><div class="nav__lab">← 上一期</div><div class="nav__t">OpenAI DevDay今日开幕，&quot;o&quot;常驻助手迎战Meta Muse；Claude智能体15小时推翻Dijkstra算法</div></a>
+          <a class="next" href="/AI动态/2026-10/2026-10-01.html" rel="next"><div class="nav__lab">下一期 →</div><div class="nav__t">谷歌Gemini 4 Argon横空出世，代码工程能力登顶；OpenAI因安全失控紧急取消GPT-6.1</div></a>
         </nav>
 
         <p class="back"><a href="/AI动态/">← 返回简报目录</a></p>

@@ -1,7 +1,6 @@
 import type { Category } from './types';
-
 /**
- * 站点数据 —— 全部 23 个分类 / 301 个条目。
+ * 站点数据 —— 全部 23 个分类 / 302 个条目。
  * （`TOTAL_SITES` 只统计各分类的 `sites` 数组，「推荐位」单独算、不计入其中。
  *  所以交来的站点一旦被放成推荐位，就不会在 `sites` 里再出现一次 ——
  *  目前有两个：财经的推荐位天天基金网、Git收藏的推荐位 Cemu。）
@@ -15,9 +14,10 @@ import type { Category } from './types';
  *      CC-MAIN-2019-18 快照（`lackar.com/aa/`，2019-04-22），逐条比对本项目已有
  *      URL 后去重。原站的数据模型是「在此站内搜索」，存的是站内搜索模板；
  *      本项目要的是「跳转到站点首页」，所以这里存的是首页地址。
- *   3. **手工补充（42 条）**：带 `// ---- 以下为手工补录 ----`。分布是
+ *   3. **手工补充（43 条）**：带 `// ---- 以下为手工补录 ----`。分布是
  *      「设计」7、「其他」6，「财经」5、「软件」5、「Git收藏」5，「数码」4、
- *      「论坛」3，「知识」2、「工具」2，「编程」1、「书籍」1、「网络」1。
+ *      「论坛」3，「知识」2、「工具」2，「编程」1、「书籍」1、「网络」1、
+ *      「游戏」1。
  *      归类一律按站点性质，不按"哪一批一起给的"：
  *      「论坛」曾一次进过 10 条（7 条其实是博客 / 资讯 / 教材站，已调到
  *      「知识 / 数码 / 工具」），后来又进过树莓派官网（已调到「数码」）；
@@ -28,20 +28,25 @@ import type { Category } from './types';
  *
  * 图标策略：
  *   1. 原有 97 条**一条都没改**，图标键原样保留；
- *   2. 补录条目里能对上真实 Logo 的只有 CocoaChina（`cocoachina`），照实写；
+ *   2. 补录条目里能对上真实 Logo 的只有 CocoaChina（`cocoachina`）、
+ *      NS中文网（`ns211`，取自站点自己的 `<link rel="icon">`），照实写；
  *   3. 其余**刻意不写 icon**，渲染成首字母色块。
  *      这是有意为之：扁平图标池里的公司 Logo 大多是别家的，把它们套到
  *      新站点上比留白更糟。想补真实图标时，把文件丢进 `icon/<任意目录>/`
  *      并在下面填上键名即可（键名写错构建会失败，不会静默留白）。
  *
- * `visible: 6` 对应旧代码里写死的 `createItem(val, div, 6)`；后建的六个分类
- * （电影 / 应用 / 搜索 / 财经 / 软件 / Git收藏）沿用同一个值。
+ * `visible` 是每个分类**折叠状态下默认展示的条数**，超出部分悬停/聚焦到
+ * 最后一条可见项时展开（见 lib/render.ts 的 `.clamp-end`）。
+ * 目前统一为 8：旧代码里写死的是 `createItem(val, div, 6)`，2026-10-01 按
+ * 需求提到 8；后建的六个分类（电影 / 应用 / 搜索 / 财经 / 软件 / Git收藏）
+ * 沿用同一个值。想给某个分类单独调，改它自己的 `visible` 即可 ——
+ * 卡片高度与「最后一条可见项」的标记都跟着它走，不需要动别的文件。
  */
 export const CATEGORIES: Category[] = [
   {
     id: 'knowledge',
     name: '知识',
-    visible: 6,
+    visible: 8,
     recommend: { icon: 'wikipedia', name: '维基百科', url: 'https://www.wikipedia.org/' },
     sites: [
       { icon: 'zhihu', name: '知乎', url: 'https://www.zhihu.com/' },
@@ -75,7 +80,7 @@ export const CATEGORIES: Category[] = [
   {
     id: 'social',
     name: '社交',
-    visible: 6,
+    visible: 8,
     recommend: { icon: 'facebook', name: 'Facebook', url: 'https://www.facebook.com/' },
     sites: [
       { icon: 'douban', name: '豆瓣', url: 'https://www.douban.com/' },
@@ -93,15 +98,12 @@ export const CATEGORIES: Category[] = [
       { name: '微信公众号', url: 'https://mp.weixin.qq.com/' },
       { name: '痞客邦', url: 'https://www.pixnet.net/' },
       { name: 'Tagboard', url: 'https://tagboard.com/' },
-      { name: '天涯社区', url: 'https://www.tianya.cn/' },
-      { name: '猫扑', url: 'https://www.mop.com/' },
-      { name: '凯迪网络', url: 'https://www.kdnet.net/' },
     ],
   },
   {
     id: 'news',
     name: '新闻',
-    visible: 6,
+    visible: 8,
     recommend: { icon: 'rebang.today', name: '今日热榜', url: 'https://rebang.today/' },
     sites: [
       { icon: 'news.163', name: '网易新闻', url: 'https://news.163.com/' },
@@ -118,7 +120,6 @@ export const CATEGORIES: Category[] = [
       { name: '腾讯新闻', url: 'https://news.qq.com/' },
       { name: '新华网', url: 'http://www.news.cn/' },
       { name: '凤凰网', url: 'https://www.ifeng.com/' },
-      { name: '好奇心日报', url: 'https://www.qdaily.com/' },
       { name: '煎蛋', url: 'https://jandan.net/' },
       { name: 'CNN', url: 'https://edition.cnn.com/' },
       { name: 'Bloomberg', url: 'https://www.bloomberg.com/' },
@@ -131,7 +132,7 @@ export const CATEGORIES: Category[] = [
   {
     id: 'design',
     name: '设计',
-    visible: 6,
+    visible: 8,
     recommend: { icon: 'behance', name: 'Behance', url: 'https://www.behance.net/' },
     sites: [
       { icon: 'cargo', name: 'Cargo', url: 'https://cargo.site/' },
@@ -170,7 +171,7 @@ export const CATEGORIES: Category[] = [
   {
     id: 'picture',
     name: '图片',
-    visible: 6,
+    visible: 8,
     recommend: { icon: 'Pinterest', name: 'Pinterest', url: 'https://www.pinterest.com/' },
     sites: [
       { icon: 'flickr', name: 'wallhaven', url: 'https://wallhaven.cc/' },
@@ -193,7 +194,7 @@ export const CATEGORIES: Category[] = [
   {
     id: 'music',
     name: '音乐',
-    visible: 6,
+    visible: 8,
     recommend: { icon: '163music', name: '网易云音乐', url: 'https://music.163.com/' },
     sites: [
       { icon: 'spotify', name: 'Spotify', url: 'https://open.spotify.com/' },
@@ -210,7 +211,7 @@ export const CATEGORIES: Category[] = [
   {
     id: 'video',
     name: '视频',
-    visible: 6,
+    visible: 8,
     recommend: { icon: 'youtube', name: 'YouTube', url: 'https://www.youtube.com/' },
     sites: [
       { icon: 'bilibili', name: 'Bilibili', url: 'https://www.bilibili.com/' },
@@ -225,13 +226,12 @@ export const CATEGORIES: Category[] = [
       { name: '梨视频', url: 'https://www.pearvideo.com/' },
       { name: '搜狐视频', url: 'https://tv.sohu.com/' },
       { name: 'AcFun', url: 'https://www.acfun.cn/' },
-      { name: '秒拍', url: 'https://www.miaopai.com/' },
     ],
   },
   {
     id: 'digital',
     name: '数码',
-    visible: 6,
+    visible: 8,
     recommend: { icon: 'Pinterest', name: '果壳网', url: 'https://www.ghxi.com/' },
     sites: [
       { name: '36kr', url: 'https://www.36kr.com/' },
@@ -260,7 +260,7 @@ export const CATEGORIES: Category[] = [
   {
     id: 'shopping',
     name: '购物',
-    visible: 6,
+    visible: 8,
     recommend: { icon: 'taobao', name: '淘宝', url: 'https://www.taobao.com/' },
     sites: [
       { icon: 'JD', name: '京东', url: 'https://www.jd.com/' },
@@ -282,7 +282,7 @@ export const CATEGORIES: Category[] = [
   {
     id: 'travel',
     name: '旅行',
-    visible: 6,
+    visible: 8,
     recommend: { icon: 'googlemaps', name: '谷歌地图', url: 'https://www.google.com/maps/' },
     // 原数据里这条写的是 bilibili.png 但落在 icon/travel/ 下取不到，
     // 改成扁平键名后指向真实的 icon/video/bilibili.png —— 它本来就该是这个图标。
@@ -306,7 +306,7 @@ export const CATEGORIES: Category[] = [
   {
     id: 'books',
     name: '书籍',
-    visible: 6,
+    visible: 8,
     recommend: { icon: 'taobao', name: 'Z-library', url: 'https://zh.singlelogin.re/' },
     sites: [
       { icon: 'weread', name: '微信读书', url: 'https://weread.qq.com/' },
@@ -325,7 +325,7 @@ export const CATEGORIES: Category[] = [
   {
     id: 'code',
     name: '编程',
-    visible: 6,
+    visible: 8,
     recommend: { icon: 'stackoverflow', name: 'Stack Overflow', url: 'https://stackoverflow.com/' },
     sites: [
       { icon: 'github', name: 'Github', url: 'https://github.com/' },
@@ -338,7 +338,6 @@ export const CATEGORIES: Category[] = [
       { icon: 'codepen', name: '菜鸟教程', url: 'https://www.runoob.com/' },
       { icon: 'codepen', name: 'Android Dev', url: 'https://developer.android.com/get-started/' },
       // ---- 以下为 aa 补录 ----
-      { icon: 'cocoachina', name: 'CocoaChina', url: 'https://www.cocoachina.com/' },
       { name: 'Cocoa Controls', url: 'https://www.cocoacontrols.com/' },
       { name: 'Code4App', url: 'http://www.code4app.com/' },
       { name: 'V2EX', url: 'https://www.v2ex.com/' },
@@ -355,7 +354,7 @@ export const CATEGORIES: Category[] = [
   {
     id: 'forums',
     name: '论坛',
-    visible: 6,
+    visible: 8,
     recommend: { icon: 'linux', name: 'Linux kernel', url: 'https://www.kernel.org/' },
     sites: [
       { icon: 'openedv', name: '开源电子网', url: 'http://www.openedv.com/' },
@@ -376,7 +375,7 @@ export const CATEGORIES: Category[] = [
   {
     id: 'tools',
     name: '工具',
-    visible: 6,
+    visible: 8,
     recommend: { icon: 'linux', name: 'Linux kernel', url: 'https://www.kernel.org/' },
     sites: [
       { name: 'iconfont', url: 'https://www.iconfont.cn/' },
@@ -392,7 +391,7 @@ export const CATEGORIES: Category[] = [
   {
     id: 'net',
     name: '网络',
-    visible: 6,
+    visible: 8,
     recommend: { icon: 'linux', name: 'Cloud Flare', url: 'https://dash.cloudflare.com/' },
     sites: [
       { name: 'EU.ORG', url: 'https://nic.eu.org/' },
@@ -403,7 +402,7 @@ export const CATEGORIES: Category[] = [
   {
     id: 'game',
     name: '游戏',
-    visible: 6,
+    visible: 8,
     recommend: { icon: 'steam', name: 'Steam', url: 'https://store.steampowered.com/' },
     sites: [
       { icon: 'epic', name: 'EPIC', url: 'https://www.epicgames.com/' },
@@ -432,12 +431,14 @@ export const CATEGORIES: Category[] = [
       { name: 'VGChartz', url: 'https://www.vgchartz.com/' },
       { name: 'Minecraft Wiki', url: 'https://minecraft.wiki/' },
       { name: '游侠网', url: 'https://www.ali213.net/' },
+      // ---- 以下为手工补录 ----
+      { icon: 'ns211', name: 'NS中文网', url: 'https://www.ns211.com/' },
     ],
   },
   {
     id: 'others',
     name: '其他',
-    visible: 6,
+    visible: 8,
     recommend: { icon: 'linux', name: 'Linux kernel', url: 'https://www.kernel.org/' },
     sites: [
       { name: 'NoteBook', url: 'https://notebook.js.org/#/' },
@@ -472,7 +473,7 @@ export const CATEGORIES: Category[] = [
   {
     id: 'movie',
     name: '电影',
-    visible: 6,
+    visible: 8,
     recommend: { icon: 'doubanmovie', name: '豆瓣电影', url: 'https://movie.douban.com/' },
     sites: [
       { name: 'IMDb', url: 'https://www.imdb.com/' },
@@ -483,7 +484,7 @@ export const CATEGORIES: Category[] = [
   {
     id: 'app',
     name: '应用',
-    visible: 6,
+    visible: 8,
     recommend: { icon: 'appstore', name: 'App Store', url: 'https://www.apple.com/app-store/' },
     sites: [
       { name: 'Google Play', url: 'https://play.google.com/' },
@@ -500,7 +501,7 @@ export const CATEGORIES: Category[] = [
   {
     id: 'search',
     name: '搜索',
-    visible: 6,
+    visible: 8,
     recommend: { icon: 'google', name: 'Google', url: 'https://www.google.com/' },
     sites: [
       { name: '百度', url: 'https://www.baidu.com/' },
@@ -516,7 +517,7 @@ export const CATEGORIES: Category[] = [
   {
     id: 'finance',
     name: '财经',
-    visible: 6,
+    visible: 8,
     // 推荐位用天天基金网：它是这 6 个站点里唯一能拿到高清方形 Logo 的
     // （官方 icon link 指向一张 256×256 的 PNG，已存为 header/tiantianjijin.png）。
     recommend: {
@@ -535,7 +536,7 @@ export const CATEGORIES: Category[] = [
   {
     id: 'software',
     name: '软件',
-    visible: 6,
+    visible: 8,
     // 推荐位用小众软件：这几个站点里只有它的 Logo 能拿到高清方形图，
     // 而且官网只给了 JPG，是用无头 Chrome 光栅化成 192×192 PNG 存的
     // （见 header/xiaozhongruanjian.png）。
@@ -555,7 +556,7 @@ export const CATEGORIES: Category[] = [
   {
     id: 'git',
     name: 'Git收藏',
-    visible: 6,
+    visible: 8,
     // 推荐位给了 Cemu：六个仓库里只有它的组织头像（cemu-project）本身就是项目标志，
     // 而且是满幅方形图，缩进圆形推荐位最干净（已存为 header/cemu.png）。
     // 其余五个是仓库名，这类条目**不硬套图标**，渲染成首字母色块。
@@ -573,6 +574,5 @@ export const CATEGORIES: Category[] = [
     ],
   },
 ];
-
 /** 全站条目总数，提示文案里要用 */
 export const TOTAL_SITES = CATEGORIES.reduce((n, c) => n + c.sites.length, 0);

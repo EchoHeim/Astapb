@@ -1,0 +1,558 @@
+---
+/**
+ * SponsorSimple —— 参考 Kaiyuan/sponsor-page 的 `simple` 版赞赏按钮
+ * https://github.com/Kaiyuan/sponsor-page/tree/master/simple
+ * 本地素材：`WebBlog/sponsor/`（原版目录，未改动），图走 `sponsor/images/`。
+ *
+ * 交互与动画**照抄原版**，一处都没简化：
+ *   ① 点图标 → 铺满视口的浮层 + 遮罩，二维码在屏幕中央弹出来
+ *   ② showQR：3s / 10 段关键帧的阻尼摆动（90°→-60°→40°→-28°→18°→-12°→9°→-5°→2°→0）
+ *   ③ hideQR：0.5s，先放大到 1.08 再 rotateZ(40deg) 缩掉
+ *   ④ 时序：浮层显示后等 300ms 才起动效；点关闭后等 600ms 才真正收起
+ *
+ * 与原版的两处差异（都是刻意的）：
+ *   - 浮层用原生 `<dialog>` + `::backdrop`，和站内 SearchDialog 同一套约定 ——
+ *     白送 Esc 关闭、焦点管理、背景 inert；原版是手搓 fixed div + 自己把按钮行
+ *     blur(3px)，这里遮罩整页虚化，效果等价且更彻底。
+ *   - 图标/二维码走 ASSETS_BASE：dev 下是站内相对路径，但**构建产物走 jsDelivr
+ *     指向主仓库** —— 新增的图得 commit + push 才会上线。
+ */
+import { ASSETS_BASE } from '../consts';
+
+const IMG = `${ASSETS_BASE}/sponsor/images`;
+
+/**
+ * 只收录有**本人收款码**的渠道。
+ * 注意：`sponsor/images/BTCQR.png` 经比对与上游仓库字节一致，是原作者的比特币地址，
+ * 不是本站站长的，因此**刻意不收录**——放上去等于把打赏打给别人。
+ *
+ * 图标注意：alipay.svg / wechat.svg / QQqianbao.png 全都是**横向彩色字标**
+ * （比例约 3:1，见各自 viewBox；支付宝是 #074098 深蓝）。所以图标容器要扁长、
+ * 底衬要浅色——塞进方框会缩成一小坨，放在深底上则直接糊掉。
+ */
+const CHANNELS = [
+  { id: 'alipay', label: '支付宝', icon: `${IMG}/alipay.svg`, qr: `${IMG}/AliPayQR.png` },
+  { id: 'wechat', label: '微信赞赏', icon: `${IMG}/wechat.svg`, qr: `${IMG}/WePayQR.png` },
+  { id: 'qq', label: 'QQ钱包', icon: `${IMG}/QQqianbao.png`, qr: `${IMG}/QQPayQR.png` },
+];
+---
+
+<div class="sp" data-sponsor>
+  <!-- ① 手写邀约：文字图替掉原来那句纯文本 -->
+  <div class="sp__invite">
+    <img class="sp__coffee" src={`${IMG}/coffee.png`} alt="" width="34" height="34" />
+    <img
+      class="sp__hand"
+      src={`${IMG}/text.png`}
+      alt="给作者一杯咖啡"
+      width="190"
+      height="49"
+    />
+  </div>
+
+  <!-- ② 徽标 + 分段图标条 -->
+  <div class="sp__row">
+    <div class="sp__badge" style={`--ico-like: url("${IMG}/like.svg")`} aria-hidden="true">
+      <span class="sp__badge-ico"></span>
+      <span class="sp__badge-txt">Sponsor</span>
+    </div>
+
+    <ul class="sp__bar" role="list">
+      {
+        CHANNELS.map((c) => (
+          <li class="sp__cell">
+            <button
+              type="button"
+              class="sp__btn"
+              data-sponsor-btn={c.id}
+              data-qr={c.qr}
+              data-label={c.label}
+              aria-expanded="false"
+              aria-controls="sp-dialog"
+              title={`${c.label}赞赏`}
+            >
+              <span class="sp__ico" style={`--ico: url("${c.icon}")`} aria-hidden="true" />
+              <span class="sp__sr">{c.label}</span>
+            </button>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <!-- ③ 浮层：铺满视口只做定位容器，遮罩交给 ::backdrop -->
+  <dialog class="sp__dlg" id="sp-dialog" data-sponsor-dialog aria-label="赞赏收款码">
+    <div class="sp__stage">
+      <div class="sp__card" data-sponsor-card>
+        <img class="sp__qr" data-sponsor-qr alt="" width="232" height="232" />
+      </div>
+      <p class="sp__cap" data-sponsor-cap>点一下图标，扫码请我喝杯咖啡</p>
+    </div>
+  </dialog>
+
+  <noscript>
+    <div class="sp__fallback">
+      {
+        CHANNELS.map((c) => (
+          <figure>
+            <img src={c.qr} alt={`${c.label}收款码`} loading="lazy" />
+            <figcaption>{c.label}</figcaption>
+          </figure>
+        ))
+      }
+    </div>
+  </noscript>
+</div>
+
+<script>
+  function initSponsor(root: HTMLElement) {
+    const dlg = root.querySelector<HTMLDialogElement>('[data-sponsor-dialog]');
+    const card = root.querySelector<HTMLElement>('[data-sponsor-card]');
+    const qr = root.querySelector<HTMLImageElement>('[data-sponsor-qr]');
+    const cap = root.querySelector<HTMLElement>('[data-sponsor-cap]');
+    const btns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-sponsor-btn]'));
+
+    if (!dlg || !card || !qr || !cap || btns.length === 0) return;
+
+    // 原版 script.js 的两个延时：显示后 300ms 起 showQR；收起动画 0.5s，等 600ms 才收
+    const OPEN_DELAY = 300;
+    const HIDE_WAIT = 600;
+
+    const defaultCap = cap.textContent || '';
+    let currentBtn: HTMLButtonElement | null = null;
+    let isOpen = false;
+    let showTimer: ReturnType<typeof setTimeout> | undefined;
+    let hideTimer: ReturnType<typeof setTimeout> | undefined;
+
+    const clearTimers = () => {
+      clearTimeout(showTimer);
+      clearTimeout(hideTimer);
+    };
+
+    /** 换图 + 同步文案/aria。返回是否换成功。 */
+    const render = (btn: HTMLButtonElement) => {
+      const src = btn.dataset.qr;
+      if (!src) return false;
+
+      if (qr.getAttribute('src') !== src) {
+        qr.setAttribute('src', src);
+        qr.setAttribute('alt', `${btn.dataset.label || ''}收款码`);
+      }
+      const label = btn.dataset.label || '';
+      cap.textContent = label ? `${label} · ${defaultCap}` : defaultCap;
+      btns.forEach((b) => b.setAttribute('aria-expanded', String(b === btn)));
+      return true;
+    };
+
+    const open = (btn: HTMLButtonElement) => {
+      if (!render(btn)) return;
+
+      clearTimers();
+      currentBtn = btn;
+      isOpen = true;
+      if (!dlg.open) dlg.showModal();
+
+      // 先复位再强制回流，保证每次（含切渠道）都能重放 showQR
+      card.classList.remove('is-in', 'is-out');
+      void card.offsetWidth;
+
+      showTimer = setTimeout(() => {
+        if (isOpen) card.classList.add('is-in');
+      }, OPEN_DELAY);
+    };
+
+    const close = () => {
+      if (!isOpen) return;
+      isOpen = false;
+      clearTimers();
+
+      card.classList.remove('is-in');
+      void card.offsetWidth;
+      card.classList.add('is-out');
+
+      hideTimer = setTimeout(() => {
+        card.classList.remove('is-out');
+        if (dlg.open) dlg.close();
+        btns.forEach((b) => b.setAttribute('aria-expanded', 'false'));
+
+        const back = currentBtn;
+        currentBtn = null;
+        if (back) back.focus({ preventScroll: true });
+      }, HIDE_WAIT);
+    };
+
+    btns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        // 同一个再点一次 → 收起；换一个 → 直接换图并重放动画
+        if (isOpen && currentBtn === btn) close();
+        else open(btn);
+      });
+    });
+
+    // 点遮罩空白处关闭（原生 dialog 的约定做法，与站内 SearchDialog 一致）
+    dlg.addEventListener('click', (e) => {
+      if (e.target === dlg) close();
+    });
+
+    // 点二维码本身也关（原版行为）
+    card.addEventListener('click', close);
+
+    // Esc：拦掉原生关闭，先把 hideQR 播完
+    dlg.addEventListener('cancel', (e) => {
+      e.preventDefault();
+      close();
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-sponsor]').forEach(initSponsor);
+</script>
+
+<style>
+  .sp {
+    /* 浮层遮罩：两套主题都压暗（白色纱在深色模式下会把页面冲亮）。
+       深色下页面本来就暗，纱再重一点才有「浮起来」的分层感。 */
+    --sp-veil: color-mix(in srgb, #17150f 45%, transparent);
+    margin-top: 18px;
+  }
+
+  /* ---------- ① 手写邀约 ---------- */
+  .sp__invite {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .sp__coffee {
+    width: 34px;
+    height: 34px;
+    flex: none;
+    object-fit: contain;
+    opacity: 0.9;
+  }
+  /* text.png 是 320×240，但字只占中间 256×66 的一条（上下大片透明）。
+     容器按内容比例 256/66 配上 object-fit:cover，浏览器会等比放大后居中裁掉
+     透明边——不用改图就能把字裁到正好铺满。 */
+  .sp__hand {
+    width: 190px;
+    height: auto;
+    aspect-ratio: 256 / 66;
+    object-fit: cover;
+  }
+
+  /* ---------- ② 徽标 + 图标条 ---------- */
+  .sp__row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .sp__badge {
+    flex: none;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: #ffd886;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    transform: rotate(-15deg);
+    box-shadow: 0 4px 14px -6px rgba(176, 74, 47, 0.55);
+    transition: transform 0.3s;
+  }
+  .sp__row:hover .sp__badge {
+    transform: rotate(-8deg) scale(1.04);
+  }
+  .sp__badge-ico {
+    width: 17px;
+    height: 17px;
+    background: var(--ico-like) no-repeat center / contain;
+  }
+  .sp__badge-txt {
+    font-size: 11px;
+    line-height: 1;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  }
+
+  /* 图标条常态就是浅色底（原版也是 #fff + #ddd 边框）。
+     字标本身是彩色的（支付宝深蓝），放深底上会直接糊掉，所以深色模式不改底色，
+     只把边框和 hover 底色换成配深色主题的暖色调。 */
+  .sp__bar {
+    --bar-bg: #fff;
+    --bar-line: var(--rule-2);
+    --bar-hot: var(--accent-soft);
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: 1px solid var(--bar-line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bar-bg);
+  }
+  .sp__cell + .sp__cell {
+    border-left: 1px solid var(--bar-line);
+  }
+  .sp__btn {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    width: 88px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    filter: grayscale(1);
+    opacity: 0.55;
+    transition: filter 0.3s, opacity 0.3s, background-color 0.3s;
+  }
+  .sp__btn:hover,
+  .sp__btn:focus-visible,
+  .sp__btn[aria-expanded='true'] {
+    filter: grayscale(0);
+    opacity: 1;
+    background: var(--bar-hot);
+  }
+  .sp__btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+  /* 三个都是横向字标（约 3:1），必须给扁长的框 + contain，
+     否则会被压进方框里变得又小又糊 */
+  .sp__ico {
+    width: 62px;
+    height: 20px;
+    background: var(--ico) no-repeat center / contain;
+  }
+  .sp__sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* ---------- ③ 浮层（对应原版 #QRBox + #MainBox）---------- */
+  /* 铺满视口只做定位容器，与站内 .dialog（SearchDialog）同一套约定。
+     注意：<dialog> 的 UA 样式带 `height: fit-content`，只写 inset:0 会被它盖掉，
+     导致内容贴顶不居中 —— 必须显式给高度。 */
+  .sp__dlg {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: none;
+    width: 100%;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 24px;
+    border: 0;
+    overflow: hidden;
+    background: transparent;
+    color: var(--ink);
+  }
+  .sp__dlg[open] {
+    display: grid;
+    place-items: center;
+  }
+  /* 原版是 rgba(255,255,255,.3) 的白色纱 + 自己把按钮行 blur(3px)，这里整页虚化。
+     遮罩色**不能用**站点 SearchDialog 那套 `color-mix(--ink 42%)`：--ink 在深色模式下
+     是近白 #f0ede5，那会把深色页面反过来冲成一片灰白。改成两套主题各自定值。 */
+  .sp__dlg::backdrop {
+    background: var(--sp-veil);
+    backdrop-filter: blur(3px);
+  }
+
+  .sp__stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 0 20px;
+    text-align: center;
+    /* 原版把 perspective 放在 QRBox（卡片的父级）上，这里同理 */
+    perspective: 400px;
+  }
+
+  /* 原版 #MainBox：200×200、底色 #fff、初始 opacity 0（全靠动画推到 1）、
+     preserve-3d + transform-origin center。这里等比放大到 232 便于扫码。 */
+  .sp__card {
+    width: 232px;
+    height: 232px;
+    padding: 11px;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    opacity: 0;
+    transition: all 1s ease-in-out;
+    transform-style: preserve-3d;
+    transform-origin: center center;
+    overflow: hidden;
+  }
+  .sp__qr {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .sp__cap {
+    margin: 0;
+    max-width: 22rem;
+    font-size: 13px;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  }
+
+  /* 原版 showQR：3s、10 段阻尼摆动，节拍 90 → -60 → 40 → -28 → 18 → -12 → 9 → -5 → 2 → 0 */
+  .sp__card.is-in {
+    animation: spShowQR 3s ease-in-out 0s 1 normal forwards;
+  }
+  @keyframes spShowQR {
+    from {
+      transform: rotateX(90deg);
+    }
+    8% {
+      opacity: 1;
+      transform: rotateX(-60deg);
+    }
+    18% {
+      opacity: 1;
+      transform: rotateX(40deg);
+    }
+    34% {
+      opacity: 1;
+      transform: rotateX(-28deg);
+    }
+    44% {
+      opacity: 1;
+      transform: rotateX(18deg);
+    }
+    58% {
+      opacity: 1;
+      transform: rotateX(-12deg);
+    }
+    72% {
+      opacity: 1;
+      transform: rotateX(9deg);
+    }
+    88% {
+      opacity: 1;
+      transform: rotateX(-5deg);
+    }
+    96% {
+      opacity: 1;
+      transform: rotateX(2deg);
+    }
+    to {
+      opacity: 1;
+      transform: rotateX(0deg);
+    }
+  }
+
+  /* 原版 hideQR：先放大到 1.08 停一下，再 rotateZ(40deg) 边转边缩到 0.6 并淡出 */
+  .sp__card.is-out {
+    animation: spHideQR 0.5s ease-in-out 0s 1 normal forwards;
+  }
+  @keyframes spHideQR {
+    from {
+      opacity: 1;
+      transform: scale(1, 1);
+    }
+    20%,
+    50% {
+      opacity: 1;
+      transform: scale(1.08, 1.08);
+    }
+    to {
+      opacity: 0;
+      transform: rotateZ(40deg) scale(0.6, 0.6);
+    }
+  }
+
+  /* ---------- 兜底 ---------- */
+  .sp__fallback {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+  .sp__fallback figure {
+    margin: 0;
+    text-align: center;
+  }
+  .sp__fallback img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 6px;
+  }
+  .sp__fallback figcaption {
+    margin-top: 6px;
+    font-size: 12.5px;
+    color: var(--sub);
+  }
+
+  /* ---------- 深色模式 ---------- */
+  /* 只有手写图在黑卡片上，需要反相；图标条是浅底，不用动 */
+  :global([data-theme='dark']) .sp {
+    --sp-veil: color-mix(in srgb, #000 62%, transparent);
+  }
+  :global([data-theme='dark']) .sp__hand {
+    filter: invert(1);
+  }
+  :global([data-theme='dark']) .sp__bar {
+    /* 保持浅底，但用暖白而不是纯白，免得在深色卡片上刺眼 */
+    --bar-bg: #efece2;
+    --bar-line: #cdc6b4;
+    --bar-hot: #ded7c6;
+  }
+
+  /* 关掉动效时卡片得自己显形 —— 底色 opacity 是 0，全靠动画推到 1 */
+  @media (prefers-reduced-motion: reduce) {
+    .sp__card {
+      transition: none;
+    }
+    .sp__card.is-in,
+    .sp__card.is-out {
+      animation: none;
+    }
+    .sp__card.is-in {
+      opacity: 1;
+    }
+    .sp__badge,
+    .sp__btn {
+      transition: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .sp__badge {
+      width: 52px;
+      height: 52px;
+    }
+    .sp__hand {
+      width: 150px;
+    }
+    .sp__btn {
+      width: 78px;
+      height: 42px;
+    }
+    .sp__ico {
+      width: 54px;
+      height: 18px;
+    }
+    .sp__card {
+      width: 208px;
+      height: 208px;
+    }
+  }
+</style>

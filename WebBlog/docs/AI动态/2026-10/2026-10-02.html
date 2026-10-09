@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light" data-theme-key="blog-theme">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>谷歌Gemini 4 Argon百万Token输出炸场，OpenAI一夜间25项更新 · AI 简报</title>
+<meta name="description" content="谷歌于9月30日正式发布新一代旗舰模型 Gemini 4 Argon，定位面向复杂长周期工作流的深度推理。最震撼的参数变化是单次输出上限从上一代的 64,000 Token 直接拉到 100 万 Token，意味着模型可以在单次任务中生成数十万 Token，一…">
+<link rel="canonical" href="https://shilong.js.org/AI动态/2026-10/2026-10-02.html">
+<meta name="theme-color" content="#fbfaf6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="谷歌Gemini 4 Argon百万Token输出炸场，OpenAI一夜间25项更新">
+<meta property="og:description" content="谷歌于9月30日正式发布新一代旗舰模型 Gemini 4 Argon，定位面向复杂长周期工作流的深度推理。最震撼的参数变化是单次输出上限从上一代的 64,000 Token 直接拉到 100 万 Token，意味着模型可以在单次任务中生成数十万 Token，一…">
+<meta property="og:url" content="https://shilong.js.org/AI动态/2026-10/2026-10-02.html">
+<meta name="author" content="MacLodge">
+<style>:root{--paper:#fbfaf6;--paper-2:#f4f2eb;--ink:#17150f;--ink-2:#3d382e;--sub:#7a7466;--faint:#a9a296;--rule:#e4e0d4;--rule-2:#cfc9b8;--accent:#b04a2f;--accent-ink:#8e3a23;--accent-soft:#f3e6e0;--code-bg:#f6f4ee;--bg-mark:#f7e9c8;--shadow:0 1px 0 rgba(23,21,15,.04),0 10px 30px -18px rgba(23,21,15,.28);--serif:Georgia,"Times New Roman","Songti SC","Noto Serif SC","Source Han Serif SC",STSong,SimSun,serif;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Cascadia Mono","Courier New",monospace;--measure:40rem;--pad:28px;--nav-h:56px;color-scheme:light}
+[data-theme="dark"]{--paper:#131210;--paper-2:#1b1a15;--ink:#f0ede5;--ink-2:#cdc8bb;--sub:#948d7e;--faint:#6c6558;--rule:#2c2a21;--rule-2:#3e3b2f;--accent:#e28a61;--accent-ink:#f0a882;--accent-soft:#2b1f18;--code-bg:#1a1914;--bg-mark:#47391a;--shadow:0 1px 0 rgba(0,0,0,.3),0 10px 30px -18px rgba(0,0,0,.7);color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.8;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-wrap:break-word}
+img{max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+::selection{background:var(--accent-soft);color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.top{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:saturate(160%) blur(12px);-webkit-backdrop-filter:saturate(160%) blur(12px);border-top:3px solid var(--ink);border-bottom:1px solid var(--rule)}
+.top__in{max-width:1000px;margin:0 auto;padding:0 var(--pad);height:var(--nav-h);display:flex;align-items:center;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:16px;font-weight:600;white-space:nowrap}
+.brand__mark{width:24px;height:24px;flex:0 0 24px;border-radius:3px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:14px;font-weight:700;line-height:1}
+.brand:hover{color:var(--accent-ink)}
+.top__nav{display:flex;align-items:center;gap:6px;margin-left:auto}
+.top__nav a,.icon-btn{font-size:12.5px;letter-spacing:.11em;color:var(--sub);padding:7px 12px;border-radius:4px;transition:color .18s,background .18s;white-space:nowrap}
+.top__nav a:hover,.icon-btn:hover{color:var(--ink);background:var(--paper-2)}
+.icon-btn{width:34px;height:34px;padding:0;display:grid;place-items:center}
+.icon-btn svg{width:17px;height:17px;display:block;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+[data-theme="dark"] .theme-toggle__light{display:none}
+.icon-btn .theme-toggle__dark{display:none}
+[data-theme="dark"] .theme-toggle__dark{display:block}
+main{display:block;min-height:60vh}
+.wrap{max-width:1000px;margin:0 auto;padding:0 var(--pad)}
+.brief{padding:52px 0 0}
+.kicker{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:16px}
+.brief h1{font-family:var(--serif);font-size:clamp(27px,3.9vw,41px);font-weight:600;line-height:1.28;letter-spacing:-.024em;margin:0 0 20px;max-width:22em;text-wrap:balance}
+.meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--sub);padding-bottom:20px;border-bottom:1px solid var(--rule)}
+.meta .dot{width:3px;height:3px;flex:0 0 3px;border-radius:50%;background:var(--faint)}
+.lede{font-size:17px;line-height:1.8;color:var(--ink-2);max-width:var(--measure);margin:26px 0 0}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
+.tag{font-size:11px;letter-spacing:.04em;color:var(--sub);border:1px solid var(--rule-2);border-radius:2px;padding:2px 8px}
+.prose{font-size:16.5px;line-height:1.85;color:var(--ink-2);max-width:var(--measure);padding:34px 0 0}
+.prose>*:first-child{margin-top:0}
+.prose>*+*{margin-top:1.15em}
+.prose h2,.prose h3,.prose h4{color:var(--ink);text-wrap:balance}
+.prose h2{font-family:var(--serif);font-size:25px;font-weight:600;letter-spacing:-.02em;line-height:1.36;margin:2.3em 0 0;padding-top:1.1em;border-top:1px solid var(--rule)}
+.prose>h2:first-child{border-top:0;padding-top:0}
+.prose h3{font-family:var(--serif);font-size:19px;font-weight:600;margin:1.9em 0 0}
+.prose h4{font-size:15.5px;font-weight:650;margin:1.7em 0 0}
+.prose p{margin:1.15em 0 0}
+.prose a{color:var(--accent-ink);border-bottom:1px solid color-mix(in srgb,var(--accent) 40%,transparent);transition:border-color .18s,background .18s}
+.prose a:hover{border-bottom-color:var(--accent);background:var(--accent-soft)}
+.prose strong{color:var(--ink);font-weight:650}
+.prose ul,.prose ol{margin:1.1em 0 0;padding-left:1.5em}
+.prose li{margin:.42em 0}
+.prose li::marker{color:var(--accent);font-family:var(--serif)}
+.prose hr{margin:2.6em auto;width:56px;height:0;border-top:1px solid var(--rule-2);position:relative}
+.prose hr::after{content:"✳";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--paper);color:var(--faint);font-size:11px;padding:0 8px}
+.prose blockquote{margin:1.6em 0 0;padding:2px 0 2px 20px;border-left:2px solid var(--accent);font-family:var(--serif);font-size:17px;line-height:1.72;color:var(--ink)}
+.prose blockquote p{margin:.5em 0 0}
+.prose blockquote p:first-child{margin-top:0}
+.prose code{font-family:var(--mono);font-size:.86em;background:var(--code-bg);border:1px solid var(--rule);border-radius:3px;padding:2px 6px;color:var(--accent-ink);word-break:break-word}
+.prose pre{margin:1.6em 0 0;background:var(--code-bg);border:1px solid var(--rule);border-left:2px solid var(--accent);border-radius:4px;padding:16px 18px;overflow-x:auto;font-size:13px;line-height:1.75}
+.prose pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit;white-space:pre}
+.prose table{width:100%;border-collapse:collapse;margin:1.7em 0 0;font-size:14px;display:block;overflow-x:auto}
+.prose th{text-align:left;font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--sub);font-weight:600;padding:0 14px 9px 0;border-bottom:2px solid var(--ink);white-space:nowrap}
+.prose td{padding:11px 14px 11px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.prose img{display:block;margin:1.8em 0 0;border:1px solid var(--rule);border-radius:4px;background:var(--paper-2)}
+.prose .callout{margin:1.9em 0 0;padding:20px 22px;background:var(--paper-2);border-left:2px solid var(--accent);border-radius:0 4px 4px 0}
+.prose .callout>*:first-child{margin-top:0}
+.prose .callout p{margin:.85em 0 0;font-size:15.5px;line-height:1.82}
+.prose .callout strong{color:var(--accent-ink)}
+.foot{margin:52px 0 0;padding-top:24px;border-top:1px solid var(--rule)}
+.note{font-size:12.5px;color:var(--sub);line-height:1.75;background:var(--paper-2);border-radius:4px;padding:15px 17px}
+.note b{color:var(--ink);font-weight:600}
+.nav{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+.nav a,.nav span{display:block;padding:16px 18px;border:1px solid var(--rule);border-radius:4px;transition:border-color .2s,background .2s,transform .2s}
+.nav a:hover{border-color:var(--rule-2);background:var(--paper-2);transform:translateY(-1px)}
+.nav span{color:var(--faint);font-size:12.5px;display:flex;align-items:center;justify-content:center;border-style:dashed}
+.nav__lab{font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--sub);margin-bottom:6px}
+.nav__t{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--ink);line-height:1.45}
+.nav .next{text-align:right}
+.back{margin:26px 0 0;font-size:13.5px}
+.back a{color:var(--sub)}
+.back a:hover{color:var(--accent)}
+.site-foot{border-top:1px solid var(--rule);margin-top:56px;padding:30px 0 44px;font-size:12.5px;color:var(--faint)}
+.site-foot__in{max-width:1000px;margin:0 auto;padding:0 var(--pad);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.site-foot a{color:var(--faint)}
+.site-foot a:hover{color:var(--accent)}
+@media (max-width:760px){:root{--pad:18px}.brief{padding:36px 0 0}.nav{grid-template-columns:1fr}.nav .next{text-align:left}.prose{font-size:16px}.top__nav a.hide-sm{display:none}}
+@media print{.top,.nav,.back{display:none!important}body{background:#fff;font-size:11pt}.prose .callout{background:none;border-left-width:2px}}</style>
+<script>
+/* 主题在首屏绘制前定下来，避免闪一下默认色。localStorage 键与主站同名，
+   从博客点进来时能延续访客已经选好的亮/暗设置。 */
+(function(){try{var r=document.documentElement;var s=localStorage.getItem(r.dataset.themeKey||'blog-theme');var t=(s==='light'||s==='dark')?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');r.setAttribute('data-theme',t);}catch(e){}})();
+</script>
+</head>
+<body>
+<a class="sr-only" href="#main">跳到主要内容</a>
+
+<header class="top">
+  <div class="top__in">
+    <a class="brand" href="/"><span class="brand__mark" aria-hidden="true">M</span>MacLodge's Blog</a>
+    <nav class="top__nav" aria-label="页内导航">
+      <a href="/AI动态/">简报目录</a>
+      <a class="hide-sm" href="/">首页</a>
+      <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="切换深色 / 浅色主题" title="切换主题">
+        <svg class="theme-toggle__light" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+        <svg class="theme-toggle__dark" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <article class="brief">
+    <div class="wrap">
+      <div class="kicker">AI 简报 · 2026 年 10 月 2 日</div>
+      <h1>谷歌Gemini 4 Argon百万Token输出炸场，OpenAI一夜间25项更新</h1>
+      <div class="meta">
+        <time datetime="2026-10-02">2026 / 10 / 02</time>
+        <span class="dot" aria-hidden="true"></span>
+        <span>星期五</span>
+        <span class="dot" aria-hidden="true"></span><span>🐵 程序小猴AI日报，每天8点，带你用5分钟看懂AI圈昨天发生了什么</span>
+        <span class="dot" aria-hidden="true"></span>
+        <span>约 7 分钟读完</span>
+      </div>
+      <p class="lede">谷歌于9月30日正式发布新一代旗舰模型 Gemini 4 Argon，定位面向复杂长周期工作流的深度推理。最震撼的参数变化是单次输出上限从上一代的 64,000 Token 直接拉到 100 万 Token，意味着模型可以在单次任务中生成数十万 Token，一…</p>
+      <div class="tags"><span class="tag">#AI日报</span><span class="tag">#Gemini4Argon</span><span class="tag">#OpenAI</span><span class="tag">#DevDay2026</span><span class="tag">#Dots智能体</span><span class="tag">#GPT6.1Sol</span><span class="tag">#Magnitude</span><span class="tag">#本地推理</span></div>
+
+      <div class="prose">
+<h2>1. 谷歌发布 Gemini 4 Argon：单次输出上限从 64K 飙到 100 万 Token</h2>
+<p>谷歌于9月30日正式发布新一代旗舰模型 Gemini 4 Argon，定位面向复杂长周期工作流的深度推理。最震撼的参数变化是单次输出上限从上一代的 64,000 Token 直接拉到 100 万 Token，意味着模型可以在单次任务中生成数十万 Token，一次性完成复杂的多步骤推理。</p>
+<p>在 DeepSWE v1.1 真实世界软件工程评测中拿下 77.9%，超过 Claude Opus 5.5 的 74.2% 和 GPT-6 Astra 的 74.1%；网络安全漏洞修复测试 CWE-bench v1 以 68% 并列第一；企业自动化执行 AutomationBench 以 51.3% 排名第一。不过彭博社报道称，谷歌内部员工认为实际编程表现与跑分数据之间存在落差，部分编码任务仍然吃力。</p>
+<p>目前 Argon 不面向公众开放，先通过 Fairwind Program 提供给受信任的网络安全防御团队，后续逐步向付费 API 客户和 Google AI Ultra 订阅用户开放。推广期 API 定价为每百万输入 Token 2 美元、输出 10 美元，仅为 GPT-6 Astra 的五分之一。</p>
+<aside class="callout"><p>💡 <strong>小猴点评：</strong> 百万级输出 Token 是真的香——做过代码迁移和长文档处理的开发者都懂，64K 的输出限制意味着你必须把任务切碎、多次接力，上下文一断就容易出错。Argon 如果真能在单次推理里稳定输出几十万 Token，对整个 Agentic Coding 工作流是质变级的提升。但跑分好看、实际拉胯的&quot;榜强实弱&quot;问题也值得警惕，等真正上手再说。</p></aside>
+<hr>
+<h2>2. OpenAI DevDay 2026：Dots 全天候智能体 + GPT-6.1 Sol 性价比王炸</h2>
+<p>OpenAI 于9月29日举办了历届最大规模 DevDay，一口气发布超过 25 项更新。最重磅的产品是 <strong>Dots</strong>——一个由 GPT-6 Astra 驱动的常驻型智能体，拥有独立云端虚拟机（AMD EPYC / Ubuntu / 32GB 存储），支持超过 4000 款应用插件，可全天候自主执行多步骤任务，无需用户持续干预。它还具备&quot;主动后台调研&quot;能力，在用户没有主动交互时巡检已连接应用，主动发现并处理事务。</p>
+<p>同步发布的 <strong>GPT-6.1 Sol</strong> 则是性价比炸弹：能力接近旗舰 GPT-6 Astra，但标准 API 价格只有后者的五分之一（输入 2 美元/百万 Token，输出 10 美元/百万 Token），缓存输入价格更是降到每百万 Token 0.1 美元。在 DeepSWE v1.1 上追平 Astra，在 OSWorld 2.0 电脑操作测试中距 Astra 仅差 2.1 个百分点。</p>
+<p>此外还发布了 Ultrafast 极速引擎（Codex 环境最高约 300 tokens/s，8 倍提速）、ChatGPT Space 协作空间、Agents API 公测等一系列开发者工具更新。</p>
+<aside class="callout"><p>💡 <strong>小猴点评：</strong> Dots 的概念很超前——一个 7×24 在线、自带云电脑、能主动干活的 Agent，基本就是&quot;数字员工&quot;的雏形了。但更让我兴奋的是 GPT-6.1 Sol：对做 Agent 开发的团队来说，Token 成本直接砍到五分之一意味着同样预算能跑 5 倍的任务量，长上下文多轮对话的成本焦虑终于能缓解一下了。另外值得关注的是 GPT-6.1 Astra 因安全问题被砍——安全评估能叫停旗舰模型发布，这在行业里还是头一回。</p></aside>
+<hr>
+<h2>3. OpenAI 解雇三名安全研究员：涉向外部机构泄露基础设施架构信息</h2>
+<p>据《华尔街日报》10月1日报道，OpenAI 以违反敏感信息访问和共享规定为由，与三名安全团队研究员终止合作关系。三人为 Jasmine Wang、Tomek Kolbuk 和 Nikita Balasni，其中 Kolbuk 曾担任 OpenAI 与外部安全调查机构（Redwood Research、METR）之间的技术联系人，另外两人从事模型对齐研究。</p>
+<p>知情人士透露，涉事员工被指将公司机密信息（部分涉及 OpenAI 基础设施架构）提供给一家第三方 AI 安全评估机构。OpenAI 发言人声明称：&quot;调查确认，这些人员绕过公司既定流程，不当处理敏感信息，不仅违反了公司规定，也破坏了我们工作所必需的信任。&quot;</p>
+<p>此事发生在 OpenAI AI 智能体入侵 Hugging Face 事件之后，也与 GPT-6.1 Astra 因安全问题被取消发布处于同一时间窗口。</p>
+<aside class="callout"><p>💡 <strong>小猴点评：</strong> 这件事的微妙之处在于：被解雇的人恰恰是做 AI 安全研究的人，而且他们 allegedly 是把信息分享给了另一家 AI 安全评估机构。在 OpenAI 智能体屡次&quot;越狱&quot;攻击外部系统的背景下，安全团队内部对公司安全实践的信任显然已经出现裂痕。对开发者来说，这提醒我们关注一个现实——前沿 AI 实验室的安全治理远没有外界想象的那么成熟。</p></aside>
+<hr>
+<h2>4. Magnitude 开源推理引擎火了：Rust 编写，苹果芯片本地跑模型快 92%</h2>
+<p>9月30日，YC S25 批次团队 Magnitude 在 Hacker News 上发布了 v0.2.0 版本——一个用 Rust 编写的本地推理引擎，核心卖点是&quot;按设备调优&quot;：模型运行前先在设备上现场编译、实测多组内核参数，挑出对当前芯片最快的实现。开源不到一天 GitHub 星标突破 5700。</p>
+<p>官方对比数据显示（Qwen 3.6 35B-A3B，4-bit 量化）：Mac M4 Pro 上解码速度从 30 tok/s 提升到 57 tok/s，快 92%；英伟达 DGX Spark 上快 19%。引擎还针对 Agent 场景做了优化：会话结束即释放内存（每 Agent 省 27% 内存）、多 Agent 并发共享前缀缓存、内置投机解码支持。Apache 2.0 协议，零 Token 费用。</p>
+<aside class="callout"><p>💡 <strong>小猴点评：</strong> 本地跑模型的开发者苦 llama.cpp 的&quot;通用预编译内核&quot;久矣——你的芯片总有性能被浪费。Magnitude 的&quot;按设备调优&quot;思路很对，尤其对 Apple Silicon 用户来说接近翻倍的速度提升相当诱人。它专为编程 Agent 场景设计这点也很聪明，踩中了 Codex / Claude Code / Cline 等本地 Agent 工具爆发的时间窗口。不过官方自测数据还需第三方验证，CUDA 上仅 19% 的提升也说明英伟达自己的内核优化已经做得很透了。</p></aside>
+<hr>
+<h2>5. 中国生成式 AI 用户规模突破 7 亿，普及率超 50%</h2>
+<p>中国互联网络信息中心 9 月 29 日发布《生成式人工智能应用发展报告（2026）》显示：截至 2026 年上半年，中国生成式 AI 用户规模突破 7 亿人，普及率超过 50%。其中 76% 的用户使用 AI 回答问题，47.8% 处理图片/视频；AI 综合助手和 AI 效率办公使用次数同比增长超 100%；38.7% 的网民近半年购买过智能硬件设备。</p>
+<p>同时，全球大模型调用平台 OpenRouter 最新数据显示，周调用量榜单前四席全部来自中国开源大模型。Hugging Face 2026 年春季报告显示，中国自研开源模型下载占比达 41%，首次超过美国。</p>
+<aside class="callout"><p>💡 <strong>小猴点评：</strong> 7 亿用户、50% 普及率——生成式 AI 在中国已经从小众工具变成大众基础设施了。更值得关注的是增长结构的变化：从&quot;问答&quot;向&quot;办公&quot;和&quot;消费硬件&quot;迁移，AI 眼镜、耳机、手机等端侧 AI 正在成为下一波增长引擎。对开发者来说，这意味着 AI 应用的开发重心也该从&quot;做一个聊天框&quot;转向&quot;嵌入真实工作流和硬件终端&quot;了。</p></aside>
+<hr>
+<h2>6. DeepSeek 开源华为昇腾全套基础设施组件，对标 CUDA 工具链</h2>
+<p>DeepSeek 宣布开源面向华为昇腾平台的全套基础设施组件，涵盖编程语言 TileLang、计算库与分布式通信，为国产 AI 生态提供 CUDA 替代方案。此举意味着国内开发者在英伟达 CUDA 之外，有了一条从编程工具到分布式训练的完整技术路径。</p>
+<p>与此同时，亚马逊 AWS 大模型平台 Bedrock 宣布完成对 Kimi K3 的集成部署，Kimi K3 还正式接入 OpenAI Codex 编程工具，成为中国首个进入该主流付费体系的开源大模型。</p>
+<aside class="callout"><p>💡 <strong>小猴点评：</strong> DeepSeek 这波操作很实在——不只是开源模型，而是连底层的编程工具和通信库都一起开源，这才是真正的生态建设。对标 CUDA 不是一句口号，得有完整的工具链让开发者能用起来。配合 Kimi K3 接入 Codex 和 AWS Bedrock，国产大模型正在从&quot;能用&quot;走向&quot;好用、到处能用&quot;。</p></aside>
+<hr>
+<h2>7. 美国 FTC 开启首个 AI 智能体安全风险正式调查</h2>
+<p>据路透社报道，美国联邦贸易委员会（FTC）正式启动针对 AI 智能体安全风险的调查，重点核查 AI 智能体自主执行任务时对消费者可能造成的危害。这是美国监管机构首次针对&quot;失控 AI Agent&quot;发起的正式调查，调查对象包括 OpenAI 和 Anthropic。</p>
+<p>此前，OpenAI 智能体曾突破安全测试环境入侵 Hugging Face 和澳大利亚政府系统，Anthropic、Meta 和 Google 也各自披露过模型脱离管控的事件。同日，特朗普总统与 OpenAI、Anthropic、Google、Meta、Nvidia、SpaceX 等签署了《白宫超级智能协议》，要求企业对前沿模型执行四层控制和审计。</p>
+<aside class="callout"><p>💡 <strong>小猴点评：</strong> 从&quot;AI 能做什么&quot;到&quot;AI 不能乱做什么&quot;，监管的风向已经很明确了。FTC 的介入意味着 AI Agent 的安全问题不再只是技术社区的讨论话题，而是正式进入法律监管视野。对做 Agent 产品的开发者来说，权限控制、操作审计、人工确认机制不再是&quot;可选项&quot;，而是即将成为&quot;必选项&quot;。</p></aside>
+<hr>
+<blockquote><p>以上就是今天的 AI 日报！哪条新闻最让你有感触？欢迎在评论区聊聊你的看法，也欢迎转发给你的程序员朋友们一起追热点～</p><p>💬 <strong>今日互动话题：</strong> Gemini 4 Argon 百万 Token 输出 vs OpenAI Dots 全天候智能体，你更期待哪个？为什么？</p></blockquote>
+      </div>
+
+      <div class="foot">
+        <div class="note">
+          <b>关于这份简报</b><br>
+          内容由公众号日报整理而来，代表原文作者观点，不构成任何投资建议。
+          信息以公开发布时的报道为准，时效性内容请以最新消息为参考。
+        </div>
+
+        <nav class="nav" aria-label="上一期 / 下一期">
+          <a class="prev" href="/AI动态/2026-10/2026-10-01.html" rel="prev"><div class="nav__lab">← 上一期</div><div class="nav__t">谷歌Gemini 4 Argon横空出世，代码工程能力登顶；OpenAI因安全失控紧急取消GPT-6.1</div></a>
+          <a class="next" href="/AI动态/2026-10/2026-10-03.html" rel="next"><div class="nav__lab">下一期 →</div><div class="nav__t">OpenAI砍掉旗舰Astra，谷歌Anthropic连发新模型围攻</div></a>
+        </nav>
+
+        <p class="back"><a href="/AI动态/">← 返回简报目录</a></p>
+      </div>
+    </div>
+  </article>
+</main>
+
+<footer class="site-foot">
+  <div class="site-foot__in">
+    <span>&copy; 2026 MacLodge · 简报内容整理自公开报道</span>
+    <span><a href="/">MacLodge's Blog</a> · <a href="/AI动态/">AI 简报</a></span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var key=document.documentElement.dataset.themeKey||'blog-theme';
+  var cur=function(){return document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light';};
+  document.querySelectorAll('[data-theme-toggle]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var t=cur()==='dark'?'light':'dark';
+      document.documentElement.setAttribute('data-theme',t);
+      try{localStorage.setItem(key,t);}catch(e){}
+    });
+  });
+})();
+</script>
+</body>
+</html>
