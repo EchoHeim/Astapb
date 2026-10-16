@@ -117,6 +117,15 @@ const isFence = (t) => /^(```|~~~)/.test(t);
 const isTableRow = (t) => t.startsWith('|');
 
 /**
+ * 点评块的起始行判定。日报有两种写法：
+ *   段落  `💡 **小猴点评**：…`      （绝大多数稿子）
+ *   引用  `> 💡 **小猴点评**：…`    （10/01 那批）
+ * 只认段落写法的话，引用写法那几期会退化成 blockquote，同一批日报出现两种排版。
+ */
+const isCalloutStart = (line) =>
+  /^\s*(\*\*)?\s*💡|^\s*(\*\*)?\s*小猴点评/.test(line || '');
+
+/**
  * 极简 Markdown → HTML。只覆盖这批日报真实用到的写法：
  * 标题、段落、粗体、行内代码、引用、列表、表格、分隔线、围栏代码块。
  *
@@ -202,6 +211,11 @@ function renderMarkdown(md, nested = false) {
         buf.push(lines[i].trim().replace(/^>\s?/, ''));
         i++;
       }
+      // 引用形式的点评块也要折进 callout，与段落写法保持同一排版
+      if (!nested && isCalloutStart(buf[0])) {
+        callout = buf.slice();
+        continue;
+      }
       const inner = buf
         .map((line) => (line.trim() ? `<p>${inline(line)}</p>` : ''))
         .join('');
@@ -241,7 +255,7 @@ function renderMarkdown(md, nested = false) {
       i++;
     }
 
-    if (!nested && /^💡/.test(buf[0])) {
+    if (!nested && isCalloutStart(buf[0])) {
       callout = buf.slice();
       continue;
     }
@@ -724,7 +738,8 @@ function walkSource(dir, out = []) {
       continue;
     }
     if (!name.toLowerCase().endsWith('.md')) continue;
-    if (/正文|排版|预览|README/i.test(name)) continue;
+    // 「说明.md」是源目录的常驻文档（不含日期），漏掉就会被当成一期生成出来
+    if (/正文|排版|预览|README|说明/i.test(name)) continue;
     if (name.startsWith('_') || name.startsWith('.')) continue;
     out.push(full);
   }

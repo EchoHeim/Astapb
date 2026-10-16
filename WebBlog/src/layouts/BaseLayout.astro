@@ -21,6 +21,12 @@ interface Props {
   trackProgress?: boolean;
   /** 搜索页自带输入框，不需要再挂全局搜索弹窗 */
   hideSearch?: boolean;
+  /**
+   * giscus 评论创建讨论时的回链 URL（文章页传该文的正式地址）。
+   * 有它能保证：即使在本地/临时域名下测试发评论，写进 GitHub 讨论的
+   * 来源链接也是线上正式地址，不会混入 localhost。
+   */
+  giscusBacklink?: string;
 }
 
 const {
@@ -30,6 +36,7 @@ const {
   active,
   trackProgress = false,
   hideSearch = false,
+  giscusBacklink,
 } = Astro.props;
 const pageTitle = title ? `${title} · ${SITE_TITLE}` : SITE_TITLE;
 const desc = description || SITE_DESCRIPTION;
@@ -65,6 +72,7 @@ const canonical = absoluteUrl(Astro.url.pathname.replace(withBase(''), ''));
     {image && <meta property="og:image" content={image} />}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="author" content={AUTHOR.name} />
+    {giscusBacklink && <meta name="giscus:backlink" content={giscusBacklink} />}
 
     <script is:inline>
       // 主题必须在首屏绘制前定下来，否则会闪一下默认色。

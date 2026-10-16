@@ -52,9 +52,31 @@ function walk(dir, out = []) {
   return out;
 }
 
+/** 递归列出目录下所有文件 */
+function walkFiles(dir, out = []) {
+  for (const name of fs.readdirSync(dir)) {
+    const full = path.join(dir, name);
+    if (fs.statSync(full).isDirectory()) walkFiles(full, out);
+    else out.push(full);
+  }
+  return out;
+}
+
 const IMG_RE = /!?\[[^\]]*\]\(\s*([^)\s]+)/g;
 const HTML_SRC_RE = /<(?:img|source|video|audio)[^>]*\ssrc=["']([^"']+)["']/gi;
-const SKIP = /^(https?:|\/\/|\/|#|mailto:|tel:|data:)/i;
+/** 站内路径前缀（BASE_PATH），从 consts.ts 读，避免两处硬编码走偏 */
+const BASE_PREFIX =
+  (
+    fs
+      .readFileSync(path.join(PROJECT, 'src', 'consts.ts'), 'utf8')
+      .match(/export\s+const\s+BASE_PATH\s*=\s*['"]([^'"]*)['"]/) || [, '']
+  )[1] || '';
+
+// 2026-10-16：不再跳过 `/` 开头 —— md 里的站内绝对路径（如 `/images/posts/x.png`）
+// 现在是推荐写法（dev 由中间件读本地，线上由 rewrite-asset-urls.mjs 转 CDN），
+// 跳过它们会让迁移清单漏掉文章配图。
+// BASE_PATH 非空时站内路径形如 `/base/images/...`，下面解析时会剥掉前缀。
+const SKIP = /^(https?:|\/\/|#|mailto:|tel:|data:)/i;
 
 const referenced = new Map(); // 绝对源路径 -> 引用它的 md
 
@@ -71,7 +93,11 @@ for (const md of walk(BLOG)) {
       } catch {
         /* 保持原样 */
       }
-      const abs = path.resolve(path.dirname(md), p);
+      // 站内绝对路径的根是工程根（WebBlog/），不是 md 所在目录；
+      // BASE_PATH 非空时要先剥掉那一段，这里按 BASE_PATH 当前值处理。
+      const abs = p.startsWith('/')
+        ? path.resolve(ASSET_ROOT, '.' + p.slice(BASE_PREFIX.length))
+        : path.resolve(path.dirname(md), p);
       if (!abs.startsWith(ASSET_ROOT)) continue;
       if (!fs.existsSync(abs)) continue;
       if (!referenced.has(abs)) referenced.set(abs, md);
@@ -87,11 +113,9 @@ const STATIC = [
 for (const rel of STATIC) {
   const dir = path.join(ASSET_ROOT, rel);
   if (!fs.existsSync(dir)) continue;
-  for (const name of fs.readdirSync(dir)) {
-    const abs = path.join(dir, name);
-    if (fs.statSync(abs).isFile() && !referenced.has(abs)) {
-      referenced.set(abs, '(站点固定资源)');
-    }
+  // 递归：`images/posts/<分类>/` 这类子目录里的文章配图也要算进去
+  for (const abs of walkFiles(dir)) {
+    if (!referenced.has(abs)) referenced.set(abs, '(站点固定资源)');
   }
 }
 

@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Comments from '../components/Comments.astro';
 import { withBase, formatDateZh, absoluteUrl } from '../utils/url';
 import { tagSlug } from '../utils/tags';
 import { AUTHOR } from '../consts';
@@ -57,7 +58,12 @@ const jsonLd = {
 const showToc = toc.length >= 3;
 ---
 
-<BaseLayout title={post.data.title} description={post.data.summary} trackProgress>
+<BaseLayout
+  title={post.data.title}
+  description={post.data.summary}
+  trackProgress
+  giscusBacklink={canonical}
+>
   <script
     type="application/ld+json"
     set:html={JSON.stringify(jsonLd)}
@@ -188,6 +194,8 @@ const showToc = toc.length >= 3;
               )
             }
           </div>
+
+          <Comments />
         </div>
 
         {

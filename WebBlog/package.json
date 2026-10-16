@@ -12,6 +12,8 @@
     "dev": "astro dev",
     "prebuild": "node scripts/sync-content.mjs && node scripts/sync-ai-brief.mjs",
     "build": "astro build",
+    "postbuild": "node scripts/rewrite-asset-urls.mjs",
+    "cdn:check": "node scripts/rewrite-asset-urls.mjs --check",
     "preview": "astro preview",
     "migrate-assets": "node scripts/migrate-assets.mjs"
   },

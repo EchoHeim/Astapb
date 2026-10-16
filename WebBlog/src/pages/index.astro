@@ -10,6 +10,7 @@ import {
   SITE_DESCRIPTION,
   AUTHOR,
   AI_BRIEF,
+  ASSETS_BASE,
 } from '../consts';
 import { buildTagIndex, buildCategoryTree } from '../utils/tags';
 import { withBase } from '../utils/url';
@@ -45,9 +46,19 @@ const briefLatest = aiBrief.latest
   <section class="hero">
     <div class="wrap">
       <div class="hero__kicker">嵌入式工程师的学习笔记 · 自 {startLabel}</div>
-      <h1 class="hero__title">
-        互联网是有记忆的，<br />我想留下<em>一些成长的脚印</em>。
-      </h1>
+      <div class="hero__head">
+        <img
+          class="hero__logo"
+          src={`${ASSETS_BASE}/images/logo.png`}
+          alt=""
+          width="242"
+          height="116"
+          decoding="async"
+        />
+        <h1 class="hero__title">
+          互联网是有记忆的，<br />我想留下<em>一些成长的脚印</em>。
+        </h1>
+      </div>
       <p class="hero__lede">
         Linux、C/C++、Python、FPGA、ToolBox —— 把踩过的坑和想明白的事写在这里，
         也写给下一个遇到同样问题的人。

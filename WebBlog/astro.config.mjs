@@ -1,7 +1,72 @@
 // @ts-check
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
-import { SITE_URL, BASE_PATH } from './src/consts.ts';
+import { SITE_URL, BASE_PATH, CDN_ORIGIN } from './src/consts.ts';
+
+const PROJECT_ROOT = path.dirname(fileURLToPath(import.meta.url));
+
+/**
+ * 站点资源的真源目录（相对工程根）。它们**不进构建产物**：
+ * dev 由下面的中间件直接读文件，生产由 scripts/rewrite-asset-urls.mjs
+ * 把产物里的站内路径改写成 CDN_ORIGIN。新增图片目录时同步这里与重写脚本。
+ */
+const ASSET_PREFIXES = ['/images/', '/sponsor/images/'].map(
+  (p) => BASE_PATH + p
+);
+
+const MIME = {
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.svg': 'image/svg+xml',
+  '.webp': 'image/webp',
+  '.avif': 'image/avif',
+  '.ico': 'image/x-icon',
+  '.json': 'application/json',
+  '.txt': 'text/plain',
+};
+
+/**
+ * dev 下把 `images/`、`sponsor/images/` 当静态目录服务。
+ *
+ * Astro 的 dev server 只服务 public/，而这两个目录在工程根 —— 结果就是
+ * 本地预览时站点 logo、头像全部裂图（404，静默失败）。这里补上：
+ * 本地文件存在就直接读，不存在则 302 回源 jsDelivr（跟线上行为一致）。
+ * 只在 dev 生效（apply: 'serve'），构建产物走 CDN 重写，不受影响。
+ */
+function localAssets() {
+  return {
+    name: 'local-assets',
+    apply: 'serve',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const url = decodeURIComponent((req.url || '').split('?')[0]);
+        if (!ASSET_PREFIXES.some((p) => url.startsWith(p))) return next();
+
+        const rel = url.slice(BASE_PATH.length);
+        const file = path.resolve(PROJECT_ROOT, '.' + rel);
+        // 防目录穿越：解码后的 ../ 也必须落在工程根之内
+        if (!file.startsWith(PROJECT_ROOT + path.sep)) return next();
+
+        if (fs.existsSync(file) && fs.statSync(file).isFile()) {
+          res.setHeader(
+            'Content-Type',
+            MIME[path.extname(file).toLowerCase()] || 'application/octet-stream'
+          );
+          res.setHeader('Cache-Control', 'no-cache');
+          fs.createReadStream(file).pipe(res);
+          return;
+        }
+        res.writeHead(302, { Location: CDN_ORIGIN + rel });
+        res.end();
+      });
+    },
+  };
+}
 
 /**
  * 关于几件事的说明，避免以后回来看不懂：
@@ -25,6 +90,9 @@ export default defineConfig({
   site: SITE_URL,
   ...(BASE_PATH ? { base: BASE_PATH } : {}),
   trailingSlash: 'ignore',
+  vite: {
+    plugins: [localAssets()],
+  },
   build: {
     format: 'directory',
     inlineStylesheets: 'auto',

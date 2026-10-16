@@ -44,18 +44,28 @@ export const AUTHOR = {
  * 正式做法是建一个独立的资源仓库（附件占 219 MB，不该和代码混在一个包里），
  * 跑 `npm run migrate-assets -- --yes` 把被引用的资源镜像过去，然后只改这一行：
  *
- *   export const ASSETS_BASE =
+ *   export const CDN_ORIGIN =
  *     'https://cdn.jsdelivr.net/gh/EchoHeim/Astapb-assets@main';
  */
+export const CDN_ORIGIN =
+  'https://cdn.jsdelivr.net/gh/EchoHeim/Astapb@master/WebBlog';
+
+/**
+ * 资源基址 —— 图片与附件统一由这里提供。
+ *
+ * 2026-10-16 修正：原先注释称「astro dev 把仓库根当静态资源目录，/images/ 是 200」，
+ * 实测是 **404**（dev 只服务 public/）。所以本地预览下站点 logo、头像全是裂图，
+ * 而这个失败是静默的，很容易误判成样式问题。现在由 astro.config.mjs 里的
+ * `local-assets` 中间件补上：dev 下直接从 `images/` 读文件，本地没有的（还没加进
+ * 来的图）再 302 回源 CDN。
+ */
 export const ASSETS_BASE =
-  // 本地开发走站内相对路径：`astro dev` 本来就把仓库根目录当静态资源目录
-  // （实测 /images/xxx.png、/sponsor/images/xxx.png 都是 200），所以新加的图
-  // 不用先 commit + push 就能在本地看到 —— 否则 jsDelivr 取不到未提交的文件，
-  // 本地只会看到裂图，而且这个失败是静默的，很容易误判成样式问题。
-  // 构建产物不受影响，仍走下面的 CDN。
+  // 本地开发走站内绝对路径：dev 由中间件提供，不用先 commit + push 就能看到新图。
+  // 构建产物里的站内路径，则由 scripts/rewrite-asset-urls.mjs 在 build 之后
+  // 统一改写成 CDN_ORIGIN —— 两条路走同一个真源 `images/`，线上仍然走 CDN 加速。
   import.meta.env?.DEV
     ? ''
-    : 'https://cdn.jsdelivr.net/gh/EchoHeim/Astapb@master/WebBlog';
+    : CDN_ORIGIN;
 
 /** 首页每页文章数 */
 export const PAGE_SIZE = 10;
@@ -90,6 +100,27 @@ export const HEADER_ICONS = [
 ];
 
 /**
+ * 微信公众号入口 —— 报头右侧的「图标 + 悬浮二维码」。
+ *
+ * 常驻状态只是一个 34px 图标（不遮挡页面任何内容）；鼠标悬停、键盘聚焦
+ * 或触摸点击时才浮出二维码卡片，移开 / 点外部即收起。
+ * 二维码与「关于」页用的是同一张图（Qart_CodeKey.png）。
+ */
+export const WECHAT = {
+  /** 总开关：false 时报头不渲染微信入口 */
+  enabled: true,
+  /** 公众号二维码（入口图标是内联的微信 logo，见 WeChatEntry.astro） */
+  qr: `${ASSETS_BASE}/images/Qart_CodeKey.png`,
+  /** 图标按钮的无障碍名称 */
+  label: '微信公众号：程序小猴（查看二维码）',
+  /** 卡片标题与副文案 */
+  cardTitle: '微信公众号「程序小猴」',
+  cardHint: '编码技术 · 学习经验 · 生活感悟',
+  /** 二维码图片的 alt（与「关于」页同一份描述） */
+  qrAlt: '微信公众号二维码：程序小猴',
+};
+
+/**
  * AI 简报 —— 唯一入口在首页，其它位置（导航 / 侧栏 / 搜索 / RSS / 站点地图）
  * 一律不出现，这是刻意的：简报内容只从那一个入口进。
  *
@@ -108,6 +139,39 @@ export const AI_BRIEF = {
   tagline: '每日更新 · 5 分钟读完一圈 AI 动态',
   /** 目录页页脚的小字说明 */
   note: '简报按月份归档，随日报同步更新（工作日 08:00 前后）。',
+};
+
+/**
+ * 评论区 —— Giscus（评论存在 GitHub Discussions 里，零后端、零维护）。
+ *
+ * 启用前在 GitHub 上做两步（各一分钟，不用改代码）：
+ *   1. 仓库 Settings → General → Features → 勾选 Discussions；
+ *   2. 安装 giscus App（https://github.com/apps/giscus）并授权本仓库。
+ * 随后到 https://giscus.app/zh-CN 输入仓库名并选择分类，
+ * 把生成的 categoryId 填到下面对应位置即可。
+ *
+ * categoryId 留空时视为「还没配好」：文章页不渲染评论区，不输出半成品组件；
+ * 想整体暂停评论区，把 provider 改成 'none'（配置原样保留）。
+ */
+export const COMMENTS = {
+  provider: 'giscus' as 'giscus' | 'none',
+  giscus: {
+    /** 存放评论的仓库（owner/repo） */
+    repo: 'EchoHeim/Astapb',
+    /** 仓库 ID（R_ 开头）；仓库迁移/重建后需要更新 */
+    repoId: 'R_kgDOHgQi-A',
+    /**
+     * Discussion 分类：用 Announcements —— 只有仓库维护者能发起新讨论、
+     * 访客只能评论和回复，天然防止有人乱开讨论。开启 Discussions 时自动创建。
+     */
+    category: 'Announcements',
+    /** 分类 ID（DIC_ 开头），在 giscus.app 上选好分类即可看到 */
+    categoryId: 'DIC_kwDOHgQi-M4DIkZr',
+    /** 页面与讨论的映射方式：链接结构不变时用 pathname 最稳 */
+    mapping: 'pathname',
+    /** 评论区界面语言 */
+    lang: 'zh-CN',
+  },
 };
 
 /** 主题：'auto' 跟随系统，其余为固定值。localStorage 键名 */

@@ -6,6 +6,7 @@ import {
   EXTERNAL_LINKS,
   HEADER_ICONS,
 } from '../consts';
+import WeChatEntry from './WeChatEntry.astro';
 import { withBase } from '../utils/url';
 
 interface Props {
@@ -59,6 +60,8 @@ function isCurrent(href: string): boolean {
     </nav>
 
     <div class="tools">
+      <WeChatEntry />
+
       {
         HEADER_ICONS.map((item) => (
           <a

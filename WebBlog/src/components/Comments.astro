@@ -1,0 +1,191 @@
+---
+/**
+ * 评论区 —— Giscus（基于本仓库的 GitHub Discussions，无自有后端）。
+ *
+ * 三个设计点，都是为「国内网络 + GitHub 偶发不稳」兜底：
+ * 1. 懒加载：滚到评论区附近才注入 giscus 脚本，文章首屏完全不碰它；
+ * 2. 主题联动：站点切换亮暗（themechange 事件）时，把新主题推给 giscus iframe；
+ * 3. 失败兜底：脚本加载失败或迟迟不初始化时，显示一行提示 + 重试按钮 +
+ *    讨论区直达链接 —— 最坏情况只是评论区空着，文章照读。
+ *
+ * 配置在 consts.ts 的 COMMENTS；categoryId 未填时整块不渲染。
+ */
+import { COMMENTS } from '../consts';
+
+const { provider, giscus } = COMMENTS;
+const enabled = provider === 'giscus' && Boolean(giscus.categoryId);
+const discussionsUrl = `https://github.com/${giscus.repo}/discussions`;
+---
+
+{
+  enabled && (
+    <section class="comments" id="comments" aria-label="留言评论">
+      <div class="comments__h">留言 / 评论</div>
+      <p class="comments__hint">
+        评论由 GitHub Discussions{' '}
+        承载，登录 GitHub 账号即可发言；数据存在博客仓库里，不依赖第三方评论服务。
+      </p>
+
+      <div
+        class="comments__host"
+        id="giscus-host"
+        data-repo={giscus.repo}
+        data-repo-id={giscus.repoId}
+        data-category={giscus.category}
+        data-category-id={giscus.categoryId}
+        data-mapping={giscus.mapping}
+        data-lang={giscus.lang}
+      >
+        <p class="comments__placeholder">评论加载中…</p>
+      </div>
+
+      <noscript>
+        <p class="comments__fb">
+          评论区需要 JavaScript 支持；也可以直接到{' '}
+          <a href={discussionsUrl} target="_blank" rel="noopener">
+            GitHub 讨论区
+          </a>{' '}
+          留言。
+        </p>
+      </noscript>
+
+      <div class="comments__fb" id="giscus-fb" hidden>
+        <span>评论区没能加载出来（可能是这会儿网络到 GitHub 不太顺），</span>
+        <button type="button">重试</button>
+        <span>一下，或</span>
+        <a href={discussionsUrl} target="_blank" rel="noopener">
+          去 GitHub 讨论区留言
+        </a>
+        。
+      </div>
+    </section>
+  )
+}
+
+<script>
+  const host = document.getElementById('giscus-host');
+
+  if (host) {
+    const fb = document.getElementById('giscus-fb');
+    const removePlaceholder = () =>
+      host.querySelector('.comments__placeholder')?.remove();
+    let settleTimer = 0;
+    let settled = false;
+
+    const curTheme = () =>
+      document.documentElement.getAttribute('data-theme') === 'dark'
+        ? 'dark'
+        : 'light';
+
+    const fail = () => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(settleTimer);
+      removePlaceholder();
+      // 撤掉占位高度，失败提示不悬在一段空白下面
+      host.style.minHeight = '0';
+      if (fb) fb.hidden = false;
+    };
+
+    // 幂等：迟到的成功（giscus 的 message、慢加载出来的 iframe）也能撤销错误提示
+    const succeed = () => {
+      settled = true;
+      window.clearTimeout(settleTimer);
+      removePlaceholder();
+      if (fb) fb.hidden = true;
+    };
+
+    const load = () => {
+      if (settled) return;
+
+      const attrs: Record<string, string | undefined> = {
+        'data-repo': host.dataset.repo,
+        'data-repo-id': host.dataset.repoId,
+        'data-category': host.dataset.category,
+        'data-category-id': host.dataset.categoryId,
+        'data-mapping': host.dataset.mapping,
+        'data-lang': host.dataset.lang,
+        'data-theme': curTheme(),
+        'data-strict': '0',
+        'data-reactions-enabled': '1',
+        'data-input-position': 'top',
+      };
+
+      const s = document.createElement('script');
+      s.src = 'https://giscus.app/client.js';
+      s.async = true;
+      s.crossOrigin = 'anonymous';
+      for (const [k, v] of Object.entries(attrs)) {
+        if (typeof v === 'string' && v) s.setAttribute(k, v);
+      }
+      s.addEventListener('error', fail);
+      // client.js 执行完成时 iframe 已挂好，占位可以撤了
+      s.addEventListener('load', removePlaceholder);
+      host.appendChild(s);
+
+      // 兜底：12 秒内没看到 iframe 就认为这条路走不通 ——
+      // 到 GitHub 的请求被卡住时不会有任何事件，只能靠超时判断。
+      settleTimer = window.setTimeout(() => {
+        if (settled) return;
+        if (host.querySelector('iframe')) succeed();
+        else fail();
+      }, 12000);
+    };
+
+    // giscus 运行中的信号：来自 giscus.app 的 message（收到即提前收工）。
+    // 注意它平时也会发 error message（如会话过期），那不算加载失败，
+    // 只在控制台留痕，避免误报。
+    window.addEventListener('message', (e) => {
+      if (e.origin !== 'https://giscus.app') return;
+      const data = e.data as { giscus?: unknown } | undefined;
+      if (!data || typeof data !== 'object' || !data.giscus) return;
+      if (typeof data.giscus !== 'object') return;
+      const payload = data.giscus as Record<string, unknown>;
+      if ('error' in payload) {
+        console.error('[giscus]', payload.error);
+        return;
+      }
+      // 迟到的成功也算成功：撤掉所有错误提示
+      succeed();
+    });
+
+    // 主题联动：站点切换亮暗时把新主题推给 giscus
+    document.addEventListener('themechange', () => {
+      const iframe = host.querySelector<HTMLIFrameElement>(
+        'iframe.giscus-frame'
+      );
+      iframe?.contentWindow?.postMessage(
+        { giscus: { setConfig: { theme: curTheme() } } },
+        'https://giscus.app'
+      );
+    });
+
+    // 重试：清场后重新注入（giscus 会重新挂载评论文档）
+    fb?.querySelector('button')?.addEventListener('click', () => {
+      fb.hidden = true;
+      settled = false;
+      host.innerHTML = '';
+      const p = document.createElement('p');
+      p.className = 'comments__placeholder';
+      p.textContent = '评论加载中…';
+      host.appendChild(p);
+      load();
+    });
+
+    // 懒加载：距评论区还有 400px 就开始请求
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((en) => en.isIntersecting)) {
+            io.disconnect();
+            load();
+          }
+        },
+        { rootMargin: '400px 0px' }
+      );
+      io.observe(host);
+    } else {
+      load();
+    }
+  }
+</script>

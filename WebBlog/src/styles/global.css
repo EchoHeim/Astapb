@@ -4,7 +4,8 @@
 
    组织顺序：设计令牌 → 基础 → 布局 → 报头 → 首页 hero → 内容栅格 →
              文章列表 → 侧栏 → 文章页 → 正文排版 → 文末 → 归档/标签 →
-             关于 → 页脚 → 搜索 → 返回顶部 → 杂项 → 响应式 → AI 简报 → 打印
+             关于 → 页脚 → 搜索 → 返回顶部 → 杂项 → 响应式 → AI 简报 →
+             评论区 → 打印
    主题通过 <html data-theme="light|dark"> 切换，由 BaseLayout 的内联脚本
    在首屏渲染前写入，避免闪白/闪黑。
    ========================================================================== */
@@ -357,6 +358,85 @@ main {
   }
 }
 
+/* 微信入口（组件 WeChatEntry.astro）：常驻只有图标，悬停/聚焦/点击浮出二维码卡片。
+   卡片默认右对齐到图标；小屏改左对齐 —— 两个方向各算过，任何视口都不会越出报头右缘。 */
+.wx {
+  position: relative;
+}
+/* 入口图标：微信官方双对话泡 logo（内联 SVG），品牌绿 #07c160 */
+.wx__btn svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+  transition: transform 0.18s;
+}
+.wx__btn:hover svg {
+  transform: scale(1.08);
+}
+.wx__card {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 5;
+  padding-top: 10px; /* 悬停接力区：鼠标从按钮滑向卡片不会触发 pointerleave */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+}
+.wx:hover .wx__card,
+.wx:focus-within .wx__card,
+.wx[data-open="true"] .wx__card {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+.wx__card-in {
+  width: 200px;
+  padding: 14px;
+  background: var(--paper);
+  border: 1px solid var(--rule-2);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+.wx__qr {
+  display: block;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto;
+  border-radius: 4px;
+}
+.wx__t {
+  margin-top: 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.5;
+}
+.wx__s {
+  margin-top: 3px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--sub);
+}
+@media (max-width: 480px) {
+  /* 小屏改「居中于图标」：卡片（200px 宽）在 320–480 的任何视口都不会越出屏幕两侧 */
+  .wx__card {
+    right: auto;
+    left: 50%;
+    margin-left: -100px; /* 卡片宽 200 的一半（改宽度时这里要同步） */
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wx__card,
+  .wx__btn svg,
+  .wx__btn:hover svg {
+    transition: none;
+    transform: none;
+  }
+}
+
 /* 主题按钮：亮/暗两个图标切换显示 */
 [data-theme="dark"] .theme-toggle__light {
   display: none;
@@ -412,6 +492,40 @@ main {
   background: var(--rule-2);
   max-width: 120px;
 }
+/* logo 与大标题并排。两个细节都踩过：
+   1）logo.png 是**不透明白底**的手写图，直接贴上去就是一块白方块 —— 不靠底色垫，
+      改用混合模式融进纸面：浅色 multiply（白底 → --paper，墨字不变）；暗色先反相
+      再用 screen 让黑底消失（hue-rotate 180° 不能省，否则叶子的绿会翻成品红）。
+   2）原图 242×116 里手写内容只占 x34..215 / y15..112，两侧共 60px 白边会把 logo
+      的视觉尺寸压掉近四分之一、也把并排间距撑虚。所以按原始像素比例用负 margin
+      把白边抵掉：内容宽度只由 --logo-ink 一个变量决定，其余尺寸随它等比缩放。 */
+.hero__head {
+  --logo-ink: clamp(104px, 9.2vw, 132px);
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 2.6vw, 36px);
+  margin-bottom: 20px;
+}
+.hero__logo {
+  --k: calc(var(--logo-ink) / 182); /* 每个原始像素对应的显示尺寸 */
+  flex: 0 0 auto;
+  width: calc(var(--k) * 242);
+  height: auto;
+  margin: calc(var(--k) * -15) calc(var(--k) * -26) calc(var(--k) * -3)
+    calc(var(--k) * -34);
+  mix-blend-mode: multiply;
+  user-select: none;
+}
+[data-theme="dark"] .hero__logo {
+  filter: invert(1) hue-rotate(180deg);
+  mix-blend-mode: screen;
+}
+/* 下间距统一交给 .hero__head，并排时标题不再自带 */
+.hero__head .hero__title {
+  margin-bottom: 0;
+  min-width: 0;
+}
+
 .hero__title {
   font-family: var(--serif);
   font-weight: 600;
@@ -2172,6 +2286,12 @@ main {
   .hero {
     padding: 46px 0 38px;
   }
+  /* 窄屏并排会跟中文大标题抢宽度（标题换行更凶），改成 logo 居左压在标题上方 */
+  .hero__head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
   .hero__stats {
     gap: 28px;
   }
@@ -2264,11 +2384,11 @@ main {
   }
 }
 
-/* 报头一行放不下「站名 + 4 个图标按钮」时的兜底（实测视口 < 400px 就会溢出，
-   把汉堡按钮挤出屏幕右侧、移动端导航直接打不开）。这里只留 M 标记，
-   站名在本页 <title> 和页脚都还在。不想藏站名的话，可以改成隐藏
-   .icon-btn--img（B 站入口只在宽屏出现），改这一处即可。 */
-@media (max-width: 400px) {
+/* 报头一行放不下「站名 + 5 个图标按钮」时的兜底（微信入口加入后，安全线
+   由 400px 上移到 480px；再窄就会把汉堡按钮挤出屏幕右侧、移动端导航打不开）。
+   这里只留 M 标记，站名在本页 <title> 和页脚都还在。不想藏站名的话，
+   可以改成隐藏 .icon-btn--img（在窄屏收起图标入口），改这一处即可。 */
+@media (max-width: 480px) {
   .brand__name {
     display: none;
   }
@@ -2443,7 +2563,81 @@ main {
   color: var(--faint);
 }
 
-/* ---------------------------------------------------------- 20. 打印 */
+/* ---------------------------------------------------------- 20. 评论区 */
+
+.comments {
+  margin-top: 64px;
+}
+
+/* 标题沿用文末区域（.related__h）的排版语言，保持整篇收尾一致 */
+.comments__h {
+  font-size: 11px;
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--sub);
+  font-weight: 600;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--rule-2);
+  margin-bottom: 12px;
+}
+
+.comments__hint {
+  margin: 0 0 20px;
+  font-size: 12.5px;
+  color: var(--faint);
+  line-height: 1.7;
+}
+
+/* 懒加载期间的占位高度，避免评论框出现时整页往下跳 */
+.comments__host {
+  min-height: 160px;
+}
+/* iframe 一旦出现，占位文案即刻让位（JS 之外的双保险） */
+.comments__host:has(iframe) .comments__placeholder {
+  display: none;
+}
+
+.comments__placeholder {
+  margin: 0;
+  padding: 24px 0;
+  font-size: 13px;
+  color: var(--faint);
+}
+
+/* 加载失败的兜底提示（也用于 noscript） */
+.comments__fb {
+  margin: 8px 0 0;
+  padding: 16px 18px;
+  background: var(--paper-2);
+  border: 1px dashed var(--rule-2);
+  border-radius: var(--radius);
+  font-size: 12.5px;
+  color: var(--sub);
+  line-height: 1.8;
+}
+.comments__fb[hidden] {
+  display: none;
+}
+.comments__fb a,
+.comments__fb button {
+  color: var(--accent-ink);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.comments__fb a:hover,
+.comments__fb button:hover {
+  border-bottom-color: var(--accent);
+}
+.comments__fb button {
+  font: inherit;
+  padding: 0;
+  background: none;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  cursor: pointer;
+}
+
+/* ---------------------------------------------------------- 21. 打印 */
 
 @media print {
   .masthead,
@@ -2452,7 +2646,8 @@ main {
   .to-top,
   .dialog,
   .pager,
-  .toc-inline {
+  .toc-inline,
+  .comments {
     display: none !important;
   }
   body {
