@@ -54,3 +54,7 @@ venv/
 #       和 tmp/ 都是本机脚手架，用完即弃，一律不入库。
 .workbuddy/_*
 .workbuddy/tmp/
+
+output/
+
+
