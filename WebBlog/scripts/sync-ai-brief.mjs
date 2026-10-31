@@ -183,7 +183,10 @@ function renderMarkdown(md, nested = false) {
     if (isHeading(t)) {
       flush();
       const m = t.match(/^(#{1,6})\s+(.+?)\s*#*\s*$/);
-      const depth = Math.min(4, Math.max(2, m[1].length));
+      // 原稿的小节有的写 `##`、有的写 `###`（10 月 15/17/8 日那几份正文用 ###，
+      // 却把「今日总结」写成 ##，于是正文全成了总结的子节）。页面上 h1 是标题、
+      // 小节一律 h2，所以这里把 2~3 级压到 h2 统一，更深的（#### 起）保留层级。
+      const depth = m[1].length <= 3 ? 2 : Math.min(4, m[1].length);
       out.push(`<h${depth}>${inline(m[2])}</h${depth}>`);
       i++;
       continue;
@@ -362,6 +365,22 @@ function cleanTitle(raw) {
   return s.trim();
 }
 
+/**
+ * 文末的话题标签行。
+ *
+ * 微信话题标签名里**可以带空格**（10 月 22 日那份写的是 `#Claude Duet`），而早先的判据
+ * `^#tag(\s+#tag)*$` 要求每个空格分隔的 token 都以 `#` 开头，于是 `Duet` 让它整行失配：
+ * 标签条变空、那一整行还漏进正文当段落渲染。所以这里改成「以 `#非空白` 开头 + 多数 token
+ * 是标签」这种容错判据 —— 既能收下带空格的标签，也不会把 `## 小标题`、`# 大标题` 误认。
+ */
+function isTagLine(line) {
+  const s = String(line).trim();
+  if (!/^#[^\s#]/.test(s)) return false;
+  const tokens = s.split(/\s+/);
+  const hashed = tokens.filter((t) => t.startsWith('#')).length;
+  return hashed / tokens.length >= 0.6;
+}
+
 /** 正文：从一级标题之后开始，去掉内部留档段落与结尾的话题标签行 */
 function extractBody(lines, titleIndex) {
   let body = lines.slice(titleIndex + 1);
@@ -373,8 +392,7 @@ function extractBody(lines, titleIndex) {
   // 结尾的话题标签行 + 它上面的分隔线 + 空行
   while (body.length) {
     const last = body[body.length - 1].trim();
-    const isTagLine = /^#[^\s#]+(\s+#[^\s#]+)*$/.test(last);
-    if (last === '' || last === '---' || last === '***' || isTagLine) body.pop();
+    if (last === '' || last === '---' || last === '***' || isTagLine(last)) body.pop();
     else break;
   }
 
@@ -459,14 +477,14 @@ function parseBrief(file) {
 
   const tagSource =
     configField(lines, /^\*\*(话题标签|文末标签|标签|话题)\*\*/) ||
-    (lines.slice().reverse().find((l) => /^#[^\s#]+(\s+#[^\s#]+)*$/.test(l.trim())) ||
-      '');
+    (lines.slice().reverse().find((l) => isTagLine(l)) || '');
+  // 按 `#` 切而不是按空白切：`#Claude Duet` 是一个标签，切成两个词就散了。
   const tags = [
     ...new Set(
       tagSource
-        .split(/[\s#]+/)
-        .map((t) => t.trim())
-        .filter(Boolean)
+        .split('#')
+        .map((t) => t.replace(/\s+/g, ' ').trim())
+        .filter((t) => t && t.length <= 30)
     ),
   ];
 

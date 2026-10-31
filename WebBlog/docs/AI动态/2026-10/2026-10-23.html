@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light" data-theme-key="blog-theme">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DeepSeek把核心推理引擎也开源了 · AI 简报</title>
+<meta name="description" content="10月20日，DeepSeek正式开源内部推理框架DeepInfer及生产级词元编解码组件，旨在帮助开发者与企业优化大规模模型部署、降低算力成本与能源消耗。同步发布的技术报告罕见公开了推理服务的部署数据：基于该框架已实现DeepSeek V4.1 Flash的…">
+<link rel="canonical" href="https://shilong.js.org/AI动态/2026-10/2026-10-23.html">
+<meta name="theme-color" content="#fbfaf6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DeepSeek把核心推理引擎也开源了">
+<meta property="og:description" content="10月20日，DeepSeek正式开源内部推理框架DeepInfer及生产级词元编解码组件，旨在帮助开发者与企业优化大规模模型部署、降低算力成本与能源消耗。同步发布的技术报告罕见公开了推理服务的部署数据：基于该框架已实现DeepSeek V4.1 Flash的…">
+<meta property="og:url" content="https://shilong.js.org/AI动态/2026-10/2026-10-23.html">
+<meta name="author" content="MacLodge">
+<style>:root{--paper:#fbfaf6;--paper-2:#f4f2eb;--ink:#17150f;--ink-2:#3d382e;--sub:#7a7466;--faint:#a9a296;--rule:#e4e0d4;--rule-2:#cfc9b8;--accent:#b04a2f;--accent-ink:#8e3a23;--accent-soft:#f3e6e0;--code-bg:#f6f4ee;--bg-mark:#f7e9c8;--shadow:0 1px 0 rgba(23,21,15,.04),0 10px 30px -18px rgba(23,21,15,.28);--serif:Georgia,"Times New Roman","Songti SC","Noto Serif SC","Source Han Serif SC",STSong,SimSun,serif;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Cascadia Mono","Courier New",monospace;--measure:40rem;--pad:28px;--nav-h:56px;color-scheme:light}
+[data-theme="dark"]{--paper:#131210;--paper-2:#1b1a15;--ink:#f0ede5;--ink-2:#cdc8bb;--sub:#948d7e;--faint:#6c6558;--rule:#2c2a21;--rule-2:#3e3b2f;--accent:#e28a61;--accent-ink:#f0a882;--accent-soft:#2b1f18;--code-bg:#1a1914;--bg-mark:#47391a;--shadow:0 1px 0 rgba(0,0,0,.3),0 10px 30px -18px rgba(0,0,0,.7);color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.8;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-wrap:break-word}
+img{max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+::selection{background:var(--accent-soft);color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.top{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:saturate(160%) blur(12px);-webkit-backdrop-filter:saturate(160%) blur(12px);border-top:3px solid var(--ink);border-bottom:1px solid var(--rule)}
+.top__in{max-width:1000px;margin:0 auto;padding:0 var(--pad);height:var(--nav-h);display:flex;align-items:center;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:16px;font-weight:600;white-space:nowrap}
+.brand__mark{width:24px;height:24px;flex:0 0 24px;border-radius:3px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:14px;font-weight:700;line-height:1}
+.brand:hover{color:var(--accent-ink)}
+.top__nav{display:flex;align-items:center;gap:6px;margin-left:auto}
+.top__nav a,.icon-btn{font-size:12.5px;letter-spacing:.11em;color:var(--sub);padding:7px 12px;border-radius:4px;transition:color .18s,background .18s;white-space:nowrap}
+.top__nav a:hover,.icon-btn:hover{color:var(--ink);background:var(--paper-2)}
+.icon-btn{width:34px;height:34px;padding:0;display:grid;place-items:center}
+.icon-btn svg{width:17px;height:17px;display:block;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+[data-theme="dark"] .theme-toggle__light{display:none}
+.icon-btn .theme-toggle__dark{display:none}
+[data-theme="dark"] .theme-toggle__dark{display:block}
+main{display:block;min-height:60vh}
+.wrap{max-width:1000px;margin:0 auto;padding:0 var(--pad)}
+.brief{padding:52px 0 0}
+.kicker{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:16px}
+.brief h1{font-family:var(--serif);font-size:clamp(27px,3.9vw,41px);font-weight:600;line-height:1.28;letter-spacing:-.024em;margin:0 0 20px;max-width:22em;text-wrap:balance}
+.meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--sub);padding-bottom:20px;border-bottom:1px solid var(--rule)}
+.meta .dot{width:3px;height:3px;flex:0 0 3px;border-radius:50%;background:var(--faint)}
+.lede{font-size:17px;line-height:1.8;color:var(--ink-2);max-width:var(--measure);margin:26px 0 0}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
+.tag{font-size:11px;letter-spacing:.04em;color:var(--sub);border:1px solid var(--rule-2);border-radius:2px;padding:2px 8px}
+.prose{font-size:16.5px;line-height:1.85;color:var(--ink-2);max-width:var(--measure);padding:34px 0 0}
+.prose>*:first-child{margin-top:0}
+.prose>*+*{margin-top:1.15em}
+.prose h2,.prose h3,.prose h4{color:var(--ink);text-wrap:balance}
+.prose h2{font-family:var(--serif);font-size:25px;font-weight:600;letter-spacing:-.02em;line-height:1.36;margin:2.3em 0 0;padding-top:1.1em;border-top:1px solid var(--rule)}
+.prose>h2:first-child{border-top:0;padding-top:0}
+.prose h3{font-family:var(--serif);font-size:19px;font-weight:600;margin:1.9em 0 0}
+.prose h4{font-size:15.5px;font-weight:650;margin:1.7em 0 0}
+.prose p{margin:1.15em 0 0}
+.prose a{color:var(--accent-ink);border-bottom:1px solid color-mix(in srgb,var(--accent) 40%,transparent);transition:border-color .18s,background .18s}
+.prose a:hover{border-bottom-color:var(--accent);background:var(--accent-soft)}
+.prose strong{color:var(--ink);font-weight:650}
+.prose ul,.prose ol{margin:1.1em 0 0;padding-left:1.5em}
+.prose li{margin:.42em 0}
+.prose li::marker{color:var(--accent);font-family:var(--serif)}
+.prose hr{margin:2.6em auto;width:56px;height:0;border-top:1px solid var(--rule-2);position:relative}
+.prose hr::after{content:"✳";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--paper);color:var(--faint);font-size:11px;padding:0 8px}
+.prose blockquote{margin:1.6em 0 0;padding:2px 0 2px 20px;border-left:2px solid var(--accent);font-family:var(--serif);font-size:17px;line-height:1.72;color:var(--ink)}
+.prose blockquote p{margin:.5em 0 0}
+.prose blockquote p:first-child{margin-top:0}
+.prose code{font-family:var(--mono);font-size:.86em;background:var(--code-bg);border:1px solid var(--rule);border-radius:3px;padding:2px 6px;color:var(--accent-ink);word-break:break-word}
+.prose pre{margin:1.6em 0 0;background:var(--code-bg);border:1px solid var(--rule);border-left:2px solid var(--accent);border-radius:4px;padding:16px 18px;overflow-x:auto;font-size:13px;line-height:1.75}
+.prose pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit;white-space:pre}
+.prose table{width:100%;border-collapse:collapse;margin:1.7em 0 0;font-size:14px;display:block;overflow-x:auto}
+.prose th{text-align:left;font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--sub);font-weight:600;padding:0 14px 9px 0;border-bottom:2px solid var(--ink);white-space:nowrap}
+.prose td{padding:11px 14px 11px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.prose img{display:block;margin:1.8em 0 0;border:1px solid var(--rule);border-radius:4px;background:var(--paper-2)}
+.prose .callout{margin:1.9em 0 0;padding:20px 22px;background:var(--paper-2);border-left:2px solid var(--accent);border-radius:0 4px 4px 0}
+.prose .callout>*:first-child{margin-top:0}
+.prose .callout p{margin:.85em 0 0;font-size:15.5px;line-height:1.82}
+.prose .callout strong{color:var(--accent-ink)}
+.foot{margin:52px 0 0;padding-top:24px;border-top:1px solid var(--rule)}
+.note{font-size:12.5px;color:var(--sub);line-height:1.75;background:var(--paper-2);border-radius:4px;padding:15px 17px}
+.note b{color:var(--ink);font-weight:600}
+.nav{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+.nav a,.nav span{display:block;padding:16px 18px;border:1px solid var(--rule);border-radius:4px;transition:border-color .2s,background .2s,transform .2s}
+.nav a:hover{border-color:var(--rule-2);background:var(--paper-2);transform:translateY(-1px)}
+.nav span{color:var(--faint);font-size:12.5px;display:flex;align-items:center;justify-content:center;border-style:dashed}
+.nav__lab{font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--sub);margin-bottom:6px}
+.nav__t{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--ink);line-height:1.45}
+.nav .next{text-align:right}
+.back{margin:26px 0 0;font-size:13.5px}
+.back a{color:var(--sub)}
+.back a:hover{color:var(--accent)}
+.site-foot{border-top:1px solid var(--rule);margin-top:56px;padding:30px 0 44px;font-size:12.5px;color:var(--faint)}
+.site-foot__in{max-width:1000px;margin:0 auto;padding:0 var(--pad);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.site-foot a{color:var(--faint)}
+.site-foot a:hover{color:var(--accent)}
+@media (max-width:760px){:root{--pad:18px}.brief{padding:36px 0 0}.nav{grid-template-columns:1fr}.nav .next{text-align:left}.prose{font-size:16px}.top__nav a.hide-sm{display:none}}
+@media print{.top,.nav,.back{display:none!important}body{background:#fff;font-size:11pt}.prose .callout{background:none;border-left-width:2px}}</style>
+<script>
+/* 主题在首屏绘制前定下来，避免闪一下默认色。localStorage 键与主站同名，
+   从博客点进来时能延续访客已经选好的亮/暗设置。 */
+(function(){try{var r=document.documentElement;var s=localStorage.getItem(r.dataset.themeKey||'blog-theme');var t=(s==='light'||s==='dark')?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');r.setAttribute('data-theme',t);}catch(e){}})();
+</script>
+</head>
+<body>
+<a class="sr-only" href="#main">跳到主要内容</a>
+
+<header class="top">
+  <div class="top__in">
+    <a class="brand" href="/"><span class="brand__mark" aria-hidden="true">M</span>MacLodge's Blog</a>
+    <nav class="top__nav" aria-label="页内导航">
+      <a href="/AI动态/">简报目录</a>
+      <a class="hide-sm" href="/">首页</a>
+      <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="切换深色 / 浅色主题" title="切换主题">
+        <svg class="theme-toggle__light" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+        <svg class="theme-toggle__dark" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <article class="brief">
+    <div class="wrap">
+      <div class="kicker">AI 简报 · 2026 年 10 月 23 日</div>
+      <h1>DeepSeek把核心推理引擎也开源了</h1>
+      <div class="meta">
+        <time datetime="2026-10-23">2026 / 10 / 23</time>
+        <span class="dot" aria-hidden="true"></span>
+        <span>星期五</span>
+        <span class="dot" aria-hidden="true"></span><span>🐵 程序小猴AI日报，每天8点，带你用5分钟看懂AI圈昨天发生了什么</span>
+        <span class="dot" aria-hidden="true"></span>
+        <span>约 6 分钟读完</span>
+      </div>
+      <p class="lede">10月20日，DeepSeek正式开源内部推理框架DeepInfer及生产级词元编解码组件，旨在帮助开发者与企业优化大规模模型部署、降低算力成本与能源消耗。同步发布的技术报告罕见公开了推理服务的部署数据：基于该框架已实现DeepSeek V4.1 Flash的…</p>
+      <div class="tags"><span class="tag">#AI日报</span><span class="tag">#DeepSeek</span><span class="tag">#DeepInfer</span><span class="tag">#科大讯飞</span><span class="tag">#星火X2.6</span><span class="tag">#宇树科技</span><span class="tag">#物理AI</span><span class="tag">#OpenAI</span></div>
+
+      <div class="prose">
+<h2>1. DeepSeek开源生产级推理框架DeepInfer，单一集群日吞吐155万亿Tokens</h2>
+<p>10月20日，DeepSeek正式开源内部推理框架DeepInfer及生产级词元编解码组件，旨在帮助开发者与企业优化大规模模型部署、降低算力成本与能源消耗。同步发布的技术报告罕见公开了推理服务的部署数据：基于该框架已实现DeepSeek V4.1 Flash的高吞吐低延迟服务，单一集群日吞吐量达155万亿Tokens，每卡每小时收入38美元。此前DeepSeek已先后开源模型权重与底层核心计算代码，此次将推理调度中枢一并开放，在全球AI社区引发强烈反响。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：推理框架是大模型商业化的&quot;调度中枢&quot;，决定了能不能以合理成本跑起大规模服务。DeepSeek从模型权重到内核代码再到推理引擎，逐层开放的做法在全球AI公司里几乎没有先例——彭博社都承认这类技术通常是企业&quot;严格保密&quot;的。对做私有化部署的开发者来说，这等于直接把生产环境的部署手册交到你手里。</p>
+<p>来源：<a href="https://k.sina.com.cn/article_3214158792_bf942bc801903lwq2.html" target="_blank" rel="noopener noreferrer">新浪</a>、<a href="https://www.toutiao.com/article/7699060609203323432/" target="_blank" rel="noopener noreferrer">今日头条</a></p></aside>
+<hr>
+<h2>2. 科大讯飞发布星火X2.6：全国产算力训练，训练效率提升约4倍</h2>
+<p>10月22日，科大讯飞在全球1024开发者节上发布基于全国产算力训练的讯飞星火X2.6大模型，重点提升代码生成、智能体及复杂任务处理能力。通过长程任务动态并行训练技术，超长上下文训练效率提升约4倍；推理环节通过国产集群自适应存算协同等技术，推理效率提升4.5倍。同步发布的还有星火X2.6-4B开源端侧模型、语音基座大模型SparkAudio 1.0和智慧座舱3.0。4B端侧模型定价输入0.9元/百万tokens、输出3.6元/百万tokens。刘庆峰坦言目前国产算力对标全球仍有两代左右差距。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：全国产算力训练是这次发布的核心看点——目前行业内只有讯飞一家完全使用国产算力训练大模型。虽然两代差距客观存在，但训练效率4倍、推理效率4.5倍的提升说明软件层面的优化可以显著弥补硬件短板。4B端侧模型的定价也很有竞争力，适合想在端侧跑智能体的开发者关注。</p>
+<p>来源：<a href="http://finance.stockstar.com/IG2026102300006238.shtml" target="_blank" rel="noopener noreferrer">证券之星</a>、<a href="https://www.sohu.com/a/1091415661_122066678" target="_blank" rel="noopener noreferrer">搜狐</a></p></aside>
+<hr>
+<h2>3. 宇树科技预研&quot;物理AI自进化V1.0&quot;大模型，G1机器人已累计生产约1-2万台</h2>
+<p>宇树科技在2026世界物理AI大会上宣布正预研&quot;物理AI机器人自进化V1.0&quot;大模型，目标是让AI自主检索全球学术论文与开源方案、生成控制代码、在仿真环境验证后部署至真实机器人测试，形成&quot;AI自主驱动—调研建模—训练验证—改进优化&quot;的闭环迭代体系。同场发布&quot;世界物理AI大赛&quot;，每年投入数千万元奖金，设八大赛道。创始人王兴兴判断物理AI已现&quot;被击穿&quot;苗头，有望1-3年内实质性突破。宇树G1人形机器人累计生产下线约1万—2万台，为当前全球最畅销人形机器人。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：&quot;自进化&quot;这个概念很硬核——让AI自己读论文、写控制代码、仿真验证、实机测试、再反馈优化，本质是用AI替代传统的人工调试流程来加速机器人算法迭代。虽然还在预研阶段，但思路直指具身智能的核心瓶颈。G1已生产1-2万台说明硬件端有了规模化验证的基础，软件层的自进化如果能跑通，迭代效率会有质变。</p>
+<p>来源：<a href="https://www.sohu.com/a/1091338219_122066679" target="_blank" rel="noopener noreferrer">搜狐</a>、<a href="https://m.163.com/dy/article/L9TINETT0512B07B.html" target="_blank" rel="noopener noreferrer">网易</a></p></aside>
+<hr>
+<h2>4. OpenAI正式全面开放决策API，输入定价每百万Tokens 0.10美元</h2>
+<p>10月23日，OpenAI正式全面开放决策API（Decision API），输入定价为每百万Tokens 0.10美元，缓存输入每百万Tokens 0.01美元。该API支持AI根据用户设定的目标自主规划执行步骤、调用外部工具并完成多步骤复杂任务链，标志着大模型从&quot;问答工具&quot;向&quot;自主执行Agent&quot;的能力跨越。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：决策API本质上是把Agent的任务编排能力API化了——以前开发者需要自己搭建复杂的规划-执行-反馈框架，现在可以直接调用API让模型自主完成多步骤任务。0.10美元/百万Tokens的定价对Agent场景来说相当友好，缓存价格更是低至0.01美元。做Agent开发的同学值得第一时间接入测试。</p>
+<p>来源：<a href="https://www.cls.cn/detail/2512860" target="_blank" rel="noopener noreferrer">财联社</a> | 2026-10-23</p></aside>
+<hr>
+<h2>5. 国际具身智能技能大赛今日上海开幕，聚焦九大真实场景挑战</h2>
+<p>2026国际具身智能技能大赛10月23日在上海开幕，为期三天，聚焦矿山巷道巡检、文旅宣教、仓储物流等九大真实应用场景。杭州团队展示了能穿越复杂地形、完成物资配送和救援的四足机器狗，主要应用于矿山和能源电力设施巡检；深圳团队让机器人完成标签翻面与扫件等仓储动作；上海团队专注文旅场景机器人应用。据介绍，具身智能技术已在国内多家知名快递企业中实际部署应用。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：从Demo走向真实场景是具身智能最关键的跨越。这次比赛不是学术圈自嗨，而是直接对标矿山、仓储、文旅等具体行业需求。快递企业的实际部署案例说明技术已经在生产环境中经受验证了。做机器人方向的开发者可以重点关注这几类场景的工程化方案。</p>
+<p>来源：<a href="https://news.china.com/socialgd/10000169/20261022/49809854.html" target="_blank" rel="noopener noreferrer">中华网</a> | 2026-10-23</p></aside>
+<hr>
+<h2>6. 中国修订AI技术出口管制目录，23项AI技术纳入监管，DeepSeek、MiniMax已完成合规手续</h2>
+<p>商务部、科技部近日就修订《中国禁止出口限制出口技术目录》公开征求意见，其中23项人工智能领域技术被纳入监管，涵盖大模型、智能体、算力集群、信息处理等方向。不过商务部明确表示，《目录》的核心是划定边界而非单纯限制，绝大部分AI技术仍可自由出口。据悉，DeepSeek、MiniMax两家头部企业已顺利履行登记手续，并正常完成开源和海外授权使用。涉及40项技术中，拟禁止出口14项、拟限制出口26项，覆盖AI、生物医药、光伏三大领域。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：乍看&quot;出口管制&quot;四个字容易紧张，但细读政策会发现重点在&quot;划定边界&quot;。对绝大多数开发者来说，日常开源、商用和海外合作不受影响——DeepSeek和MiniMax已经走通了合规路径，开源和海外授权照常进行。做海外业务的开发者建议关注具体技术条目清单，不必过度解读。</p>
+<p>来源：<a href="https://k.sina.com.cn/article_7857201856_1d45362c001908s236.html" target="_blank" rel="noopener noreferrer">新浪</a>、<a href="https://dzrb.dzng.com/general/0/NEWS3766768EIUXNKRUDQWAB" target="_blank" rel="noopener noreferrer">大众新闻</a></p></aside>
+<hr>
+<h2>7. 国产开源大模型全球调用量连续24周霸榜，Hugging Face下载占比达41%</h2>
+<p>据OpenRouter统计，截至10月11日，中国大模型周调用量已连续24周超过美国，稳居全球首位。在Hugging Face平台上，中国自研开源模型下载占比达41%，首次超过美国成为该平台规模第一的开源模型供给方。价格方面，中国开源大模型较Anthropic、OpenAI头部模型普遍低60%至90%——Kimi K3每百万Token输入3美元，而Claude Fable 5.1输入10美元，单任务成本后者是前者的3.8倍。我国开源模型累计下载量已突破100亿次。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：41%的下载占比、24周连续霸榜、价格低60%-90%——这组数据放在一起，说明国产开源模型已经从&quot;能用&quot;走到了&quot;好用且首选&quot;。当你的模型价格是对方三分之一甚至十分之一，性能又跟得上的时候，全球开发者自然用脚投票。对国内开发者来说，这意味着生态在扩大，可用的工具链和社区支持越来越丰富。</p>
+<p>来源：<a href="https://tz.rednet.cn/nograb/646054/66/16396961.html" target="_blank" rel="noopener noreferrer">红网</a>、<a href="https://www.cena.com.cn/intelligence/20260810/129352.html" target="_blank" rel="noopener noreferrer">电子信息产业网</a></p></aside>
+<hr>
+<p>今天的AI日报就到这里了！哪条新闻最让你感兴趣？或者你觉得还有什么重要动态我没覆盖到？欢迎留言交流，也欢迎转发给你身边关注AI的朋友～</p>
+<p>如果觉得有用，记得点个「在看」和「转发」，你的支持是我每天整理的动力！</p>
+      </div>
+
+      <div class="foot">
+        <div class="note">
+          <b>关于这份简报</b><br>
+          内容由公众号日报整理而来，代表原文作者观点，不构成任何投资建议。
+          信息以公开发布时的报道为准，时效性内容请以最新消息为参考。
+        </div>
+
+        <nav class="nav" aria-label="上一期 / 下一期">
+          <a class="prev" href="/AI动态/2026-10/2026-10-22.html" rel="prev"><div class="nav__lab">← 上一期</div><div class="nav__t">智元机器人七天连发全栈技术，G2即将&quot;入职&quot;便利店直播打工24小时</div></a>
+          <a class="next" href="/AI动态/2026-10/2026-10-24.html" rel="next"><div class="nav__lab">下一期 →</div><div class="nav__t">Kimi K3.1 Pro发布，3万亿参数国产大模型即将开源</div></a>
+        </nav>
+
+        <p class="back"><a href="/AI动态/">← 返回简报目录</a></p>
+      </div>
+    </div>
+  </article>
+</main>
+
+<footer class="site-foot">
+  <div class="site-foot__in">
+    <span>&copy; 2026 MacLodge · 简报内容整理自公开报道</span>
+    <span><a href="/">MacLodge's Blog</a> · <a href="/AI动态/">AI 简报</a></span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var key=document.documentElement.dataset.themeKey||'blog-theme';
+  var cur=function(){return document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light';};
+  document.querySelectorAll('[data-theme-toggle]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var t=cur()==='dark'?'light':'dark';
+      document.documentElement.setAttribute('data-theme',t);
+      try{localStorage.setItem(key,t);}catch(e){}
+    });
+  });
+})();
+</script>
+</body>
+</html>

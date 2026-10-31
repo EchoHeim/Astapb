@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light" data-theme-key="blog-theme">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DeepSeek开源推理框架DeepInfer，谷歌量子计算突破登Science · AI 简报</title>
+<meta name="description" content="10月20日，DeepSeek正式宣布将内部推理框架DeepInfer全面开源。DeepInfer是DeepSeek大规模推理服务的核心底座，负责统筹调度庞大的算力集群，已支撑V4.1 Flash实现高吞吐、低延迟的线上服务。此前DeepSeek已陆续开源了大…">
+<link rel="canonical" href="https://shilong.js.org/AI动态/2026-10/2026-10-21.html">
+<meta name="theme-color" content="#fbfaf6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DeepSeek开源推理框架DeepInfer，谷歌量子计算突破登Science">
+<meta property="og:description" content="10月20日，DeepSeek正式宣布将内部推理框架DeepInfer全面开源。DeepInfer是DeepSeek大规模推理服务的核心底座，负责统筹调度庞大的算力集群，已支撑V4.1 Flash实现高吞吐、低延迟的线上服务。此前DeepSeek已陆续开源了大…">
+<meta property="og:url" content="https://shilong.js.org/AI动态/2026-10/2026-10-21.html">
+<meta name="author" content="MacLodge">
+<style>:root{--paper:#fbfaf6;--paper-2:#f4f2eb;--ink:#17150f;--ink-2:#3d382e;--sub:#7a7466;--faint:#a9a296;--rule:#e4e0d4;--rule-2:#cfc9b8;--accent:#b04a2f;--accent-ink:#8e3a23;--accent-soft:#f3e6e0;--code-bg:#f6f4ee;--bg-mark:#f7e9c8;--shadow:0 1px 0 rgba(23,21,15,.04),0 10px 30px -18px rgba(23,21,15,.28);--serif:Georgia,"Times New Roman","Songti SC","Noto Serif SC","Source Han Serif SC",STSong,SimSun,serif;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Cascadia Mono","Courier New",monospace;--measure:40rem;--pad:28px;--nav-h:56px;color-scheme:light}
+[data-theme="dark"]{--paper:#131210;--paper-2:#1b1a15;--ink:#f0ede5;--ink-2:#cdc8bb;--sub:#948d7e;--faint:#6c6558;--rule:#2c2a21;--rule-2:#3e3b2f;--accent:#e28a61;--accent-ink:#f0a882;--accent-soft:#2b1f18;--code-bg:#1a1914;--bg-mark:#47391a;--shadow:0 1px 0 rgba(0,0,0,.3),0 10px 30px -18px rgba(0,0,0,.7);color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.8;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-wrap:break-word}
+img{max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+::selection{background:var(--accent-soft);color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.top{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:saturate(160%) blur(12px);-webkit-backdrop-filter:saturate(160%) blur(12px);border-top:3px solid var(--ink);border-bottom:1px solid var(--rule)}
+.top__in{max-width:1000px;margin:0 auto;padding:0 var(--pad);height:var(--nav-h);display:flex;align-items:center;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:16px;font-weight:600;white-space:nowrap}
+.brand__mark{width:24px;height:24px;flex:0 0 24px;border-radius:3px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:14px;font-weight:700;line-height:1}
+.brand:hover{color:var(--accent-ink)}
+.top__nav{display:flex;align-items:center;gap:6px;margin-left:auto}
+.top__nav a,.icon-btn{font-size:12.5px;letter-spacing:.11em;color:var(--sub);padding:7px 12px;border-radius:4px;transition:color .18s,background .18s;white-space:nowrap}
+.top__nav a:hover,.icon-btn:hover{color:var(--ink);background:var(--paper-2)}
+.icon-btn{width:34px;height:34px;padding:0;display:grid;place-items:center}
+.icon-btn svg{width:17px;height:17px;display:block;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+[data-theme="dark"] .theme-toggle__light{display:none}
+.icon-btn .theme-toggle__dark{display:none}
+[data-theme="dark"] .theme-toggle__dark{display:block}
+main{display:block;min-height:60vh}
+.wrap{max-width:1000px;margin:0 auto;padding:0 var(--pad)}
+.brief{padding:52px 0 0}
+.kicker{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:16px}
+.brief h1{font-family:var(--serif);font-size:clamp(27px,3.9vw,41px);font-weight:600;line-height:1.28;letter-spacing:-.024em;margin:0 0 20px;max-width:22em;text-wrap:balance}
+.meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--sub);padding-bottom:20px;border-bottom:1px solid var(--rule)}
+.meta .dot{width:3px;height:3px;flex:0 0 3px;border-radius:50%;background:var(--faint)}
+.lede{font-size:17px;line-height:1.8;color:var(--ink-2);max-width:var(--measure);margin:26px 0 0}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
+.tag{font-size:11px;letter-spacing:.04em;color:var(--sub);border:1px solid var(--rule-2);border-radius:2px;padding:2px 8px}
+.prose{font-size:16.5px;line-height:1.85;color:var(--ink-2);max-width:var(--measure);padding:34px 0 0}
+.prose>*:first-child{margin-top:0}
+.prose>*+*{margin-top:1.15em}
+.prose h2,.prose h3,.prose h4{color:var(--ink);text-wrap:balance}
+.prose h2{font-family:var(--serif);font-size:25px;font-weight:600;letter-spacing:-.02em;line-height:1.36;margin:2.3em 0 0;padding-top:1.1em;border-top:1px solid var(--rule)}
+.prose>h2:first-child{border-top:0;padding-top:0}
+.prose h3{font-family:var(--serif);font-size:19px;font-weight:600;margin:1.9em 0 0}
+.prose h4{font-size:15.5px;font-weight:650;margin:1.7em 0 0}
+.prose p{margin:1.15em 0 0}
+.prose a{color:var(--accent-ink);border-bottom:1px solid color-mix(in srgb,var(--accent) 40%,transparent);transition:border-color .18s,background .18s}
+.prose a:hover{border-bottom-color:var(--accent);background:var(--accent-soft)}
+.prose strong{color:var(--ink);font-weight:650}
+.prose ul,.prose ol{margin:1.1em 0 0;padding-left:1.5em}
+.prose li{margin:.42em 0}
+.prose li::marker{color:var(--accent);font-family:var(--serif)}
+.prose hr{margin:2.6em auto;width:56px;height:0;border-top:1px solid var(--rule-2);position:relative}
+.prose hr::after{content:"✳";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--paper);color:var(--faint);font-size:11px;padding:0 8px}
+.prose blockquote{margin:1.6em 0 0;padding:2px 0 2px 20px;border-left:2px solid var(--accent);font-family:var(--serif);font-size:17px;line-height:1.72;color:var(--ink)}
+.prose blockquote p{margin:.5em 0 0}
+.prose blockquote p:first-child{margin-top:0}
+.prose code{font-family:var(--mono);font-size:.86em;background:var(--code-bg);border:1px solid var(--rule);border-radius:3px;padding:2px 6px;color:var(--accent-ink);word-break:break-word}
+.prose pre{margin:1.6em 0 0;background:var(--code-bg);border:1px solid var(--rule);border-left:2px solid var(--accent);border-radius:4px;padding:16px 18px;overflow-x:auto;font-size:13px;line-height:1.75}
+.prose pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit;white-space:pre}
+.prose table{width:100%;border-collapse:collapse;margin:1.7em 0 0;font-size:14px;display:block;overflow-x:auto}
+.prose th{text-align:left;font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--sub);font-weight:600;padding:0 14px 9px 0;border-bottom:2px solid var(--ink);white-space:nowrap}
+.prose td{padding:11px 14px 11px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.prose img{display:block;margin:1.8em 0 0;border:1px solid var(--rule);border-radius:4px;background:var(--paper-2)}
+.prose .callout{margin:1.9em 0 0;padding:20px 22px;background:var(--paper-2);border-left:2px solid var(--accent);border-radius:0 4px 4px 0}
+.prose .callout>*:first-child{margin-top:0}
+.prose .callout p{margin:.85em 0 0;font-size:15.5px;line-height:1.82}
+.prose .callout strong{color:var(--accent-ink)}
+.foot{margin:52px 0 0;padding-top:24px;border-top:1px solid var(--rule)}
+.note{font-size:12.5px;color:var(--sub);line-height:1.75;background:var(--paper-2);border-radius:4px;padding:15px 17px}
+.note b{color:var(--ink);font-weight:600}
+.nav{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+.nav a,.nav span{display:block;padding:16px 18px;border:1px solid var(--rule);border-radius:4px;transition:border-color .2s,background .2s,transform .2s}
+.nav a:hover{border-color:var(--rule-2);background:var(--paper-2);transform:translateY(-1px)}
+.nav span{color:var(--faint);font-size:12.5px;display:flex;align-items:center;justify-content:center;border-style:dashed}
+.nav__lab{font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--sub);margin-bottom:6px}
+.nav__t{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--ink);line-height:1.45}
+.nav .next{text-align:right}
+.back{margin:26px 0 0;font-size:13.5px}
+.back a{color:var(--sub)}
+.back a:hover{color:var(--accent)}
+.site-foot{border-top:1px solid var(--rule);margin-top:56px;padding:30px 0 44px;font-size:12.5px;color:var(--faint)}
+.site-foot__in{max-width:1000px;margin:0 auto;padding:0 var(--pad);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.site-foot a{color:var(--faint)}
+.site-foot a:hover{color:var(--accent)}
+@media (max-width:760px){:root{--pad:18px}.brief{padding:36px 0 0}.nav{grid-template-columns:1fr}.nav .next{text-align:left}.prose{font-size:16px}.top__nav a.hide-sm{display:none}}
+@media print{.top,.nav,.back{display:none!important}body{background:#fff;font-size:11pt}.prose .callout{background:none;border-left-width:2px}}</style>
+<script>
+/* 主题在首屏绘制前定下来，避免闪一下默认色。localStorage 键与主站同名，
+   从博客点进来时能延续访客已经选好的亮/暗设置。 */
+(function(){try{var r=document.documentElement;var s=localStorage.getItem(r.dataset.themeKey||'blog-theme');var t=(s==='light'||s==='dark')?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');r.setAttribute('data-theme',t);}catch(e){}})();
+</script>
+</head>
+<body>
+<a class="sr-only" href="#main">跳到主要内容</a>
+
+<header class="top">
+  <div class="top__in">
+    <a class="brand" href="/"><span class="brand__mark" aria-hidden="true">M</span>MacLodge's Blog</a>
+    <nav class="top__nav" aria-label="页内导航">
+      <a href="/AI动态/">简报目录</a>
+      <a class="hide-sm" href="/">首页</a>
+      <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="切换深色 / 浅色主题" title="切换主题">
+        <svg class="theme-toggle__light" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+        <svg class="theme-toggle__dark" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <article class="brief">
+    <div class="wrap">
+      <div class="kicker">AI 简报 · 2026 年 10 月 21 日</div>
+      <h1>DeepSeek开源推理框架DeepInfer，谷歌量子计算突破登Science</h1>
+      <div class="meta">
+        <time datetime="2026-10-21">2026 / 10 / 21</time>
+        <span class="dot" aria-hidden="true"></span>
+        <span>星期三</span>
+        <span class="dot" aria-hidden="true"></span><span>🐵 程序小猴AI日报，每天8点，带你用5分钟看懂AI圈昨天发生了什么</span>
+        <span class="dot" aria-hidden="true"></span>
+        <span>约 4 分钟读完</span>
+      </div>
+      <p class="lede">10月20日，DeepSeek正式宣布将内部推理框架DeepInfer全面开源。DeepInfer是DeepSeek大规模推理服务的核心底座，负责统筹调度庞大的算力集群，已支撑V4.1 Flash实现高吞吐、低延迟的线上服务。此前DeepSeek已陆续开源了大…</p>
+      <div class="tags"><span class="tag">#AI日报</span><span class="tag">#DeepSeek</span><span class="tag">#DeepInfer</span><span class="tag">#开源推理框架</span><span class="tag">#MemT记忆大模型</span><span class="tag">#TorchTPU</span><span class="tag">#量子计算</span><span class="tag">#英伟达GTC</span></div>
+
+      <div class="prose">
+<h2>1. DeepSeek全面开源推理框架DeepInfer</h2>
+<p>10月20日，DeepSeek正式宣布将内部推理框架DeepInfer全面开源。DeepInfer是DeepSeek大规模推理服务的核心底座，负责统筹调度庞大的算力集群，已支撑V4.1 Flash实现高吞吐、低延迟的线上服务。此前DeepSeek已陆续开源了大模型权重、TileLang编译工具及推理算子库。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：训练框架卷完了，现在开始卷推理框架。对做私有化部署的团队来说这是个大礼包——之前大家推理侧要么用vLLM要么用TGI，DeepSeek把自己在超大规模场景下跑通的东西直接放出来，等于给行业送了一份经过亿级流量验证的参考实现。</p></aside>
+<hr>
+<h2>2. MemT 1.0记忆原生大模型开源发布</h2>
+<p>记忆张量团队开源了MemT 1.0记忆原生大模型，将记忆功能直接内化到模型底层架构中。模型采用主干网络+动态记忆状态的双模块设计，能够在持续交互中自主学习如何读写、更新和调用记忆，在超过6.6万token的长对话测试中准确识别出关键时间变更。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：现在大模型做记忆基本靠外挂——RAG、向量库、对话摘要，都是一层一层往上贴。MemT的思路比较激进，直接把记忆写进模型权重更新链路里。如果这条路能跑通，对做Agent和长期对话场景的开发者意义很大，不用再自己拼记忆中间件了。</p></aside>
+<hr>
+<h2>3. 谷歌开源TorchTPU，正面挑战英伟达CUDA生态</h2>
+<p>谷歌宣布面向TPU的原生PyTorch框架TorchTPU已在GitHub开源。开发者可以直接在谷歌自研TPU芯片上运行PyTorch应用，也可以将现有基于英伟达GPU的PyTorch代码便捷迁移到TPU上。这是谷歌与亚马逊联手打破英伟达AI训练生态垄断的最新动作。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：85%的AI应用用PyTorch，而PyTorch最初就是为英伟达GPU量身定做的。谷歌这一手的意义在于：让迁移到TPU的工程成本降到最低。对开发者来说，多一个靠谱的硬件选择总是好事，至少不用被单一生态锁死。</p></aside>
+<hr>
+<h2>4. 亚马逊发布TorchNeuron适配Trainium2，国产互连芯片累计出货80万颗</h2>
+<p>亚马逊云发布TorchNeuron框架，适配其自研AI训练芯片Trainium2。与此同时，国内众星微联合多家本土芯片企业在无锡发布了12款已量产的自研高性能互连芯片，累计出货量突破80万颗，覆盖智算中心GPU扩展、PCIe Switch和高性能网卡三大方向。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：大模型训练不是单卡战斗，万卡集群的关键瓶颈在互连带宽。国内80万颗互连芯片的出货量说明这个问题正在被实质性解决。再加上亚马逊也在补自研芯片的训练框架短板，全球AI算力的&quot;去英伟达化&quot;进程在加速。</p></aside>
+<hr>
+<h2>5. 谷歌量子计算重大突破：错误率降低40倍，成果登上Science</h2>
+<p>Google Quantum AI团队宣布在105比特量子芯片Willow上成功验证了&quot;魔法态培育&quot;新技术，研究成果正式发表于Science。该技术将错误率降低了40倍，实现了99.99%的逻辑保真度，突破了困扰量子计算领域20年的算力瓶颈。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：99.99%的逻辑保真度，这个数字意味着量子纠错终于从理论走进了工程现实。虽然离量子计算真正替代经典计算还有很长的路，但这一步对量子算法研究和密码学领域的影响是实打实的。做安全相关的同学可以开始关注后量子密码学的迁移计划了。</p></aside>
+<hr>
+<h2>6. 英伟达GTC柏林大会开幕，重心从GPU转向&quot;AI工厂&quot;</h2>
+<p>英伟达GTC大会于10月20日至22日在德国柏林举行，黄仁勋在21日发表主题演讲。本届大会设有100多场专题分享，覆盖完整AI技术栈，核心聚焦加速计算、Agentic AI、物理AI、机器人、开源模型和AI基础设施六大方向。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：从&quot;卖GPU&quot;到&quot;卖AI工厂&quot;，这个定位转变很说明问题。英伟达已经不满足于做芯片供应商，而是要做AI基础设施的全栈平台商。对开发者来说值得关注的是Agentic AI和物理AI两个方向，这是下一波应用爆发的关键赛道。</p></aside>
+<hr>
+<h2>7. 通用人工智能大会在重庆开幕，发布&quot;明镜&quot;AGI平台</h2>
+<p>10月21日至23日，通用人工智能大会与世界科技与发展论坛同步在重庆举行，汇聚全球近40个国家和地区的专家学者。大会正式发布智能体全生命周期平台&quot;明镜&quot;，依托中国原创AGI技术路径，覆盖智能体创制、训练、测试与演化全流程。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：Agent开发正从手工作坊走向工业化。一个覆盖全生命周期的平台如果做得好，能大幅降低企业级Agent的开发门槛。关注国内AGI技术路线的同学可以跟进一下&quot;明镜&quot;平台的开放情况。</p></aside>
+<hr>
+<p>以上就是今天的AI日报！觉得有用的话，别忘了<strong>点赞+在看+转发</strong>三连，你的每一次分享都是小猴持续产出的动力。</p>
+<p>有想看的AI方向或话题，欢迎在评论区留言，小猴会优先安排！</p>
+      </div>
+
+      <div class="foot">
+        <div class="note">
+          <b>关于这份简报</b><br>
+          内容由公众号日报整理而来，代表原文作者观点，不构成任何投资建议。
+          信息以公开发布时的报道为准，时效性内容请以最新消息为参考。
+        </div>
+
+        <nav class="nav" aria-label="上一期 / 下一期">
+          <a class="prev" href="/AI动态/2026-10/2026-10-20.html" rel="prev"><div class="nav__lab">← 上一期</div><div class="nav__t">OpenAI官宣下场造人形机器人，9B具身模型六项评测干翻GPT-6 Astra</div></a>
+          <a class="next" href="/AI动态/2026-10/2026-10-22.html" rel="next"><div class="nav__lab">下一期 →</div><div class="nav__t">智元机器人七天连发全栈技术，G2即将&quot;入职&quot;便利店直播打工24小时</div></a>
+        </nav>
+
+        <p class="back"><a href="/AI动态/">← 返回简报目录</a></p>
+      </div>
+    </div>
+  </article>
+</main>
+
+<footer class="site-foot">
+  <div class="site-foot__in">
+    <span>&copy; 2026 MacLodge · 简报内容整理自公开报道</span>
+    <span><a href="/">MacLodge's Blog</a> · <a href="/AI动态/">AI 简报</a></span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var key=document.documentElement.dataset.themeKey||'blog-theme';
+  var cur=function(){return document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light';};
+  document.querySelectorAll('[data-theme-toggle]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var t=cur()==='dark'?'light':'dark';
+      document.documentElement.setAttribute('data-theme',t);
+      try{localStorage.setItem(key,t);}catch(e){}
+    });
+  });
+})();
+</script>
+</body>
+</html>

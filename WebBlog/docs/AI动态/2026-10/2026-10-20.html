@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light" data-theme-key="blog-theme">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenAI官宣下场造人形机器人，9B具身模型六项评测干翻GPT-6 Astra · AI 简报</title>
+<meta name="description" content="OpenAI CEO奥尔特曼在播客节目《Sources》中首次明确确认：OpenAI将自研人形机器人。公司已于今年6月正式成立Robotics事业部，由Sora模型负责人阿迪亚·拉梅什领导，目前官网已放出19个机器人相关岗位，涵盖控制系统、执行器设计、电机、制…">
+<link rel="canonical" href="https://shilong.js.org/AI动态/2026-10/2026-10-20.html">
+<meta name="theme-color" content="#fbfaf6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenAI官宣下场造人形机器人，9B具身模型六项评测干翻GPT-6 Astra">
+<meta property="og:description" content="OpenAI CEO奥尔特曼在播客节目《Sources》中首次明确确认：OpenAI将自研人形机器人。公司已于今年6月正式成立Robotics事业部，由Sora模型负责人阿迪亚·拉梅什领导，目前官网已放出19个机器人相关岗位，涵盖控制系统、执行器设计、电机、制…">
+<meta property="og:url" content="https://shilong.js.org/AI动态/2026-10/2026-10-20.html">
+<meta name="author" content="MacLodge">
+<style>:root{--paper:#fbfaf6;--paper-2:#f4f2eb;--ink:#17150f;--ink-2:#3d382e;--sub:#7a7466;--faint:#a9a296;--rule:#e4e0d4;--rule-2:#cfc9b8;--accent:#b04a2f;--accent-ink:#8e3a23;--accent-soft:#f3e6e0;--code-bg:#f6f4ee;--bg-mark:#f7e9c8;--shadow:0 1px 0 rgba(23,21,15,.04),0 10px 30px -18px rgba(23,21,15,.28);--serif:Georgia,"Times New Roman","Songti SC","Noto Serif SC","Source Han Serif SC",STSong,SimSun,serif;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Cascadia Mono","Courier New",monospace;--measure:40rem;--pad:28px;--nav-h:56px;color-scheme:light}
+[data-theme="dark"]{--paper:#131210;--paper-2:#1b1a15;--ink:#f0ede5;--ink-2:#cdc8bb;--sub:#948d7e;--faint:#6c6558;--rule:#2c2a21;--rule-2:#3e3b2f;--accent:#e28a61;--accent-ink:#f0a882;--accent-soft:#2b1f18;--code-bg:#1a1914;--bg-mark:#47391a;--shadow:0 1px 0 rgba(0,0,0,.3),0 10px 30px -18px rgba(0,0,0,.7);color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.8;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-wrap:break-word}
+img{max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+::selection{background:var(--accent-soft);color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.top{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:saturate(160%) blur(12px);-webkit-backdrop-filter:saturate(160%) blur(12px);border-top:3px solid var(--ink);border-bottom:1px solid var(--rule)}
+.top__in{max-width:1000px;margin:0 auto;padding:0 var(--pad);height:var(--nav-h);display:flex;align-items:center;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:16px;font-weight:600;white-space:nowrap}
+.brand__mark{width:24px;height:24px;flex:0 0 24px;border-radius:3px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:14px;font-weight:700;line-height:1}
+.brand:hover{color:var(--accent-ink)}
+.top__nav{display:flex;align-items:center;gap:6px;margin-left:auto}
+.top__nav a,.icon-btn{font-size:12.5px;letter-spacing:.11em;color:var(--sub);padding:7px 12px;border-radius:4px;transition:color .18s,background .18s;white-space:nowrap}
+.top__nav a:hover,.icon-btn:hover{color:var(--ink);background:var(--paper-2)}
+.icon-btn{width:34px;height:34px;padding:0;display:grid;place-items:center}
+.icon-btn svg{width:17px;height:17px;display:block;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+[data-theme="dark"] .theme-toggle__light{display:none}
+.icon-btn .theme-toggle__dark{display:none}
+[data-theme="dark"] .theme-toggle__dark{display:block}
+main{display:block;min-height:60vh}
+.wrap{max-width:1000px;margin:0 auto;padding:0 var(--pad)}
+.brief{padding:52px 0 0}
+.kicker{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:16px}
+.brief h1{font-family:var(--serif);font-size:clamp(27px,3.9vw,41px);font-weight:600;line-height:1.28;letter-spacing:-.024em;margin:0 0 20px;max-width:22em;text-wrap:balance}
+.meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--sub);padding-bottom:20px;border-bottom:1px solid var(--rule)}
+.meta .dot{width:3px;height:3px;flex:0 0 3px;border-radius:50%;background:var(--faint)}
+.lede{font-size:17px;line-height:1.8;color:var(--ink-2);max-width:var(--measure);margin:26px 0 0}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
+.tag{font-size:11px;letter-spacing:.04em;color:var(--sub);border:1px solid var(--rule-2);border-radius:2px;padding:2px 8px}
+.prose{font-size:16.5px;line-height:1.85;color:var(--ink-2);max-width:var(--measure);padding:34px 0 0}
+.prose>*:first-child{margin-top:0}
+.prose>*+*{margin-top:1.15em}
+.prose h2,.prose h3,.prose h4{color:var(--ink);text-wrap:balance}
+.prose h2{font-family:var(--serif);font-size:25px;font-weight:600;letter-spacing:-.02em;line-height:1.36;margin:2.3em 0 0;padding-top:1.1em;border-top:1px solid var(--rule)}
+.prose>h2:first-child{border-top:0;padding-top:0}
+.prose h3{font-family:var(--serif);font-size:19px;font-weight:600;margin:1.9em 0 0}
+.prose h4{font-size:15.5px;font-weight:650;margin:1.7em 0 0}
+.prose p{margin:1.15em 0 0}
+.prose a{color:var(--accent-ink);border-bottom:1px solid color-mix(in srgb,var(--accent) 40%,transparent);transition:border-color .18s,background .18s}
+.prose a:hover{border-bottom-color:var(--accent);background:var(--accent-soft)}
+.prose strong{color:var(--ink);font-weight:650}
+.prose ul,.prose ol{margin:1.1em 0 0;padding-left:1.5em}
+.prose li{margin:.42em 0}
+.prose li::marker{color:var(--accent);font-family:var(--serif)}
+.prose hr{margin:2.6em auto;width:56px;height:0;border-top:1px solid var(--rule-2);position:relative}
+.prose hr::after{content:"✳";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--paper);color:var(--faint);font-size:11px;padding:0 8px}
+.prose blockquote{margin:1.6em 0 0;padding:2px 0 2px 20px;border-left:2px solid var(--accent);font-family:var(--serif);font-size:17px;line-height:1.72;color:var(--ink)}
+.prose blockquote p{margin:.5em 0 0}
+.prose blockquote p:first-child{margin-top:0}
+.prose code{font-family:var(--mono);font-size:.86em;background:var(--code-bg);border:1px solid var(--rule);border-radius:3px;padding:2px 6px;color:var(--accent-ink);word-break:break-word}
+.prose pre{margin:1.6em 0 0;background:var(--code-bg);border:1px solid var(--rule);border-left:2px solid var(--accent);border-radius:4px;padding:16px 18px;overflow-x:auto;font-size:13px;line-height:1.75}
+.prose pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit;white-space:pre}
+.prose table{width:100%;border-collapse:collapse;margin:1.7em 0 0;font-size:14px;display:block;overflow-x:auto}
+.prose th{text-align:left;font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--sub);font-weight:600;padding:0 14px 9px 0;border-bottom:2px solid var(--ink);white-space:nowrap}
+.prose td{padding:11px 14px 11px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.prose img{display:block;margin:1.8em 0 0;border:1px solid var(--rule);border-radius:4px;background:var(--paper-2)}
+.prose .callout{margin:1.9em 0 0;padding:20px 22px;background:var(--paper-2);border-left:2px solid var(--accent);border-radius:0 4px 4px 0}
+.prose .callout>*:first-child{margin-top:0}
+.prose .callout p{margin:.85em 0 0;font-size:15.5px;line-height:1.82}
+.prose .callout strong{color:var(--accent-ink)}
+.foot{margin:52px 0 0;padding-top:24px;border-top:1px solid var(--rule)}
+.note{font-size:12.5px;color:var(--sub);line-height:1.75;background:var(--paper-2);border-radius:4px;padding:15px 17px}
+.note b{color:var(--ink);font-weight:600}
+.nav{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+.nav a,.nav span{display:block;padding:16px 18px;border:1px solid var(--rule);border-radius:4px;transition:border-color .2s,background .2s,transform .2s}
+.nav a:hover{border-color:var(--rule-2);background:var(--paper-2);transform:translateY(-1px)}
+.nav span{color:var(--faint);font-size:12.5px;display:flex;align-items:center;justify-content:center;border-style:dashed}
+.nav__lab{font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--sub);margin-bottom:6px}
+.nav__t{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--ink);line-height:1.45}
+.nav .next{text-align:right}
+.back{margin:26px 0 0;font-size:13.5px}
+.back a{color:var(--sub)}
+.back a:hover{color:var(--accent)}
+.site-foot{border-top:1px solid var(--rule);margin-top:56px;padding:30px 0 44px;font-size:12.5px;color:var(--faint)}
+.site-foot__in{max-width:1000px;margin:0 auto;padding:0 var(--pad);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.site-foot a{color:var(--faint)}
+.site-foot a:hover{color:var(--accent)}
+@media (max-width:760px){:root{--pad:18px}.brief{padding:36px 0 0}.nav{grid-template-columns:1fr}.nav .next{text-align:left}.prose{font-size:16px}.top__nav a.hide-sm{display:none}}
+@media print{.top,.nav,.back{display:none!important}body{background:#fff;font-size:11pt}.prose .callout{background:none;border-left-width:2px}}</style>
+<script>
+/* 主题在首屏绘制前定下来，避免闪一下默认色。localStorage 键与主站同名，
+   从博客点进来时能延续访客已经选好的亮/暗设置。 */
+(function(){try{var r=document.documentElement;var s=localStorage.getItem(r.dataset.themeKey||'blog-theme');var t=(s==='light'||s==='dark')?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');r.setAttribute('data-theme',t);}catch(e){}})();
+</script>
+</head>
+<body>
+<a class="sr-only" href="#main">跳到主要内容</a>
+
+<header class="top">
+  <div class="top__in">
+    <a class="brand" href="/"><span class="brand__mark" aria-hidden="true">M</span>MacLodge's Blog</a>
+    <nav class="top__nav" aria-label="页内导航">
+      <a href="/AI动态/">简报目录</a>
+      <a class="hide-sm" href="/">首页</a>
+      <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="切换深色 / 浅色主题" title="切换主题">
+        <svg class="theme-toggle__light" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+        <svg class="theme-toggle__dark" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <article class="brief">
+    <div class="wrap">
+      <div class="kicker">AI 简报 · 2026 年 10 月 20 日</div>
+      <h1>OpenAI官宣下场造人形机器人，9B具身模型六项评测干翻GPT-6 Astra</h1>
+      <div class="meta">
+        <time datetime="2026-10-20">2026 / 10 / 20</time>
+        <span class="dot" aria-hidden="true"></span>
+        <span>星期二</span>
+        <span class="dot" aria-hidden="true"></span><span>🐵 程序小猴AI日报，每天8点，带你用5分钟看懂AI圈昨天发生了什么</span>
+        <span class="dot" aria-hidden="true"></span>
+        <span>约 6 分钟读完</span>
+      </div>
+      <p class="lede">OpenAI CEO奥尔特曼在播客节目《Sources》中首次明确确认：OpenAI将自研人形机器人。公司已于今年6月正式成立Robotics事业部，由Sora模型负责人阿迪亚·拉梅什领导，目前官网已放出19个机器人相关岗位，涵盖控制系统、执行器设计、电机、制…</p>
+      <div class="tags"><span class="tag">#AI日报</span><span class="tag">#OpenAI人形机器人</span><span class="tag">#具身智能</span><span class="tag">#ACE-Brain</span><span class="tag">#大晓机器人</span><span class="tag">#大模型调用量</span><span class="tag">#脑机接口国际标准</span><span class="tag">#AI数学</span></div>
+
+      <div class="prose">
+<h2>1. OpenAI正式下场造人形机器人，成立Robotics事业部</h2>
+<p>OpenAI CEO奥尔特曼在播客节目《Sources》中首次明确确认：OpenAI将自研人形机器人。公司已于今年6月正式成立Robotics事业部，由Sora模型负责人阿迪亚·拉梅什领导，目前官网已放出19个机器人相关岗位，涵盖控制系统、执行器设计、电机、制造和供应链等全链条。奥尔特曼强调&quot;机器人的大脑远比外形重要&quot;，预计2027年推出演示样机，短期目标是帮助技术工人建设基础设施，长期才考虑进入家庭。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：这事儿最有意思的点在于——OpenAI是被Figure AI&quot;逼&quot;下场的。2024年OpenAI给Figure提供模型，合作一年就被Figure踢开，对方转头自研了端到端模型Helix。教训很直白：如果机器人的&quot;身体&quot;是别人的，你就永远拿不到真实物理世界的训练数据。从工程师视角看，OpenAI走的路线是&quot;先训世界模型，再灌进硬件&quot;，和特斯拉&quot;先造身体再塞脑子&quot;完全反着来。GPT-6 Astra最近接机械臂画金门大桥成功率95%，说明这条路确实有搞头。</p></aside>
+<hr>
+<h2>2. 9B模型干翻GPT-6 Astra！大晓机器人发布具身基模型ACE-Brain-0.6</h2>
+<p>大晓机器人（商汤联合创始人王晓刚创立）发布视觉空间锚定增强型具身基模型ACE-Brain-0.6，基于Qwen3.5-9B微调，在八项Grounding（空间锚定）评测中有六项超越GPT-6 Astra。七项公开基准平均74.53分 vs Astra的73.68分，自建RobotGrounding评测94.13分 vs 91.10分。核心突破在于用约百万条可验证的空间锚定数据做scaling，数据每翻倍得分提升约2.4分。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：这条新闻对做机器人的开发者来说含金量极高。ACE-Brain-0.6验证了一个重要假设——在空间感知这个特定能力上，9B小模型通过高质量数据+针对性训练可以超越万亿参数的通用大模型。关键不是参数多，而是你的训练数据有没有&quot;物理世界的正确答案&quot;。他们自建的那套数据管线（关键帧筛选→自动标注→VLM校验）值得借鉴，本质上是在用工程手段弥补模型规模。</p></aside>
+<hr>
+<h2>3. 中国大模型周调用量连续25周全球第一，前五名全是中国模型</h2>
+<p>根据OpenRouter最新数据，上周（10月12日-18日）全球AI大模型总调用量164万亿Token，中国大模型达79.18万亿Token，稳居全球首位。调用量前五全是中国模型：DeepSeek V4.1 Flash以32.8万亿Token居首，智谱GLM 5.3 Flash排第二（12.2万亿），阶跃星辰Step 5 Preview升至第三（11.5万亿，环比增长30%）。小米MiMo V2.6 Flash排第四，腾讯Hy4 preview排第五。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：Step 5 Preview环比增长30%这个数据值得注意——它10月8日才上线OpenRouter，两周就冲到全球第三，说明开源权重+极致性价比（单次任务成本仅为Claude Opus 5的1/8）对海外开发者吸引力巨大。DeepSeek V4.1 Flash虽然还是第一但环比下滑20%，可能是部分流量被新模型分流了。对开发者来说，现在选模型看OpenRouter调用量比看benchmark更靠谱——用脚投票的数据不会骗人。</p></aside>
+<hr>
+<h2>4. 我国牵头制定的脑机接口参考架构国际标准正式发布</h2>
+<p>国际标准化组织（ISO/IEC）发布了我国牵头制定的脑机接口参考架构国际标准《信息技术 脑机接口 参考架构》。该标准由我国专家担任项目负责人，联合意大利、韩国、英国、美国、日本等10余国专家共同完成，围绕&quot;脑机接口是什么、怎么用、有什么功能、如何实现&quot;四个核心问题，建立了从概念到实现的完整技术框架。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：做脑机接口的同学应该关注这个标准——它解决的是&quot;不同技术路线怎么对话&quot;的问题。以前各家BCI系统的架构定义、接口规范各搞各的，数据不互通、组件不复用。有了统一参考架构，后续的数据标准、接口标准、测试标准才有基础可以搭。对我国来说，从术语标准（2025年发布）到参考架构，在BCI国际标准体系里的话语权正在快速积累。</p></aside>
+<hr>
+<h2>5. OpenAI一次性公开722篇AI数学手稿，丘成桐呼吁建立合作规范</h2>
+<p>OpenAI在GitHub上一次性公开了722篇由内部AI模型生成的数学手稿（后因符号错误撤回3篇，更新为719篇），涉及372个成果组，覆盖数论、几何、代数、理论计算机科学等领域，包括多道长期未解的开放难题。丘成桐、席南华等数学家在清华回应，丘成桐表示&quot;AI是探寻真理的全新工具，应当放手使用&quot;，席南华则指出OpenAI并非学术共同体成员，&quot;给学界带来了很大困扰&quot;，数学家们普遍认为AI与数学界急需建立合作规范。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：这件事的核心矛盾不是&quot;AI能不能做数学&quot;，而是&quot;AI做了数学之后，成果算谁的、怎么验证、怎么纳入学术体系&quot;。OpenAI的操作确实不太讲究——700多篇手稿直接甩GitHub，不走同行评审、不标注哪些是已验证的哪些是AI猜测的。对开发者来说，这倒是一个很好的案例：AI辅助科研产出时，如何设计confidence标注、溯源机制和人类review流程，是产品化时必须想清楚的。</p></aside>
+<hr>
+<h2>6. 奇瑞发布首个汽车行业垂域大模型，消费级人形机器人&quot;墨宝&quot;全球首发</h2>
+<p>奇瑞于10月20日举办2026全球创新大会，发布首个汽车行业垂域大模型，底层搭载车规级物理AI芯片。同时，旗下墨甲机器人推出首款消费级家庭陪伴人形机器人&quot;墨宝&quot;并开启全球预订。此外还展示了行业首款原生前装Robotaxi和凌霄eVTOL。墨甲机器人已在教育、医疗等100多个场景实现常态化上岗。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：车企做机器人的逻辑越来越清晰了——汽车产线本身就是最大的机器人应用场景，从工业机器人切到消费级是自然延伸。值得关注的技术点是&quot;车规级芯片&quot;用于物理AI世界模型——这说明奇瑞想把自动驾驶积累的感知-决策能力迁移到机器人上。不过消费级人形机器人的核心挑战不在技术，在成本和可靠性，&quot;墨宝&quot;能不能真正走进家庭，价格和故障率是关键。</p></aside>
+<hr>
+<h2>7. 商务部等9部门发文：加速脑机接口、具身智能成果转化</h2>
+<p>10月19日，商务部等9部门联合发布《关于加快推进科技兴商的意见》，明确提出聚焦消费品领域培育技术转移转化机构，加速脑机接口、具身智能等前沿科技成果向市场转化。同时要求推动具身智能技术在商贸领域落地，拓展家庭服务、商贸物流等应用场景，并推广《人工智能终端智能化分级》国家标准。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：政策层面的信号很明确——具身智能和脑机接口已经从&quot;实验室阶段&quot;进入&quot;要商业化&quot;的通道了。对创业者来说，&quot;技术转移转化机构&quot;这个提法值得关注，意味着未来可能会出现一批专门做前沿AI技术商业化的中间服务商。而《人工智能终端智能化分级》国标的推广，则是在给AI手机、AI眼镜、AI机器人等终端产品建立统一的评价体系——有标准才有市场。</p></aside>
+<hr>
+<p><strong>📌 今日互动</strong></p>
+<p>今天最让你兴奋的是哪条？OpenAI亲自下场造机器人，还是9B小模型干翻万亿参数大模型？或者你觉得脑机接口国际标准更值得关注？</p>
+<p>欢迎在评论区留言，说说你的看法！觉得不错的话，别忘了转发给你的技术小伙伴～</p>
+<p><strong>📮 投稿 &amp; 爆料</strong>：有AI圈的猛料？欢迎后台私信，入选日报会@你！</p>
+      </div>
+
+      <div class="foot">
+        <div class="note">
+          <b>关于这份简报</b><br>
+          内容由公众号日报整理而来，代表原文作者观点，不构成任何投资建议。
+          信息以公开发布时的报道为准，时效性内容请以最新消息为参考。
+        </div>
+
+        <nav class="nav" aria-label="上一期 / 下一期">
+          <a class="prev" href="/AI动态/2026-10/2026-10-19.html" rel="prev"><div class="nav__lab">← 上一期</div><div class="nav__t">国产十万卡超集群亮相、书生大模型破解30年数学猜想、Anthropic披露AI工时达人类6倍</div></a>
+          <a class="next" href="/AI动态/2026-10/2026-10-21.html" rel="next"><div class="nav__lab">下一期 →</div><div class="nav__t">DeepSeek开源推理框架DeepInfer，谷歌量子计算突破登Science</div></a>
+        </nav>
+
+        <p class="back"><a href="/AI动态/">← 返回简报目录</a></p>
+      </div>
+    </div>
+  </article>
+</main>
+
+<footer class="site-foot">
+  <div class="site-foot__in">
+    <span>&copy; 2026 MacLodge · 简报内容整理自公开报道</span>
+    <span><a href="/">MacLodge's Blog</a> · <a href="/AI动态/">AI 简报</a></span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var key=document.documentElement.dataset.themeKey||'blog-theme';
+  var cur=function(){return document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light';};
+  document.querySelectorAll('[data-theme-toggle]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var t=cur()==='dark'?'light':'dark';
+      document.documentElement.setAttribute('data-theme',t);
+      try{localStorage.setItem(key,t);}catch(e){}
+    });
+  });
+})();
+</script>
+</body>
+</html>
