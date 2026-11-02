@@ -89,14 +89,23 @@ lodge 要「写起来顺手 + 线上有加速」，所以定型为：**md 里写
 ## AI 简报（2026-09-22 新增，唯一入口在首页）
 **只有首页那一个入口能到**，导航 / 侧栏 / 搜索 / RSS / 标签 / 归档 / 站点地图一律不出现 —— 这是刻意的约束。
 - **用户主动发来新日报时，跑 `node scripts/sync-ai-brief.mjs` 即可**（也挂在 `predev`/`prebuild` 自动跑）。
-  源：`D:\Personal\Astapb\CodeKey\AI 日报\*.md`（可用 `AI_BRIEF_SRC` 换目录）。
+  源：`D:\Personal\Astapb\CodeKey\AI 日报\<年.月>\*.md`，**递归扫描**（原稿按月份分子目录，不是只读顶层）；
+  可用 `AI_BRIEF_SRC` 换目录。
 - 产物三份：正本 `docs/AI动态/YYYY-MM/YYYY-MM-DD.html`（自包含 HTML，随仓库提交，按月份分文件夹）
   ＋ 镜像 `public/AI动态/`（已 gitignore，脚本**每次无条件**从正本重建，CI 就靠这一步）
   ＋ 清单 `src/data/ai-brief.json`（首页入口与目录页读它）。
 - 入口页 `src/pages/AI动态/index.astro`；样式在 `global.css` 第 19 节；文案在 `consts.ts` 的 `AI_BRIEF`。
 - **要放开「只在这一个入口可见」这条约束时，得同时改 4 处**：`consts.ts` 的 `NAV`+`Footer`+`Sidebar`
   不加链接、`search-index.json.ts` 与 `rss.xml.js` 只读 posts 集合、`astro.config.mjs` 的 sitemap filter。
-- 提交时只 `git add WebBlog/docs/AI动态` 与 `WebBlog/src/data/ai-brief.json`（外加未提交的原稿），别顺手带上无关改动。
+- **★ 提交必须「产物 + 清单 + 原稿」三样一起**：`git add WebBlog/docs/AI动态 WebBlog/src/data/ai-brief.json`
+  再加 `CodeKey/AI 日报/` 里新增的 md。**漏了原稿，CI 会把已提交的产物当孤儿删掉** ——
+  2026-10-31 踩过：本地有 10-22~10-31 的 md 却没进仓库，CI 全量重扫只看到 33 期，
+  把 10-22 之后全部 prune，线上静默退回 10-21（部署 job 照样 success，不报错）。
+  诊断口诀：线上「已更新 N 期」比本地少 → 先查远端有没有对应的原稿。别顺手带上无关改动。
+- 渲染细节（2026-10-31 修）：①页面底部标签条**最多 8 个**（`tagHtml` 的 `slice(0,8)`），目录页只显示前 2 个，
+  manifest 存的是完整去重清单，数量不等是正常的；②`##` 与 `###` 一律渲染成 h2（11 期原稿正文写 `###`，
+  曾出现 h1 直跳 h3、「今日总结」反成正文父级）；③标签行现在容错带空格的标签（`#Claude Duet`），
+  标签按 `#` 切以保留内部空格 —— 早先整行失配会导致标签条为空且标签行漏进正文。
 - 原稿两种格式、标题清洗规则、「💡 小猴点评」折叠逻辑都写在 `scripts/sync-ai-brief.mjs` 头部注释里。
 - **源目录的原稿 md 不可删**（2026-10-16 lodge 问过「日报上线后能否删源稿」）：脚本每次全量重扫 +
   prune 孤儿页面 —— 部分删 → 对应期页面被清；全删后下次发新一期照样把旧页全清。原稿已被 git 跟踪、

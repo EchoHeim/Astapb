@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>手绘风格索引 · CodeKey</title>
+<style>
+  :root{
+    --ink:#1c1917; --ink-2:#57534e; --ink-3:#a8a29e;
+    --paper:#faf8f5; --card:#ffffff; --line:#e7e2db; --accent:#b4472e;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:56px 28px 72px; background:var(--paper); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:880px;margin:0 auto}
+  header{margin-bottom:40px}
+  .kicker{
+    font-size:12px; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--ink-3); margin:0 0 14px;
+  }
+  h1{
+    font-size:34px; line-height:1.25; margin:0 0 14px; font-weight:600; letter-spacing:-.01em;
+  }
+  h1 em{font-style:normal;color:var(--accent)}
+  .lede{margin:0;color:var(--ink-2);font-size:15px;line-height:1.75;max-width:64ch}
+  .lede code{
+    background:#f1ece5;border-radius:4px;padding:1px 5px;font-size:13px;
+    font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;
+  }
+  .meta{
+    margin:16px 0 0;font-size:12.5px;color:var(--ink-3);line-height:1.7;
+    font-variant-numeric:tabular-nums;
+  }
+  .meta b{color:var(--ink-2);font-weight:600}
+  .meta .fresh{color:var(--accent)}
+
+  .primary{
+    display:flex; align-items:center; justify-content:space-between; gap:20px;
+    margin:36px 0 18px; padding:26px 28px; background:var(--card);
+    border:1px solid var(--line); border-radius:14px; text-decoration:none; color:inherit;
+    transition:border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+  }
+  .primary:hover{
+    border-color:#d8cfc2; transform:translateY(-1px);
+    box-shadow:0 8px 24px -18px rgba(28,25,23,.5);
+  }
+  .primary h2{margin:0 0 6px;font-size:19px;font-weight:600}
+  .primary p{margin:0;font-size:13px;color:var(--ink-2);line-height:1.6}
+  .primary .num{
+    font-size:44px; font-weight:200; color:var(--accent); letter-spacing:-.03em;
+    font-variant-numeric:tabular-nums; line-height:1;
+  }
+  .primary .num small{display:block;font-size:11px;font-weight:500;letter-spacing:.14em;color:var(--ink-3);margin-top:8px;text-align:right}
+
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .card{
+    display:block;padding:20px 22px;background:var(--card);border:1px solid var(--line);
+    border-radius:12px;text-decoration:none;color:inherit;transition:border-color .15s ease;
+  }
+  .card:hover{border-color:#d8cfc2}
+  .card .t{display:flex;align-items:baseline;gap:8px;margin-bottom:6px}
+  .card .t b{font-size:15px;font-weight:600}
+  .card .t span{font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+  .card p{margin:0;font-size:12.5px;color:var(--ink-2);line-height:1.6}
+
+  .note{
+    margin-top:34px;padding-top:22px;border-top:1px solid var(--line);
+    font-size:12.5px;color:var(--ink-2);line-height:1.9;
+  }
+  .note b{color:var(--ink);font-weight:600}
+  .note code{
+    font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;font-size:12px;
+    background:#f1ece5;border-radius:4px;padding:1px 5px;
+  }
+  .note ul{margin:10px 0 0;padding-left:18px}
+  .note li{margin-bottom:7px}
+  footer{margin-top:26px;font-size:11.5px;color:var(--ink-3)}
+  @media (max-width:620px){
+    body{padding:36px 18px 56px}
+    h1{font-size:26px}
+    .grid{grid-template-columns:1fr}
+    .primary{flex-direction:column;align-items:flex-start}
+    .primary .num{font-size:34px}
+    .primary .num small{text-align:left}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="kicker">CodeKey · 02-样式素材</p>
+    <h1>手绘风格<em>索引</em></h1>
+    <p class="lede">
+      本地安装的 <code>handdraw-style-prompter</code> v1.9.6。挑风格不用描述「可爱一点、文艺一点」——
+      记住一个编号就够了：跟 AI 说「<code>FA-018 风格，主题：秋天的第一杯奶茶</code>」。
+    </p>
+    <p class="meta">
+      <b>366</b> 风格 / <b>170</b> 版式 / <b>36</b> 主题色 ｜ 2026-10-24 更新：
+      <span class="fresh">IG-038 万能信息图</span>（版式 169 → 170）、<span class="fresh">FE-068 唐山皮影</span>（风格 365 → 366）
+    </p>
+  </header>
+
+  <a class="primary" href="02-样式素材/handraw-style/skills/handdraw-style-prompter/gallery/index.html">
+    <div>
+      <h2>风格编号画廊</h2>
+      <p>366 种画风，按分类归档，可搜索、可看参考图。点开挑一个编号。</p>
+    </div>
+    <div class="num">366<small>STYLES</small></div>
+  </a>
+
+  <div class="grid">
+    <a class="card" href="02-样式素材/handraw-style/skills/handdraw-style-prompter/gallery/layouts.html">
+      <div class="t"><b>版式图型</b><span>170</span></div>
+      <p>社媒卡 SC-* / 信息图 IG-* / 漫画分镜 SB-* / IP 卡 IP-* / 电商 EC-*</p>
+    </a>
+    <a class="card" href="02-样式素材/handraw-style/skills/handdraw-style-prompter/gallery/colors.html">
+      <div class="t"><b>经典主题色</b><span>36</span></div>
+      <p>克莱因蓝、鼠尾草绿、爱马仕橙…… C-01 到 C-36，一键定基调</p>
+    </a>
+    <a class="card" href="02-样式素材/handraw-style/skills/handdraw-style-prompter/gallery/tutorials.html">
+      <div class="t"><b>组合指令教程</b><span>场景</span></div>
+      <p>封面、批量配图、海报、信息图、风格融合分别怎么开口</p>
+    </a>
+    <a class="card" href="02-样式素材/handraw-style/skills/handdraw-style-prompter/gallery/assets.html">
+      <div class="t"><b>素材库</b><span>角色/道具/场景</span></div>
+      <p>自定义 CH-* / PR-* / SCN-* 资产，跨文章保持同一套视觉</p>
+    </a>
+  </div>
+
+  <div class="note">
+    <b>三个要知道的点</b>
+    <ul>
+      <li><b>编号改过了。</b>v1.9.5 起是分类码 <code>FA-001</code> … <code>FI-034</code>；老文章里的 1–366（比如「267 号风格」）会自动映射，267 现在是 <code>FE-060</code>。</li>
+      <li><b>默认只给提示词，不出图。</b>要说「直接生成图片」才会调生图能力。</li>
+      <li><b>两种模式。</b>纯图 = 画面无字；说一句「切换为图文模式」，文字就当构图元素排进画里，适合金句卡和封面。</li>
+    </ul>
+  </div>
+
+  <footer>
+    作者 yang0 ｜ <a href="https://github.com/yang0/handraw-style" style="color:var(--ink-2)">github.com/yang0/handraw-style</a>
+    ｜ 本地说明见 <code>02-样式素材/说明.md</code>
+  </footer>
+
+</div>
+</body>
+</html>
