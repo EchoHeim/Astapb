@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light" data-theme-key="blog-theme">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>美团LongCat-2.5登顶多项Agent榜单，国产算力跑通万亿参数训练闭环 · AI 简报</title>
+<meta name="description" content="11月2日，美团正式发布新一代大模型LongCat-2.5，这是一款面向长程智能体任务的原生多模态模型，总参数量1.6万亿，每个token激活约480亿参数。模型全程在国产算力上完成训练，是目前依托国产算力完成的最大规模训练任务。在AutomationBenc…">
+<link rel="canonical" href="https://shilong.js.org/AI动态/2026-11/2026-11-03.html">
+<meta name="theme-color" content="#fbfaf6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="美团LongCat-2.5登顶多项Agent榜单，国产算力跑通万亿参数训练闭环">
+<meta property="og:description" content="11月2日，美团正式发布新一代大模型LongCat-2.5，这是一款面向长程智能体任务的原生多模态模型，总参数量1.6万亿，每个token激活约480亿参数。模型全程在国产算力上完成训练，是目前依托国产算力完成的最大规模训练任务。在AutomationBenc…">
+<meta property="og:url" content="https://shilong.js.org/AI动态/2026-11/2026-11-03.html">
+<meta name="author" content="MacLodge">
+<style>:root{--paper:#fbfaf6;--paper-2:#f4f2eb;--ink:#17150f;--ink-2:#3d382e;--sub:#7a7466;--faint:#a9a296;--rule:#e4e0d4;--rule-2:#cfc9b8;--accent:#b04a2f;--accent-ink:#8e3a23;--accent-soft:#f3e6e0;--code-bg:#f6f4ee;--bg-mark:#f7e9c8;--shadow:0 1px 0 rgba(23,21,15,.04),0 10px 30px -18px rgba(23,21,15,.28);--serif:Georgia,"Times New Roman","Songti SC","Noto Serif SC","Source Han Serif SC",STSong,SimSun,serif;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Cascadia Mono","Courier New",monospace;--measure:40rem;--pad:28px;--nav-h:56px;color-scheme:light}
+[data-theme="dark"]{--paper:#131210;--paper-2:#1b1a15;--ink:#f0ede5;--ink-2:#cdc8bb;--sub:#948d7e;--faint:#6c6558;--rule:#2c2a21;--rule-2:#3e3b2f;--accent:#e28a61;--accent-ink:#f0a882;--accent-soft:#2b1f18;--code-bg:#1a1914;--bg-mark:#47391a;--shadow:0 1px 0 rgba(0,0,0,.3),0 10px 30px -18px rgba(0,0,0,.7);color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.8;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-wrap:break-word}
+img{max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+::selection{background:var(--accent-soft);color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.top{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:saturate(160%) blur(12px);-webkit-backdrop-filter:saturate(160%) blur(12px);border-top:3px solid var(--ink);border-bottom:1px solid var(--rule)}
+.top__in{max-width:1000px;margin:0 auto;padding:0 var(--pad);height:var(--nav-h);display:flex;align-items:center;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:16px;font-weight:600;white-space:nowrap}
+.brand__mark{width:24px;height:24px;flex:0 0 24px;border-radius:3px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:14px;font-weight:700;line-height:1}
+.brand:hover{color:var(--accent-ink)}
+.top__nav{display:flex;align-items:center;gap:6px;margin-left:auto}
+.top__nav a,.icon-btn{font-size:12.5px;letter-spacing:.11em;color:var(--sub);padding:7px 12px;border-radius:4px;transition:color .18s,background .18s;white-space:nowrap}
+.top__nav a:hover,.icon-btn:hover{color:var(--ink);background:var(--paper-2)}
+.icon-btn{width:34px;height:34px;padding:0;display:grid;place-items:center}
+.icon-btn svg{width:17px;height:17px;display:block;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+[data-theme="dark"] .theme-toggle__light{display:none}
+.icon-btn .theme-toggle__dark{display:none}
+[data-theme="dark"] .theme-toggle__dark{display:block}
+main{display:block;min-height:60vh}
+.wrap{max-width:1000px;margin:0 auto;padding:0 var(--pad)}
+.brief{padding:52px 0 0}
+.kicker{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:16px}
+.brief h1{font-family:var(--serif);font-size:clamp(27px,3.9vw,41px);font-weight:600;line-height:1.28;letter-spacing:-.024em;margin:0 0 20px;max-width:22em;text-wrap:balance}
+.meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--sub);padding-bottom:20px;border-bottom:1px solid var(--rule)}
+.meta .dot{width:3px;height:3px;flex:0 0 3px;border-radius:50%;background:var(--faint)}
+.lede{font-size:17px;line-height:1.8;color:var(--ink-2);max-width:var(--measure);margin:26px 0 0}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
+.tag{font-size:11px;letter-spacing:.04em;color:var(--sub);border:1px solid var(--rule-2);border-radius:2px;padding:2px 8px}
+.prose{font-size:16.5px;line-height:1.85;color:var(--ink-2);max-width:var(--measure);padding:34px 0 0}
+.prose>*:first-child{margin-top:0}
+.prose>*+*{margin-top:1.15em}
+.prose h2,.prose h3,.prose h4{color:var(--ink);text-wrap:balance}
+.prose h2{font-family:var(--serif);font-size:25px;font-weight:600;letter-spacing:-.02em;line-height:1.36;margin:2.3em 0 0;padding-top:1.1em;border-top:1px solid var(--rule)}
+.prose>h2:first-child{border-top:0;padding-top:0}
+.prose h3{font-family:var(--serif);font-size:19px;font-weight:600;margin:1.9em 0 0}
+.prose h4{font-size:15.5px;font-weight:650;margin:1.7em 0 0}
+.prose p{margin:1.15em 0 0}
+.prose a{color:var(--accent-ink);border-bottom:1px solid color-mix(in srgb,var(--accent) 40%,transparent);transition:border-color .18s,background .18s}
+.prose a:hover{border-bottom-color:var(--accent);background:var(--accent-soft)}
+.prose strong{color:var(--ink);font-weight:650}
+.prose ul,.prose ol{margin:1.1em 0 0;padding-left:1.5em}
+.prose li{margin:.42em 0}
+.prose li::marker{color:var(--accent);font-family:var(--serif)}
+.prose hr{margin:2.6em auto;width:56px;height:0;border-top:1px solid var(--rule-2);position:relative}
+.prose hr::after{content:"✳";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--paper);color:var(--faint);font-size:11px;padding:0 8px}
+.prose blockquote{margin:1.6em 0 0;padding:2px 0 2px 20px;border-left:2px solid var(--accent);font-family:var(--serif);font-size:17px;line-height:1.72;color:var(--ink)}
+.prose blockquote p{margin:.5em 0 0}
+.prose blockquote p:first-child{margin-top:0}
+.prose code{font-family:var(--mono);font-size:.86em;background:var(--code-bg);border:1px solid var(--rule);border-radius:3px;padding:2px 6px;color:var(--accent-ink);word-break:break-word}
+.prose pre{margin:1.6em 0 0;background:var(--code-bg);border:1px solid var(--rule);border-left:2px solid var(--accent);border-radius:4px;padding:16px 18px;overflow-x:auto;font-size:13px;line-height:1.75}
+.prose pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit;white-space:pre}
+.prose table{width:100%;border-collapse:collapse;margin:1.7em 0 0;font-size:14px;display:block;overflow-x:auto}
+.prose th{text-align:left;font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--sub);font-weight:600;padding:0 14px 9px 0;border-bottom:2px solid var(--ink);white-space:nowrap}
+.prose td{padding:11px 14px 11px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.prose img{display:block;margin:1.8em 0 0;border:1px solid var(--rule);border-radius:4px;background:var(--paper-2)}
+.prose .callout{margin:1.9em 0 0;padding:20px 22px;background:var(--paper-2);border-left:2px solid var(--accent);border-radius:0 4px 4px 0}
+.prose .callout>*:first-child{margin-top:0}
+.prose .callout p{margin:.85em 0 0;font-size:15.5px;line-height:1.82}
+.prose .callout strong{color:var(--accent-ink)}
+.foot{margin:52px 0 0;padding-top:24px;border-top:1px solid var(--rule)}
+.note{font-size:12.5px;color:var(--sub);line-height:1.75;background:var(--paper-2);border-radius:4px;padding:15px 17px}
+.note b{color:var(--ink);font-weight:600}
+.nav{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+.nav a,.nav span{display:block;padding:16px 18px;border:1px solid var(--rule);border-radius:4px;transition:border-color .2s,background .2s,transform .2s}
+.nav a:hover{border-color:var(--rule-2);background:var(--paper-2);transform:translateY(-1px)}
+.nav span{color:var(--faint);font-size:12.5px;display:flex;align-items:center;justify-content:center;border-style:dashed}
+.nav__lab{font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--sub);margin-bottom:6px}
+.nav__t{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--ink);line-height:1.45}
+.nav .next{text-align:right}
+.back{margin:26px 0 0;font-size:13.5px}
+.back a{color:var(--sub)}
+.back a:hover{color:var(--accent)}
+.site-foot{border-top:1px solid var(--rule);margin-top:56px;padding:30px 0 44px;font-size:12.5px;color:var(--faint)}
+.site-foot__in{max-width:1000px;margin:0 auto;padding:0 var(--pad);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.site-foot a{color:var(--faint)}
+.site-foot a:hover{color:var(--accent)}
+@media (max-width:760px){:root{--pad:18px}.brief{padding:36px 0 0}.nav{grid-template-columns:1fr}.nav .next{text-align:left}.prose{font-size:16px}.top__nav a.hide-sm{display:none}}
+@media print{.top,.nav,.back{display:none!important}body{background:#fff;font-size:11pt}.prose .callout{background:none;border-left-width:2px}}</style>
+<script>
+/* 主题在首屏绘制前定下来，避免闪一下默认色。localStorage 键与主站同名，
+   从博客点进来时能延续访客已经选好的亮/暗设置。 */
+(function(){try{var r=document.documentElement;var s=localStorage.getItem(r.dataset.themeKey||'blog-theme');var t=(s==='light'||s==='dark')?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');r.setAttribute('data-theme',t);}catch(e){}})();
+</script>
+</head>
+<body>
+<a class="sr-only" href="#main">跳到主要内容</a>
+
+<header class="top">
+  <div class="top__in">
+    <a class="brand" href="/"><span class="brand__mark" aria-hidden="true">M</span>MacLodge's Blog</a>
+    <nav class="top__nav" aria-label="页内导航">
+      <a href="/AI动态/">简报目录</a>
+      <a class="hide-sm" href="/">首页</a>
+      <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="切换深色 / 浅色主题" title="切换主题">
+        <svg class="theme-toggle__light" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+        <svg class="theme-toggle__dark" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <article class="brief">
+    <div class="wrap">
+      <div class="kicker">AI 简报 · 2026 年 11 月 3 日</div>
+      <h1>美团LongCat-2.5登顶多项Agent榜单，国产算力跑通万亿参数训练闭环</h1>
+      <div class="meta">
+        <time datetime="2026-11-03">2026 / 11 / 03</time>
+        <span class="dot" aria-hidden="true"></span>
+        <span>星期二</span>
+        <span class="dot" aria-hidden="true"></span><span>🐵 程序小猴AI日报，每天8点，带你用5分钟看懂AI圈昨天发生了什么</span>
+        <span class="dot" aria-hidden="true"></span>
+        <span>约 6 分钟读完</span>
+      </div>
+      <p class="lede">11月2日，美团正式发布新一代大模型LongCat-2.5，这是一款面向长程智能体任务的原生多模态模型，总参数量1.6万亿，每个token激活约480亿参数。模型全程在国产算力上完成训练，是目前依托国产算力完成的最大规模训练任务。在AutomationBenc…</p>
+      <div class="tags"><span class="tag">#AI日报</span><span class="tag">#大模型</span><span class="tag">#Agent</span><span class="tag">#DeepSeek</span><span class="tag">#美团LongCat</span><span class="tag">#商汤日日新</span><span class="tag">#具身智能</span><span class="tag">#世界互联网大会</span></div>
+
+      <div class="prose">
+<h2>1. 美团发布LongCat-2.5：1.6万亿参数，全程国产算力训练，多项Agent评测登顶第一</h2>
+<p>11月2日，美团正式发布新一代大模型LongCat-2.5，这是一款面向长程智能体任务的原生多模态模型，总参数量1.6万亿，每个token激活约480亿参数。模型全程在国产算力上完成训练，是目前依托国产算力完成的最大规模训练任务。在AutomationBench、BrowseComp、3DCodeBench等多个Agent评测基准中，LongCat-2.5得分领先Claude-Opus-5和GPT-5.6-Sol等海外头部模型。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：这条新闻最值得关注的不只是跑分本身，而是&quot;全程国产算力&quot;这六个字。1.6万亿参数、480亿激活参数——这证明国产GPU集群已经能撑起万亿级模型的完整训练闭环。对开发者来说，LongCat-2.5在网页浏览、自动化操作、3D生成这类Agent任务上的优势，也意味着国产模型在&quot;干活型&quot;场景上开始有自己的差异化竞争力。</p></aside>
+<hr>
+<h2>2. DeepSeek开源Super-agent架构：AI开始指挥AI干活，编程智能体进入多任务并行时代</h2>
+<p>10月31日晚，DeepSeek Harness团队发布技术文章《Super-agent设计探索：迈向更自主的Agent系统》，同时以MIT协议在GitHub开源了原型项目dsh-superagent-prototype。Super-agent采用Router-Worker双层架构，引入事件驱动、存算分离、Watchdog等计算机系统经典设计思想，让智能体能够持续在线、并行处理多个任务、主动发现并修复问题。初步实验显示，任务完成时间p50为12.4分钟，显著优于单会话方案。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：这可能是今年Agent领域最有架构启发性的一次开源。DeepSeek把&quot;调度、缓存、存算分离、看门狗&quot;这些操作系统级别的工程思想搬进了Agent系统，解决的正是开发者最头疼的问题——怎么让AI同时管好多个任务、少打扰人。Router做全局调度、Worker各自隔离执行，这个思路对我们做工程化Agent开发有直接参考价值。目前还是研究原型，但方向很明确。</p></aside>
+<hr>
+<h2>3. 商汤发布SenseNova 6.8 Flash正式版：Flash级轻量模型，办公交付能力对标国际顶尖</h2>
+<p>11月2日，商汤日日新SenseNova 6.8 Flash正式版出炉。该模型围绕真实环境中的复杂任务进行优化，支持跨任务、跨会话协作，将生成能力延伸到动态网页、3D内容、动态PPT等富交付形态。评测显示，SenseNova 6.8 Flash在TeamBench多Agent协作、DataAnalysis 2.0数据分析等场景上超过部分国际前沿模型。同期商汤还开源了SenseNova Loop-9B-Preview，探索&quot;用计算深度换取参数效率&quot;的新架构路线。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：现在模型圈的竞争风向已经很明显了——不是比谁的跑分高，而是比谁做出来的PPT更好看、谁生成的网页能直接用。SenseNova 6.8 Flash作为一个Flash级轻量模型，在视觉工程交付上能做到这个程度，说明&quot;小模型+专项优化&quot;的路线是有出路的。对做产品交付的同学来说，这类模型值得关注。</p></aside>
+<hr>
+<h2>4. 清华姚期智团队发布代数世界模型（AWM）：让AI像牛顿一样从观察中推导规律并给出数学证明</h2>
+<p>清华大学交叉信息研究院姚期智教授和袁洋副教授领导的团队发布了代数世界模型（Algebraic World Model, AWM）。该框架将对象、关系和规则抽象为代数结构，通过探索、凝炼、证明三阶段建模，并使用Lean 4进行形式化验证。在ARC-AGI-3测试集中，基于Opus 5的AWM在183个关卡全部通关，得分99.9%，平均通关动作数仅为人类基准的43%。面对无解关卡，AWM能给出经机器核验的完整证明。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：这才是真正让人兴奋的研究。现有大模型本质上还是在&quot;记录现象&quot;，AWM要做的是&quot;理解本质&quot;——用范畴论把零散的观察统一成可推理、可证明的代数结构。对做AI安全和可靠性方向的开发者来说，这个思路很有启发：与其让模型猜答案，不如让它证明答案。用Lean 4做形式化验证这一步尤其关键，这是从&quot;大概率对&quot;到&quot;确定性地对&quot;的跨越。</p></aside>
+<hr>
+<h2>5. 微软开源4B电脑操作模型Mage-VL-Cowork：40亿参数，既会点鼠标也会写代码</h2>
+<p>微软Mage团队在Hugging Face发布Mage-VL-Cowork权重，这是一款40亿参数的混合电脑操作智能体，基于自研视觉编码器Mage-ViT和Qwen3-4B构建。它将&quot;看截图操作界面&quot;和&quot;用代码、命令行处理文件&quot;合在一个模型里，每一步自行决定走哪个通道。在OSWorld-Verified基准上取得66.0%的成绩，超过多个更大参数量的开源模型。权重以Apache 2.0协议公开，可在个人电脑上本地部署。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：Computer Use赛道终于开始卷小模型了。40亿参数就能在桌面操作上打出这个成绩，关键 trick 是让模型同时掌握GUI操作和代码执行两条通道，自己判断什么时候用哪条。对做RPA和桌面自动化的开发者来说，这意味着本地化、离线化的AI办公助手在技术上已经可行，数据不必上传云端。</p></aside>
+<hr>
+<h2>6. 2026世界互联网大会乌镇峰会开幕：30余款具身智能机器人实景上岗，6G原型系统集中亮相</h2>
+<p>11月2日至5日，2026年世界互联网大会乌镇峰会在浙江乌镇举行，主题为&quot;开源开放 共建共享&quot;。&quot;互联网之光&quot;博览会吸引来自54个国家和地区的671家企业参展，展示1000余项新技术新产品。智元、优必选、宇树等30余款具身智能机器人实景演示，全球首款可与人自主打羽毛球的双足人形机器人成为焦点。GSMA携高通等企业展示端到端6G原型系统，阿里巴巴、华为、中兴、曙光四大厂商超节点集中亮相。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：从这次乌镇博览会可以看出，具身智能已经从&quot;展台表演&quot;走向&quot;实岗作业&quot;。机器人不再只是静态展示，而是在商场、产线、药房真正干活。对做嵌入式和机器人开发的程序员来说，&quot;从Demo到POC&quot;的行业转折点可能就在今年。6G方面，端到端原型系统的出现也说明标准制定正在加速。</p></aside>
+<hr>
+<h2>7. 度小满联合港科大发布轩辕4.5金融大模型：基于RSI自进化技术，推理成本仅为通用模型十分之一</h2>
+<p>11月2日，度小满与香港科技大学、香港生成式AI研发中心联合发布轩辕4.5金融增强大模型。该模型是行业首个将自进化RSI技术运用于模型训练及智能体场景目标适配的金融大模型，在获客、风控、客户经营等核心金融场景中效果提升30%，推理成本仅为通用顶级模型的十分之一。基于轩辕模型，度小满已构建上千个智能体、5000余项技能，日均Token使用量超过1000亿。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：金融行业一直是大模型落地最积极的领域之一。轩辕4.5的技术亮点在于RSI（递归自进化）——让模型在真实业务环境中持续学习和适配，而不是训完就固定。日均1000亿Token的使用量说明这不是PPT项目，是真正跑在生产环境里的。对做垂直领域大模型的开发者来说，&quot;自进化+低成本推理&quot;这个组合值得研究。</p></aside>
+<hr>
+<p>📌 <strong>今日份的AI日报就到这里了！</strong> 觉得有用的话，点个「在看」转发给你的技术小伙伴吧。你最关注哪条动态？欢迎在评论区聊聊你的看法，小猴会在评论区和大家互动～</p>
+<p>明天同一时间，不见不散！</p>
+      </div>
+
+      <div class="foot">
+        <div class="note">
+          <b>关于这份简报</b><br>
+          内容由公众号日报整理而来，代表原文作者观点，不构成任何投资建议。
+          信息以公开发布时的报道为准，时效性内容请以最新消息为参考。
+        </div>
+
+        <nav class="nav" aria-label="上一期 / 下一期">
+          <a class="prev" href="/AI动态/2026-11/2026-11-02.html" rel="prev"><div class="nav__lab">← 上一期</div><div class="nav__t">DeepSeek开源Agent底座架构，AI开始指挥AI干活了</div></a>
+          <a class="next" href="/AI动态/2026-11/2026-11-04.html" rel="next"><div class="nav__lab">下一期 →</div><div class="nav__t">美团万亿参数LongCat-2.5全程国产算力训练，百度发布物理AI世界模型Apollo World</div></a>
+        </nav>
+
+        <p class="back"><a href="/AI动态/">← 返回简报目录</a></p>
+      </div>
+    </div>
+  </article>
+</main>
+
+<footer class="site-foot">
+  <div class="site-foot__in">
+    <span>&copy; 2026 MacLodge · 简报内容整理自公开报道</span>
+    <span><a href="/">MacLodge's Blog</a> · <a href="/AI动态/">AI 简报</a></span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var key=document.documentElement.dataset.themeKey||'blog-theme';
+  var cur=function(){return document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light';};
+  document.querySelectorAll('[data-theme-toggle]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var t=cur()==='dark'?'light':'dark';
+      document.documentElement.setAttribute('data-theme',t);
+      try{localStorage.setItem(key,t);}catch(e){}
+    });
+  });
+})();
+</script>
+</body>
+</html>
