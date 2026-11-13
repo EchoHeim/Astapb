@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light" data-theme-key="blog-theme">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anthropic Fable 5.2编程测试登顶，1000个Agent协作8天造出操作系统原型 · AI 简报</title>
+<meta name="description" content="Anthropic 于11月9日正式发布 Claude Fable 5.2 和 Mythos 5.2，两款模型共享底层架构，但在安全策略上做了差异化——Fable 面向所有用户，Mythos 仅向通过审核的网安和生命科学机构开放。Fable 5.2 在复杂编程…">
+<link rel="canonical" href="https://shilong.js.org/AI动态/2026-11/2026-11-10.html">
+<meta name="theme-color" content="#fbfaf6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Anthropic Fable 5.2编程测试登顶，1000个Agent协作8天造出操作系统原型">
+<meta property="og:description" content="Anthropic 于11月9日正式发布 Claude Fable 5.2 和 Mythos 5.2，两款模型共享底层架构，但在安全策略上做了差异化——Fable 面向所有用户，Mythos 仅向通过审核的网安和生命科学机构开放。Fable 5.2 在复杂编程…">
+<meta property="og:url" content="https://shilong.js.org/AI动态/2026-11/2026-11-10.html">
+<meta name="author" content="MacLodge">
+<style>:root{--paper:#fbfaf6;--paper-2:#f4f2eb;--ink:#17150f;--ink-2:#3d382e;--sub:#7a7466;--faint:#a9a296;--rule:#e4e0d4;--rule-2:#cfc9b8;--accent:#b04a2f;--accent-ink:#8e3a23;--accent-soft:#f3e6e0;--code-bg:#f6f4ee;--bg-mark:#f7e9c8;--shadow:0 1px 0 rgba(23,21,15,.04),0 10px 30px -18px rgba(23,21,15,.28);--serif:Georgia,"Times New Roman","Songti SC","Noto Serif SC","Source Han Serif SC",STSong,SimSun,serif;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Cascadia Mono","Courier New",monospace;--measure:40rem;--pad:28px;--nav-h:56px;color-scheme:light}
+[data-theme="dark"]{--paper:#131210;--paper-2:#1b1a15;--ink:#f0ede5;--ink-2:#cdc8bb;--sub:#948d7e;--faint:#6c6558;--rule:#2c2a21;--rule-2:#3e3b2f;--accent:#e28a61;--accent-ink:#f0a882;--accent-soft:#2b1f18;--code-bg:#1a1914;--bg-mark:#47391a;--shadow:0 1px 0 rgba(0,0,0,.3),0 10px 30px -18px rgba(0,0,0,.7);color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.8;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-wrap:break-word}
+img{max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+::selection{background:var(--accent-soft);color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.top{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:saturate(160%) blur(12px);-webkit-backdrop-filter:saturate(160%) blur(12px);border-top:3px solid var(--ink);border-bottom:1px solid var(--rule)}
+.top__in{max-width:1000px;margin:0 auto;padding:0 var(--pad);height:var(--nav-h);display:flex;align-items:center;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:16px;font-weight:600;white-space:nowrap}
+.brand__mark{width:24px;height:24px;flex:0 0 24px;border-radius:3px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:14px;font-weight:700;line-height:1}
+.brand:hover{color:var(--accent-ink)}
+.top__nav{display:flex;align-items:center;gap:6px;margin-left:auto}
+.top__nav a,.icon-btn{font-size:12.5px;letter-spacing:.11em;color:var(--sub);padding:7px 12px;border-radius:4px;transition:color .18s,background .18s;white-space:nowrap}
+.top__nav a:hover,.icon-btn:hover{color:var(--ink);background:var(--paper-2)}
+.icon-btn{width:34px;height:34px;padding:0;display:grid;place-items:center}
+.icon-btn svg{width:17px;height:17px;display:block;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+[data-theme="dark"] .theme-toggle__light{display:none}
+.icon-btn .theme-toggle__dark{display:none}
+[data-theme="dark"] .theme-toggle__dark{display:block}
+main{display:block;min-height:60vh}
+.wrap{max-width:1000px;margin:0 auto;padding:0 var(--pad)}
+.brief{padding:52px 0 0}
+.kicker{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:16px}
+.brief h1{font-family:var(--serif);font-size:clamp(27px,3.9vw,41px);font-weight:600;line-height:1.28;letter-spacing:-.024em;margin:0 0 20px;max-width:22em;text-wrap:balance}
+.meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--sub);padding-bottom:20px;border-bottom:1px solid var(--rule)}
+.meta .dot{width:3px;height:3px;flex:0 0 3px;border-radius:50%;background:var(--faint)}
+.lede{font-size:17px;line-height:1.8;color:var(--ink-2);max-width:var(--measure);margin:26px 0 0}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
+.tag{font-size:11px;letter-spacing:.04em;color:var(--sub);border:1px solid var(--rule-2);border-radius:2px;padding:2px 8px}
+.prose{font-size:16.5px;line-height:1.85;color:var(--ink-2);max-width:var(--measure);padding:34px 0 0}
+.prose>*:first-child{margin-top:0}
+.prose>*+*{margin-top:1.15em}
+.prose h2,.prose h3,.prose h4{color:var(--ink);text-wrap:balance}
+.prose h2{font-family:var(--serif);font-size:25px;font-weight:600;letter-spacing:-.02em;line-height:1.36;margin:2.3em 0 0;padding-top:1.1em;border-top:1px solid var(--rule)}
+.prose>h2:first-child{border-top:0;padding-top:0}
+.prose h3{font-family:var(--serif);font-size:19px;font-weight:600;margin:1.9em 0 0}
+.prose h4{font-size:15.5px;font-weight:650;margin:1.7em 0 0}
+.prose p{margin:1.15em 0 0}
+.prose a{color:var(--accent-ink);border-bottom:1px solid color-mix(in srgb,var(--accent) 40%,transparent);transition:border-color .18s,background .18s}
+.prose a:hover{border-bottom-color:var(--accent);background:var(--accent-soft)}
+.prose strong{color:var(--ink);font-weight:650}
+.prose ul,.prose ol{margin:1.1em 0 0;padding-left:1.5em}
+.prose li{margin:.42em 0}
+.prose li::marker{color:var(--accent);font-family:var(--serif)}
+.prose hr{margin:2.6em auto;width:56px;height:0;border-top:1px solid var(--rule-2);position:relative}
+.prose hr::after{content:"✳";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--paper);color:var(--faint);font-size:11px;padding:0 8px}
+.prose blockquote{margin:1.6em 0 0;padding:2px 0 2px 20px;border-left:2px solid var(--accent);font-family:var(--serif);font-size:17px;line-height:1.72;color:var(--ink)}
+.prose blockquote p{margin:.5em 0 0}
+.prose blockquote p:first-child{margin-top:0}
+.prose code{font-family:var(--mono);font-size:.86em;background:var(--code-bg);border:1px solid var(--rule);border-radius:3px;padding:2px 6px;color:var(--accent-ink);word-break:break-word}
+.prose pre{margin:1.6em 0 0;background:var(--code-bg);border:1px solid var(--rule);border-left:2px solid var(--accent);border-radius:4px;padding:16px 18px;overflow-x:auto;font-size:13px;line-height:1.75}
+.prose pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit;white-space:pre}
+.prose table{width:100%;border-collapse:collapse;margin:1.7em 0 0;font-size:14px;display:block;overflow-x:auto}
+.prose th{text-align:left;font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--sub);font-weight:600;padding:0 14px 9px 0;border-bottom:2px solid var(--ink);white-space:nowrap}
+.prose td{padding:11px 14px 11px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.prose img{display:block;margin:1.8em 0 0;border:1px solid var(--rule);border-radius:4px;background:var(--paper-2)}
+.prose .callout{margin:1.9em 0 0;padding:20px 22px;background:var(--paper-2);border-left:2px solid var(--accent);border-radius:0 4px 4px 0}
+.prose .callout>*:first-child{margin-top:0}
+.prose .callout p{margin:.85em 0 0;font-size:15.5px;line-height:1.82}
+.prose .callout strong{color:var(--accent-ink)}
+.foot{margin:52px 0 0;padding-top:24px;border-top:1px solid var(--rule)}
+.note{font-size:12.5px;color:var(--sub);line-height:1.75;background:var(--paper-2);border-radius:4px;padding:15px 17px}
+.note b{color:var(--ink);font-weight:600}
+.nav{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+.nav a,.nav span{display:block;padding:16px 18px;border:1px solid var(--rule);border-radius:4px;transition:border-color .2s,background .2s,transform .2s}
+.nav a:hover{border-color:var(--rule-2);background:var(--paper-2);transform:translateY(-1px)}
+.nav span{color:var(--faint);font-size:12.5px;display:flex;align-items:center;justify-content:center;border-style:dashed}
+.nav__lab{font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--sub);margin-bottom:6px}
+.nav__t{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--ink);line-height:1.45}
+.nav .next{text-align:right}
+.back{margin:26px 0 0;font-size:13.5px}
+.back a{color:var(--sub)}
+.back a:hover{color:var(--accent)}
+.site-foot{border-top:1px solid var(--rule);margin-top:56px;padding:30px 0 44px;font-size:12.5px;color:var(--faint)}
+.site-foot__in{max-width:1000px;margin:0 auto;padding:0 var(--pad);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.site-foot a{color:var(--faint)}
+.site-foot a:hover{color:var(--accent)}
+@media (max-width:760px){:root{--pad:18px}.brief{padding:36px 0 0}.nav{grid-template-columns:1fr}.nav .next{text-align:left}.prose{font-size:16px}.top__nav a.hide-sm{display:none}}
+@media print{.top,.nav,.back{display:none!important}body{background:#fff;font-size:11pt}.prose .callout{background:none;border-left-width:2px}}</style>
+<script>
+/* 主题在首屏绘制前定下来，避免闪一下默认色。localStorage 键与主站同名，
+   从博客点进来时能延续访客已经选好的亮/暗设置。 */
+(function(){try{var r=document.documentElement;var s=localStorage.getItem(r.dataset.themeKey||'blog-theme');var t=(s==='light'||s==='dark')?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');r.setAttribute('data-theme',t);}catch(e){}})();
+</script>
+</head>
+<body>
+<a class="sr-only" href="#main">跳到主要内容</a>
+
+<header class="top">
+  <div class="top__in">
+    <a class="brand" href="/"><span class="brand__mark" aria-hidden="true">M</span>MacLodge's Blog</a>
+    <nav class="top__nav" aria-label="页内导航">
+      <a href="/AI动态/">简报目录</a>
+      <a class="hide-sm" href="/">首页</a>
+      <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="切换深色 / 浅色主题" title="切换主题">
+        <svg class="theme-toggle__light" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+        <svg class="theme-toggle__dark" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <article class="brief">
+    <div class="wrap">
+      <div class="kicker">AI 简报 · 2026 年 11 月 10 日</div>
+      <h1>Anthropic Fable 5.2编程测试登顶，1000个Agent协作8天造出操作系统原型</h1>
+      <div class="meta">
+        <time datetime="2026-11-10">2026 / 11 / 10</time>
+        <span class="dot" aria-hidden="true"></span>
+        <span>星期二</span>
+        <span class="dot" aria-hidden="true"></span><span>🐵 程序小猴AI日报，每天8点，带你用5分钟看懂AI圈昨天发生了什么</span>
+        <span class="dot" aria-hidden="true"></span>
+        <span>约 6 分钟读完</span>
+      </div>
+      <p class="lede">Anthropic 于11月9日正式发布 Claude Fable 5.2 和 Mythos 5.2，两款模型共享底层架构，但在安全策略上做了差异化——Fable 面向所有用户，Mythos 仅向通过审核的网安和生命科学机构开放。Fable 5.2 在复杂编程…</p>
+      <div class="tags"><span class="tag">#AIDailyReport</span><span class="tag">#Anthropic</span><span class="tag">#ClaudeFable5</span><span class="tag">#美团LongCat</span><span class="tag">#字节Seedream</span><span class="tag">#苹果HALO</span><span class="tag">#人形机器人</span><span class="tag">#具身智能</span></div>
+
+      <div class="prose">
+<h2>1. Anthropic 发布 Fable 5.2：复杂编程测试登顶，30小时证明费马大定理</h2>
+<p>Anthropic 于11月9日正式发布 Claude Fable 5.2 和 Mythos 5.2，两款模型共享底层架构，但在安全策略上做了差异化——Fable 面向所有用户，Mythos 仅向通过审核的网安和生命科学机构开放。Fable 5.2 在复杂编程测试 FrontierCode 2.0 上从上一代的 32.4% 飙升至 49.1%，超过 GPT-6 Astra 的 42.8% 和 Gemini 4 Carbon 的 41.1%。输出速度较上代提升 30%，价格下调 20%（输入 $8/M Token，输出 $40/M Token）。最硬核的演示：模型在 30 小时内完成了费马大定理的 Lean 形式化证明，还展示了 1000 个 AI Agent 协作 8 天搭建出操作系统原型的能力。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：Fable 5.2 的编程能力跃升幅度很大，FrontierCode 2.0 考的不是写个函数，而是端到端的复杂工程任务——这对日常做大型代码库重构和系统迁移的开发者来说，意味着 AI Copilot 的能力天花板又抬高了一截。1000 个 Agent 协作的演示更值得关注，多 Agent 编排一直是工程难题，Anthropic 这次把规模推到了新量级。</p></aside>
+<hr>
+<h2>2. 美团开源 LongCat-2.5：1.6万亿参数，为长程Agent任务而生</h2>
+<p>美团龙猫正式开源 LongCat-2.5，MIT 协议，总参数 1.6 万亿，每个 Token 激活约 480 亿参数，原生支持 100 万上下文。模型定位为面向长程智能体任务的原生多模态模型，在复杂代码库开发、完整项目构建、Visual Coding 等场景中端到端交付能力有明显提升。技术上亮点不少：视觉信号用多层级离散 Token 表示而非外挂模块，训练环境会断网清缓存防止模型&quot;作弊&quot;，推理采用 W4A4 量化方案，并针对国产算力做了深度适配——单卡显存不足 80GB 也能跑起来。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：MIT 协议意味着商用无门槛，这点对开发者社区很重要。100 万上下文 + 长程 Agent 任务的组合，直接对标 Claude Code 和 Codex 的使用场景。特别有意思的是训练时&quot;断网清 git&quot;的反作弊设计——说明团队在认真解决模型走捷径的问题，而不是只刷跑分。国产算力的适配也很务实，对于受限于硬件条件的团队来说是个实用选择。</p></aside>
+<hr>
+<h2>3. 字节跳动发布 Seedream 5.5：100轮编辑像素级保持，原生透明素材生成</h2>
+<p>字节跳动 Seed 团队发布新一代图像创作模型 Seedream 5.5，核心升级在多轮编辑稳定性和透明素材生成。模型支持围绕同一作品进行最多 100 轮连续编辑，非编辑区域实现像素级保持，不会出现色彩偏移或画质衰减。新增原生 RGBA 透明素材生成能力，可直接输出带 Alpha 通道的图像。API 定价约 0.28 元/张（2K 方图编辑），不到上代 Seedream 5.0 Pro 的一半。豆包、即梦已同步接入。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：100 轮编辑不崩坏这个能力对设计师来说是真的实用——以前 AI 生图最大的痛点之一就是&quot;改了这里那里就崩了&quot;。原生 RGBA 支持也省去了后期抠图的麻烦，做 UI 组件、图标素材的工作流可以更短。API 价格打到 0.28 元，对于需要批量出图的电商和设计团队来说，成本已经很低了。</p></aside>
+<hr>
+<h2>4. 苹果开源 HALO 人形机器人系统：千问模型本地运行，91%成功率</h2>
+<p>苹果研究团队在 arXiv 发表论文并开源代码，披露了人形机器人自主控制系统 HALO。系统采用三层分层架构，最上层的任务编排模块使用阿里巴巴 Qwen3.6-35B-A3B 模型，在机器人搭载的 Mac mini 上本地运行，无需联网。在 6 个未预先扫描的真实环境中进行了 360 次单项任务测试，平均成功率 91%；组合任务成功率 70%。机器人可完成钻桌底、坐沙发、推箱子等动作。论文同时指出系统在遮挡场景下表现不佳，下一步将加入触觉感知。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：苹果选择开源机器人系统代码不太常见，说明他们在这个方向上更倾向于学术验证而非短期商业化。91% 的零样本迁移成功率验证了&quot;纯仿真训练 → 真实部署&quot;这条路径的可行性，这对机器人开发者来说是个重要信号——你不一定需要昂贵的真机数据采集。不过 70% 的组合任务成功率和遮挡场景的问题也说明，单靠视觉感知做机器人控制还有明显瓶颈。</p></aside>
+<hr>
+<h2>5. 北京人形发布通用全身控制模型：多机协作完成长程任务</h2>
+<p>北京人形机器人创新中心发布通用全身控制模型，多机器人以一镜到底方式完成了会议室整理长程作业——搬移座椅、捡拾杂物、搬运垃圾袋、下蹲拾取纸团，多机之间可分工接续。模型瞄准的核心痛点是仿真与真实物理世界之间的鸿沟：当前行业普遍在平地行走和高动态表演上已过关，但面对真实环境的负载扰动和非结构化地形时稳定性会大幅衰减。短期落地场景瞄准工业现场和特种高危作业。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：从&quot;能走&quot;到&quot;能干活&quot;是人形机器人的关键跨越。这个演示的价值在于多机协作 + 长程任务——不是单次抓取，而是连续完成一套复杂操作。仿真到真实世界的 Sim2Real 鸿沟一直是具身智能的核心工程难题，北京人形这次展示了在多机场景下的突破，但论文也坦承家庭场景还有距离。对做机器人开发的同行来说，全身控制的开源方案值得期待。</p></aside>
+<hr>
+<h2>6. 姚期智 × 杨植麟联合论文：给9个大模型出了张&quot;图灵考试卷&quot;</h2>
+<p>图灵奖得主姚期智和月之暗面创始人杨植麟联合发表论文 TCSExam，首次为理论计算机科学设计了一套覆盖定理证明、求解器工程、数学构造和开放猜想的完整评测。9 个前沿大模型参加考试，GPT-6 Astra 在定理证明类&quot;裸考&quot;拿下 70% 成功率，Kimi K3.1 Pro 以 38.3% 居第二。有趣的是，AI 在构造类任务上出现了超越人类已知记录的表现——Kimi K3 造出了一个 124 顶点、630 条边的特殊图，超过了论文引用的 629 条边参考记录。但在开放猜想类中，30 个长期未解猜想仅 6 次被接受，且都是&quot;查资料查到&quot;而非独立推导。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：这篇论文最有价值的发现不是谁考了多少分，而是揭示了大模型的能力边界——给它&quot;递小抄&quot;（中间引理）后性能显著提升，说明模型不是不会推理，而是需要更好的引导框架。对做 AI 应用开发的人来说，这验证了 Chain-of-Thought 和 RAG 的工程直觉：与其指望模型一步到位，不如给它搭好&quot;脚手架&quot;。</p></aside>
+<hr>
+<h2>7. 蚂蚁灵波具身大模型挑战赛：1855支队伍角逐，48小时真机黑客松</h2>
+<p>蚂蚁灵波首届具身大模型挑战赛决赛名单出炉，15 支战队从全球 1855 支队伍、3252 位选手中晋级。决赛将于 11 月 14-15 日在上海张江进行 48 小时线下真机黑客松，选手统一使用松灵 COBOT MAGIC 设备和 LingBot-VLA 2.0 开源预训练模型，完成从任务理解到真机部署的全流程。蚂蚁灵波开源模型在 GitHub 累计获超 3.3 万 Star。</p>
+<aside class="callout"><p>💡 <strong>小猴点评</strong>：1855 支队伍的参赛规模说明具身智能的热度确实在起来。48 小时真机黑客松比纯刷 paper 的比赛更接近真实工程场景——模型调完还得跑在真机上，软硬件协同的坑一个都绕不过去。对关注具身智能方向的开发者来说，这类比赛的开源方案和数据集是不错的学习资源。</p></aside>
+<hr>
+<p>📌 <strong>今日互动</strong></p>
+<p>Anthropic Fable 5.2 的编程能力又创新高，你觉得目前 AI 编程助手最缺的能力是什么？是更长的上下文理解、更好的代码审查，还是别的？评论区聊聊你的看法～</p>
+<p>觉得有用就 <strong>点赞 + 在看 + 转发</strong> 三连，你的支持是我持续更新的动力！</p>
+      </div>
+
+      <div class="foot">
+        <div class="note">
+          <b>关于这份简报</b><br>
+          内容由公众号日报整理而来，代表原文作者观点，不构成任何投资建议。
+          信息以公开发布时的报道为准，时效性内容请以最新消息为参考。
+        </div>
+
+        <nav class="nav" aria-label="上一期 / 下一期">
+          <a class="prev" href="/AI动态/2026-11/2026-11-09.html" rel="prev"><div class="nav__lab">← 上一期</div><div class="nav__t">AI学会&quot;自我纠错&quot;——DeepSeek新模型在推理中实时改写思路，数学竞赛准确率提升7个百分点</div></a>
+          <a class="next" href="/AI动态/2026-11/2026-11-11.html" rel="next"><div class="nav__lab">下一期 →</div><div class="nav__t">Anthropic千个Agent协作8天从零搓出操作系统，Fable 5.2登顶全球第一</div></a>
+        </nav>
+
+        <p class="back"><a href="/AI动态/">← 返回简报目录</a></p>
+      </div>
+    </div>
+  </article>
+</main>
+
+<footer class="site-foot">
+  <div class="site-foot__in">
+    <span>&copy; 2026 MacLodge · 简报内容整理自公开报道</span>
+    <span><a href="/">MacLodge's Blog</a> · <a href="/AI动态/">AI 简报</a></span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var key=document.documentElement.dataset.themeKey||'blog-theme';
+  var cur=function(){return document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light';};
+  document.querySelectorAll('[data-theme-toggle]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var t=cur()==='dark'?'light':'dark';
+      document.documentElement.setAttribute('data-theme',t);
+      try{localStorage.setItem(key,t);}catch(e){}
+    });
+  });
+})();
+</script>
+</body>
+</html>

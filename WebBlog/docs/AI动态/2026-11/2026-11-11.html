@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light" data-theme-key="blog-theme">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anthropic千个Agent协作8天从零搓出操作系统，Fable 5.2登顶全球第一 · AI 简报</title>
+<meta name="description" content="Anthropic正式推出Claude Fable 5.2和Mythos 5.2两款旗舰模型，基于同一底层模型，Fable面向所有用户开放，Mythos面向审核通过的网安和生命科学机构。在预发布测试中，Fable 5.2协调1000多个子智能体，连续8天从空文…">
+<link rel="canonical" href="https://shilong.js.org/AI动态/2026-11/2026-11-11.html">
+<meta name="theme-color" content="#fbfaf6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Anthropic千个Agent协作8天从零搓出操作系统，Fable 5.2登顶全球第一">
+<meta property="og:description" content="Anthropic正式推出Claude Fable 5.2和Mythos 5.2两款旗舰模型，基于同一底层模型，Fable面向所有用户开放，Mythos面向审核通过的网安和生命科学机构。在预发布测试中，Fable 5.2协调1000多个子智能体，连续8天从空文…">
+<meta property="og:url" content="https://shilong.js.org/AI动态/2026-11/2026-11-11.html">
+<meta name="author" content="MacLodge">
+<style>:root{--paper:#fbfaf6;--paper-2:#f4f2eb;--ink:#17150f;--ink-2:#3d382e;--sub:#7a7466;--faint:#a9a296;--rule:#e4e0d4;--rule-2:#cfc9b8;--accent:#b04a2f;--accent-ink:#8e3a23;--accent-soft:#f3e6e0;--code-bg:#f6f4ee;--bg-mark:#f7e9c8;--shadow:0 1px 0 rgba(23,21,15,.04),0 10px 30px -18px rgba(23,21,15,.28);--serif:Georgia,"Times New Roman","Songti SC","Noto Serif SC","Source Han Serif SC",STSong,SimSun,serif;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Cascadia Mono","Courier New",monospace;--measure:40rem;--pad:28px;--nav-h:56px;color-scheme:light}
+[data-theme="dark"]{--paper:#131210;--paper-2:#1b1a15;--ink:#f0ede5;--ink-2:#cdc8bb;--sub:#948d7e;--faint:#6c6558;--rule:#2c2a21;--rule-2:#3e3b2f;--accent:#e28a61;--accent-ink:#f0a882;--accent-soft:#2b1f18;--code-bg:#1a1914;--bg-mark:#47391a;--shadow:0 1px 0 rgba(0,0,0,.3),0 10px 30px -18px rgba(0,0,0,.7);color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.8;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-wrap:break-word}
+img{max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+::selection{background:var(--accent-soft);color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.top{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:saturate(160%) blur(12px);-webkit-backdrop-filter:saturate(160%) blur(12px);border-top:3px solid var(--ink);border-bottom:1px solid var(--rule)}
+.top__in{max-width:1000px;margin:0 auto;padding:0 var(--pad);height:var(--nav-h);display:flex;align-items:center;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:16px;font-weight:600;white-space:nowrap}
+.brand__mark{width:24px;height:24px;flex:0 0 24px;border-radius:3px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:14px;font-weight:700;line-height:1}
+.brand:hover{color:var(--accent-ink)}
+.top__nav{display:flex;align-items:center;gap:6px;margin-left:auto}
+.top__nav a,.icon-btn{font-size:12.5px;letter-spacing:.11em;color:var(--sub);padding:7px 12px;border-radius:4px;transition:color .18s,background .18s;white-space:nowrap}
+.top__nav a:hover,.icon-btn:hover{color:var(--ink);background:var(--paper-2)}
+.icon-btn{width:34px;height:34px;padding:0;display:grid;place-items:center}
+.icon-btn svg{width:17px;height:17px;display:block;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+[data-theme="dark"] .theme-toggle__light{display:none}
+.icon-btn .theme-toggle__dark{display:none}
+[data-theme="dark"] .theme-toggle__dark{display:block}
+main{display:block;min-height:60vh}
+.wrap{max-width:1000px;margin:0 auto;padding:0 var(--pad)}
+.brief{padding:52px 0 0}
+.kicker{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:16px}
+.brief h1{font-family:var(--serif);font-size:clamp(27px,3.9vw,41px);font-weight:600;line-height:1.28;letter-spacing:-.024em;margin:0 0 20px;max-width:22em;text-wrap:balance}
+.meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--sub);padding-bottom:20px;border-bottom:1px solid var(--rule)}
+.meta .dot{width:3px;height:3px;flex:0 0 3px;border-radius:50%;background:var(--faint)}
+.lede{font-size:17px;line-height:1.8;color:var(--ink-2);max-width:var(--measure);margin:26px 0 0}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
+.tag{font-size:11px;letter-spacing:.04em;color:var(--sub);border:1px solid var(--rule-2);border-radius:2px;padding:2px 8px}
+.prose{font-size:16.5px;line-height:1.85;color:var(--ink-2);max-width:var(--measure);padding:34px 0 0}
+.prose>*:first-child{margin-top:0}
+.prose>*+*{margin-top:1.15em}
+.prose h2,.prose h3,.prose h4{color:var(--ink);text-wrap:balance}
+.prose h2{font-family:var(--serif);font-size:25px;font-weight:600;letter-spacing:-.02em;line-height:1.36;margin:2.3em 0 0;padding-top:1.1em;border-top:1px solid var(--rule)}
+.prose>h2:first-child{border-top:0;padding-top:0}
+.prose h3{font-family:var(--serif);font-size:19px;font-weight:600;margin:1.9em 0 0}
+.prose h4{font-size:15.5px;font-weight:650;margin:1.7em 0 0}
+.prose p{margin:1.15em 0 0}
+.prose a{color:var(--accent-ink);border-bottom:1px solid color-mix(in srgb,var(--accent) 40%,transparent);transition:border-color .18s,background .18s}
+.prose a:hover{border-bottom-color:var(--accent);background:var(--accent-soft)}
+.prose strong{color:var(--ink);font-weight:650}
+.prose ul,.prose ol{margin:1.1em 0 0;padding-left:1.5em}
+.prose li{margin:.42em 0}
+.prose li::marker{color:var(--accent);font-family:var(--serif)}
+.prose hr{margin:2.6em auto;width:56px;height:0;border-top:1px solid var(--rule-2);position:relative}
+.prose hr::after{content:"✳";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--paper);color:var(--faint);font-size:11px;padding:0 8px}
+.prose blockquote{margin:1.6em 0 0;padding:2px 0 2px 20px;border-left:2px solid var(--accent);font-family:var(--serif);font-size:17px;line-height:1.72;color:var(--ink)}
+.prose blockquote p{margin:.5em 0 0}
+.prose blockquote p:first-child{margin-top:0}
+.prose code{font-family:var(--mono);font-size:.86em;background:var(--code-bg);border:1px solid var(--rule);border-radius:3px;padding:2px 6px;color:var(--accent-ink);word-break:break-word}
+.prose pre{margin:1.6em 0 0;background:var(--code-bg);border:1px solid var(--rule);border-left:2px solid var(--accent);border-radius:4px;padding:16px 18px;overflow-x:auto;font-size:13px;line-height:1.75}
+.prose pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit;white-space:pre}
+.prose table{width:100%;border-collapse:collapse;margin:1.7em 0 0;font-size:14px;display:block;overflow-x:auto}
+.prose th{text-align:left;font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--sub);font-weight:600;padding:0 14px 9px 0;border-bottom:2px solid var(--ink);white-space:nowrap}
+.prose td{padding:11px 14px 11px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.prose img{display:block;margin:1.8em 0 0;border:1px solid var(--rule);border-radius:4px;background:var(--paper-2)}
+.prose .callout{margin:1.9em 0 0;padding:20px 22px;background:var(--paper-2);border-left:2px solid var(--accent);border-radius:0 4px 4px 0}
+.prose .callout>*:first-child{margin-top:0}
+.prose .callout p{margin:.85em 0 0;font-size:15.5px;line-height:1.82}
+.prose .callout strong{color:var(--accent-ink)}
+.foot{margin:52px 0 0;padding-top:24px;border-top:1px solid var(--rule)}
+.note{font-size:12.5px;color:var(--sub);line-height:1.75;background:var(--paper-2);border-radius:4px;padding:15px 17px}
+.note b{color:var(--ink);font-weight:600}
+.nav{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+.nav a,.nav span{display:block;padding:16px 18px;border:1px solid var(--rule);border-radius:4px;transition:border-color .2s,background .2s,transform .2s}
+.nav a:hover{border-color:var(--rule-2);background:var(--paper-2);transform:translateY(-1px)}
+.nav span{color:var(--faint);font-size:12.5px;display:flex;align-items:center;justify-content:center;border-style:dashed}
+.nav__lab{font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--sub);margin-bottom:6px}
+.nav__t{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--ink);line-height:1.45}
+.nav .next{text-align:right}
+.back{margin:26px 0 0;font-size:13.5px}
+.back a{color:var(--sub)}
+.back a:hover{color:var(--accent)}
+.site-foot{border-top:1px solid var(--rule);margin-top:56px;padding:30px 0 44px;font-size:12.5px;color:var(--faint)}
+.site-foot__in{max-width:1000px;margin:0 auto;padding:0 var(--pad);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.site-foot a{color:var(--faint)}
+.site-foot a:hover{color:var(--accent)}
+@media (max-width:760px){:root{--pad:18px}.brief{padding:36px 0 0}.nav{grid-template-columns:1fr}.nav .next{text-align:left}.prose{font-size:16px}.top__nav a.hide-sm{display:none}}
+@media print{.top,.nav,.back{display:none!important}body{background:#fff;font-size:11pt}.prose .callout{background:none;border-left-width:2px}}</style>
+<script>
+/* 主题在首屏绘制前定下来，避免闪一下默认色。localStorage 键与主站同名，
+   从博客点进来时能延续访客已经选好的亮/暗设置。 */
+(function(){try{var r=document.documentElement;var s=localStorage.getItem(r.dataset.themeKey||'blog-theme');var t=(s==='light'||s==='dark')?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');r.setAttribute('data-theme',t);}catch(e){}})();
+</script>
+</head>
+<body>
+<a class="sr-only" href="#main">跳到主要内容</a>
+
+<header class="top">
+  <div class="top__in">
+    <a class="brand" href="/"><span class="brand__mark" aria-hidden="true">M</span>MacLodge's Blog</a>
+    <nav class="top__nav" aria-label="页内导航">
+      <a href="/AI动态/">简报目录</a>
+      <a class="hide-sm" href="/">首页</a>
+      <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="切换深色 / 浅色主题" title="切换主题">
+        <svg class="theme-toggle__light" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+        <svg class="theme-toggle__dark" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <article class="brief">
+    <div class="wrap">
+      <div class="kicker">AI 简报 · 2026 年 11 月 11 日</div>
+      <h1>Anthropic千个Agent协作8天从零搓出操作系统，Fable 5.2登顶全球第一</h1>
+      <div class="meta">
+        <time datetime="2026-11-11">2026 / 11 / 11</time>
+        <span class="dot" aria-hidden="true"></span>
+        <span>星期三</span>
+        <span class="dot" aria-hidden="true"></span><span>🐵 程序小猴AI日报，每天8点，带你用5分钟看懂AI圈昨天发生了什么</span>
+        <span class="dot" aria-hidden="true"></span>
+        <span>约 6 分钟读完</span>
+      </div>
+      <p class="lede">Anthropic正式推出Claude Fable 5.2和Mythos 5.2两款旗舰模型，基于同一底层模型，Fable面向所有用户开放，Mythos面向审核通过的网安和生命科学机构。在预发布测试中，Fable 5.2协调1000多个子智能体，连续8天从空文…</p>
+      <div class="tags"><span class="tag">#AI日报</span><span class="tag">#ClaudeFable52</span><span class="tag">#Gemini4Carbon</span><span class="tag">#MiniMaxH3Image</span><span class="tag">#具身智能</span><span class="tag">#大模型开源</span><span class="tag">#TPU芯片</span><span class="tag">#机器人</span></div>
+
+      <div class="prose">
+<h2>1. Anthropic发布Fable 5.2与Mythos 5.2：千Agent协作8天造出操作系统</h2>
+<p>Anthropic正式推出Claude Fable 5.2和Mythos 5.2两款旗舰模型，基于同一底层模型，Fable面向所有用户开放，Mythos面向审核通过的网安和生命科学机构。在预发布测试中，Fable 5.2协调1000多个子智能体，连续8天从空文件夹构建出一个可在笔记本上启动的操作系统（含内核、驱动、窗口系统和安装程序），并以30小时完成费马大定理的Lean形式化证明（此前需11天）。RoboDojo Sim机器人控制测试从5.1的27.6%飙升至64.9%，远超GPT-6 Astra的29.8%。API价格下调20%至每百万输入token 8美元、输出40美元，输出速度提升30%。</p>
+<aside class="callout"><p>💡 小猴点评：这可能是今年最具震撼力的发布。1000个Agent协作8天从零造出操作系统，已经不是&quot;AI辅助编程&quot;的范畴了，而是&quot;AI独立工程交付&quot;。对开发者来说，真正值得关注的是RLI（远程劳动指数）从17.9%跳到41.3%——这意味着Fable 5.2能独立扛下来越来越多原本需要人类工程师长时间投入的任务。另外，反蒸馏保护把数据窃取量砍掉90%-99%，这对靠API构建产品的团队来说是个信号：模型能力的&quot;租赁经济&quot;会更稳固。</p></aside>
+<hr>
+<h2>2. 谷歌Gemini 4 Carbon正式全面开放：百万token上下文，推广期白菜价</h2>
+<p>谷歌宣布将此前仅向网络安全防御机构开放的Gemini 4 Carbon正式向所有付费开发者和企业用户开放。该模型拥有1,048,576 token统一上下文窗口，支持low/medium/high三档推理强度，在CursorBench 4.0、Perplexity WANDR和Zapier AutomationBench三项独立基准中均排名第一。同时谷歌在Antigravity平台预览了/swarm功能，可通过单条提示词协调多智能体团队并行工作。推广期价格每百万输入token 2美元、输出10美元，11月30日后翻倍。</p>
+<aside class="callout"><p>💡 小猴点评：Carbon的全面开放意味着开发者现在有了三个旗舰级选择：GPT-6 Astra、Fable 5.2和Carbon。Carbon的核心差异点在于百万级上下文窗口配合/swarm多智能体编排，特别适合大型代码库分析和长周期工程任务。推广期的价格极具攻击性——只有Fable 5.2的四分之一，如果你在做Agent类应用开发，这个时间窗口值得抓住。</p></aside>
+<hr>
+<h2>3. MiniMax开源H3 Image：10秒生成4K图像，开源图像模型新SOTA</h2>
+<p>MiniMax正式发布并开源新一代图像生成模型H3 Image，基于33.1亿参数的稠密扩散Transformer架构，可在10-20秒内直接生成4096×4096像素（约1600万像素）的4K图像，无需超分辨率后处理。模型支持最多16张参考图输入，具备文生图、图像编辑和多参考图协同创作能力，指令遵循能力号称开源图像模型最强。模型权重已在Hugging Face同步开放，支持SGLang、vLLM-Omni、ComfyUI等主流部署工具。</p>
+<aside class="callout"><p>💡 小猴点评：这可能是目前开源图像生成领域最值得关注的模型。10秒出4K图的速度背后是蒸馏优化将采样步骤压缩到6步，这个工程优化相当扎实。对开发者来说，33.1亿参数的稠密DiT架构、支持ComfyUI本地部署，意味着可以在自己的工作流中深度集成。爱范儿实测评价&quot;GPT的效果加上MJ的审美&quot;，这个定位打得很准——信息准确度和美学的结合正是图像生成的痛点。</p></aside>
+<hr>
+<h2>4. 谷歌发布两款新TPU芯片：训练与推理双管齐下</h2>
+<p>谷歌推出两款新TPU芯片——面向训练的&quot;Sunfish&quot;TPU 8t和面向推理的TPU 8tx。TPU 8t以9600个加速器组成pod，提供121 exaflops的FP4算力，每个加速器配备216GB HBM3E内存，超过100万个TPU 8t组成的集群已被用于训练Gemini 4 Carbon。TPU 8tx则采用全新的板蝇互连拓扑替代3D环面互连，将平均延迟降低约一半，专为复杂智能体推理工作负载设计。同时推出的TPU 8i Max将推理内存容量翻倍，面向超长上下文AI推理场景。</p>
+<aside class="callout"><p>💡 小猴点评：谷歌在芯片层面的布局越来越清晰——训练端追求极致算力密度，推理端追求低延迟和大内存。板蝇互连替代3D环面是一个有意思的架构变化，说明谷歌认为未来推理的瓶颈不在算力而在通信延迟。对开发者来说，这意味着在Google Cloud上跑Agent类应用的延迟和成本都会持续优化。</p></aside>
+<hr>
+<h2>5. 智元机器人发布WITA-Omni：首款具身全模态端到端交互大模型</h2>
+<p>智元机器人正式发布自研WITA-Omni（硅光动语全模态大模型），定位为机器人专属物理世界交互大脑，是行业首款聚焦机器人本体、面向物理场景的具身全模态端到端交互大模型。该模型突破传统音视频交互局限，新增触觉感知和机身本体状态等物理维度输入，支持边感知、边思考、边响应的全双工交互模式。交互最快响应约400毫秒、平均约600毫秒，较行业普遍水平提速近三倍，无需固定唤醒词即可识别有效交互。</p>
+<aside class="callout"><p>💡 小猴点评：从&quot;对话式AI&quot;到&quot;物理世界AI&quot;，具身智能正在从概念走向工程落地。400毫秒的响应速度对人机交互来说是一个关键门槛——低于500毫秒人类就很难感知到延迟。把触觉感知纳入端到端模型架构，而不是作为独立模块后处理，这个设计思路值得关注。</p></aside>
+<hr>
+<h2>6. 蚂蚁灵波开源LingBot-Touch触觉基础模型</h2>
+<p>蚂蚁灵波科技开源触觉基础模型LingBot-Touch，基于近5000小时真实触觉数据预训练，覆盖磁触觉、视触觉和压阻式三类主流传感原理，可将不同传感信号转化为同一套触觉表征，供不同灵巧手和动作模型使用。该模型旨在让机器人在&quot;看得清楚、想得明白&quot;的基础上，进一步补齐精细操作所需的触觉感知能力。</p>
+<aside class="callout"><p>💡 小猴点评：如果说大语言模型的核心资源是文本数据，那具身智能的核心资源就是物理交互数据。5000小时的真实触觉数据在全球范围内都算稀缺资源。统一三类传感信号为同一表征空间的做法，降低了不同硬件平台之间的迁移成本——这对灵巧手开发者来说是个好消息。</p></aside>
+<hr>
+<h2>7. 亚马逊Ring进军机器人：六年磨一剑的安防无人机终于亮相</h2>
+<p>亚马逊旗下Ring发布家用安防无人机Ring Drone Cam和商用巡逻机器人，正式进军机器人领域。其中无人机历时六年、两度推倒重来才最终亮相，售价250美元，将在获得FCC批准后于明年1月下旬发货。AI成为此次破局的关键——早期版本因缺乏足够的AI能力而被放弃，直到大模型技术成熟后才得以重新推进。</p>
+<aside class="callout"><p>💡 小猴点评：六年两度推倒重来，这个故事本身就很说明问题——硬件产品的瓶颈往往不在硬件本身，而在软件智能的成熟度。Ring无人机的命运轨迹，恰好是AI从实验室走向消费级产品的一个缩影。250美元的定价也说明AI能力的成本正在快速下探到大众可接受的范围。</p></aside>
+<hr>
+<p>📌 以上就是今天的AI圈动态，觉得有用的话点个「赞」和「在看」，转发给你身边关注AI的朋友吧！</p>
+<p>你最关注哪条新闻？欢迎在评论区聊聊你的看法，小猴会逐条回复～</p>
+<p>👉 关注「程序小猴」，每天早上8点，5分钟带你追平AI前沿。</p>
+      </div>
+
+      <div class="foot">
+        <div class="note">
+          <b>关于这份简报</b><br>
+          内容由公众号日报整理而来，代表原文作者观点，不构成任何投资建议。
+          信息以公开发布时的报道为准，时效性内容请以最新消息为参考。
+        </div>
+
+        <nav class="nav" aria-label="上一期 / 下一期">
+          <a class="prev" href="/AI动态/2026-11/2026-11-10.html" rel="prev"><div class="nav__lab">← 上一期</div><div class="nav__t">Anthropic Fable 5.2编程测试登顶，1000个Agent协作8天造出操作系统原型</div></a>
+          <a class="next" href="/AI动态/2026-11/2026-11-12.html" rel="next"><div class="nav__lab">下一期 →</div><div class="nav__t">Fable 5.2 一夜屠榜，机器人赛道迎来&quot;通用模型入侵&quot;</div></a>
+        </nav>
+
+        <p class="back"><a href="/AI动态/">← 返回简报目录</a></p>
+      </div>
+    </div>
+  </article>
+</main>
+
+<footer class="site-foot">
+  <div class="site-foot__in">
+    <span>&copy; 2026 MacLodge · 简报内容整理自公开报道</span>
+    <span><a href="/">MacLodge's Blog</a> · <a href="/AI动态/">AI 简报</a></span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var key=document.documentElement.dataset.themeKey||'blog-theme';
+  var cur=function(){return document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light';};
+  document.querySelectorAll('[data-theme-toggle]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var t=cur()==='dark'?'light':'dark';
+      document.documentElement.setAttribute('data-theme',t);
+      try{localStorage.setItem(key,t);}catch(e){}
+    });
+  });
+})();
+</script>
+</body>
+</html>
