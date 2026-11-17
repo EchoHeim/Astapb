@@ -175,9 +175,12 @@
 /* 列间距交给 #grid 的 gap，这里不留 margin —— 有 margin 的话卡片会在固定轨道内缩进，
    实际宽度就不等于 --col-w 了。 */
 .item {
+  position: relative;
   overflow: hidden;
-  /* 旧版由 JS 内联算 height，这里交给 CSS 变量，分类各自的可见条数可配 */
-  height: calc(12rem + var(--row-h) * var(--visible, 6));
+  /* 旧版由 JS 内联算 height，这里交给 CSS 变量，分类各自的可见条数可配。
+     头部那一块（标题 + 推荐位）的高度也在 --item-head-h 里，续列的顶部
+     对齐读的是同一个值。 */
+  height: calc(var(--item-head-h) + var(--row-h) * var(--visible, 6));
 }
 
 .wrap {
@@ -208,6 +211,22 @@
 
 .recommend p {
   line-height: 2rem;
+  /* 主链接名称保持单行：头部高度是卡片高度公式里的常量（--item-head-h），
+     名称一旦折成两行，列表起点就会比另一列低一截，两列对不齐。 */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* 主链接里的首字母兜底色块：站点没有图标时（多数补录条目都没有）用它顶上，
+   尺寸、圆角、投影都与 .recommend img 对齐，头部高度才不变。 */
+.recommend .icon-fallback {
+  width: 5rem;
+  height: 5rem;
+  margin: 0.5rem auto;
+  border-radius: 3rem;
+  font-size: 2rem;
+  box-shadow: 0 4px 4px 4px var(--shadow-2);
 }
 
 .wrap ul {
@@ -275,10 +294,45 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, var(--fade-from), var(--fade-to));
+  /* 只在下方四成压暗：旧版从 .5 一路渐到不透明，第 8 条（TED、新华网）被压成
+     「禁用」的样子，反而看不清还能点。现在文字那行基本不动，只做下沿过渡。 */
+  background: linear-gradient(to bottom, transparent 40%, var(--fade-to));
   /* 旧版遮罩挂在 li 本身、点击仍然生效；现在 li 里套了 <a>，
      不放开事件的话最后一条可见项就点不动了 */
   pointer-events: none;
+}
+
+/* 「还有 N 条」徽标。绝对定位是必须的：卡片高度是算出来的
+   （12rem + 2.6rem × visible），流内多一行就会把第 visible 条挤掉。
+   展开后改回流内，落在列表末尾，语义上就是「收起这些」。 */
+.more {
+  position: absolute;
+  right: 0.6rem;
+  bottom: 0.2rem;
+  z-index: 2;
+  padding: 0 0.45rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--muted);
+  background: var(--bg);
+  border: 0.5px solid var(--border);
+  border-radius: 0.7rem;
+  opacity: 0.92;
+}
+
+.more:hover,
+.more:focus-visible {
+  color: var(--accent);
+  border-color: var(--accent);
+  opacity: 1;
+}
+
+/* 展开后位置不变，只把文案换成「收起」：如果让它跟着列表落到末尾，
+   一展开就跑到视口外，用户找不到往回收的入口，卡片就永远摊在那儿了。 */
+.item.change .more {
+  color: var(--accent);
+  border-color: var(--accent);
+  opacity: 1;
 }
 
 .item.change {
@@ -295,6 +349,31 @@
 .item.change .clamp-end::after {
   background: none;
 }
+
+/* ---------------- 续列：条目多的分类再占一列 ---------------- */
+
+/*
+ * 两张卡片并排成两列，每列仍是 --col-w —— 没有哪张卡片被拉宽。
+ *
+ * 包裹层只负责「两列必须并排」：各列表项若直接当网格项，主列一旦落在行尾，
+ * 续列就会被挤到下一行，两列错开一整行（实测 Δ477px）。span 2 把它们拴在
+ * 一起，代价只是行尾可能空出一格，比错行好得多；不用 dense，分类顺序仍然严格。
+ *
+ * minmax(0, 1fr) 而不是 1fr：1fr 的下限是 auto，会被条目最小内容宽度撑开。
+ */
+.item-pair {
+  grid-column: span 2;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+}
+
+/*
+ * 续列（第二张卡片）没有任何专属样式：它也渲染 h2 与 .recommend，
+ * 只是主链接换成自己这一列的第 1 条。两列头部结构相同、高度自然相等，
+ * 所以这里不需要为「对齐」写内边距 —— 曾经靠 `padding-top: var(--item-head-h)`
+ * 把无头的列表推下去，那种写法在窄屏退单列时要额外补三条规则来抵消，现在不用了。
+ */
 
 /* 过滤态：全部命中项直接铺开，不做折叠 */
 #grid.is-filtering .item {

@@ -10,7 +10,7 @@
  * `export const x: T = ...` 与 `import type`，都是可擦除语法，所以无需 esbuild 之类。
  */
 
-import { readdirSync, statSync } from 'node:fs';
+import { readdirSync, statSync, readFileSync } from 'node:fs';
 import { join, dirname, basename, extname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -185,6 +185,29 @@ if (TOTAL_SITES !== CATEGORIES.reduce((n, c) => n + c.sites.length, 0)) {
 
 if (iconCount + fallbackCount !== TOTAL_SITES) {
   errors.push(`条目统计对不上：${iconCount} + ${fallbackCount} ≠ ${TOTAL_SITES}`);
+}
+
+// ---- 文档里的数字不能跟数据走散 ----
+// 「23 个分类共 301 个站点」这句话在 index.html、README、categories.ts 里各写过一遍，
+// 三个数字互不相同。index.html 改成构建期注入了，剩下的手写文案在这里兜住：
+// 对不上就中断构建，别再让文档自说自话。
+try {
+  const readme = readFileSync(join(ROOT, 'README.md'), 'utf8');
+  let pairs = 0;
+  // 只认「N 个分类 / M 个条目」这种成对写法：README 里还有「原有 17 个分类」
+  // 「当成第 24 个分类」这类叙述性的数字，单独抓会误伤。
+  for (const m of readme.matchAll(/(\d+)\s*个分类\s*[、/]\s*(\d+)\s*个(?:站点|条目)/g)) {
+    pairs += 1;
+    if (Number(m[1]) !== CATEGORIES.length) {
+      errors.push(`README.md 写着「${m[1]} 个分类」，实际是 ${CATEGORIES.length} 个`);
+    }
+    if (Number(m[2]) !== TOTAL_SITES) {
+      errors.push(`README.md 写着「${m[2]} 个条目」，实际是 ${TOTAL_SITES} 个`);
+    }
+  }
+  if (pairs === 0) warnings.push('README.md 里没有「N 个分类 / M 个条目」的成对数字，跳过文档校验');
+} catch {
+  warnings.push('README.md 读不到，跳过文档数字校验');
 }
 
 notes.push(

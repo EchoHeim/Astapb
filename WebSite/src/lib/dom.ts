@@ -47,28 +47,54 @@ export function mount(selector: string): HTMLElement {
 
 /**
  * 把文本按关键词切成分片，命中的片段包在 <mark> 里。
+ *
+ * 关键词是**多个词**（与过滤同一套切法）：每个词各自找全部命中位置，
+ * 排序后合并重叠区间再一次性切分。旧版把整串当成一个 needle，
+ * 于是「知识 图」这种多词查询能筛出结果却零高亮。
  * 全程用文本节点拼装，关键词里含 HTML 特殊字符也不会出问题。
  */
-export function highlight(text: string, keyword: string): DocumentFragment {
+export function highlight(text: string, needles: string[]): DocumentFragment {
   const fragment = document.createDocumentFragment();
-  const needle = keyword.trim().toLowerCase();
+  const haystack = text.toLowerCase();
+  const ranges: [number, number][] = [];
 
-  if (!needle) {
+  for (const needle of needles) {
+    const word = needle.trim().toLowerCase();
+    if (!word) continue;
+
+    let cursor = 0;
+    for (;;) {
+      const at = haystack.indexOf(word, cursor);
+      if (at === -1) break;
+      ranges.push([at, at + word.length]);
+      cursor = at + word.length;
+    }
+  }
+
+  if (ranges.length === 0) {
     fragment.appendChild(document.createTextNode(text));
     return fragment;
   }
 
-  const haystack = text.toLowerCase();
-  let cursor = 0;
+  // 相邻或重叠的区间合并，避免嵌套 <mark>
+  ranges.sort((a, b) => a[0] - b[0]);
+  const merged: [number, number][] = [];
+  for (const [start, end] of ranges) {
+    const last = merged[merged.length - 1];
+    if (last && start <= last[1]) {
+      last[1] = Math.max(last[1], end);
+    } else {
+      merged.push([start, end]);
+    }
+  }
 
-  for (;;) {
-    const at = haystack.indexOf(needle, cursor);
-    if (at === -1) break;
-    if (at > cursor) fragment.appendChild(document.createTextNode(text.slice(cursor, at)));
+  let cursor = 0;
+  for (const [start, end] of merged) {
+    if (start > cursor) fragment.appendChild(document.createTextNode(text.slice(cursor, start)));
     const mark = document.createElement('mark');
-    mark.textContent = text.slice(at, at + needle.length);
+    mark.textContent = text.slice(start, end);
     fragment.appendChild(mark);
-    cursor = at + needle.length;
+    cursor = end;
   }
 
   if (cursor < text.length) fragment.appendChild(document.createTextNode(text.slice(cursor)));
